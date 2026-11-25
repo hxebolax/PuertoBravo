@@ -482,7 +482,7 @@ Gracias a todas las personas que han ayudado a mejorar Puerto Bravo desde GitHub
 - [patricus3](https://github.com/patricus3): el estilo temerario del piloto automático del GPS y el mod El Diablo, una agencia de sicarios con sus misiones y sus contratos. Además, sus avisos y propuestas trajeron las novedades en inglés y los estilos de conducción con prisa, la compilación en cualquier Windows, el arreglo de pruebas que fallaban, que cada partida guarde en su propia ranura, que el desguace pague las mejoras de tus vehículos, la lista de lugares de más cerca a más lejos, el arreglo de la comprobación de la compilación, el laboratorio sin su minijuego, que el juego diga por qué sube el nivel de búsqueda y que el piloto con mucha prisa vaya a toda velocidad. Además, creó el grupo de Telegram de la comunidad en inglés y lleva el servidor de jugadores Patricus productions.
 - [Daoductrung](https://github.com/Daoductrung): la traducción al vietnamita del juego, de toda su documentación y del mod Marisma Negra, y el arreglo para que la ficha de los mods y las mejoras del taller salgan en el idioma del juego.
 - [leoguimaoficial](https://github.com/leoguimaoficial): la traducción completa al portugués de Brasil y sus correcciones.
-- [dimasya34](https://github.com/dimasya34): la traducción al ruso del juego, su README y sus correcciones, y el arreglo del instalador de las actualizaciones, que con el juego en ruso no se podía ejecutar.
+- [dimasya34](https://github.com/dimasya34): la traducción al ruso del juego, su README y sus correcciones, el arreglo del instalador de las actualizaciones, que con el juego en ruso no se podía ejecutar, y los nombres del mando en ruso.
 
 ### Con avisos de fallos y propuestas
 

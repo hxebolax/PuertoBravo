@@ -136,3 +136,15 @@ def test_traduccion_mando_y_botones_en_ruso():
     assert "команда" not in cat["Mando"].lower()
     assert "командир" not in cat["Mando, al volante"].lower()
 
+
+
+def test_ningun_texto_del_mando_lleva_los_nombres_viejos():
+    """Lo que dice qué botón pulsar usa los nombres de la PR 40 en todos los textos, no solo en los que tocó: Крест, Квадрат,
+    крестовина y стик, y no «Эквис», «траверса», «перекрестие» ni «рычаг». Los trozos que solo sustituyen frases en
+    español (mando.py, con \1 o cortados) no cuentan: en ruso nunca se usan."""
+    cat = _catalogo()
+    viejos = re.compile(r"Эквис|Equis|Square|Circulo|травер|перекладин|перекрест|рычаг|D-pad", re.I)
+    trozos = {r"\1on la palanca izquierda", "a palanca izquierda", "mpuja a fondo la palanca izquierda"}
+    malos = [k for k, v in cat.items() if k not in trozos and re.search(r"Equis|Cuadrado|cruceta|palanca (izquierda|derecha)", k)
+             and viejos.search(v)]
+    assert not malos, malos[:5]
