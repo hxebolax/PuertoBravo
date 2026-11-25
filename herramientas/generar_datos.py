@@ -312,6 +312,18 @@ def generar_teclas():
 </body>
 </html>
 """).format(estilo=ESTILO, menus=_lista(MENUS), teclas=html_teclas(2), botones=botones)
+    bloque_trampas = tr(
+        "<h2>En el menú de trampas</h2>\n"
+        "<p>La ventana externa <code>MenuTrampas.exe</code> (requiere activar <strong>Permitir el menú de trampas</strong> en Opciones &gt; Combate y dificultad y, en multijugador, que el dueño del servidor habilite <code>permitir_trampas</code>) responde a estas teclas:</p>\n"
+        "<ul>\n"
+        "<li><kbd>Control Tab</kbd> y <kbd>Control Mayúsculas Tab</kbd>: cambiar entre las pestañas y subpestañas.</li>\n"
+        "<li><kbd>Tab</kbd> y <kbd>Mayúsculas Tab</kbd>: recorrer los campos y botones de la pestaña actual.</li>\n"
+        "<li><kbd>Alt</kbd> más la letra o número subrayado del rótulo o botón: saltar directamente a ese control (<kbd>Alt 1</kbd> a <kbd>Alt 5</kbd> para la instancia, Conectar/Desconectar, Actualizar, estado y resumen).</li>\n"
+        "<li><kbd>F5</kbd>: refrescar de inmediato la conexión y todos los campos sincronizados con el juego.</li>\n"
+        "<li><kbd>Control H</kbd>: anunciar con el lector de pantalla la ayuda contextual del control que tiene el foco.</li>\n"
+        "</ul>"
+    )
+    texto = re.sub(r"[ \t]*</body>", lambda _: bloque_trampas + "\n</body>", texto, count=1)
     return _escribir("teclas.html", texto)
 
 

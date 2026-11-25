@@ -471,6 +471,9 @@ class EnLinea:
                    "ficha": str(ok.get("ficha") or "")[:MAX_FICHA], "fichas": {}, "historial": [], "pasajeros": set(), "radio_ajena": None,
                    "economia": (ok.get("servidor") or {}).get("economia") if isinstance((ok.get("servidor") or {}).get("economia"), dict) else None,
                    "veh_pend": {}, "dinero_visto": None, "t_gasto": None, "t_guardado_real": None, "reenganche": None, "regrupo": None}
+        srv_puente = getattr(self.app, "_puente_trampas", None)
+        if srv_puente is not None and not bool(self.sv["info"].get("permitir_trampas", False)):
+            srv_puente.suspender()
         for clave in ("historial", "radio_ajena_dicha"):                     # al volver, lo dicho por los canales de rol sigue ahí
             if clave in antes:
                 self.sv[clave] = antes[clave]
@@ -1013,6 +1016,14 @@ class EnLinea:
             self.son(m["son"], cat="interfaz", vol=0.6)
         self.decir(tr_servidor(str(m.get("texto", ""))))
         self.voz.apuntar_mensaje(tr_servidor(str(m.get("texto", ""))))
+
+    def _svm_trampas(self, m):
+        permitir = bool(m.get("permitir"))
+        if isinstance(self.sv.get("info"), dict):
+            self.sv["info"]["permitir_trampas"] = permitir
+        srv_puente = getattr(self.app, "_puente_trampas", None)
+        if srv_puente is not None and not permitir:
+            srv_puente.suspender()
 
     def _svm_pong(self, m):
         pass

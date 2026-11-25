@@ -29,6 +29,7 @@ class Jugador:
         self.guardaespaldas = 0
         self.hab = {"conduccion": 0.0, "punteria": 0.0, "resistencia": 0.0, "pesca": 0.0}
         self.logros = []
+        self.trampas_usadas = False
         self.marcadores = []
         self.perro = ""
         self.perro_hambre = 0.0      # de 0, recién comido, a 100

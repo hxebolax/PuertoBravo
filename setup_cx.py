@@ -17,7 +17,7 @@ from juego import NOMBRE, VERSION  # noqa: E402
 
 opciones = {
     "build_exe": os.path.join("dist", "PuertoBravo"),
-    "packages": ["juego", "editor", "servidor", "panel_servidor", "wx", "pygame", "numpy", "sounddevice", "_sounddevice_data", "soundfile", "_soundfile_data",
+    "packages": ["juego", "editor", "servidor", "panel_servidor", "trampas", "wx", "pygame", "numpy", "sounddevice", "_sounddevice_data", "soundfile", "_soundfile_data",
                  "accessible_output2", "libloader", "platform_utils", "win32com", "pythoncom", "pywintypes"],
     "includes": ["juego.app"],
     "excludes": ["tkinter", "pytest", "_pytest", "unittest", "pydoc_data", "PyInstaller", "setuptools", "pip", "numpy.f2py", "numpy.testing", "win32comext"],
@@ -47,5 +47,6 @@ setup(
     executables=[Executable("main.py", base="gui", target_name="PuertoBravo.exe"),
                  Executable("editor_mods.py", base="gui", target_name="EditorMods.exe"),
                  Executable("servidor_panel.py", base="gui", target_name="PuertoBravoServidorPanel.exe"),
-                 Executable("servidor_main.py", base="console", target_name="PuertoBravoServidor.exe")],
+                 Executable("servidor_main.py", base="console", target_name="PuertoBravoServidor.exe"),
+                 Executable("trampas_gui.py", base="gui", target_name="MenuTrampas.exe")],
 )

@@ -78,6 +78,8 @@ class Extras2:
 
     # ------------------------------------------------------------------- logros
     def comprobar_logros(self):
+        if getattr(self.j, "trampas_usadas", False):
+            return
         for ident, nombre, desc, cond in LOGROS:
             if ident in self.j.logros:
                 continue

@@ -314,7 +314,12 @@ def progreso(p):
         for ident, nombre, desc, _ in LOGROS:
             ops.append(Opcion(f"{nombre}: {'conseguido' if ident in j.logros else 'pendiente'}. {desc}",
                               ayuda=tr("Un logro se consigue solo, en cuanto haces lo que dice, y el juego te lo anuncia con un sonido.")))
-        app.abrir(Menu(app, tr('Logros: {len} de {len2}').format(len=(len(j.logros)), len2=(len(LOGROS))), ops))
+        intro = (
+            tr("Los logros están desactivados en esta partida porque se han usado trampas.")
+            if getattr(j, "trampas_usadas", False)
+            else None
+        )
+        app.abrir(Menu(app, tr('Logros: {len} de {len2}').format(len=(len(j.logros)), len2=(len(LOGROS))), ops, intro=intro))
     app.abrir(Menu(app, tr("Habilidades y logros"), [
         Opcion(tr("Habilidades"), habilidades, ayuda=tr("Tu nivel en cada habilidad, del uno al diez, y tu salud máxima. Suben solas con la práctica, y F1 explica cada una.")),
         Opcion(lambda: tr('Logros: {len} de {len2}').format(len=(len(j.logros)), len2=(len(LOGROS))), logros,

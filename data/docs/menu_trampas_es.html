@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Manual del menú de trampas de Puerto Bravo</title>
+<style>
+body { font-family: Segoe UI, Arial, sans-serif; max-width: 54em; margin: 1em auto; padding: 0 1em; line-height: 1.6; background: #111; color: #f2f2f2; font-size: 1.1em; }
+h1, h2, h3 { color: #ffd84d; }
+a { color: #8fd0ff; }
+code { color: #9fe89f; }
+kbd { border: 1px solid #aaa; border-radius: 4px; padding: 0 .35em; background: #2a2a2a; }
+li { margin-bottom: .3em; }
+</style>
+</head>
+<body>
+<h1>Manual del menú de trampas de Puerto Bravo</h1>
+<p>El menú de trampas es un programa externo, con ventanas y controles estándar de Windows, diseñado para usarse con teclado y lector de pantalla mientras juegas. Sirve para probar mods, recorrer el mapa, reproducir situaciones concretas y ajustar datos de la partida en tiempo real sin repetir misiones. Este documento está organizado por encabezados: con tu lector de pantalla puedes saltar de sección en sección con la tecla <kbd>H</kbd>.</p>
+
+<h2>1. Requisitos, activación e idioma</h2>
+<ul>
+<li>Ejecuta <strong>MenuTrampas.exe</strong>, que está junto a <strong>PuertoBravo.exe</strong>.</li>
+<li>Por seguridad viene apagado de serie: antes de abrir la conexión, entra en el juego en Opciones, Combate y dificultad y pon <strong>Permitir el menú de trampas</strong> en <strong>sí</strong>.</li>
+<li>Mientras esa opción esté en <strong>no</strong>, el juego no abre ningún puerto local ni escribe el archivo temporal de enlace, así que el menú no detectará la partida.</li>
+</ul>
+<p>El idioma de la ventana se elige al arrancar <strong>MenuTrampas.exe</strong> siguiendo este orden de prioridad:</p>
+<ol>
+<li>La variable de entorno <code>PUERTOBRAVO_IDIOMA</code>, si está definida.</li>
+<li>La opción <strong>Idioma</strong> guardada en la configuración del juego (<code>data\config</code>).</li>
+<li>Si está en <strong>auto</strong>, el idioma de Windows (o del sistema): si hay catálogo instalado para ese idioma lo usa; si no, usa inglés (y español si tampoco hubiera inglés).</li>
+</ol>
+<p>Si cambias el idioma dentro del juego, cierra y vuelve a abrir <strong>MenuTrampas.exe</strong> para ver la ventana en el idioma nuevo.</p>
+
+<h2>2. Conexión, sincronización y manejo por teclado</h2>
+<p>En la parte superior de la ventana están los controles de enlace, seguidos de las pestañas de herramientas. Al conectar y al refrescar, la ventana lee del juego los valores actuales (dinero, salud, blindaje, búsqueda, hora, día, lluvia, listas de vehículos y personas cercanas) para que no se desfacen.</p>
+<ul>
+<li><kbd>Alt 1</kbd> (Instancia del juego): lista de partidas activas detectadas en tu equipo.</li>
+<li><kbd>Alt 2</kbd> (Conectar / Desconectar): enlaza con la instancia seleccionada. Mientras ya está conectado, el botón cambia a <strong>Desconectar</strong> y no abre una conexión duplicada; púlsalo si quieres cerrar el enlace actual o volver a enlazar.</li>
+<li><kbd>F5</kbd> o <kbd>Alt 3</kbd> (Actualizar): resincroniza al momento el estado general, los campos editables y las listas de entidades.</li>
+<li><kbd>Alt 4</kbd> y <kbd>Alt 5</kbd>: cuadros de solo lectura con el estado de la conexión y un resumen rápido del jugador y del entorno.</li>
+<li><kbd>Control Tabulador</kbd> y <kbd>Control Mayúsculas Tabulador</kbd>: cambiar entre las pestañas principales y las subpestañas.</li>
+<li><kbd>Tabulador</kbd> y <kbd>Alt</kbd> más la letra subrayada: recorrer controles o saltar directamente al campo o botón elegido.</li>
+<li><kbd>Control H</kbd>: anunciar con el lector de pantalla la ayuda contextual del control que tiene el foco.</li>
+</ul>
+<p>La referencia completa de teclas está en <a href="teclas_es.html">teclas y botones</a>.</p>
+
+<h2>3. Qué permite hacer, pestaña por pestaña</h2>
+<h3>Jugador</h3>
+<ul>
+<li><strong>Combate y Estado</strong>: ajustar salud actual, salud máxima, blindaje, concentración (foco), activar o desactivar el modo invulnerable, o curar y restaurar todo.</li>
+<li><strong>Economía y Progreso</strong>: modificar dinero en mano, dinero en banco, ánimo, prestigio vecinal, fama callejera, puntos de carné y número de guardaespaldas; añadir +5.000 o +50.000 euros, borrar antecedentes o desbloquear todas las propiedades.</li>
+<li><strong>Necesidades y Habilidades</strong>: ajustar hambre, sed, sueño y suciedad (o ponerlas todas a 0), fijar el nivel (0 a 10) de cualquier habilidad, ajustar cocina práctica o llevar todas las habilidades al máximo.</li>
+<li><strong>Banda y Perro</strong>: editar nombre de la banda, alias de jefe y miembros, llamar a la banda, conquistar el barrio actual o todos los barrios; adoptar o traer al perro y ajustar su nombre, hambre y confianza.</li>
+</ul>
+<h3>Inventario</h3>
+<ul>
+<li><strong>Armas</strong>: elegir cualquier arma del catálogo, ajustar cargador, munición de reserva, silenciador y cargador ampliado; entregarla, equiparla, quitarla o conseguir todas las armas.</li>
+<li><strong>Objetos y Mochila</strong>: fijar o sumar cantidades de objetos útiles, guardar objetos de valor en la mochila, activar la mochila grande (40 huecos) y limpiar la marca de robado.</li>
+<li><strong>Sustancias y Comida</strong>: fijar unidades de sustancias (o sumar +10) y añadir productos de comida al bolsillo.</li>
+</ul>
+<h3>Vehículos</h3>
+<ul>
+<li><strong>Generar</strong>: crear cualquier modelo de vehículo junto a ti, elegir nombre propio opcional, marcarlo como tuyo, subir al instante y aplicar mejoras al máximo.</li>
+<li><strong>Vehículos activos</strong>: listar los vehículos vivos en la localidad actual y subir, traerlos junto a ti, repararlos, llenar el depósito, quitar averías, aplicar mejoras al máximo, hacerlos propios, explotarlos, eliminarlos o limpiar el tráfico.</li>
+<li><strong>Especificaciones y Taller</strong>: editar nombre, modo de IA, velocidad máxima, aceleración, freno, salud actual y máxima, flags de hostil o cerrado (solo este ejemplar o la clase) y ajustar mejoras concretas del taller.</li>
+</ul>
+<h3>NPCs y Bandas</h3>
+<ul>
+<li><strong>Generar NPCs</strong>: crear peatones, enemigos, aliados o policías por clase de catálogo, banda, arma, cantidad, salud, llegada en vehículo y actitud hostil.</li>
+<li><strong>Personas activas</strong>: listar las personas de la zona y editar nombre, salud, puntería, estado, confianza civil y si es hostil ahora; traer aquí, curar, matar, eliminar, quitar hostiles o limpiar caídos.</li>
+<li><strong>Reputación con Bandas</strong>: consultar y fijar la reputación con cada banda (-100 a +100), o pasar directamente a aliados (+100), neutral (0) o enemigos (-100).</li>
+</ul>
+<h3>Policía, Eventos y Mundo</h3>
+<ul>
+<li><strong>Policía</strong>: fijar estrellas actuales (0 a 5), limpiar búsqueda y persecución, enviar patrullas o patrulla de ronda, lanzar o retirar el helicóptero, activar el modo sin policía y el helicóptero en nivel 5.</li>
+<li><strong>Eventos</strong>: lanzar o cancelar sucesos callejeros, iniciar persecuciones con modelo y velocidad objetivo, iniciar guerras de barrio, provocar peleas, atracar el local o banco cercano, limpiar vetos de locales, llamar una ambulancia, soltar un maletín de 1.000 euros o lanzar contratos y encargos de coche.</li>
+<li><strong>Mundo</strong>: teletransportarse a cualquier localidad y lugar del catálogo (con filtro por texto), fijar hora, día, lluvia y tipo de día, o activar reglas rápidas de jugabilidad (+18, fuego amigo, guerra de barrios, vida realista, combustible, averías, normas de tráfico, soltar armas, enemigos duros y policía estricta).</li>
+</ul>
+<h3>Inspector</h3>
+<p>Permite leer y editar de forma segura ámbitos concretos de la partida y del sistema (por ejemplo jugador, estadísticas, configuración, vehículo actual o persona cercana). Antes de aplicar la primera modificación desde el Inspector, el puente guarda automáticamente una copia previa de tu partida en <code>respaldo_antes_trampas.json</code> dentro de la carpeta de partidas.</p>
+
+<h2>4. Qué no permite hacer y límites de seguridad</h2>
+<ul>
+<li><strong>Sin control con mando</strong>: al ser una ventana externa de Windows, no admite manejo con gamepad; se maneja con teclado y lector de pantalla.</li>
+<li><strong>Juego cerrado o sin activar</strong>: si <strong>PuertoBravo.exe</strong> no está en marcha o <strong>Permitir el menú de trampas</strong> está en <strong>no</strong>, el puente no existe y ninguna acción se ejecuta.</li>
+<li><strong>Partidas con amigos y servidores</strong>: en partidas cooperativas con amigos está anulado por completo. En un servidor en línea dedicado solo funciona si el dueño habilita <code>permitir_trampas = si</code> en la configuración del servidor; mientras no lo haga, la comunicación queda bloqueada y todas las trampas se rechazan. Ten en cuenta que, si el dueño lo activa, el servidor deja de controlar el dinero de todos los jugadores de ese servidor (consulta la <a href="servidor_es.html">guía del servidor</a>).</li>
+<li><strong>Desactivación de logros</strong>: en cuanto aplicas cualquier trampa sobre una partida en solitario, esa partida queda marcada y los logros dejan de concederse en ella.</li>
+<li><strong>Límites del Inspector</strong>: no permite modificar campos arbitrarios ni atributos internos que empiezan por <code>_</code>, ni claves sensibles de configuración (como <code>permitir_trampas</code>, <code>servidores</code>, <code>teclas</code>, rutas de actualización o dispositivos de audio). Además valida estrictamente la sintaxis JSON y el tipo de cada campo: si hay un error (por ejemplo, comillas simples, un tipo incompatible o un número fuera de rango), informa al usuario y no modifica ni añade nada.</li>
+<li><strong>Alcance del puente IPC</strong>: escucha únicamente en el propio equipo (<code>127.0.0.1</code>), requiere token de sesión por instancia y limita las conexiones simultáneas (máximo 8) para evitar bloqueos por saturación.</li>
+</ul>
+
+<h2>5. Más guías</h2>
+<ul>
+<li><a href="manual_es.html">Volver al manual principal del juego</a>.</li>
+<li><a href="teclas_es.html">Guía completa de teclas y botones</a>.</li>
+<li><a href="servidor_es.html">Guía del servidor en línea</a> (para el ajuste <code>permitir_trampas</code>).</li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Manual do menu de trapaças de Puerto Bravo</title>
+<style>
+body { font-family: Segoe UI, Arial, sans-serif; max-width: 54em; margin: 1em auto; padding: 0 1em; line-height: 1.6; background: #111; color: #f2f2f2; font-size: 1.1em; }
+h1, h2, h3 { color: #ffd84d; }
+a { color: #8fd0ff; }
+code { color: #9fe89f; }
+kbd { border: 1px solid #aaa; border-radius: 4px; padding: 0 .35em; background: #2a2a2a; }
+li { margin-bottom: .3em; }
+</style>
+</head>
+<body>
+<h1>Manual do menu de trapaças de Puerto Bravo</h1>
+<p>O menu de trapaças é um programa externo do Windows, com janelas e controles acessíveis padrão, feito para usar com teclado e leitor de tela enquanto você joga. Ele serve para testar mods, explorar o mapa, provocar situações específicas e ajustar valores da partida em tempo real sem repetir missões. Este guia está organizado por cabeçalhos: com o leitor de tela você pode pular de seção em seção com a tecla <kbd>H</kbd>.</p>
+
+<h2>1. Requisitos, ativação e idioma</h2>
+<ul>
+<li>Execute <strong>MenuTrampas.exe</strong>, que fica ao lado de <strong>PuertoBravo.exe</strong>.</li>
+<li>Por segurança ele vem desligado por padrão: antes de abrir qualquer conexão, entre no jogo em Opções, Combate e dificuldade e mude <strong>Permitir menu de trapaças</strong> para <strong>sim</strong>.</li>
+<li>Enquanto essa opção estiver em <strong>não</strong>, o jogo não abre nenhuma porta local nem grava o arquivo temporário de ligação, portanto o menu não detectará nenhuma partida em execução.</li>
+</ul>
+<p>O idioma da janela é escolhido ao abrir <strong>MenuTrampas.exe</strong>, seguindo esta ordem de prioridade:</p>
+<ol>
+<li>A variável de ambiente <code>PUERTOBRAVO_IDIOMA</code>, se estiver definida.</li>
+<li>A opção <strong>Idioma</strong> salva na configuração do jogo (<code>data\config</code>).</li>
+<li>Se estiver em <strong>auto</strong>, o idioma do Windows (ou do sistema): se houver catálogo instalado para esse idioma ele é usado; caso contrário, usa o inglês (e o espanhol se nem o inglês estiver disponível).</li>
+</ol>
+<p>Se você mudar o idioma dentro do jogo, feche e abra novamente <strong>MenuTrampas.exe</strong> para recarregar a janela no novo idioma.</p>
+
+<h2>2. Conexão, sincronização e controle pelo teclado</h2>
+<p>Na parte superior da janela ficam os controles de conexão, seguidos pelas abas de ferramentas. Ao conectar e ao atualizar, a janela lê do jogo os valores atuais (dinheiro, saúde, blindagem, estrelas de procurado, hora, dia, chuva, veículos e pessoas por perto) para que os campos fiquem sempre sincronizados.</p>
+<ul>
+<li><kbd>Alt 1</kbd> (Instância do jogo): lista de partidas ativas detectadas no seu computador.</li>
+<li><kbd>Alt 2</kbd> (Conectar / Desconectar): faz o enlace com a instância selecionada. Quando já está conectado, o botão muda para <strong>Desconectar</strong> e não abre uma segunda conexão duplicada; pressione novamente se quiser fechar a ligação atual ou reconectar depois.</li>
+<li><kbd>F5</kbd> ou <kbd>Alt 3</kbd> (Atualizar): ressincroniza imediatamente o estado geral, os campos editáveis e as listas de entidades.</li>
+<li><kbd>Alt 4</kbd> e <kbd>Alt 5</kbd>: quadros somente leitura com o estado da conexão e um resumo rápido do jogador e do ambiente.</li>
+<li><kbd>Control Tab</kbd> e <kbd>Control Shift Tab</kbd>: alternar entre as abas principais e subabas.</li>
+<li><kbd>Tab</kbd> e <kbd>Alt</kbd> mais a letra sublinhada: percorrer os controles ou ir direto para um campo ou botão específico.</li>
+<li><kbd>Control H</kbd>: anunciar no leitor de tela a ajuda contextual do controle em foco.</li>
+</ul>
+<p>Consulte <a href="teclas_pt.html">teclas e botões</a> para ver a referência completa de atalhos.</p>
+
+<h2>3. O que permite fazer, aba por aba</h2>
+<h3>Jogador</h3>
+<ul>
+<li><strong>Combate e Estado</strong>: ajustar saúde atual, saúde máxima, blindagem, foco, ativar ou desativar o modo invulnerável, ou curar e restaurar tudo.</li>
+<li><strong>Economia e Progresso</strong>: editar dinheiro na mão, saldo bancário, ânimo, prestígio local, fama de rua, pontos da carteira e guarda-costas; somar +5.000 ou +50.000 euros, limpar antecedentes ou liberar todas as propriedades.</li>
+<li><strong>Necessidades e Habilidades</strong>: ajustar fome, sede, sono e sujeira (ou zerar todas as necessidades), definir o nível (0 a 10) de qualquer habilidade, ajustar culinária prática ou maximizar todas as habilidades.</li>
+<li><strong>Gangue e Cão</strong>: editar nome da gangue, apelido de chefe e membros, chamar a gangue, conquistar o bairro atual ou todos os bairros; adotar ou chamar o cão e ajustar nome, fome e confiança.</li>
+</ul>
+<h3>Inventário</h3>
+<ul>
+<li><strong>Armas</strong>: escolher qualquer arma do catálogo, ajustar carregador, munição reserva, silenciador e carregador ampliado; entregar, equipar, remover ou liberar todas as armas.</li>
+<li><strong>Objetos e Mochila</strong>: definir ou somar quantidades de objetos úteis, guardar itens de valor na mochila, ativar a mochila grande (40 espaços) e limpar a marca de roubado.</li>
+<li><strong>Substâncias e Comida</strong>: definir unidades de substâncias (ou somar +10) e adicionar produtos alimentícios ao bolso.</li>
+</ul>
+<h3>Veículos</h3>
+<ul>
+<li><strong>Gerar</strong>: criar qualquer modelo de veículo perto de você, escolher um nome próprio opcional, marcá-lo como seu, entrar imediatamente e aplicar melhorias no máximo.</li>
+<li><strong>Veículos ativos</strong>: listar os veículos ativos na cidade atual e entrar, trazer aqui, reparar, encher tanque, remover avarias, aplicar melhorias máx., tornar próprio, explodir, excluir ou limpar tráfego.</li>
+<li><strong>Especificações e Oficina</strong>: editar nome, modo IA, velocidade máxima, aceleração, freio, saúde atual e máxima, marcadores de hostil ou trancado (apenas este exemplar ou a classe inteira) e ajustar melhorias específicas da oficina.</li>
+</ul>
+<h3>NPCs e Gangues</h3>
+<ul>
+<li><strong>Gerar NPCs</strong>: criar civis, inimigos, aliados ou policiais por classe do catálogo, gangue, arma, quantidade, saúde, chegada de veículo e atitude hostil.</li>
+<li><strong>Pessoas ativas</strong>: listar as pessoas na área atual e editar nome, saúde, pontaria, estado, confiança civil e hostilidade atual; trazer aqui, curar, matar, excluir, remover hostis ou limpar mortos.</li>
+<li><strong>Reputação com Gangues</strong>: consultar e definir a reputação com cada gangue (-100 a +100), ou mudar direto para aliados (+100), neutro (0) ou inimigos (-100).</li>
+</ul>
+<h3>Polícia, Ocorrências e Mundo</h3>
+<ul>
+<li><strong>Polícia</strong>: definir estrelas atuais (0 a 5), limpar procurado e perseguição, enviar patrulhas ou patrulha de ronda, lançar ou retirar o helicóptero, jogar sem polícia e ativar o helicóptero policial no nível 5.</li>
+<li><strong>Ocorrências</strong>: lançar ou cancelar ocorrências de rua, iniciar perseguições com modelo fugitivo e velocidade alvo, iniciar guerra de bairros, procurar briga, assaltar a loja ou banco próximo, limpar proibições de locais, mandar ambulância, soltar maleta de 1.000 euros ou iniciar contratos e entregas de carro.</li>
+<li><strong>Mundo</strong>: teletransportar para qualquer cidade e local do catálogo (com filtro de texto), definir hora, dia, chuva e tipo de dia, ou alternar regras rápidas (+18, fogo amigo, guerra de bairros, vida realista, combustível, avarias, leis de trânsito, largar armas, inimigos difíceis e polícia rigorosa).</li>
+</ul>
+<h3>Inspetor</h3>
+<p>Permite ler e editar com segurança escopos específicos da partida e das configurações (como jogador, estatísticas, config, veículo selecionado ou pessoa próxima). Antes de aplicar a primeira modificação no Inspetor, a ponte salva automaticamente uma cópia prévia da partida em <code>respaldo_antes_trampas.json</code> dentro da pasta de partidas.</p>
+
+<h2>4. O que não permite fazer e limites de segurança</h2>
+<ul>
+<li><strong>Sem suporte a controle de videogame</strong>: por ser uma janela externa do Windows, não funciona com gamepad; deve ser usada com teclado e leitor de tela.</li>
+<li><strong>Jogo fechado ou opção desligada</strong>: se <strong>PuertoBravo.exe</strong> não estiver aberto ou <strong>Permitir menu de trapaças</strong> estiver em <strong>não</strong>, a ponte não existe e nenhuma ação é executada.</li>
+<li><strong>Partidas com amigos e servidores online</strong>: em partidas cooperativas com amigos o menu fica totalmente bloqueado. Em um servidor online dedicado ele só funciona se o dono ativar <code>permitir_trampas = si</code> na configuração do servidor; caso contrário a comunicação permanece bloqueada e todas as trapaças são rejeitadas. Lembre-se de que, ao ativar isso, o servidor deixa de vigiar o dinheiro de todos os jogadores daquele servidor (veja o <a href="servidor_pt.html">guia do servidor</a>).</li>
+<li><strong>Desativação de conquistas</strong>: ao usar qualquer trapaça em uma partida solo, esse salvamento fica marcado e as conquistas deixam de ser desbloqueadas nele.</li>
+<li><strong>Limites do Inspetor</strong>: não permite alterar campos arbitrários nem atributos internos que começam com <code>_</code>, nem chaves sensíveis da configuração (como <code>permitir_trampas</code>, <code>servidores</code>, <code>teclas</code>, endereços de atualização ou saídas de áudio). Também valida rigorosamente a sintaxe JSON e o tipo de cada campo: diante de qualquer erro (por exemplo, aspas simples, tipo incompatível ou número fora do intervalo), avisa o usuário e não altera nem adiciona nada.</li>
+<li><strong>Alcance da ponte IPC</strong>: escuta apenas localmente (<code>127.0.0.1</code>), exige token de sessão por instância e limita conexões simultâneas (máximo de 8) para evitar travamentos por excesso de threads.</li>
+</ul>
+
+<h2>5. Mais guias</h2>
+<ul>
+<li><a href="manual_pt.html">Voltar ao manual principal do jogo</a>.</li>
+<li><a href="teclas_pt.html">Guia completo de teclas e botões</a>.</li>
+<li><a href="servidor_pt.html">Guia do servidor online</a> (para a opção <code>permitir_trampas</code>).</li>
+</ul>
+</body>
+</html>

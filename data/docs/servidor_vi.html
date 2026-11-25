@@ -394,6 +394,7 @@ a { color: #9fd0ff; }
 <li><code>backup (copia)</code>: tạo một bản sao lưu.</li>
 <li><code>backups (copias)</code>: danh sách các bản sao lưu hiện có.</li>
 <li><code>reload (recargar)</code>: đọc lại servidor.conf và áp dụng các thay đổi không cần khởi động lại.</li>
+<li><code>cheats (trampas) si hoặc no</code>: cho phép hoặc chặn bảng gian lận trên máy chủ này (chỉ từ bảng điều khiển hoặc giao diện quản lý).</li>
 <li><code>update (actualizar)</code>: thông báo cho toàn thể người chơi rằng máy chủ khởi động lại để cập nhật, đếm ngược, lưu dữ liệu và dừng lại; các máy khách sẽ chờ và tự động kết nối lại khi mở máy chủ. Có thể thêm số giây đếm ngược phía sau.</li>
 <li><code>restart (reiniciar)</code>: tương tự, nhưng thông báo lý do là bảo trì. Có thể thêm số giây đếm ngược phía sau.</li>
 <li><code>shutdown (apagar)</code>: thông báo cho toàn thể người chơi, lưu mọi dữ liệu và dừng máy chủ.</li>
@@ -488,6 +489,7 @@ a { color: #9fd0ff; }
 <li>Giữa những người bạn tin cậy: hãy thoải mái tăng <code>ganancia_hora</code> lên 100.000 hoặc cao hơn, hoặc tắt hoàn toàn việc theo dõi tiền bạc bằng <code>economia = no</code>. Mức trần sinh ra dành cho các máy chủ mở cho người lạ, chứ không phải để làm phiền bạn bè của bạn.</li>
 <li>Trên máy chủ công khai: hãy giữ nguyên mức trần mặc định và nếu người chơi chuyên sống bằng hợp đồng hoặc cướp bóc phàn nàn, hãy tăng <code>encargos_hora</code> trước khi tăng <code>ganancia_hora</code>.</li>
 <li>Nếu có người phàn nàn rằng máy chủ thu hồi tiền của họ, hãy hỏi họ trò chơi đã thông báo điều gì: từ bản 1.7.1 trò chơi luôn hiển thị các con số rõ ràng. Nhật ký máy chủ cũng ghi lại một dòng mỗi lần kèm số tiền bị thu hồi và hạn mức.</li>
+<li>Nếu bạn bật <code>permitir_trampas = si</code> (hoặc chạy <code>trampas si</code>), máy chủ sẽ ngừng kiểm tra tiền của tất cả người chơi chứ không riêng người dùng bảng gian lận: bất kỳ ai cũng có thể tự đặt bao nhiêu tiền tùy thích, bỏ qua <code>ganancia_hora</code> và <code>economia</code>. Chỉ nên bật với bạn bè tin cậy.</li>
 <li>Tất cả các tùy chọn này đều có thể thay đổi ngay trong khi máy chủ đang chạy.</li>
 </ul>
 <h3>Nếu bị mất kết nối ngay sau khi mua sắm</h3>
@@ -817,6 +819,13 @@ a { color: #9fd0ff; }
 </ul>
 <h4>Cho phép hai phiên đăng nhập cùng thông tin định danh: <code>varias_sesiones</code></h4>
 <p>Chỉ dùng để thử nghiệm. Mặc định là no: nếu ai đó đăng nhập nhân vật từ nơi khác, phiên đăng nhập trước sẽ bị ngắt.</p>
+<ul>
+<li>Các giá trị: si (có) hoặc no (không).</li>
+<li>Mặc định: <code>no</code>.</li>
+<li>Được áp dụng ngay mà không cần khởi động lại máy chủ.</li>
+</ul>
+<h4>Cho phép bảng gian lận: <code>permitir_trampas</code></h4>
+<p>Chọn no (mặc định): trò chơi sẽ vô hiệu hóa hoàn toàn bảng gian lận khi vào máy chủ này. Chọn si: máy chủ sẽ ngừng kiểm tra tiền của tất cả người chơi và bất kỳ ai cũng có thể tự đặt bao nhiêu tiền tùy thích.</p>
 <ul>
 <li>Các giá trị: si (có) hoặc no (không).</li>
 <li>Mặc định: <code>no</code>.</li>

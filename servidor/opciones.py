@@ -142,6 +142,8 @@ OPCIONES = (
        "A los administradores no se les saca."), ENTERO, 0, 0, 1440),
     _o("varias_sesiones", "acceso", tr("Permitir dos sesiones con la misma identidad"),
        tr("Solo para pruebas. De serie, no: si alguien entra con su personaje desde otro sitio, la sesión anterior se cierra."), SINO, "no"),
+    _o("permitir_trampas", "acceso", tr("Permitir menú de trampas"),
+       tr("Con no, que es lo de serie, los juegos anulan por completo el menú de trampas al entrar en este servidor. Con si, el servidor deja de vigilar el dinero de todos los jugadores y cualquiera podrá ponerse el dinero que quiera."), SINO, "no"),
     # ---------------------------------------------------------------- versiones
     _o("comprobar_datos", "versiones", tr("Comprobar los datos del juego de quien entra"),
        tr("Con si, el servidor mira si el mundo que trae el juego de quien entra es el suyo, el de otra versión de verdad o uno "

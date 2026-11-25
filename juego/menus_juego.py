@@ -931,6 +931,9 @@ def opciones(app):
             si_no("sucesos", tr("Sucesos callejeros al azar"), tr("Atracos, pandilleros y maletines perdidos que aparecen de vez en cuando por la calle.")),
             si_no("invulnerable", tr("Asistencia: no recibir daño"), tr("Para explorar sin preocuparte de nada.")),
             si_no("sin_policia", tr("Asistencia: sin policía"), tr("Los delitos no cuentan y nadie te persigue.")),
+            si_no("permitir_trampas", tr("Permitir el menú de trampas"),
+                  tr("Con no, que es como viene, el juego no abre ninguna conexión para el menú de trampas externo. Con sí, permite usar MenuTrampas.exe en solitario o en servidores donde el dueño lo haya permitido. Usar trampas desactiva los logros en esa partida."),
+                  al_cambiar=lambda: app.actualizar_puente_trampas()),
             si_no("vida_realista", tr("Vida realista: hambre, sed, sueño e higiene"), tr("Hay que comer, beber, dormir y lavarse. Con hambre, con sed o con sueño vas más despacio y apuntas peor, y si los ignoras pierdes salud. "
                   "Se bebe en bares, tiendas y en tu cocina; la ducha, en tu casa o en un hotel. Ir sucio baja el ánimo. La tecla V te dice cómo estás, y Mayúsculas V, solo eso. "
                   "Además de comer fuera o pedir a domicilio, puedes hacer la compra en las tiendas de comida, guardarla en la cocina de tu casa y cocinar: es lo que más alimenta y lo más barato.")),

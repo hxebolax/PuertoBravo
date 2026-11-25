@@ -394,6 +394,7 @@ a { color: #9fd0ff; }
 <li><code>backup (copia)</code>: makes a backup.</li>
 <li><code>backups (copias)</code>: the backups there are.</li>
 <li><code>reload (recargar)</code>: reads servidor.conf again and applies what can be changed without restarting.</li>
+<li><code>cheats (trampas) si or no</code>: allows or blocks the cheat menu on this server (console or panel only).</li>
 <li><code>update (actualizar)</code>: warns everyone that the server is restarting to update, waits for the countdown, saves everything and stops it; the games wait and come back in on their own when you start it again. You can add the seconds of warning after it.</li>
 <li><code>restart (reiniciar)</code>: the same, but saying it is for maintenance. You can add the seconds of warning after it.</li>
 <li><code>shutdown (apagar)</code>: warns everyone, saves everything and stops the server.</li>
@@ -488,6 +489,7 @@ a { color: #9fd0ff; }
 <li>Among trusted friends: raise <code>ganancia_hora</code> without fear, to 100,000 or more, or turn off money tracking with <code>economia = no</code>. The cap is there for servers open to strangers, not to spoil things for your people.</li>
 <li>On an open server: leave the default cap and, if your people live off contracts or robberies and complain, raise <code>encargos_hora</code> before <code>ganancia_hora</code>.</li>
 <li>If someone tells you the server is taking money from them, ask them what the game told them: since 1.7.1 it gives them the figures. The server log shows a line each time, with what was taken away and the cap.</li>
+<li>If you set <code>permitir_trampas = si</code> (or run <code>trampas si</code>), the server stops checking money for all players, not only the one using the cheat menu: anyone can give themselves as much money as they want, bypassing <code>ganancia_hora</code> and <code>economia</code>. Only enable it among trusted friends.</li>
 <li>All these options can be changed with the server running.</li>
 </ul>
 <h3>If the connection drops right after buying</h3>
@@ -817,6 +819,13 @@ a { color: #9fd0ff; }
 </ul>
 <h4>Allow two sessions with the same identity: <code>varias_sesiones</code></h4>
 <p>For testing only. By default, no: if someone comes in with their character from somewhere else, the previous session is closed.</p>
+<ul>
+<li>Values: si or no.</li>
+<li>Default: <code>no</code>.</li>
+<li>It applies without restarting the server.</li>
+</ul>
+<h4>Allow cheat menu: <code>permitir_trampas</code></h4>
+<p>With no, which is the default, games completely disable the cheat menu when joining this server. With si, the server stops checking money for all players and anyone can give themselves as much money as they want.</p>
 <ul>
 <li>Values: si or no.</li>
 <li>Default: <code>no</code>.</li>

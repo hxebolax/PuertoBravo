@@ -36,6 +36,9 @@
 " (administra)": [
 "servidor/nucleo.py"
 ],
+" (copia de seguridad creada)": [
+"trampas/ventana.py"
+],
 " (dentro)": [
 "servidor/nucleo.py"
 ],
@@ -742,6 +745,10 @@
 " Recompensa: {paga} euros.": [
 "juego/misiones.py"
 ],
+" Recuerda usar comillas dobles (\") en lugar de comillas simples (').": [
+"trampas/puente.py",
+"trampas/puente.py"
+],
 " Redúcele: Q para fijarle. Cuando se rinda, Intro.": [
 "juego/agente.py"
 ],
@@ -1306,6 +1313,9 @@
 " {v} se queda sin su aliada.": [
 "juego/reconquista.py"
 ],
+" | Servidor (trampas permitidas)": [
+"trampas/ventana.py"
+],
 " ¿A que sí?": [
 "juego/respuestas.py"
 ],
@@ -1496,8 +1506,30 @@
 "%s: no existe ninguna opción con ese nombre; no se le hace caso.": [
 "servidor/opciones.py"
 ],
+"&1 Instancia del juego:": [
+"trampas/ventana.py"
+],
+"&2 Conectar": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"&2 Desconectar": [
+"trampas/ventana.py"
+],
+"&3 Actualizar (F5)": [
+"trampas/ventana.py"
+],
+"&4 Estado de conexión:": [
+"trampas/ventana.py"
+],
+"&5 Resumen de partida:": [
+"trampas/ventana.py"
+],
 "&Abrir mod...\tCtrl+O": [
 "editor/ventana.py"
+],
+"&Aceleración:": [
+"trampas/ventana.py"
 ],
 "&Aceptar": [
 "editor/formulario.py",
@@ -1513,6 +1545,9 @@
 "&Activar o desactivar mods...\tCtrl+M": [
 "editor/ventana.py"
 ],
+"&Aliados (+100)": [
+"trampas/ventana.py"
+],
 "&Anular": [
 "panel_servidor/ventana.py"
 ],
@@ -1522,15 +1557,49 @@
 "&Anuncio para todos los jugadores:": [
 "panel_servidor/ventana.py"
 ],
+"&Aplicar a NPC": [
+"trampas/ventana.py"
+],
+"&Aplicar banda": [
+"trampas/ventana.py"
+],
+"&Aplicar cambio": [
+"trampas/ventana.py"
+],
+"&Aplicar combate": [
+"trampas/ventana.py"
+],
+"&Aplicar economía y progreso": [
+"trampas/ventana.py"
+],
+"&Aplicar necesidades": [
+"trampas/ventana.py"
+],
+"&Aplicar tiempo": [
+"trampas/ventana.py"
+],
 "&Archivo": [
 "editor/ventana.py",
 "editor/ventana.py"
+],
+"&Arma del catálogo:": [
+"trampas/ventana.py"
 ],
 "&Arrancar": [
 "panel_servidor/ventana.py"
 ],
 "&Arrancar\tF5": [
 "panel_servidor/ventana.py"
+],
+"&Banda rival:": [
+"trampas/ventana.py"
+],
+"&Banda:": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"&Blindaje:": [
+"trampas/ventana.py"
 ],
 "&Borrar la cuenta": [
 "panel_servidor/ventana.py"
@@ -1539,6 +1608,9 @@
 "panel_servidor/ventana.py",
 "panel_servidor/ventana.py"
 ],
+"&Campos disponibles:": [
+"trampas/ventana.py"
+],
 "&Cancelar": [
 "editor/formulario.py",
 "editor/formulario.py",
@@ -1546,14 +1618,42 @@
 "editor/accesibilidad/dialogos.py",
 "editor/accesibilidad/dialogos.py"
 ],
+"&Cancelar suceso": [
+"trampas/ventana.py"
+],
+"&Cantidad:": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"&Cargador:": [
+"trampas/ventana.py"
+],
+"&Cerrado": [
+"trampas/ventana.py"
+],
 "&Cerrar el puerto ahora": [
 "panel_servidor/ventana.py"
+],
+"&Clase (catálogo):": [
+"trampas/ventana.py"
+],
+"&Cocina práctica (0-100):": [
+"trampas/ventana.py"
 ],
 "&Comprobar el mod\tF5": [
 "editor/ventana.py"
 ],
+"&Confianza civil (-100..100):": [
+"trampas/ventana.py"
+],
 "&Configuración...\tCtrl+P": [
 "panel_servidor/ventana.py"
+],
+"&Conquistar barrio actual": [
+"trampas/ventana.py"
+],
+"&Contenido +18": [
+"trampas/ventana.py"
 ],
 "&Copia de seguridad ahora\tCtrl+B": [
 "panel_servidor/ventana.py"
@@ -1567,6 +1667,9 @@
 "&Cuentas del servidor:": [
 "panel_servidor/ventana.py"
 ],
+"&Dar / aplicar arma": [
+"trampas/ventana.py"
+],
 "&Datos": [
 "panel_servidor/ventana.py"
 ],
@@ -1576,8 +1679,29 @@
 "&Dejarlo abierto": [
 "panel_servidor/ventana.py"
 ],
+"&Dinero en mano:": [
+"trampas/ventana.py"
+],
+"&Día:": [
+"trampas/ventana.py"
+],
+"&Enemigos (-100)": [
+"trampas/ventana.py"
+],
+"&Equipar": [
+"trampas/ventana.py"
+],
+"&Estado del inspector:": [
+"trampas/ventana.py"
+],
 "&Estado del servidor:": [
 "panel_servidor/ventana.py"
+],
+"&Estado:": [
+"trampas/ventana.py"
+],
+"&Estrellas actuales (0 a 5):": [
+"trampas/ventana.py"
 ],
 "&Expulsar al jugador elegido...\tCtrl+E": [
 "panel_servidor/ventana.py"
@@ -1586,8 +1710,44 @@
 "panel_servidor/ventana.py",
 "panel_servidor/ventana.py"
 ],
+"&Fama callejera (0-100):": [
+"trampas/ventana.py"
+],
+"&Fijar cantidad": [
+"trampas/ventana.py"
+],
+"&Fijar estrellas": [
+"trampas/ventana.py"
+],
+"&Fijar habilidad": [
+"trampas/ventana.py"
+],
+"&Fijar reputación": [
+"trampas/ventana.py"
+],
+"&Fijar unidades": [
+"trampas/ventana.py"
+],
+"&Filtrar clave:": [
+"trampas/ventana.py"
+],
+"&Filtrar lugares:": [
+"trampas/ventana.py"
+],
+"&Freno:": [
+"trampas/ventana.py"
+],
+"&Generar NPC(s) aquí": [
+"trampas/ventana.py"
+],
+"&Generar vehículo junto a mí": [
+"trampas/ventana.py"
+],
 "&Gestión": [
 "panel_servidor/ventana.py"
+],
+"&Guardaespaldas:": [
+"trampas/ventana.py"
 ],
 "&Guardar": [
 "editor/accesibilidad/dialogos.py"
@@ -1604,8 +1764,30 @@
 "&Guía del servidor\tF1": [
 "panel_servidor/ventana.py"
 ],
+"&Habilidad:": [
+"trampas/ventana.py"
+],
 "&Hacer administrador": [
 "panel_servidor/ventana.py"
+],
+"&Hacer contrato": [
+"trampas/ventana.py"
+],
+"&Hacer mío": [
+"trampas/ventana.py"
+],
+"&Hambre perro (0-100):": [
+"trampas/ventana.py"
+],
+"&Hora (0-23):": [
+"trampas/ventana.py"
+],
+"&Hostil": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"&Hostil ahora": [
+"trampas/ventana.py"
 ],
 "&Invitaciones:": [
 "panel_servidor/ventana.py"
@@ -1616,8 +1798,32 @@
 "&Jugadores que están dentro:": [
 "panel_servidor/ventana.py"
 ],
+"&Lanzar persecución": [
+"trampas/ventana.py"
+],
+"&Leer ámbito": [
+"trampas/ventana.py"
+],
+"&Limpiar búsqueda y persecución": [
+"trampas/ventana.py"
+],
+"&Limpiar marca de robado": [
+"trampas/ventana.py"
+],
+"&Llamar banda": [
+"trampas/ventana.py"
+],
+"&Lugar de destino:": [
+"trampas/ventana.py"
+],
 "&Manual del editor\tF1": [
 "editor/ventana.py"
+],
+"&Matar": [
+"trampas/ventana.py"
+],
+"&Mejoras máx.": [
+"trampas/ventana.py"
 ],
 "&Mensaje al jugador elegido...\tCtrl+M": [
 "panel_servidor/ventana.py"
@@ -1632,9 +1838,15 @@
 "&Mensaje:": [
 "editor/accesibilidad/dialogos.py"
 ],
+"&Miembros:": [
+"trampas/ventana.py"
+],
 "&Mod": [
 "editor/ventana.py",
 "editor/ventana.py"
+],
+"&Modelo a generar:": [
+"trampas/ventana.py"
 ],
 "&Mods de la carpeta data, mods:": [
 "editor/ventana.py"
@@ -1644,6 +1856,9 @@
 ],
 "&Más tarde": [
 "panel_servidor/ventana.py"
+],
+"&Neutral (0)": [
+"trampas/ventana.py"
 ],
 "&No": [
 "editor/accesibilidad/dialogos.py",
@@ -1662,8 +1877,27 @@
 "&No vetar": [
 "panel_servidor/ventana.py"
 ],
+"&Nombre banda:": [
+"trampas/ventana.py"
+],
+"&Nombre propio (opcional):": [
+"trampas/ventana.py"
+],
+"&Nombre:": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"&Normas de tráfico": [
+"trampas/ventana.py"
+],
 "&Nuevo mod\tCtrl+N": [
 "editor/ventana.py"
+],
+"&Nuevo valor (texto o JSON):": [
+"trampas/ventana.py"
+],
+"&Objeto útil:": [
+"trampas/ventana.py"
 ],
 "&Orden para el servidor:": [
 "panel_servidor/ventana.py"
@@ -1678,8 +1912,23 @@
 "panel_servidor/ventana.py",
 "panel_servidor/ventana.py"
 ],
+"&Personas en la zona actual:": [
+"trampas/ventana.py"
+],
+"&Policía estricta": [
+"trampas/ventana.py"
+],
+"&Prestigio vecinal (0-100):": [
+"trampas/ventana.py"
+],
 "&Probar en el juego\tF9": [
 "editor/ventana.py"
+],
+"&Producto:": [
+"trampas/ventana.py"
+],
+"&Quitar arma": [
+"trampas/ventana.py"
 ],
 "&Quitar la administración": [
 "panel_servidor/ventana.py",
@@ -1697,6 +1946,12 @@
 "&Reiniciar ahora": [
 "panel_servidor/ventana.py"
 ],
+"&Reparar": [
+"trampas/ventana.py"
+],
+"&Reputación (-100 a 100):": [
+"trampas/ventana.py"
+],
 "&Restaurar": [
 "panel_servidor/ventana.py"
 ],
@@ -1707,11 +1962,43 @@
 "editor/ventana.py",
 "panel_servidor/ventana.py"
 ],
+"&Salud actual:": [
+"trampas/ventana.py"
+],
+"&Salud:": [
+"trampas/ventana.py",
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"&Sed (0-100):": [
+"trampas/ventana.py"
+],
 "&Seleccionar...": [
 "editor/accesibilidad/nombres.py"
 ],
 "&Servidor": [
 "panel_servidor/ventana.py"
+],
+"&Silenciador": [
+"trampas/ventana.py"
+],
+"&Soltar armas": [
+"trampas/ventana.py"
+],
+"&Soltar maletín de 1.000 €": [
+"trampas/ventana.py"
+],
+"&Subir": [
+"trampas/ventana.py"
+],
+"&Subir al instante": [
+"trampas/ventana.py"
+],
+"&Sumar cantidad": [
+"trampas/ventana.py"
+],
+"&Sustancia:": [
+"trampas/ventana.py"
 ],
 "&Sí": [
 "editor/accesibilidad/dialogos.py",
@@ -1721,11 +2008,36 @@
 "&Teclas del panel": [
 "panel_servidor/ventana.py"
 ],
+"&Teletransportar al lugar elegido": [
+"trampas/ventana.py"
+],
+"&Terminar guerra": [
+"trampas/ventana.py"
+],
+"&Tipo de entidad:": [
+"trampas/ventana.py"
+],
 "&Todas las opciones": [
 "panel_servidor/configuracion.py"
 ],
+"&Traer aquí": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"&Unidades:": [
+"trampas/ventana.py"
+],
 "&Vaciar el registro": [
 "panel_servidor/ventana.py"
+],
+"&Vehículo seleccionado:": [
+"trampas/ventana.py"
+],
+"&Vehículos vivos en la localidad:": [
+"trampas/ventana.py"
+],
+"&Velocidad objetivo:": [
+"trampas/ventana.py"
 ],
 "&Vetar": [
 "panel_servidor/ventana.py"
@@ -1735,6 +2047,49 @@
 "panel_servidor/ventana.py",
 "panel_servidor/ventana.py",
 "panel_servidor/ventana.py"
+],
+"&Vida realista": [
+"trampas/ventana.py"
+],
+"&Zona / Localidad:": [
+"trampas/ventana.py"
+],
+"'carne_puntos' debe estar entre 0 y 12. No se modificó nada.": [
+"trampas/puente.py"
+],
+"'estrellas' debe estar entre 0 y 5. No se modificó nada.": [
+"trampas/puente.py"
+],
+"'punteria' debe estar entre 0.0 y 1.0. No se modificó nada.": [
+"trampas/puente.py"
+],
+"'puntos_busqueda' debe ser mayor o igual a 0. No se modificó nada.": [
+"trampas/puente.py"
+],
+"'salud' debe ser mayor o igual a 0. No se modificó nada.": [
+"trampas/puente.py"
+],
+"'stats.carreras' debe ser una lista de identificadores de texto. No se modificó nada.": [
+"trampas/puente.py"
+],
+"'stats.{clave}' debe ser un número finito mayor o igual a 0. No se modificó nada.": [
+"trampas/puente.py"
+],
+"'vel' debe ser mayor que 0. No se modificó nada.": [
+"trampas/puente.py"
+],
+"'{clave}' debe estar entre 0 y 100. No se modificó nada.": [
+"trampas/puente.py"
+],
+"'{clave}' debe ser mayor o igual a 0. No se modificó nada.": [
+"trampas/puente.py"
+],
+"'{clave}' debe ser un número entero mayor o igual a 0. No se modificó nada.": [
+"trampas/puente.py"
+],
+"'{clave}' debe ser un número positivo mayor que 0. No se modificó nada.": [
+"trampas/puente.py",
+"trampas/puente.py"
 ],
 "(La fuente de Marta. Tengo que llegar antes que nadie.)": [
 "data/datos/misiones.json"
@@ -1754,6 +2109,29 @@
 "(fuera de personaje) %s": [
 "servidor/nucleo.py"
 ],
+"(genérico)": [
+"trampas/ventana.py"
+],
+"(ninguna detectada)": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"(ninguna)": [
+"trampas/ventana.py",
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"(ninguno)": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"(por defecto)": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"(sin coincidencias)": [
+"trampas/ventana.py"
+],
 "(sin valor)": [
 "editor/formulario.py"
 ],
@@ -1768,6 +2146,15 @@
 ],
 "*vale |*claro |*de acuerdo|*por supuesto|*entiendo|*ya veo|*es verdad|*tienes razon|*eso es|*exacto|*pues si |*pues no |*no se ": [
 "juego/respuestas_datos2.py"
+],
+"+1 h&ora": [
+"trampas/ventana.py"
+],
+"+5.000 &euros": [
+"trampas/ventana.py"
+],
+"+50.000 e&uros": [
+"trampas/ventana.py"
 ],
 ", a domicilio, con {entero} euros de envío": [
 "juego/menus_adultos.py"
@@ -2517,6 +2904,9 @@
 "juego/registro.py",
 "juego/registro.py"
 ],
+"<h2>En el menú de trampas</h2>\n<p>La ventana externa <code>MenuTrampas.exe</code> (requiere activar <strong>Permitir el menú de trampas</strong> en Opciones &gt; Combate y dificultad y, en multijugador, que el dueño del servidor habilite <code>permitir_trampas</code>) responde a estas teclas:</p>\n<ul>\n<li><kbd>Control Tab</kbd> y <kbd>Control Mayúsculas Tab</kbd>: cambiar entre las pestañas y subpestañas.</li>\n<li><kbd>Tab</kbd> y <kbd>Mayúsculas Tab</kbd>: recorrer los campos y botones de la pestaña actual.</li>\n<li><kbd>Alt</kbd> más la letra o número subrayado del rótulo o botón: saltar directamente a ese control (<kbd>Alt 1</kbd> a <kbd>Alt 5</kbd> para la instancia, Conectar/Desconectar, Actualizar, estado y resumen).</li>\n<li><kbd>F5</kbd>: refrescar de inmediato la conexión y todos los campos sincronizados con el juego.</li>\n<li><kbd>Control H</kbd>: anunciar con el lector de pantalla la ayuda contextual del control que tiene el foco.</li>\n</ul>": [
+"herramientas/generar_datos.py"
+],
 "<li><code>data\\musica\\{k}</code>: {desc}. De serie trae {n} piezas, de <code>{k}_1.mp3</code> a <code>{k}_{n}.mp3</code>.</li>": [
 "herramientas/generar_datos.py"
 ],
@@ -2840,6 +3230,9 @@
 "A&plicar": [
 "editor/accesibilidad/dialogos.py"
 ],
+"A&plicar especificaciones": [
+"trampas/ventana.py"
+],
 "A&yuda": [
 "editor/ventana.py",
 "editor/ventana.py",
@@ -3113,8 +3506,14 @@
 "Acciones ya escritas para el rol": [
 "editor/esquema.py"
 ],
+"Acción de NPC desconocida: {accion}": [
+"trampas/puente.py"
+],
 "Acción de un personaje": [
 "juego/catalogo_sonidos.py"
+],
+"Acción de vehículo desconocida: {accion}": [
+"trampas/puente.py"
 ],
 "Acción para {nombre_boton}": [
 "juego/menus_extra.py"
@@ -3207,6 +3606,9 @@
 "Activa o desactiva los temas para mayores de 18 años.": [
 "juego/menus_juego.py"
 ],
+"Activar helicóptero policial en &nivel 5": [
+"trampas/ventana.py"
+],
 "Activar o desactivar mods": [
 "editor/ventana.py",
 "editor/ventana.py"
@@ -3250,6 +3652,9 @@
 ],
 "Acércate sin que te oigan y tráeme lo que haya en la puerta. Agachado y sin prisa.": [
 "data/mods/penas_altas.json"
+],
+"Ad&optar / traer perro": [
+"trampas/ventana.py"
 ],
 "Adela": [
 "data/datos/gente.json"
@@ -3578,6 +3983,9 @@
 "Aire de sierra": [
 "data/mods/penas_altas.json"
 ],
+"Aj&ustar mejora": [
+"trampas/ventana.py"
+],
 "Ajos, una cabeza": [
 "juego/compra.py",
 "data/datos/vida.json"
@@ -3660,6 +4068,9 @@
 ],
 "Al día siguiente, lo que se compró": [
 "editor/esquema.py"
+],
+"Al elegir un arma se muestran su cargador, reserva, silenciador y cargador ampliado actuales.": [
+"trampas/ventana.py"
 ],
 "Al empezar el turno": [
 "editor/esquema.py"
@@ -4000,6 +4411,9 @@
 "Algún día seré yo el de arriba.": [
 "juego/respuestas_datos2.py"
 ],
+"Aliado": [
+"trampas/ventana.py"
+],
 "Alianza cerrada entre %s y %s.": [
 "servidor/nucleo.py"
 ],
@@ -4008,6 +4422,9 @@
 ],
 "Alianzas con otras bandas": [
 "juego/menus_enlinea.py"
+],
+"Alias de &jefe:": [
+"trampas/ventana.py"
 ],
 "Allá cada cual.": [
 "juego/respuestas_datos2.py"
@@ -4183,6 +4600,9 @@
 "editor/esquema.py",
 "data/datos/vehiculos.json"
 ],
+"Ambulancia en camino.": [
+"trampas/ventana.py"
+],
 "Ambulancia: hay un herido en {nombre}. ¡Date prisa!": [
 "juego/trabajos.py"
 ],
@@ -4355,6 +4775,9 @@
 "juego/menus_honrado.py",
 "juego/menus_juego.py"
 ],
+"Antecedentes, sospechas y dinero negro limpiados.": [
+"trampas/ventana.py"
+],
 "Antes con cien euros llenabas el carro. Ahora no llenas ni la cesta.": [
 "juego/respuestas_datos1.py"
 ],
@@ -4443,6 +4866,9 @@
 "Apagando.": [
 "servidor/nucleo.py"
 ],
+"Aparcado": [
+"trampas/ventana.py"
+],
 "Aparcado delante y sin apagar el motor. Cuando salgáis, arranco.": [
 "juego/golpes.py",
 "data/datos/vida.json"
@@ -4487,6 +4913,12 @@
 ],
 "Apercibimientos con los que se pierde la placa": [
 "editor/esquema.py"
+],
+"Apl&icar perro": [
+"trampas/ventana.py"
+],
+"Aplicado correctamente: {clave} = {valor}{aviso}": [
+"trampas/ventana.py"
 ],
 "Aplicado: %s.": [
 "servidor/nucleo.py"
@@ -4781,6 +5213,9 @@
 "Aquí, dando una vuelta. Hay que estirar las piernas.": [
 "juego/respuestas_datos2.py"
 ],
+"Ar&ma:": [
+"trampas/ventana.py"
+],
 "Archivo de la llave del certificado": [
 "servidor/opciones.py"
 ],
@@ -4824,11 +5259,23 @@
 "Arma de fuego": [
 "editor/esquema.py"
 ],
+"Arma desconocida en el catálogo: {nuevo}. No se modificó nada.": [
+"trampas/puente.py"
+],
+"Arma desconocida: {ident}": [
+"trampas/puente.py"
+],
+"Arma desconocida: {val}": [
+"trampas/puente.py"
+],
 "Arma inicial": [
 "editor/esquema.py"
 ],
 "Arma que se entrega": [
 "editor/esquema.py"
+],
+"Arma {aid}: acción {accion} aplicada.": [
+"trampas/ventana.py"
 ],
 "Arma: ": [
 "juego/partida.py"
@@ -4843,7 +5290,9 @@
 "juego/menus_juego.py"
 ],
 "Armas": [
-"editor/esquema.py"
+"editor/esquema.py",
+"trampas/ventana.py",
+"trampas/ventana.py"
 ],
 "Armas colgadas tras un cristal. Huele a aceite.": [
 "juego/sistemas.py"
@@ -5123,6 +5572,12 @@
 "Así que tú eres quien anda revolviendo mi ciudad. Siéntate. ¿Whisky?": [
 "data/datos/misiones.json"
 ],
+"At&racar local cercano": [
+"trampas/ventana.py"
+],
+"Ataca": [
+"trampas/ventana.py"
+],
 "Atacas con las manos arriba: se acabó la rendición.": [
 "juego/combate.py"
 ],
@@ -5209,6 +5664,7 @@
 "juego/agente.py",
 "juego/capo.py",
 "juego/extras2.py",
+"trampas/puente.py",
 "data/datos/gente.json"
 ],
 "Atracador {v}": [
@@ -5216,6 +5672,9 @@
 ],
 "Atracar al peatón que tienes al lado": [
 "juego/mando.py"
+],
+"Atracar ba&nco cercano": [
+"trampas/ventana.py"
 ],
 "Atracar el banco": [
 "juego/menus_lugares.py"
@@ -5252,6 +5711,12 @@
 "juego/atracos.py",
 "juego/extras2.py"
 ],
+"Atraco al banco cercano iniciado.": [
+"trampas/ventana.py"
+],
+"Atraco al local cercano iniciado.": [
+"trampas/ventana.py"
+],
 "Atraco calle": [
 "editor/esquema.py"
 ],
@@ -5268,11 +5733,23 @@
 "editor/esquema.py",
 "editor/esquema.py"
 ],
+"Atracos, encargos y calle": [
+"trampas/ventana.py"
+],
 "Atracos, pandilleros y maletines perdidos que aparecen de vez en cuando por la calle.": [
 "juego/menus_juego.py"
 ],
 "Atravesarla": [
 "juego/vuelo_pantalla.py"
+],
+"Atributo inexistente en Vehículo: {clave}. No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
+"Atributo interno o protegido no editable ({limpia}). No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
+"Atributos del NPC actualizados.": [
+"trampas/ventana.py"
 ],
 "Atropellas a {get}.": [
 "juego/enlinea.py"
@@ -5371,6 +5848,12 @@
 "editor/accesibilidad/revision_teclado.py",
 "editor/accesibilidad/revision_teclado.py"
 ],
+"Avanzada una hora.": [
+"trampas/ventana.py"
+],
+"Ave&rías": [
+"trampas/ventana.py"
+],
 "Avenida Belmonte": [
 "data/datos/ciudad.json"
 ],
@@ -5462,6 +5945,9 @@
 ],
 "Avenidas, de oeste a este": [
 "editor/esquema.py"
+],
+"Averías y pinchazos eliminados.": [
+"trampas/ventana.py"
 ],
 "Averías, taller, gasolina y robo de vehículos": [
 "juego/catalogo_sonidos.py"
@@ -5685,8 +6171,20 @@
 "Añades {lower}. Llevas {len}: {total} euros, más {envio} de envío.": [
 "juego/domicilio.py"
 ],
+"Añadido {pid} al bolsillo.": [
+"trampas/ventana.py"
+],
+"Añadidos 5000 euros en mano.": [
+"trampas/ventana.py"
+],
+"Añadidos 50000 euros en mano.": [
+"trampas/ventana.py"
+],
 "Añadir": [
 "editor/formulario.py"
+],
+"Añadir al &bolsillo": [
+"trampas/ventana.py"
 ],
 "Añadir un &sonido propio...\tCtrl+Shift+A": [
 "editor/ventana.py"
@@ -5727,6 +6225,9 @@
 ],
 "B o Círculo para volver": [
 "juego/mando.py"
+],
+"B&uscar encargo de coche": [
+"trampas/ventana.py"
 ],
 "Bah, eso no es nada.": [
 "juego/respuestas.py"
@@ -5968,8 +6469,15 @@
 "Banda desmantelada": [
 "editor/esquema.py"
 ],
+"Banda propia y territorios": [
+"trampas/ventana.py"
+],
 "Banda que manda en el barrio": [
 "editor/esquema.py"
+],
+"Banda y Perro": [
+"trampas/ventana.py",
+"trampas/ventana.py"
 ],
 "Bandas": [
 "editor/esquema.py",
@@ -6021,6 +6529,9 @@
 ],
 "Baraja española. Elige cuánto apuestas": [
 "juego/sistemas.py"
+],
+"Barco": [
+"trampas/ventana.py"
 ],
 "Barco de regalo": [
 "editor/esquema.py",
@@ -6075,6 +6586,9 @@
 ],
 "Barrio Viejo": [
 "data/datos/ciudad.json"
+],
+"Barrio actual conquistado.": [
+"trampas/ventana.py"
 ],
 "Barrio defendido": [
 "juego/catalogo_sonidos.py",
@@ -6230,6 +6744,9 @@
 "Bicicleta": [
 "juego/catalogo_sonidos.py",
 "data/datos/vehiculos.json"
+],
+"Bidón de gasolina": [
+"trampas/puente.py"
 ],
 "Bidón de gasolina comprado. Llevas {bidon}.": [
 "juego/menus_juego.py"
@@ -6396,6 +6913,12 @@
 "Bloq Mayús": [
 "editor/accesibilidad/revision_teclado.py"
 ],
+"Bloqueado en servidores o partidas en línea.": [
+"trampas/puente.py"
+],
+"Bloqueado: no se permiten trampas en servidores ni partidas en línea.": [
+"trampas/puente.py"
+],
 "Bobinas de cobre": [
 "data/datos/misiones_extra3.json"
 ],
@@ -6538,6 +7061,9 @@
 "Borrar": [
 "editor/formulario.py",
 "editor/formulario.py"
+],
+"Borrar an&tecedentes": [
+"trampas/ventana.py"
 ],
 "Borrar el último marcador": [
 "juego/menus_extra.py"
@@ -6754,6 +7280,10 @@
 "Busca errores: referencias que no existen, posiciones imposibles, pasos incoherentes.": [
 "editor/ventana.py"
 ],
+"Busca y conecta con el proceso de Puerto Bravo seleccionado.": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
 "Buscador de tesoros": [
 "data/datos/misiones_extra.json",
 "data/datos/misiones_extra.json"
@@ -6775,6 +7305,9 @@
 ],
 "Buscar componentes nuevos al arrancar: {v}": [
 "juego/menus_actualizar.py"
+],
+"Buscar p&elea": [
+"trampas/ventana.py"
 ],
 "Buscar pelea": [
 "editor/esquema.py",
@@ -6828,8 +7361,14 @@
 "Búscate la vida.": [
 "juego/respuestas_datos2.py"
 ],
+"Búsqueda limpiada y agentes retirados.": [
+"trampas/ventana.py"
+],
 "C&errar": [
 "editor/accesibilidad/dialogos.py"
+],
+"Ca&ntidad:": [
+"trampas/ventana.py"
 ],
 "Cabaña del bosque": [
 "data/datos/mapas/fuentefria.json"
@@ -7667,11 +8206,26 @@
 "Campo de girasoles": [
 "data/datos/mapas/villaseca.json"
 ],
+"Campo de persona no editable desde el Inspector: {clave}. No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
 "Campo de texto. Escriba aquí el valor.": [
 "editor/accesibilidad/ayuda.py"
 ],
+"Campo de vehículo no editable desde el Inspector: {clave}. No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
+"Campo no editable desde el Inspector por seguridad de la partida: {clave}. No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
+"Campo no editable en el Inspector": [
+"trampas/ventana.py"
+],
 "Campo numérico. Escriba un número o cámbielo con las flechas arriba y abajo.": [
 "editor/accesibilidad/ayuda.py"
+],
+"Campo {clave} actualizado.": [
+"trampas/ventana.py"
 ],
 "Campo: {nombre}": [
 "juego/vuelo_pantalla.py"
@@ -7797,6 +8351,9 @@
 ],
 "Carga. ": [
 "juego/vuelo_pantalla.py"
+],
+"Cargador am&pliado": [
+"trampas/ventana.py"
 ],
 "Cargador ampliado": [
 "juego/menus_juego.py"
@@ -8133,6 +8690,12 @@
 ],
 "Categorías de componentes que te interesan": [
 "juego/menus_componentes.py"
+],
+"Categorías de trampas": [
+"trampas/ventana.py"
+],
+"Categorías principales de trampas. Cambia con Control+Tab o las flechas.": [
+"trampas/ventana.py"
 ],
 "Categorías que te interesan: ": [
 "juego/menus_componentes.py"
@@ -8555,6 +9118,9 @@
 "Cierra esta ventana.": [
 "editor/accesibilidad/ayuda.py"
 ],
+"Cierra la conexión actual con Puerto Bravo.": [
+"trampas/ventana.py"
+],
 "Cierra la ventana sin guardar los cambios.": [
 "editor/accesibilidad/ayuda.py"
 ],
@@ -8641,6 +9207,12 @@
 ],
 "Ciudadan[o|a] ejemplar": [
 "juego/extras2.py"
+],
+"Civil": [
+"trampas/ventana.py"
+],
+"Cla&ve:": [
+"trampas/ventana.py"
 ],
 "Claro del helicóptero": [
 "data/datos/mapas/isla_tortuga.json"
@@ -8917,6 +9489,9 @@
 "Cocina para los dos o, a veces, te toca a ti. Da salud y quita el hambre y la sed de la vida realista. Una vez al día.": [
 "juego/convivencia.py"
 ],
+"Cocina práctica actualizada.": [
+"trampas/ventana.py"
+],
 "Cocina sin laboratorio": [
 "editor/esquema.py"
 ],
@@ -9009,6 +9584,9 @@
 "juego/misvehiculos.py",
 "data/datos/vida.json"
 ],
+"Cola de comandos llena; intenta de nuevo.": [
+"trampas/puente.py"
+],
 "Coleccionista": [
 "juego/extras2.py"
 ],
@@ -9044,6 +9622,9 @@
 "Colonia fresca": [
 "data/datos/vida.json"
 ],
+"Comando desconocido: {cmd}": [
+"trampas/puente.py"
+],
 "Combate de boxeo": [
 "juego/extras2.py",
 "data/datos/vida.json"
@@ -9057,6 +9638,10 @@
 ],
 "Combate entre jugadores: ": [
 "juego/menus_enlinea.py"
+],
+"Combate y Estado": [
+"trampas/ventana.py",
+"trampas/ventana.py"
 ],
 "Combate y dificultad": [
 "juego/menus_juego.py"
@@ -9072,6 +9657,9 @@
 ],
 "Combinaciones al volante: ": [
 "juego/menus_extra.py"
+],
+"Combustibl&e": [
+"trampas/ventana.py"
 ],
 "Combustible": [
 "editor/esquema.py",
@@ -9191,6 +9779,9 @@
 ],
 "Comida y compra que llevas: {_total} de {entero}": [
 "juego/menus_cocina.py"
+],
+"Comida y productos de cocina": [
+"trampas/ventana.py"
 ],
 "Comidas": [
 "editor/esquema.py"
@@ -9470,6 +10061,11 @@
 ],
 "Comprárselo por {oferta} euros": [
 "juego/menus_juego.py"
+],
+"Comunicación anulada: modo multijugador activo.": [
+"trampas/puente.py",
+"trampas/puente.py",
+"trampas/ventana.py"
 ],
 "Comunicación: grupos y canales de mensajería": [
 "data/datos/comunidad.json"
@@ -9941,6 +10537,12 @@
 "Con no, los jugadores no pueden herirse, atracarse ni robarse entre sí.": [
 "servidor/opciones.py"
 ],
+"Con no, que es como viene, el juego no abre ninguna conexión para el menú de trampas externo. Con sí, permite usar MenuTrampas.exe en solitario o en servidores donde el dueño lo haya permitido. Usar trampas desactiva los logros en esa partida.": [
+"juego/menus_juego.py"
+],
+"Con no, que es lo de serie, los juegos anulan por completo el menú de trampas al entrar en este servidor. Con si, el servidor deja de vigilar el dinero de todos los jugadores y cualquiera podrá ponerse el dinero que quiera.": [
+"servidor/opciones.py"
+],
 "Con no, que es lo de siempre, los barrios se conquistan y se defienden desde el móvil, en Territorios. Con sí, cada barrio de las ciudades es de una banda y los suyos andan por sus calles. Un barrio se conquista yendo allí: al tumbar a dos de los suyos, o plantándoles cara desde el móvil cuando ya estás dentro, la banda viene a por ti en tres oleadas. Tu propia banda acude a ayudarte. No hay que salir del barrio hasta acabar. Y cuando ataquen un barrio tuyo, lo defiendes entrando en él. En un servidor en línea no cuenta: allí los barrios son de las bandas de los jugadores.": [
 "juego/menus_juego.py"
 ],
@@ -10319,6 +10921,12 @@
 "Con él puedes llegar a los puestos de dirección y subir tus negocios al nivel más alto.": [
 "data/datos/vida.json"
 ],
+"Con&centración (foco):": [
+"trampas/ventana.py"
+],
+"Con&fianza perro (0-100):": [
+"trampas/ventana.py"
+],
 "Con&figuración...": [
 "panel_servidor/ventana.py"
 ],
@@ -10340,7 +10948,8 @@
 "Conducción": [
 "juego/extras2.py",
 "juego/menus_juego.py",
-"editor/modelo.py"
+"editor/modelo.py",
+"trampas/ventana.py"
 ],
 "Conducción ": [
 "juego/partida.py"
@@ -10373,8 +10982,23 @@
 "Conductor temerario: hay que darle el alto con la sirena": [
 "editor/esquema.py"
 ],
+"Conecta primero con Puerto Bravo (un jugador o servidor con trampas permitidas).": [
+"trampas/ventana.py"
+],
+"Conectado (pantalla: {pantalla}). Esperando a que empieces o cargues una partida.": [
+"trampas/ventana.py"
+],
+"Conectado a PID {pid} (Puerto Bravo v{ver}).": [
+"trampas/ventana.py"
+],
 "Conectado como {nombre}. ": [
 "juego/online.py"
+],
+"Conectado y sincronizado con Puerto Bravo.": [
+"trampas/ventana.py"
+],
+"Conectado — {mapa} ({barrio}) | Día {dia} {hora} | Salud {salud}/{salud_max} | {dinero} € | {estrellas}★": [
+"trampas/ventana.py"
 ],
 "Conectando con {nombre}.": [
 "juego/reconexion.py"
@@ -10456,6 +11080,9 @@
 ],
 "Conquista tres territorios.": [
 "juego/extras2.py"
+],
+"Conquistar &todos los barrios": [
+"trampas/ventana.py"
 ],
 "Conquistar {nombre}": [
 "juego/menus_extra.py"
@@ -10623,6 +11250,9 @@
 ],
 "Contrato cumplido. Vuelve a {nombre} a cobrar.": [
 "juego/extras2.py"
+],
+"Contrato iniciado.": [
+"trampas/ventana.py"
 ],
 "Contrato: {quien}": [
 "juego/extras2.py"
@@ -10939,6 +11569,12 @@
 ],
 "Ctrl+Z": [
 "editor/accesibilidad/revision_teclado.py"
+],
+"Cu&rar": [
+"trampas/ventana.py"
+],
+"Cu&rar y restaurar todo": [
+"trampas/ventana.py"
 ],
 "Cuaderno de bitácora": [
 "data/datos/misiones_extra2.json"
@@ -11845,6 +12481,9 @@
 "Dar la cara, disculparte y arreglarlo": [
 "data/datos/vida.json"
 ],
+"Dar t&odas las armas": [
+"trampas/ventana.py"
+],
 "Dar un golpe a su escondite. Paga {entero} euros": [
 "juego/reconquista.py"
 ],
@@ -11912,12 +12551,21 @@
 "Das un rodeo por fuera. Gastas algo más de combustible y de tiempo, y no pasa nada.": [
 "juego/vuelo_pantalla.py"
 ],
+"Datos de tu banda actualizados.": [
+"trampas/ventana.py"
+],
 "Datos del mod": [
 "editor/esquema.py"
 ],
 "Datos del mundo: versión %s, huella %s. %d localidades.": [
 "panel_servidor/motor.py",
 "servidor/__main__.py"
+],
+"Datos del perro actualizados.": [
+"trampas/ventana.py"
+],
+"Datos y controles sincronizados con el juego.": [
+"trampas/ventana.py"
 ],
 "Datos y copias de seguridad": [
 "servidor/opciones.py"
@@ -12661,6 +13309,9 @@
 "Del museo ha desaparecido un cuadro pequeño. El conservador sabe dónde está y no quiere denuncia.": [
 "data/datos/misiones_extra3.json"
 ],
+"Demasiadas conexiones simultáneas en el puente.": [
+"trampas/puente.py"
+],
 "Demasiado {motivo}. Motor y al aire: da otra vuelta y vuelve a entrar.": [
 "juego/vuelo.py",
 "data/datos/vida.json"
@@ -12746,6 +13397,9 @@
 "Depósito de combustible mayor": [
 "data/datos/vida.json"
 ],
+"Depósito lleno.": [
+"trampas/ventana.py"
+],
 "Depósito lleno. Con él puedes hacer unos {int} kilómetros. Te quedan {dinero} euros.": [
 "juego/vuelo.py"
 ],
@@ -12823,6 +13477,12 @@
 ],
 "Desciendes desde {int} metros.": [
 "juego/vuelo.py"
+],
+"Desconectado ({exc}). En multijugador el puente se anula salvo que el dueño del servidor habilite permitir_trampas.": [
+"trampas/ventana.py"
+],
+"Desconectado. Pulsa Conectar cuando quieras volver a enlazar con Puerto Bravo.": [
+"trampas/ventana.py"
 ],
 "Desconectarme": [
 "juego/menus_online.py"
@@ -13090,6 +13750,9 @@
 "editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py"
+],
+"Despliegue y opciones policiales": [
+"trampas/ventana.py"
 ],
 "Después baja al muelle y recíbelos como se merecen.": [
 "data/mods/isla_de_los_vientos.json"
@@ -13473,6 +14136,9 @@
 ],
 "Dinero aparte de lo que se lleva en los golpes. Es lo que más lealtad da, y alguien leal no te delata si lo detienen. Una vez al día.": [
 "juego/golpes.py"
+],
+"Dinero en &banco:": [
+"trampas/ventana.py"
 ],
 "Dinero en el suelo": [
 "juego/combate.py"
@@ -14213,11 +14879,17 @@
 "Dónde se guarda todo, cada cuánto y cuántas copias se conservan.": [
 "servidor/opciones.py"
 ],
+"E&liminar": [
+"trampas/ventana.py"
+],
 "E&nviar la orden": [
 "panel_servidor/ventana.py"
 ],
 "E&xaminar...": [
 "editor/accesibilidad/nombres.py"
+],
+"E&xplotar": [
+"trampas/ventana.py"
 ],
 "Ea.": [
 "juego/respuestas_datos2.py"
@@ -14274,6 +14946,13 @@
 "Economato minero": [
 "data/datos/mapas/monteferro.json"
 ],
+"Economía y Progreso": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"Economía y progreso actualizados.": [
+"trampas/ventana.py"
+],
 "Economía y vehículos": [
 "servidor/opciones.py"
 ],
@@ -14308,6 +14987,9 @@
 ],
 "Editor de mods de {NOMBRE}, versión {VERSION}.\n\nHecho por {AUTOR}.\nCopyright {ANIO}, {AUTOR}. Software libre con licencia MIT.\n\nCrea lugares, misiones, armas, vehículos, carreras, localidades enteras y todo el contenido del juego sin escribir código.\n\nCtrl+H explica el control en el que estás. F5 comprueba el mod. F9 lo prueba en el juego.": [
 "editor/ventana.py"
+],
+"Efectivo actual.": [
+"trampas/ventana.py"
 ],
 "Efectivo de El Caimán": [
 "data/datos/misiones_extra.json"
@@ -14967,6 +15649,9 @@
 "El campo del Atlético Bravo, eterno aspirante a subir de categoría.": [
 "data/datos/ciudad.json"
 ],
+"El campo {clave} no está disponible en el Inspector de {objetivo}. No se modificó ni añadió nada.": [
+"trampas/ventana.py"
+],
 "El candado está cortado con una cizalla. Dentro hay cajas de madera sin marcar, y huele a gasóleo.": [
 "data/mods/costa_dorada.json"
 ],
@@ -15415,6 +16100,12 @@
 "El dueño del chiringuito se recupera en dos días y jura que mientras viva no pagarás un pulpo en su isla.": [
 "data/datos/misiones_extra2.json"
 ],
+"El dueño del servidor ha bloqueado el menú de trampas.": [
+"servidor/nucleo.py"
+],
+"El dueño del servidor ha permitido el menú de trampas.": [
+"servidor/nucleo.py"
+],
 "El día de mercado baja medio pueblo. No se puede ni andar.": [
 "juego/respuestas_datos1.py"
 ],
@@ -15739,6 +16430,9 @@
 "El juego añade solo en qué recetas entra, dónde se guarda y cuánto aguanta.": [
 "editor/esquema.py"
 ],
+"El juego cerró la conexión sin responder.": [
+"trampas/protocolo.py"
+],
 "El juego dirá ese nombre al subir, al localizarlo y en las listas.": [
 "juego/misvehiculos.py"
 ],
@@ -15896,6 +16590,17 @@
 "El mensajero": [
 "data/datos/misiones.json"
 ],
+"El menú de trampas está bloqueado en este servidor.": [
+"servidor/nucleo.py",
+"servidor/nucleo.py"
+],
+"El menú de trampas está desactivado en Opciones.": [
+"trampas/puente.py"
+],
+"El menú de trampas está permitido en este servidor.": [
+"servidor/nucleo.py",
+"servidor/nucleo.py"
+],
 "El menú «{titulo}» de la barra de menús no tiene letra de acceso (&).": [
 "editor/accesibilidad/revision_teclado.py"
 ],
@@ -16045,8 +16750,14 @@
 "El nombre de la banda tiene que tener al menos tres letras.": [
 "servidor/nucleo.py"
 ],
+"El nombre de la persona no puede quedar vacío. No se modificó nada.": [
+"trampas/puente.py"
+],
 "El nombre del archivo de la versión no es válido.": [
 "juego/actualizador.py"
+],
+"El nombre del vehículo no puede quedar vacío. No se modificó nada.": [
+"trampas/puente.py"
 ],
 "El nombre lo guarda el servidor, y lo ven también los demás jugadores.": [
 "juego/misvehiculos.py"
@@ -16780,8 +17491,17 @@
 "El valle es de quien lo trabaja. Toma, y la escopeta te la quedas.": [
 "data/mods/valdeolmos.json"
 ],
+"El valor contiene caracteres nulos no permitidos. No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
 "El valor de cada carácter está en la sección Caracteres de la gente, de 0 a 1.": [
 "editor/esquema.py"
+],
+"El valor está vacío. Escribe un valor válido (número, booleano, texto o JSON). No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
+"El valor está vacío: se esperaba {esperado}. No se modificó ni añadió nada.": [
+"trampas/puente.py"
 ],
 "El vehículo echa humo y se queda cruzado en la calzada. Acércate y pulsa Intro.": [
 "juego/agente.py",
@@ -16870,6 +17590,9 @@
 "El único sitio abierto de noche en toda la sierra.": [
 "data/mods/penas_altas.json"
 ],
+"El&iminar": [
+"trampas/ventana.py"
+],
 "Elegante es poco.": [
 "juego/respuestas_datos2.py"
 ],
@@ -16939,11 +17662,17 @@
 "Elige qué parte del mod quieres editar. Al cambiar de sección cambia la lista de elementos de abajo.": [
 "editor/ventana.py"
 ],
+"Elige qué proceso de Puerto Bravo quieres controlar.": [
+"trampas/ventana.py"
+],
 "Elige tu personaje": [
 "juego/menus_vida.py"
 ],
 "Elige un servidor y pulsa Intro. F1 explica cada opción": [
 "juego/menus_enlinea.py"
+],
+"Elige un vehículo para actuar sobre él o editar sus especificaciones en la subpestaña siguiente.": [
+"trampas/ventana.py"
 ],
 "Elige una de las diez ranuras para guardar la partida tal como está.": [
 "juego/menus_juego.py"
@@ -17013,6 +17742,9 @@
 ],
 "Eliminar al objetivo y a sus guardaespaldas": [
 "editor/esquema.py"
+],
+"Eliminar h&ostiles": [
+"trampas/ventana.py"
 ],
 "Elías": [
 "data/mods/bahia_del_ocaso.json"
@@ -17626,6 +18358,12 @@
 "En hora punta se tarda más en coche que a pie.": [
 "juego/respuestas_datos1.py"
 ],
+"En inventario": [
+"trampas/ventana.py"
+],
+"En inventario (EQUIPADA)": [
+"trampas/ventana.py"
+],
 "En la Cantina del Barrenero, un minero jubilado dice que por la noche hay luces en la mina cerrada.": [
 "data/mods/penas_altas.json"
 ],
@@ -18213,6 +18951,9 @@
 "Encargo cumplido": [
 "juego/misiones.py"
 ],
+"Encargo de vehículo iniciado.": [
+"trampas/ventana.py"
+],
 "Encargo: dejarlo junto a {nombre}, sin el radar encima, por {paga} euros. {donde}.": [
 "juego/vuelo.py"
 ],
@@ -18327,9 +19068,13 @@
 "Endrinas para la ciudad": [
 "data/mods/penas_altas.json"
 ],
+"Ene&migos duros": [
+"trampas/ventana.py"
+],
 "Enemigo": [
 "juego/entidades.py",
-"juego/gente.py"
+"juego/gente.py",
+"trampas/ventana.py"
 ],
 "Enemigo fijado, a tiro": [
 "juego/catalogo_sonidos.py"
@@ -18350,6 +19095,9 @@
 ],
 "Enemigos de una pelea buscada": [
 "editor/esquema.py"
+],
+"Enfrentamiento de banda iniciado.": [
+"trampas/ventana.py"
 ],
 "Enhorabuena. Y que dure.": [
 "juego/respuestas_datos2.py"
@@ -18664,6 +19412,9 @@
 "Error al abrir": [
 "editor/ventana.py"
 ],
+"Error al actualizar": [
+"trampas/ventana.py"
+],
 "Error al guardar": [
 "editor/ventana.py",
 "panel_servidor/ventana.py",
@@ -18671,6 +19422,57 @@
 ],
 "Error atendiendo a un jugador: %s: %s": [
 "servidor/nucleo.py"
+],
+"Error de conexión": [
+"trampas/ventana.py"
+],
+"Error de sintaxis JSON (línea {linea}, columna {col}): {msg}.{pista} No se modificó ni añadió nada.": [
+"trampas/puente.py",
+"trampas/puente.py"
+],
+"Error de sintaxis JSON: usa comillas dobles (\") en lugar de comillas simples ('). No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
+"Error de sintaxis en el Inspector": [
+"trampas/ventana.py"
+],
+"Error de sintaxis en el valor {txt}. Usa JSON válido (número, booleano, lista [...], diccionario {{...}} o texto entre comillas dobles). No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
+"Error de sintaxis/tipo: se esperaba un booleano (true/false o sí/no), recibido {raw}. No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
+"Error de sintaxis/tipo: se esperaba un número decimal válido, recibido {raw}. No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
+"Error de sintaxis/tipo: se esperaba un número entero válido (ej. 100), recibido {raw}. No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
+"Error de sintaxis: no se permite el valor {nombre} (usa solo números finitos). No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
+"Error de tipo: se esperaba un número decimal, no un booleano. No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
+"Error de tipo: se esperaba un número entero exacto, recibido {raw}. No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
+"Error de tipo: se esperaba {esperado}. No se modificó ni añadió nada.": [
+"trampas/puente.py",
+"trampas/puente.py"
+],
+"Error de valor: no se permite {txt} (usa solo números finitos). No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
+"Error de valor: no se permiten números infinitos o NaN. No se modificó ni añadió nada.": [
+"trampas/puente.py",
+"trampas/puente.py"
+],
+"Error desconocido en el juego.": [
+"trampas/protocolo.py"
+],
+"Error en el Inspector": [
+"trampas/ventana.py"
 ],
 "Error en el reloj del servidor: %s: %s": [
 "servidor/nucleo.py"
@@ -18857,6 +19659,9 @@
 "Es viernes. El maletín sale de la sede a las ocho.": [
 "data/mods/bahia_del_ocaso.json"
 ],
+"Es&tado actual:": [
+"trampas/ventana.py"
+],
 "Es... preocupante. Yo ahorro la que puedo.": [
 "juego/respuestas_datos2.py"
 ],
@@ -19034,6 +19839,9 @@
 ],
 "Escribe parte del nombre de un sonido o de lo que significa, y te salen los que coinciden, cada uno con su grupo. No hace falta poner las tildes.": [
 "juego/menus_juego.py"
+],
+"Escribe trampas si o trampas no.": [
+"servidor/nucleo.py"
 ],
 "Escribe un texto con todas las frases de las misiones y el nombre de archivo de cada grabación.": [
 "editor/ventana.py"
@@ -19382,6 +20190,13 @@
 "Especialistas en vehículos de montaña.": [
 "data/datos/mapas/monteferro.json"
 ],
+"Especificaciones del vehículo aplicadas.": [
+"trampas/ventana.py"
+],
+"Especificaciones y Taller": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
 "Espera a que el servidor termine de arrancar o de parar.": [
 "panel_servidor/ventana.py",
 "panel_servidor/ventana.py"
@@ -19496,6 +20311,9 @@
 "Esta noche viene medio Ayuntamiento y me falta lo del cóctel de la casa. Pásate por La Trastienda y tráemelo. Quédate dos para ti.": [
 "data/mods/noches_de_neon.json"
 ],
+"Esta orden solo se puede dar desde la consola o el panel del servidor.": [
+"servidor/nucleo.py"
+],
 "Esta partida es de una versión más nueva del juego, formato {v}. Actualiza el juego para cargarla.": [
 "juego/partida.py"
 ],
@@ -19590,9 +20408,15 @@
 "Estado mínimo del vehículo, en porcentaje": [
 "editor/esquema.py"
 ],
+"Estadística no permitida en el Inspector ({clave}): solo se admiten claves registradas. No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
 "Estadísticas": [
 "juego/menus_juego.py",
 "juego/menus_juego.py"
+],
+"Estadísticas de combate aplicadas.": [
+"trampas/ventana.py"
 ],
 "Estanque del Parque de la Alameda": [
 "data/datos/ciudad.json"
@@ -20240,6 +21064,10 @@
 "Evaluación muy mala": [
 "editor/esquema_honrado.py"
 ],
+"Eventos": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
 "Ex de Lucía": [
 "data/datos/misiones_adultos.json"
 ],
@@ -20437,14 +21265,29 @@
 "Falló el paso de {paso}, y el instalador no apuntó con qué archivo.": [
 "juego/actualizador.py"
 ],
+"Falta el identificador del objeto.": [
+"trampas/puente.py"
+],
+"Falta el nombre de la clave. No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
 "Falta el nombre. Es la primera opción.": [
 "juego/menus_vida.py"
+],
+"Falta el producto.": [
+"trampas/puente.py"
+],
+"Falta la clave de configuración a modificar.": [
+"trampas/puente.py"
 ],
 "Falta la clave de {v}. Escríbela en esta misma sección.": [
 "juego/ia.py"
 ],
 "Falta la contraseña de entrada": [
 "panel_servidor/configuracion.py"
+],
+"Falta la sustancia.": [
+"trampas/puente.py"
 ],
 "Falta un cuadro. Pequeño, una marina sin firma. Para el seguro no vale nada; para esta ciudad, mucho.": [
 "data/datos/misiones_extra3.json"
@@ -20732,6 +21575,9 @@
 "Fijar a cualquiera, no solo a los enemigos": [
 "juego/mando.py"
 ],
+"Fijar c&ocina": [
+"trampas/ventana.py"
+],
 "Fijarle como objetivo": [
 "juego/menus_enlinea.py"
 ],
@@ -20922,6 +21768,15 @@
 ],
 "Formato de las direcciones": [
 "juego/menus_juego.py"
+],
+"Formato de respuesta inesperado.": [
+"trampas/protocolo.py"
+],
+"Formato inválido en '{clave}': debe ser una lista de identificadores de texto. No se modificó nada.": [
+"trampas/puente.py"
+],
+"Formato inválido en '{clave}': todas las cantidades deben ser números finitos. No se modificó nada.": [
+"trampas/puente.py"
 ],
 "Foros": [
 "data/datos/comunidad.json"
@@ -21297,6 +22152,9 @@
 "Fue piloto de rallies hasta que le retiraron la licencia. Empieza con la conducción al nivel cinco y tres juegos de ganzúas: nadie abre y lleva un coche como Álex.": [
 "data/datos/personajes.json"
 ],
+"Fue&go amigo": [
+"trampas/ventana.py"
+],
 "Fuego": [
 "juego/catalogo_sonidos.py"
 ],
@@ -21389,6 +22247,9 @@
 ],
 "Fuerzas la cerradura de {nombre}": [
 "juego/conduccion.py"
+],
+"Fugitivo ({nombre})": [
+"trampas/puente.py"
 ],
 "Fui a comprar ayer y casi me da algo. ¡Los tomates a precio de oro! Le dije al frutero: ¿esto qué es, fruta o joyería? Se rió, pero no me rebajó ni un céntimo.": [
 "juego/respuestas_datos1.py"
@@ -21663,8 +22524,18 @@
 "editor/formulario.py",
 "servidor/opciones.py"
 ],
+"Generar": [
+"trampas/ventana.py"
+],
+"Generar NPCs": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
 "Generar las voces de tu propio personaje": [
 "juego/menus_juego.py"
+],
+"Generar vehículo": [
+"trampas/ventana.py"
 ],
 "Gente bailando apretada.": [
 "juego/sistemas.py"
@@ -22034,6 +22905,9 @@
 "Guardado automático": [
 "juego/menus_juego.py"
 ],
+"Guardado en mochila: {vid}.": [
+"trampas/ventana.py"
+],
 "Guardado final: segundos que se espera al parar": [
 "servidor/opciones.py"
 ],
@@ -22174,6 +23048,9 @@
 "Guarida de Los Calaveras": [
 "data/datos/ciudad.json"
 ],
+"Guerra de &barrios": [
+"trampas/ventana.py"
+],
 "Guerra de barrios en la calle": [
 "editor/esquema.py",
 "editor/esquema.py"
@@ -22184,6 +23061,9 @@
 "Guerra en el puerto": [
 "data/datos/misiones_extra2.json"
 ],
+"Guerra o pelea terminada.": [
+"trampas/ventana.py"
+],
 "Guerra por %s: atacantes %d puntos, defensores %d. Quedan %d minutos.": [
 "servidor/nucleo.py"
 ],
@@ -22192,6 +23072,9 @@
 ],
 "Guerra: {get} contra {get2} por {barrio}, en {v}: {cuando}": [
 "juego/menus_enlinea.py"
+],
+"Guerras y peleas de banda": [
+"trampas/ventana.py"
 ],
 "Guion de voces": [
 "editor/ventana.py",
@@ -22292,12 +23175,24 @@
 "Ha venido uno con traje, de parte de un concejal. Dice que ya trabajas para él. Aquí también quiere su sobre.": [
 "data/datos/misiones_extra2.json"
 ],
+"Ha&mbre (0-100):": [
+"trampas/ventana.py"
+],
 "Haber usado el radar, con el Tabulador, durante este paso": [
 "editor/esquema.py"
+],
+"Habilidad desconocida: {hab}": [
+"trampas/puente.py"
+],
+"Habilidad {hab} al nivel {niv}.": [
+"trampas/ventana.py"
 ],
 "Habilidades": [
 "juego/menus_extra.py",
 "juego/menus_extra.py"
+],
+"Habilidades y cocina": [
+"trampas/ventana.py"
 ],
 "Habilidades y logros": [
 "juego/menus_extra.py",
@@ -22448,6 +23343,9 @@
 "panel_servidor/ventana.py",
 "panel_servidor/ventana.py",
 "panel_servidor/ventana.py"
+],
+"Hacer &propio": [
+"trampas/ventana.py"
 ],
 "Hacer administrador a ": [
 "panel_servidor/ventana.py"
@@ -22811,6 +23709,9 @@
 ],
 "Has salido del servidor.": [
 "juego/enlinea.py"
+],
+"Has subido al vehículo.": [
+"trampas/ventana.py"
 ],
 "Has subido demasiado: el radar te tiene otra vez.": [
 "juego/vuelo.py",
@@ -23223,11 +24124,17 @@
 "Helicóptero de la policía con el nivel de búsqueda más alto": [
 "juego/menus_juego.py"
 ],
+"Helicóptero de la policía desplegado.": [
+"trampas/ventana.py"
+],
 "Helicóptero de la policía: ": [
 "juego/calle.py"
 ],
 "Helicóptero de línea a {nombre}, en {nombre2}: {precio_de} euros": [
 "juego/menus_lugares.py"
+],
+"Helicóptero retirado.": [
+"trampas/ventana.py"
 ],
 "Helipuerto": [
 "juego/catalogo_sonidos.py",
@@ -23396,6 +24303,9 @@
 "Hora más temprana a la que empieza un asalto": [
 "editor/esquema.py"
 ],
+"Hora, día y clima actualizados.": [
+"trampas/ventana.py"
+],
 "Horario de un tipo de local": [
 "editor/esquema.py"
 ],
@@ -23513,6 +24423,12 @@
 ],
 "Hostelería": [
 "data/datos/vida.json"
+],
+"Hostiles eliminados.": [
+"trampas/ventana.py"
+],
+"Hostilidad:": [
+"trampas/ventana.py"
 ],
 "Hotel": [
 "editor/esquema.py"
@@ -23790,8 +24706,14 @@
 "juego/compra.py",
 "data/datos/vida.json"
 ],
+"Huida": [
+"trampas/ventana.py"
+],
 "Humo sin fuego": [
 "data/datos/misiones_extra3.json"
+],
+"Huye": [
+"trampas/ventana.py"
 ],
 "Héctor J. Benítez Corredera": [
 "juego/__init__.py"
@@ -23960,6 +24882,9 @@
 "Incendio apagado": [
 "juego/trabajos.py"
 ],
+"Indica si hay conexión con el juego y si hay una partida en solitario activa.": [
+"trampas/ventana.py"
+],
 "Indicaciones habladas del GPS": [
 "juego/menus_juego.py"
 ],
@@ -24010,6 +24935,9 @@
 ],
 "Ingresos diarios": [
 "editor/esquema.py"
+],
+"Iniciar &guerra de barrio": [
+"trampas/ventana.py"
 ],
 "Inicio": [
 "juego/vuelo_pantalla.py",
@@ -24062,6 +24990,12 @@
 ],
 "Inspección sin faltas": [
 "editor/esquema_honrado.py"
+],
+"Inspector": [
+"trampas/ventana.py"
+],
+"Inspector Avanzado": [
+"trampas/ventana.py"
 ],
 "Instalando {nombre}": [
 "juego/menus_componentes.py"
@@ -24335,7 +25269,9 @@
 ],
 "Inventario": [
 "juego/menus_juego.py",
-"juego/menus_juego.py"
+"juego/menus_juego.py",
+"trampas/ventana.py",
+"trampas/ventana.py"
 ],
 "Invernadero del Tío Lucas": [
 "data/datos/mapas/villaseca.json"
@@ -24580,6 +25516,10 @@
 "Jueves": [
 "editor/esquema.py"
 ],
+"Jugador": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
 "Jugador ": [
 "juego/menus_enlinea.py"
 ],
@@ -24603,6 +25543,9 @@
 ],
 "Jugando sin conexión, conquistar no es el final: cuando tienes todos los barrios de una ciudad, o muchos sin tenerlos todos, las bandas vencidas se rehacen y, pasados unos días de calma, intentan recuperarlos. Te avisan del asalto y tienes unas horas para ir a defender el barrio en persona o para enviar a tu gente desde el móvil; si no haces nada, lo pierdes. Te preparas en el móvil, en Territorios, Defensa de tus barrios: guardias, refuerzos, informantes, treguas y golpes a sus escondites. Elige cuánto aprietan: apagado, y nadie te los disputa de esta manera; tranquilo, con pocos asaltos y {entero} horas para responder; normal, que es lo de serie, con {entero2} horas; o duro, con asaltos más seguidos, más fuertes y {entero3} horas. Nunca hay dos asaltos a la vez. En un servidor en línea y jugando con amigos no ocurre.": [
 "juego/menus_juego.py"
+],
+"Jugar &sin policía": [
+"trampas/ventana.py"
 ],
 "Jugar a la siete y media": [
 "juego/sistemas.py",
@@ -26350,6 +27293,9 @@
 "Lanzamiento": [
 "juego/catalogo_sonidos.py"
 ],
+"Lanzar &helicóptero": [
+"trampas/ventana.py"
+],
 "Lanzas el anzuelo. Cuando oigas que pican, pulsa Espacio enseguida. No te muevas.": [
 "juego/extras.py"
 ],
@@ -27022,6 +27968,15 @@
 "Limosna a alguien de la calle": [
 "data/datos/vida.json"
 ],
+"Limp&iar vetos de locales": [
+"trampas/ventana.py"
+],
+"Limpiar caí&dos": [
+"trampas/ventana.py"
+],
+"Limpiar tráf&ico": [
+"trampas/ventana.py"
+],
 "Limpieza en La Marina": [
 "data/datos/misiones_extra.json"
 ],
@@ -27070,6 +28025,12 @@
 "Lista. Arriba y abajo cambian de elemento; izquierda y derecha recorren las columnas; Control más un número lee esa columna; Intro abre el elemento.": [
 "editor/accesibilidad/ayuda.py"
 ],
+"Listo. Ctrl+H lee la ayuda; F5 sincroniza todos los campos con el juego.": [
+"trampas/ventana.py"
+],
+"Listo. Selecciona un ámbito y pulsa Leer ámbito.": [
+"trampas/ventana.py"
+],
 "Listo. Tu sonido se llama {nombre} y ya sale en las listas de sonidos, por ejemplo en el sonido de un arma, el motor o el claxon de un vehículo o el sonido propio de un lugar. Está en data, mods, sonidos: si compartes tu mod, comparte también ese archivo.": [
 "editor/ventana.py"
 ],
@@ -27093,6 +28054,9 @@
 ],
 "Litros que trae la asistencia": [
 "editor/esquema.py"
+],
+"Ll&uvia": [
+"trampas/ventana.py"
 ],
 "Llaman al timbre de tu casa: llega la comida que has pedido a domicilio. Dos notas, din, don.": [
 "juego/catalogo_sonidos.py"
@@ -27195,6 +28159,9 @@
 "Llegan": [
 "juego/sistemas.py"
 ],
+"Llegan en &vehículo": [
+"trampas/ventana.py"
+],
 "Llegan en este vehículo": [
 "editor/esquema.py"
 ],
@@ -27246,11 +28213,17 @@
 "Llena el depósito del vehículo que llevas o del que has dejado aparcado al lado. Se paga al momento.": [
 "juego/menus_juego.py"
 ],
+"Llenar &depósito": [
+"trampas/ventana.py"
+],
 "Llenar el depósito de {nombre}: {int} litros, {int2} euros": [
 "juego/menus_juego.py"
 ],
 "Llenar el depósito: ven con tu vehículo o déjalo aparcado al lado": [
 "juego/menus_juego.py"
+],
+"Llenar necesida&des (0)": [
+"trampas/ventana.py"
 ],
 "Lleva a Belmonte a su mansión de La Colina. Conduce con suavidad: el coche no puede sufrir daños.": [
 "data/datos/misiones.json"
@@ -29001,6 +29974,9 @@
 "Los libros del prestamista están en la fábrica vieja, y no está sola.": [
 "data/datos/misiones_extra2.json"
 ],
+"Los logros están desactivados en esta partida porque se han usado trampas.": [
+"juego/menus_extra.py"
+],
 "Los lugares de este grupo, con dónde está cada uno, en orden alfabético o de más cerca a más lejos, según Opciones, Orientación y avisos. Dentro, el Tabulador cambia el orden. Sobre un lugar, F1 dice cómo es.": [
 "juego/menus_juego.py"
 ],
@@ -29321,6 +30297,9 @@
 "Lugar donde suele estar": [
 "editor/esquema.py"
 ],
+"Lugar no encontrado: {lugar_id}": [
+"trampas/puente.py"
+],
 "Lugar sin sonido propio": [
 "juego/catalogo_sonidos.py"
 ],
@@ -29380,6 +30359,12 @@
 "Línea completa, prima": [
 "juego/trabajos.py"
 ],
+"M&ejora:": [
+"trampas/ventana.py"
+],
+"M&odelo fugitivo:": [
+"trampas/ventana.py"
+],
 "Macarrones con chorizo": [
 "juego/compra.py",
 "data/datos/vida.json"
@@ -29418,6 +30403,12 @@
 "Mal.": [
 "juego/respuestas_datos2.py"
 ],
+"Maletín con {valor} euros": [
+"trampas/puente.py"
+],
+"Maletín de 1000 euros soltado junto a ti.": [
+"trampas/ventana.py"
+],
 "Maletín de documentos": [
 "data/datos/misiones.json"
 ],
@@ -29425,10 +30416,20 @@
 "data/datos/misiones_extra3.json"
 ],
 "Maletín perdido": [
-"juego/extras2.py"
+"juego/extras2.py",
+"trampas/puente.py"
+],
+"Maletín perdido generado cerca.": [
+"trampas/ventana.py"
+],
+"Man&dar ambulancia": [
+"trampas/ventana.py"
 ],
 "Manda al servidor la orden escrita. Es lo mismo que pulsar Intro en el campo.": [
 "panel_servidor/ventana.py"
+],
+"Mandar &patrulla": [
+"trampas/ventana.py"
 ],
 "Mandar a casa": [
 "juego/menus_extra.py"
@@ -29556,6 +30557,9 @@
 ],
 "Mapa del aire: dónde está una localidad": [
 "editor/esquema_vuelo.py"
+],
+"Mapa no encontrado: {mapa_id}": [
+"trampas/puente.py"
 ],
 "Maquetas de barcos, un esqueleto de ballena y la historia del pirata Tuerto, que escondió su tesoro en Isla Tortuga.": [
 "data/datos/ciudad.json"
@@ -30044,6 +31048,12 @@
 "juego/misvehiculos.py",
 "data/datos/vida.json"
 ],
+"Me&joras al máximo": [
+"trampas/ventana.py"
+],
+"Me&ter en mochila": [
+"trampas/ventana.py"
+],
 "Media hora de charla: te cuenta cosas suyas y gana algo de lealtad. Una vez al día.": [
 "juego/golpes.py"
 ],
@@ -30068,6 +31078,9 @@
 "Medicinas": [
 "juego/vuelo.py",
 "data/datos/vida.json"
+],
+"Medidor del tiempo lento.": [
+"trampas/ventana.py"
 ],
 "Medio enemigo por cada uno quiere decir uno más por cada dos.": [
 "editor/esquema.py"
@@ -30115,6 +31128,9 @@
 "Mejora tu ánimo": [
 "juego/catalogo_sonidos.py"
 ],
+"Mejora {mid} aplicada.": [
+"trampas/ventana.py"
+],
 "Mejoran solas con la práctica. F1 explica cada una": [
 "juego/menus_extra.py"
 ],
@@ -30126,6 +31142,9 @@
 ],
 "Mejoras de los negocios": [
 "editor/esquema_honrado.py"
+],
+"Mejoras de taller del vehículo": [
+"trampas/ventana.py"
 ],
 "Mejoras del taller": [
 "editor/esquema.py"
@@ -30254,6 +31273,9 @@
 "Mensaje privado para {nombre}": [
 "juego/menus_enlinea.py"
 ],
+"Mensaje recibido demasiado grande.": [
+"trampas/protocolo.py"
+],
 "Mensaje siguiente de los jugadores y del servidor": [
 "juego/mando.py"
 ],
@@ -30280,6 +31302,9 @@
 ],
 "Menudo personaje. Ahí te quedas.": [
 "juego/charla.py"
+],
+"Menú de Trampas — Puerto Bravo": [
+"trampas/ventana.py"
 ],
 "Menú de vuelo": [
 "juego/vuelo_pantalla.py"
@@ -30949,6 +31974,12 @@
 "Mochila": [
 "juego/mochila.py"
 ],
+"Mochila &grande (40 huecos)": [
+"trampas/ventana.py"
+],
+"Mochila y objetos de valor": [
+"trampas/ventana.py"
+],
 "Mochila: {carga} de 100 unidades. En la calle, {reputacion_txt}": [
 "juego/menus_adultos.py"
 ],
@@ -30972,6 +32003,9 @@
 ],
 "Modelo de vehículo": [
 "editor/esquema.py"
+],
+"Modelo de vehículo desconocido: {modelo_id}": [
+"trampas/puente.py"
 ],
 "Modelo del otro servicio: {v}": [
 "juego/menus_charla.py"
@@ -31022,6 +32056,12 @@
 ],
 "Modificador: policía más severa": [
 "juego/menus_juego.py"
+],
+"Modo &IA:": [
+"trampas/ventana.py"
+],
+"Modo &invulnerable (sin daño)": [
+"trampas/ventana.py"
 ],
 "Modo IA al hablar con la gente: {v}": [
 "juego/menus_charla.py"
@@ -31297,6 +32337,9 @@
 "Muelles, grúas y almacenes que huelen a salitre y gasóleo.": [
 "data/datos/ciudad.json"
 ],
+"Muestra errores de sintaxis o confirmación de cambios del inspector.": [
+"trampas/ventana.py"
+],
 "Muestra la ayuda.": [
 "editor/accesibilidad/ayuda.py"
 ],
@@ -31345,8 +32388,14 @@
 "Multa por {motivo}: {importe} euros y {int} puntos del carné.": [
 "juego/realismo.py"
 ],
+"Mundo": [
+"trampas/ventana.py"
+],
 "Mundo vivo": [
 "servidor/opciones.py"
+],
+"Mundo y Teletransporte": [
+"trampas/ventana.py"
 ],
 "Mundo: versión %s del juego, huella %s, %d localidades.": [
 "panel_servidor/ventana.py"
@@ -31354,6 +32403,9 @@
 "Munición comprada. Reserva: {reserva} balas.": [
 "juego/menus_juego.py",
 "juego/menus_juego.py"
+],
+"Munición de &reserva:": [
+"trampas/ventana.py"
 ],
 "Munición de {nombre}": [
 "juego/calle.py"
@@ -31402,6 +32454,9 @@
 ],
 "Muñeco de prácticas": [
 "data/datos/misiones.json"
+],
+"Má&x. todas las habilidades": [
+"trampas/ventana.py"
 ],
 "Máquina de memoria de sonidos: {precio} euros": [
 "juego/menus_extra.py"
@@ -31515,6 +32570,28 @@
 ],
 "Música {int} por ciento": [
 "juego/partida.py"
+],
+"NPC abatido.": [
+"trampas/ventana.py"
+],
+"NPC curado.": [
+"trampas/ventana.py"
+],
+"NPC eliminado.": [
+"trampas/ventana.py"
+],
+"NPC generado en la partida.": [
+"trampas/ventana.py"
+],
+"NPC traído junto a ti.": [
+"trampas/ventana.py"
+],
+"NPCs caídos limpiados.": [
+"trampas/ventana.py"
+],
+"NPCs y Bandas": [
+"trampas/ventana.py",
+"trampas/ventana.py"
 ],
 "Nacho": [
 "data/datos/gente.json"
@@ -31866,6 +32943,19 @@
 "juego/bolsa.py",
 "data/datos/vida.json"
 ],
+"Necesidades (vida realista)": [
+"trampas/ventana.py"
+],
+"Necesidades actualizadas.": [
+"trampas/ventana.py"
+],
+"Necesidades rellenadas al máximo.": [
+"trampas/ventana.py"
+],
+"Necesidades y Habilidades": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
 "Necesita pista para aterrizar": [
 "editor/esquema_vuelo.py"
 ],
@@ -32096,6 +33186,12 @@
 "Ningún taxista te recoge mientras te busca la policía.": [
 "juego/menus_juego.py"
 ],
+"Nive&l (0-10):": [
+"trampas/ventana.py"
+],
+"Nive&l:": [
+"trampas/ventana.py"
+],
 "Nivel al entrar volando bajo en una localidad con el radar encima": [
 "editor/esquema_vuelo.py"
 ],
@@ -32104,7 +33200,8 @@
 ],
 "Nivel de búsqueda": [
 "editor/esquema.py",
-"editor/esquema.py"
+"editor/esquema.py",
+"trampas/ventana.py"
 ],
 "Nivel de búsqueda al atracarla": [
 "editor/esquema.py"
@@ -32123,6 +33220,12 @@
 ],
 "Nivel de búsqueda con el que todavía viene": [
 "editor/esquema.py"
+],
+"Nivel de búsqueda fijado a {n}.": [
+"trampas/ventana.py"
+],
+"Nivel de búsqueda policial de 0 a 5, sincronizado con la partida.": [
+"trampas/ventana.py"
 ],
 "Nivel de búsqueda que te cae entonces": [
 "editor/esquema.py"
@@ -32469,6 +33572,9 @@
 "No hay archivo de configuración: uso los valores de serie. Con --ejemplo se escribe uno.": [
 "servidor/__main__.py"
 ],
+"No hay bancos en este mapa.": [
+"trampas/puente.py"
+],
 "No hay bandas.": [
 "servidor/nucleo.py"
 ],
@@ -32486,6 +33592,15 @@
 ],
 "No hay enemigos cerca.": [
 "juego/combate.py"
+],
+"No hay locales atracables en este mapa.": [
+"trampas/puente.py"
+],
+"No hay lugares disponibles en este mapa para iniciar un contrato.": [
+"trampas/puente.py"
+],
+"No hay lugares disponibles en este mapa para iniciar un encargo.": [
+"trampas/puente.py"
 ],
 "No hay lugares junto a este punto.": [
 "juego/pantallas.py"
@@ -32562,6 +33677,9 @@
 "No hay ninguna otra localidad con helipuerto ni aeropuerto": [
 "juego/vuelo_pantalla.py"
 ],
+"No hay ninguna partida cargada en este momento.": [
+"trampas/puente.py"
+],
 "No hay ninguna partida guardada": [
 "juego/menus_juego.py"
 ],
@@ -32616,6 +33734,9 @@
 "No hay ningún vehículo aquí al que ponerle nombre": [
 "juego/menus_juego.py"
 ],
+"No hay ningún vehículo seleccionado.": [
+"trampas/ventana.py"
+],
 "No hay que matarle: se rinde cuando ha recibido bastante": [
 "editor/esquema.py"
 ],
@@ -32663,6 +33784,9 @@
 ],
 "No juego.": [
 "juego/respuestas_datos2.py"
+],
+"No la tienes todavía": [
+"trampas/ventana.py"
 ],
 "No las merece.": [
 "juego/respuestas_datos2.py"
@@ -32948,11 +34072,17 @@
 "No se come tal cual: es un ingrediente. ": [
 "juego/menus_cocina.py"
 ],
+"No se encontró Puerto Bravo con el puente habilitado.": [
+"trampas/ventana.py"
+],
 "No se encontró el manual del editor. Debería estar en data, docs, editor_mods_es.html.": [
 "editor/ventana.py"
 ],
 "No se encontró el manual. Está en la carpeta data, docs.": [
 "juego/menus_juego.py"
+],
+"No se encontró ninguna instancia de Puerto Bravo en ejecución con el puente de trampas activo.": [
+"trampas/protocolo.py"
 ],
 "No se escapa.": [
 "data/datos/misiones_extra.json"
@@ -33038,6 +34168,9 @@
 "No se para el servidor": [
 "juego/menus_actualizar.py"
 ],
+"No se permiten valores numéricos infinitos o NaN.": [
+"trampas/puente.py"
+],
 "No se pierde aunque lo dejes en la calle: lo tienes en el móvil, en Mis vehículos.": [
 "juego/menus_lugares.py"
 ],
@@ -33066,6 +34199,9 @@
 "No se pudo abrir la carpeta. Es la carpeta desde la que abres el juego.": [
 "juego/menus_actualizar.py"
 ],
+"No se pudo aplicar": [
+"trampas/ventana.py"
+],
 "No se pudo averiguar. Busca en internet cuál es mi IP y dásela a tu amigo, seguida de dos puntos y el puerto.": [
 "juego/menus_online.py"
 ],
@@ -33077,6 +34213,9 @@
 ],
 "No se pudo comprobar si hay una versión nueva.": [
 "juego/menus_actualizar.py"
+],
+"No se pudo conectar con Puerto Bravo: {exc}": [
+"trampas/protocolo.py"
 ],
 "No se pudo conectar con el servidor.": [
 "juego/enlinea.py",
@@ -33145,6 +34284,9 @@
 ],
 "No se puede volar más bajo: {int} metros.": [
 "juego/vuelo_pantalla.py"
+],
+"No se pueden quitar los puños.": [
+"trampas/puente.py"
 ],
 "No se toca nada. La versión queda descargada: se instala cuando quieras desde Opciones, Actualizaciones, Instalar la versión descargada.": [
 "juego/menus_actualizar.py"
@@ -33693,11 +34835,20 @@
 "editor/esquema_honrado.py",
 "editor/esquema_honrado.py"
 ],
+"Nombre &perro:": [
+"trampas/ventana.py"
+],
 "Nombre con artículo, por ejemplo: una merluza": [
 "editor/esquema.py"
 ],
 "Nombre cuando el barrio cambia de manos": [
 "editor/esquema.py"
+],
+"Nombre de clave inválido (contiene caracteres de control o saltos de línea). No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
+"Nombre de clave inválido (supera 80 caracteres). No se modificó ni añadió nada.": [
+"trampas/puente.py"
 ],
 "Nombre de este final": [
 "editor/esquema.py",
@@ -34007,15 +35158,24 @@
 "juego/contratos.py",
 "data/datos/vida.json"
 ],
+"Objetivo de inspector no soportado: {objetivo}": [
+"trampas/puente.py"
+],
 "Objetivo de la misión o del trabajo": [
 "juego/mando.py"
 ],
 "Objetivo de la misión. ": [
 "juego/menus_juego.py"
 ],
+"Objetivo no soportado: {objetivo}. No se modificó ni añadió nada.": [
+"trampas/puente.py"
+],
 "Objetivo, {quien}": [
 "juego/contratos.py",
 "juego/extras2.py"
+],
+"Objeto de &valor:": [
+"trampas/ventana.py"
 ],
 "Objeto de colección": [
 "juego/catalogo_sonidos.py"
@@ -34026,6 +35186,9 @@
 "Objeto de valor": [
 "editor/esquema.py"
 ],
+"Objeto de valor desconocido: {ident}": [
+"trampas/puente.py"
+],
 "Objeto que hace falta y se gasta": [
 "editor/esquema_honrado.py"
 ],
@@ -34035,8 +35198,14 @@
 "Objeto recogido": [
 "juego/catalogo_sonidos.py"
 ],
+"Objeto {oid} actualizado.": [
+"trampas/ventana.py"
+],
 "Objetos de colección: {len} de {total_casetes}": [
 "juego/menus_juego.py"
+],
+"Objetos de la mochila marcados como legítimos.": [
+"trampas/ventana.py"
 ],
 "Objetos de tienda": [
 "editor/esquema.py"
@@ -34049,6 +35218,13 @@
 ],
 "Objetos perdidos: alguien ha denunciado hoy la pérdida de un maletín por esta zona.": [
 "juego/sistemas.py"
+],
+"Objetos y Mochila": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"Objetos útiles del inventario": [
+"trampas/ventana.py"
 ],
 "Ocho cartuchos seguidos. Para limpiar habitaciones.": [
 "data/datos/armas.json"
@@ -34196,12 +35372,21 @@
 "Opciones restablecidas como vienen de serie. Se conservan tu idioma, tus servidores y tu nombre en la red. Algún cambio, como el motor de sonido, se nota al volver a abrir el juego.": [
 "juego/menus_juego.py"
 ],
+"Opciones rápidas de jugabilidad (cfg)": [
+"trampas/ventana.py"
+],
 "Opción": [
 "editor/esquema_honrado.py",
 "editor/esquema_honrado.py"
 ],
 "Opción de la decisión": [
 "editor/esquema.py"
+],
+"Opción desconocida en cfg: {clave}. No se modificó nada.": [
+"trampas/puente.py"
+],
+"Opción protegida en el Inspector: {clave}. No se modificó nada.": [
+"trampas/puente.py"
 ],
 "OpenAL no ha podido abrir el dispositivo de sonido": [
 "juego/audio_al.py"
@@ -34361,12 +35546,18 @@
 "juego/calle.py",
 "data/datos/vida.json"
 ],
+"P&untería (0-100):": [
+"trampas/ventana.py"
+],
 "PASO ": [
 "juego/actualizador.py",
 "juego/actualizador.py"
 ],
 "PB1-": [
 "juego/enlinea.py"
+],
+"PID {pid} — v{ver} (puerto {puerto})": [
+"trampas/ventana.py"
 ],
 "Pack de sonidos: {nombre_pack}": [
 "juego/menus_juego.py"
@@ -34623,6 +35814,8 @@
 "juego/extras3.py",
 "juego/guerra.py",
 "juego/reconquista.py",
+"trampas/puente.py",
+"trampas/ventana.py",
 "data/datos/gente.json",
 "data/datos/gente.json",
 "data/datos/gente.json",
@@ -35482,6 +36675,9 @@
 "Pase privado: {precio} euros": [
 "juego/menus_adultos.py"
 ],
+"Pasea": [
+"trampas/ventana.py"
+],
 "Pasean alrededor del lugar. Agachado se te oye a menos de tres metros; andando, a seis; corriendo, a once.": [
 "editor/esquema.py"
 ],
@@ -35603,6 +36799,15 @@
 ],
 "Patrona de pesca de Costa Dorada. Empieza con la pesca al nivel cinco, buena resistencia, un remo, trescientos euros y el respeto de los vecinos.": [
 "data/mods/costa_dorada.json"
+],
+"Patrulla de &ronda": [
+"trampas/ventana.py"
+],
+"Patrulla de ronda generada.": [
+"trampas/ventana.py"
+],
+"Patrulla enviada.": [
+"trampas/ventana.py"
 ],
 "Patrullas de policía circulando por la calle": [
 "juego/menus_juego.py"
@@ -35851,10 +37056,19 @@
 "Periódico o librería": [
 "juego/catalogo_sonidos.py"
 ],
+"Permite inspeccionar y modificar cualquier atributo en vivo, incluso de futuras actualizaciones.": [
+"trampas/ventana.py"
+],
 "Permitir dos sesiones con la misma identidad": [
 "servidor/opciones.py"
 ],
+"Permitir el menú de trampas": [
+"juego/menus_juego.py"
+],
 "Permitir el modo pasivo": [
+"servidor/opciones.py"
+],
+"Permitir menú de trampas": [
 "servidor/opciones.py"
 ],
 "Pero si ya lo sabes, {tu}. {yo}, el de siempre.": [
@@ -35867,7 +37081,14 @@
 "data/mods/bahia_del_ocaso.json"
 ],
 "Perro": [
-"juego/extras3.py"
+"juego/extras3.py",
+"trampas/ventana.py"
+],
+"Perro compañero": [
+"trampas/ventana.py"
+],
+"Perro compañero activado junto a ti.": [
+"trampas/ventana.py"
 ],
 "Perros recogidos de las naves abandonadas. Aquí puedes adoptar uno.": [
 "data/mods/bahia_del_ocaso.json"
@@ -35879,6 +37100,12 @@
 "Persecución": [
 "juego/agente.py",
 "data/datos/vida.json"
+],
+"Persecución en vehículo": [
+"trampas/ventana.py"
+],
+"Persecución lanzada y marcada en tu GPS.": [
+"trampas/ventana.py"
 ],
 "Persecución: un vehículo que no para": [
 "editor/esquema.py"
@@ -35913,6 +37140,14 @@
 "Persona": [
 "editor/esquema.py"
 ],
+"Persona no encontrada.": [
+"trampas/puente.py",
+"trampas/puente.py",
+"trampas/puente.py"
+],
+"Persona no encontrada. No se modificó nada.": [
+"trampas/puente.py"
+],
 "Persona, contenido para adultos": [
 "editor/esquema.py"
 ],
@@ -35940,6 +37175,10 @@
 ],
 "Personas a las que puedes conocer, con las que quedar y, si la cosa va bien, ser pareja, prometeros, vivir juntos y casaros. Sin contenido para adultos.": [
 "juego/menus_juego.py"
+],
+"Personas activas": [
+"trampas/ventana.py",
+"trampas/ventana.py"
 ],
 "Personas e inteligencia artificial": [
 "juego/menus_charla.py",
@@ -35971,7 +37210,8 @@
 ],
 "Pesca": [
 "juego/extras2.py",
-"editor/modelo.py"
+"editor/modelo.py",
+"trampas/ventana.py"
 ],
 "Pesca veinticinco peces.": [
 "juego/extras2.py"
@@ -36014,6 +37254,9 @@
 ],
 "Pestañas. Cambie de pestaña con Control+Tab o con las flechas.": [
 "editor/accesibilidad/ayuda.py"
+],
+"Petición inválida: {exc}": [
+"trampas/puente.py"
 ],
 "Pez": [
 "editor/esquema.py"
@@ -36407,6 +37650,10 @@
 "juego/enlinea.py",
 "juego/entidades.py",
 "juego/gente.py",
+"trampas/ventana.py",
+"trampas/ventana.py",
+"trampas/ventana.py",
+"trampas/ventana.py",
 "data/datos/gente.json"
 ],
 "Policía abatido.": [
@@ -36852,6 +38099,9 @@
 ],
 "Precios: {precios}": [
 "juego/menus_honrado.py"
+],
+"Precisión al disparar, en porcentaje.": [
+"trampas/ventana.py"
 ],
 "Precisión {_grado}: acierta {int} de cada cien, y menos cuanto más lejos": [
 "juego/combate.py"
@@ -37338,6 +38588,9 @@
 "Puedes trabajar con un taxi, repartir pizzas, conducir ambulancias, autobuses y camiones, pescar, correr carreras, comprar casas, negocios, coches y barcos, o jugarte el dinero en el casino. El móvil, con la tecla M, lo reúne todo.": [
 "juego/ayuda.py"
 ],
+"Puente detenido.": [
+"trampas/puente.py"
+],
 "Puerta de un vehículo": [
 "juego/catalogo_sonidos.py"
 ],
@@ -37578,7 +38831,8 @@
 ],
 "Puntería": [
 "juego/extras2.py",
-"editor/modelo.py"
+"editor/modelo.py",
+"trampas/ventana.py"
 ],
 "Puntería, conducción y nervios se sortean entre el mínimo y el máximo.": [
 "editor/esquema_golpes.py"
@@ -37608,8 +38862,14 @@
 "Puntos": [
 "editor/esquema.py"
 ],
+"Puntos &carné (0-12):": [
+"trampas/ventana.py"
+],
 "Puntos al azar que se suman a cada barrio": [
 "editor/esquema.py"
+],
+"Puntos de chaleco antibalas.": [
+"trampas/ventana.py"
 ],
 "Puntos de control": [
 "editor/esquema.py"
@@ -37922,6 +39182,9 @@
 "Quiero mi caja. Cómo entras es problema tuyo. Toma munición.": [
 "data/datos/misiones.json"
 ],
+"Quieto": [
+"trampas/ventana.py"
+],
 "Quieto ahí. Le he quitado las ganas a uno que iba a por ti.": [
 "juego/golpes.py",
 "data/datos/vida.json"
@@ -37952,6 +39215,9 @@
 ],
 "Quitado de tu lista. Tu personaje sigue guardado en ese servidor.": [
 "juego/menus_enlinea.py"
+],
+"Quitar &averías": [
+"trampas/ventana.py"
 ],
 "Quitar a {nombre} de tu móvil": [
 "juego/menus_adultos.py"
@@ -38372,6 +39638,9 @@
 "juego/ayuda.py",
 "herramientas/generar_datos.py"
 ],
+"Re&tirar helicóptero": [
+"trampas/ventana.py"
+],
 "Realismo": [
 "editor/esquema.py",
 "editor/esquema.py"
@@ -38413,6 +39682,9 @@
 ],
 "Recarga": [
 "juego/catalogo_sonidos.py"
+],
+"Recarga y sincroniza todos los valores actuales desde la partida.": [
+"trampas/ventana.py"
 ],
 "Recargas el arma.": [
 "juego/catalogo_sonidos.py"
@@ -39158,8 +40430,15 @@
 "juego/vuelo.py",
 "data/datos/vida.json"
 ],
+"Reputación con Bandas": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
 "Reputación con una banda que pierdes al tumbar en defensa propia a uno de los suyos": [
 "editor/esquema_honrado.py"
+],
+"Reputación de banda fijada a {val}.": [
+"trampas/ventana.py"
 ],
 "Requena": [
 "data/datos/gente.json"
@@ -39175,7 +40454,8 @@
 "Resistencia": [
 "juego/extras2.py",
 "editor/esquema.py",
-"editor/modelo.py"
+"editor/modelo.py",
+"trampas/ventana.py"
 ],
 "Resistencia del vehículo": [
 "editor/esquema.py"
@@ -39185,6 +40465,9 @@
 ],
 "Respecto al nivel normal, que es cien. Las ventajas no cambian con el nivel.": [
 "editor/esquema_honrado.py"
+],
+"Respuesta inválida del juego: {exc}": [
+"trampas/protocolo.py"
 ],
 "Restablecer las teclas originales": [
 "juego/menus_juego.py"
@@ -39241,6 +40524,9 @@
 ],
 "Resumen para el móvil": [
 "editor/esquema.py"
+],
+"Resumen vivo de tu partida. Recórrelo con las flechas.": [
+"trampas/ventana.py"
 ],
 "Retirado de la venta.": [
 "juego/menus_enlinea.py"
@@ -39506,6 +40792,9 @@
 "Rueda cambiada. Vuelve a rodar bien.": [
 "juego/menus_juego.py"
 ],
+"Rueda de repuesto": [
+"trampas/puente.py"
+],
 "Rueda de repuesto comprada. Llevas {rueda}.": [
 "juego/menus_juego.py",
 "juego/menus_juego.py"
@@ -39592,6 +40881,9 @@
 ],
 "Río": [
 "juego/catalogo_sonidos.py"
+],
+"S&ueño (0-100):": [
+"trampas/ventana.py"
 ],
 "SERVIDOR ": [
 "juego/actualizador.py"
@@ -39775,6 +41067,9 @@
 ],
 "Saldaña no vendía mis nombres por gusto. Se los compraban Los Arcángeles.": [
 "data/mods/el_diablo.json"
+],
+"Saldo bancario actual.": [
+"trampas/ventana.py"
 ],
 "Saldo de tu cuenta: {banco} euros": [
 "juego/menus_lugares.py"
@@ -40050,6 +41345,9 @@
 "editor/esquema.py",
 "editor/esquema.py"
 ],
+"Salud actual.": [
+"trampas/ventana.py"
+],
 "Salud de más en cada asalto": [
 "editor/esquema.py"
 ],
@@ -40059,8 +41357,15 @@
 "Salud del primer rival": [
 "editor/esquema.py"
 ],
+"Salud má&xima:": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
 "Salud máxima": [
 "editor/esquema.py"
+],
+"Salud máxima.": [
+"trampas/ventana.py"
 ],
 "Salud máxima: {int} de 150. Se sube entrenando en un gimnasio": [
 "juego/menus_extra.py"
@@ -40094,6 +41399,9 @@
 ],
 "Salud {n} por ciento.": [
 "juego/partida.py"
+],
+"Salud, blindaje y foco restaurados.": [
+"trampas/ventana.py"
 ],
 "Saludar": [
 "juego/menus_charla.py"
@@ -41041,6 +42349,14 @@
 "Seisdedos viene a cobrarse lo del embarcadero.": [
 "data/mods/bahia_del_ocaso.json"
 ],
+"Selecciona primero un vehículo de la lista.": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"Selecciona primero una persona de la lista.": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
 "Selector de fecha. Cambie día, mes y año con las flechas.": [
 "editor/accesibilidad/ayuda.py"
 ],
@@ -41637,6 +42953,9 @@
 "Sigo probando.": [
 "juego/reconexion.py"
 ],
+"Sigue": [
+"trampas/ventana.py"
+],
 "Sigue abriéndose.": [
 "juego/misiones.py"
 ],
@@ -41717,6 +43036,9 @@
 "Sillones y un piano que nadie toca.": [
 "juego/sistemas.py"
 ],
+"Sin IA": [
+"trampas/ventana.py"
+],
 "Sin alias: te llaman por tu nombre.": [
 "juego/sistemas.py"
 ],
@@ -41743,6 +43065,19 @@
 ],
 "Sin comisario y sin dinero, a Belmonte solo le queda su libro de cuentas: los nombres de todos los políticos que tiene comprados. Lo guarda en la mansión.": [
 "data/datos/misiones.json"
+],
+"Sin conectar. Pulsa Conectar cuando Puerto Bravo esté en modo un jugador.": [
+"trampas/ventana.py"
+],
+"Sin conexión": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"Sin conexión con Puerto Bravo (el juego está cerrado o en multijugador sin permiso del dueño del servidor).": [
+"trampas/ventana.py"
+],
+"Sin conexión con el juego ({exc}).": [
+"trampas/protocolo.py"
 ],
 "Sin contraseña: entrará cualquiera que tenga la dirección.": [
 "juego/menus_online.py"
@@ -41821,6 +43156,16 @@
 ],
 "Sin práctica. Con cero, solo con la práctica.": [
 "editor/esquema.py"
+],
+"Sin respuesta.": [
+"trampas/puente.py"
+],
+"Sin selección": [
+"trampas/ventana.py",
+"trampas/ventana.py",
+"trampas/ventana.py",
+"trampas/ventana.py",
+"trampas/ventana.py"
 ],
 "Sin tarea: solo te acompaña cuando le llamas": [
 "juego/capo.py"
@@ -42054,6 +43399,9 @@
 ],
 "Solo entra el chico de los recados. No quiero acusarle sin saber. Sale del banco a las doce, de hacer el ingreso.": [
 "data/datos/misiones_extra3.json"
+],
+"Solo este e&jemplar": [
+"trampas/ventana.py"
 ],
 "Solo hace falta si usas un servicio que no sea OpenRouter.": [
 "juego/menus_charla.py"
@@ -42314,8 +43662,26 @@
 "Su tren sale a las seis y ve muy poco. Acompáñala hasta la estación. Va despacio y habla mucho.": [
 "data/datos/misiones_extra3.json"
 ],
+"Su&mar +10": [
+"trampas/ventana.py"
+],
 "Suave al {get} por ciento; cobros cada {get2} días; periodos de trabajo de {get3} días": [
 "editor/esquema_honrado.py"
+],
+"Subcategorías de Inventario": [
+"trampas/ventana.py"
+],
+"Subcategorías de Jugador": [
+"trampas/ventana.py"
+],
+"Subcategorías de NPCs y Bandas": [
+"trampas/ventana.py"
+],
+"Subcategorías de Vehículos": [
+"trampas/ventana.py"
+],
+"Subcategorías del jugador: Combate, Economía, Necesidades y Banda.": [
+"trampas/ventana.py"
 ],
 "Sube": [
 "juego/bolsa.py"
@@ -42488,8 +43854,29 @@
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
+"Suc&iedad (0-100):": [
+"trampas/ventana.py"
+],
 "Suceso callejero": [
 "juego/catalogo_sonidos.py"
+],
+"Suceso cancelado.": [
+"trampas/ventana.py"
+],
+"Suceso de atraco generado cerca.": [
+"trampas/ventana.py"
+],
+"Suceso de pandilleros generado cerca.": [
+"trampas/ventana.py"
+],
+"Suceso: &Atraco a peatón": [
+"trampas/ventana.py"
+],
+"Suceso: &Maletín perdido": [
+"trampas/ventana.py"
+],
+"Suceso: &Pandilleros": [
+"trampas/ventana.py"
 ],
 "Suceso: alguien ha perdido un maletín por aquí cerca. {situar}. Búscalo con el radar, pulsando Tabulador.": [
 "juego/extras2.py"
@@ -42512,6 +43899,9 @@
 ],
 "Sucesos callejeros al azar": [
 "juego/menus_juego.py"
+],
+"Sucesos callejeros aleatorios": [
+"trampas/ventana.py"
 ],
 "Suciedad desde la que hueles mal": [
 "editor/esquema.py"
@@ -42656,12 +44046,22 @@
 "Sustancia": [
 "editor/esquema.py"
 ],
+"Sustancia {sid} actualizada.": [
+"trampas/ventana.py"
+],
 "Sustancia, contenido para adultos": [
 "editor/esquema.py",
 "editor/esquema.py"
 ],
 "Sustancias": [
 "juego/menus_adultos.py"
+],
+"Sustancias (contenido +18)": [
+"trampas/ventana.py"
+],
+"Sustancias y Comida": [
+"trampas/ventana.py",
+"trampas/ventana.py"
 ],
 "Sustancias y mercancía": [
 "juego/menus_juego.py"
@@ -42789,6 +44189,9 @@
 "Súper Veinticuatro Horas": [
 "data/datos/ciudad.json"
 ],
+"T&ipo de día:": [
+"trampas/ventana.py"
+],
 "TERMINADA ": [
 "juego/actualizador.py"
 ],
@@ -42898,6 +44301,9 @@
 ],
 "Talleres y desguace": [
 "juego/menus_juego.py"
+],
+"Tamaño de mochila actualizado.": [
+"trampas/ventana.py"
 ],
 "Tambaleo al caminar": [
 "editor/esquema.py"
@@ -43889,6 +45295,12 @@
 "Tejido que transpira y bandas que reflejan la luz.": [
 "data/datos/vida.json"
 ],
+"Teletransportado a {lugar}.": [
+"trampas/ventana.py"
+],
+"Teletransporte": [
+"trampas/ventana.py"
+],
 "Telmo": [
 "data/mods/isla_de_los_vientos.json"
 ],
@@ -44122,6 +45534,9 @@
 "Thread ": [
 "juego/registro.py"
 ],
+"Tiempo de espera agotado ejecutando el comando en el juego.": [
+"trampas/puente.py"
+],
 "Tiempo en segundos": [
 "editor/esquema.py"
 ],
@@ -44139,6 +45554,9 @@
 ],
 "Tiempo normal. Concentración {int} por ciento.": [
 "juego/partida.py"
+],
+"Tiempo y clima (sincronizados)": [
+"trampas/ventana.py"
 ],
 "Tiempo. Como siempre.": [
 "juego/respuestas_datos1.py"
@@ -44352,6 +45770,9 @@
 "Tipo de contrato del tablón": [
 "editor/esquema.py"
 ],
+"Tipo de día desconocido: {ident}": [
+"trampas/puente.py"
+],
 "Tipo de enemigo": [
 "editor/esquema.py",
 "editor/esquema.py"
@@ -44376,6 +45797,12 @@
 ],
 "Tipo de enemigo que llega en un vehículo": [
 "editor/esquema.py"
+],
+"Tipo de evento desconocido: {tipo}": [
+"trampas/puente.py"
+],
+"Tipo de inventario no soportado: {tipo}": [
+"trampas/puente.py"
 ],
 "Tipo de local": [
 "editor/esquema.py",
@@ -44507,8 +45934,24 @@
 "juego/vuelo.py",
 "data/datos/vida.json"
 ],
+"Todas las armas añadidas al arsenal.": [
+"trampas/ventana.py"
+],
+"Todas las bandas": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"Todas las casas y negocios añadidos a tus propiedades.": [
+"trampas/ventana.py"
+],
 "Todas las cuentas que han entrado alguna vez: si administran, si están vetadas y cuándo se las vio. La tecla Aplicaciones abre las acciones sobre la cuenta elegida. Con el servidor parado no se pueden ver.": [
 "panel_servidor/ventana.py"
+],
+"Todas las habilidades al nivel máximo.": [
+"trampas/ventana.py"
+],
+"Todas las mejoras de taller aplicadas.": [
+"trampas/ventana.py"
 ],
 "Todas las noches llevo caldo a los que están de guardia: urgencias, los bomberos y la comisaría del puerto.": [
 "data/datos/misiones_extra3.json"
@@ -44521,6 +45964,9 @@
 ],
 "Todas las opciones vuelven a como vienen de serie, también las teclas y los volúmenes de cada sonido. Se conservan tu idioma, tus servidores guardados, tu nombre en la red y tus datos de la inteligencia artificial. Tus partidas no se tocan.": [
 "juego/menus_juego.py"
+],
+"Todas las p&ropiedades": [
+"trampas/ventana.py"
 ],
 "Todas las teclas del juego, a pie, al volante y en cualquier momento, y los botones del mando. Si has cambiado alguna tecla, dice la tuya.": [
 "juego/menus_juego.py",
@@ -44668,6 +46114,9 @@
 "Todos lo saben y nadie puede probarlo. Cobra en mano y no firma nada. Pero cada tarde, al salir del ayuntamiento, va andando a algún sitio. Síguele sin que te vea y dime dónde deja el dinero.": [
 "data/datos/misiones_honrada.json"
 ],
+"Todos los barrios conquistados.": [
+"trampas/ventana.py"
+],
 "Todos los barrios y localidades del juego, con cómo es cada uno y cuáles te faltan por visitar.": [
 "juego/menus_juego.py"
 ],
@@ -44697,6 +46146,9 @@
 ],
 "Todoterreno del capataz": [
 "data/datos/misiones_extra.json"
+],
+"Token de autenticación inválido.": [
+"trampas/puente.py"
 ],
 "Toma el autobús": [
 "juego/partida.py"
@@ -45279,7 +46731,8 @@
 "editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py",
-"editor/esquema.py"
+"editor/esquema.py",
+"trampas/ventana.py"
 ],
 "Tráfico a tu altitud": [
 "editor/esquema_vuelo.py"
@@ -45290,6 +46743,9 @@
 "Tráfico de frente a tu misma altitud, a pocos kilómetros. Sube o baja cien metros, ya.": [
 "juego/vuelo.py",
 "data/datos/vida.json"
+],
+"Tráfico de la calle limpiado.": [
+"trampas/ventana.py"
 ],
 "Tráfico detenido delante. Espera, o mantén pulsada la A para adelantar por la izquierda.": [
 "juego/conduccion.py"
@@ -45327,6 +46783,9 @@
 ],
 "Tu banda": [
 "juego/menus_enlinea.py"
+],
+"Tu banda acude a tu lado.": [
+"trampas/ventana.py"
 ],
 "Tu banda se llama ahora {t}.": [
 "juego/sistemas.py"
@@ -48344,6 +49803,12 @@
 "Valor mínimo de su carácter, de 0 a 100": [
 "editor/esquema.py"
 ],
+"Valor no permitido para {clave}: {conv}. Opciones válidas: {ops}. No se modificó nada.": [
+"trampas/puente.py"
+],
+"Valor numérico no finito no permitido: {raw}": [
+"trampas/puente.py"
+],
 "Valor, de 0 a 1": [
 "editor/esquema.py"
 ],
@@ -48747,11 +50212,45 @@
 "Vehículo del sospechoso": [
 "juego/trabajos.py"
 ],
+"Vehículo detonado.": [
+"trampas/ventana.py"
+],
+"Vehículo eliminado.": [
+"trampas/ventana.py"
+],
+"Vehículo marcado como tuyo.": [
+"trampas/ventana.py"
+],
+"Vehículo no encontrado.": [
+"trampas/puente.py",
+"trampas/puente.py",
+"trampas/puente.py"
+],
+"Vehículo no encontrado. No se modificó nada.": [
+"trampas/puente.py"
+],
 "Vehículo reparado al 100 por ciento.": [
 "juego/menus_juego.py"
 ],
+"Vehículo reparado.": [
+"trampas/ventana.py"
+],
 "Vehículo siempre aparcado en la puerta": [
 "editor/esquema.py"
+],
+"Vehículo traído junto a ti.": [
+"trampas/ventana.py"
+],
+"Vehículo {mid} generado.": [
+"trampas/ventana.py"
+],
+"Vehículos": [
+"trampas/ventana.py",
+"trampas/ventana.py"
+],
+"Vehículos activos": [
+"trampas/ventana.py",
+"trampas/ventana.py"
 ],
 "Vehículos aparcados por jugador": [
 "servidor/opciones.py"
@@ -48810,6 +50309,9 @@
 ],
 "Velero Tramontana": [
 "data/mods/costa_dorada.json"
+],
+"Velocidad &máx. (m/s):": [
+"trampas/ventana.py"
 ],
 "Velocidad de crucero, en kilómetros por hora": [
 "editor/esquema_vuelo.py"
@@ -49031,6 +50533,9 @@
 ],
 "Vete tú a saber.": [
 "juego/respuestas.py"
+],
+"Vetos de locales y proveedores limpiados.": [
+"trampas/ventana.py"
 ],
 "Viaje en taxi: bajada de bandera, a la que se suma la distancia": [
 "data/datos/vida.json"
@@ -49804,7 +51309,8 @@
 "data/datos/gente.json"
 ],
 "Víctima del atraco": [
-"juego/extras2.py"
+"juego/extras2.py",
+"trampas/puente.py"
 ],
 "W, A, S y D": [
 "juego/ayuda.py"
@@ -50095,6 +51601,9 @@
 ],
 "Ya estás bajando.": [
 "juego/vuelo.py"
+],
+"Ya estás conectado con Puerto Bravo. Pulsa Desconectar si quieres cerrar la conexión actual.": [
+"trampas/ventana.py"
 ],
 "Ya estás en el sitio: no hace falta acercarse más. Sin bajarte del vehículo, pulsa Intro para tomar la carretera{a}.": [
 "juego/partida.py"
@@ -50752,17 +52261,29 @@
 "juego/compra.py",
 "data/datos/vida.json"
 ],
+"[ACTUAL] ": [
+"trampas/ventana.py"
+],
 "[Así que tú eres el sobrino de Encarna. O la sobrina.|Así que tú eres la sobrina de Encarna. O el sobrino.] Con este ruido no me entero de nada.": [
 "data/datos/misiones.json"
 ],
 "[Campeón|Campeona]": [
 "juego/extras2.py"
 ],
+"[HOSTIL] ": [
+"trampas/ventana.py"
+],
 "[Jefe|Jefa] de barrio": [
 "juego/extras2.py"
 ],
 "[Jefe|Jefa]. El bingo, la discoteca y la marisquería. Si hoy cobras tú en persona, mañana no hace falta ni ir.": [
 "data/datos/misiones_extra2.json"
+],
+"[MUERTO] ": [
+"trampas/ventana.py"
+],
+"[MÍO] ": [
+"trampas/ventana.py"
 ],
 "\\1on la palanca izquierda": [
 "juego/mando.py"
@@ -53803,6 +55324,9 @@
 "mujer": [
 "juego/menus_juego.py"
 ],
+"multijugador": [
+"trampas/ventana.py"
+],
 "muy alto": [
 "juego/combate.py"
 ],
@@ -54157,6 +55681,9 @@
 ],
 "perdon|perdona|lo siento|disculpa|disculpame|no queria|ha sido sin querer|mis disculpas": [
 "juego/respuestas_datos2.py"
+],
+"permite o bloquea el menú de trampas en este servidor (solo desde consola o panel)": [
+"servidor/nucleo.py"
 ],
 "persona": [
 "juego/atracos.py"
@@ -54661,6 +56188,9 @@
 ],
 "si es hombre o mujer, o que dice él mismo, tienen más formas: se indican debajo de cada una.": [
 "juego/voces.py"
+],
+"si o no": [
+"servidor/nucleo.py"
 ],
 "si tienes perro, le pides que busque por el olfato el objeto más cercano": [
 "juego/ayuda.py"
@@ -55272,6 +56802,9 @@
 "un detalle: un regalo": [
 "juego/convivencia.py"
 ],
+"un diccionario JSON ({...})": [
+"trampas/puente.py"
+],
 "un disco duro": [
 "juego/contratos.py",
 "data/datos/vida.json"
@@ -55570,6 +57103,9 @@
 ],
 "una langosta": [
 "data/datos/armas.json"
+],
+"una lista JSON ([...])": [
+"trampas/puente.py"
 ],
 "una lubina": [
 "data/datos/armas.json"
@@ -56207,6 +57743,12 @@
 "{ciudad} tiene de todo: mar, bares y gente rara.": [
 "juego/respuestas_datos1.py"
 ],
+"{clave} activado.": [
+"trampas/ventana.py"
+],
+"{clave} desactivado.": [
+"trampas/ventana.py"
+],
 "{cosas}: caducado. Va a la basura.": [
 "juego/compra.py",
 "data/datos/vida.json"
@@ -56788,6 +58330,18 @@
 "{nombre_objeto} número {v}": [
 "juego/partida.py"
 ],
+"{nombre} (#{id}, {salud}/{salud_max} HP, {dist} m, ia={ia})": [
+"trampas/ventana.py"
+],
+"{nombre} (#{id}, {tipo}, {salud} HP, {dist} m)": [
+"trampas/ventana.py"
+],
+"{nombre} ({id}, daño {dano})": [
+"trampas/ventana.py"
+],
+"{nombre} ({k}, máx {niv})": [
+"trampas/ventana.py"
+],
 "{nombre} a las {h}": [
 "juego/encuentros.py"
 ],
@@ -57305,6 +58859,9 @@
 ],
 "{nombre} ya viene con {nombre2}. {situar}.": [
 "juego/misvehiculos.py"
+],
+"{nombre} {apellido} — Salud {salud}/{salud_max}, Blindaje {blindaje}\nDinero: {dinero} € en mano, {banco} € en banco | Búsqueda: {estrellas} estrellas\nÁnimo {animo}, Prestigio {ciudadania}, Fama {reputacion} | Arma: {arma}\nEntidades vivas: {vehs} vehículos, {pers} personas": [
+"trampas/ventana.py"
 ],
 "{nombre} {int} de 100": [
 "juego/menus_adultos.py"
@@ -59917,6 +61474,12 @@
 ],
 "¿Ya estamos? Qué corto se me ha hecho. Toma, quédate tú la novela, que yo ya sé cómo acaba.": [
 "data/datos/misiones_extra3.json"
+],
+"Á&mbito:": [
+"trampas/ventana.py"
+],
+"Á&nimo (0-100):": [
+"trampas/ventana.py"
 ],
 "Álex": [
 "data/datos/personajes.json"

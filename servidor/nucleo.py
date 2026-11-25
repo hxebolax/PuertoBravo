@@ -55,7 +55,7 @@ ORDENES_EN = {"help": "ayuda", "status": "estado", "players": "jugadores", "who"
               "announce": "aviso", "broadcast": "aviso", "say": "aviso", "tell": "decir", "msg": "decir", "whisper": "decir",
               "kick": "expulsar", "ban": "vetar", "unban": "perdonar", "pardon": "perdonar", "op": "admin", "deop": "quitaradmin",
               "deleteaccount": "borrarcuenta", "rename": "renombrar", "invite": "invitar", "invites": "invitaciones", "revoke": "anular", "motd": "mensaje",
-              "time": "hora", "gangs": "bandas", "save": "guardar", "backup": "copia", "backups": "copias", "reload": "recargar",
+              "time": "hora", "gangs": "bandas", "save": "guardar", "backup": "copia", "backups": "copias", "reload": "recargar", "cheats": "trampas",
               "update": "actualizar", "restart": "reiniciar", "shutdown": "apagar", "stop": "apagar", "quit": "apagar", "exit": "apagar"}
 # Cómo se dice cada orden española en inglés, para la ayuda: el primero de los suyos.
 EN_DE_ORDEN = {}
@@ -1167,6 +1167,7 @@ class Servidor(Bots, Trafico, Peatones, Policia):
             "jugadores": [o.publico() for o in self.jugadores.values() if o.dentro and o is not j],
             "servidor": {"nombre": self.cfg["nombre"], "bienvenida": self.cfg["bienvenida"], "pvp": si(self.cfg["pvp"]), "pasivo": si(self.cfg["modo_pasivo"]),
                          "seguras": si(self.cfg["zonas_seguras"]), "adultos": si(self.cfg["adultos"]), "trafico": self._tr_activo(), "peatones": self._pe_activo(), "policia": self._po_activo(), "proteccion": int(self.cfg["proteccion"]),
+                         "permitir_trampas": si(self.cfg["permitir_trampas"]),
                          "max_jugadores": tope,
                          # lo de la 1.7.3: el tope de negocios y la compra a la fuerza
                          "negocios_max": int(self.cfg["negocios_max"]), "forzosa": int(self.cfg["compra_forzosa"]), "forzosa_dias": int(self.cfg["forzosa_dias"]),
@@ -1177,7 +1178,7 @@ class Servidor(Bots, Trafico, Peatones, Policia):
                          "economia": self._economia_datos(j),
                          "precios": {k: int(self.cfg[k]) for k in ("precio_banda", "precio_barrio", "renta_barrio", "precio_guerra", "guerra_espera", "guerra_dura")}},
             "ficha": j.ficha,
-            "saldo": j.saldo if si(self.cfg["economia"]) else None,
+            "saldo": j.saldo if (si(self.cfg["economia"]) and not si(self.cfg["permitir_trampas"])) else None,
             "partida": para_el, "dias_fuera": dias_fuera, "hora": self._hora(), "semilla": self.semilla,
             "contrato": self._contrato_publico(j),
             "banda": self._banda_datos(j.banda), "territorios": self._territorios(), "recompensa": int(fila["recompensa"] or 0),
@@ -1327,6 +1328,10 @@ class Servidor(Bots, Trafico, Peatones, Policia):
         if not si(self.cfg["economia"]):
             return
         total = j.dinero + j.banco
+        if si(self.cfg["permitir_trampas"]):
+            j.saldo = total
+            j.t_margen = time.monotonic()
+            return
         if j.saldo is None:                                   # personaje nuevo: con lo que empieza, sin pasarse
             j.saldo = min(total, int(self.cfg["saldo_inicial"]))
         ahora = time.monotonic()
@@ -3119,6 +3124,7 @@ class Servidor(Bots, Trafico, Peatones, Policia):
         ("copia", tr("hace una copia de seguridad")),
         ("copias", tr("las copias de seguridad que hay")),
         ("recargar", tr("vuelve a leer servidor.conf y aplica lo que se puede cambiar sin reiniciar")),
+        ("trampas " + tr("si o no"), tr("permite o bloquea el menú de trampas en este servidor (solo desde consola o panel)")),
         ("actualizar", tr("avisa a todos de que el servidor se reinicia para actualizarse, espera la cuenta atrás, lo guarda todo y lo para; "
                        "los juegos esperan y vuelven a entrar solos cuando lo arranques otra vez. Detrás se pueden poner los segundos de aviso")),
         ("reiniciar", tr("lo mismo, pero diciendo que es por mantenimiento. Detrás se pueden poner los segundos de aviso")),
@@ -3179,7 +3185,24 @@ class Servidor(Bots, Trafico, Peatones, Policia):
             for j in list(self.jugadores.values()):
                 if j.dentro and not j.bot and j.nombre.lower() in vetados:
                     self._echar(j, es("Un administrador te ha sacado del servidor."))
+        if "permitir_trampas" in al_momento:
+            self._notificar_trampas()
         return al_momento, con_reinicio
+
+    def _notificar_trampas(self):
+        permitir = si(self.cfg["permitir_trampas"])
+        if not permitir and si(self.cfg["economia"]):
+            ahora = time.monotonic()
+            for j in self._humanos():
+                j.saldo = j.dinero + j.banco
+                j.t_margen = ahora
+                j.t_saldo = 0.0
+        self._a_todos({"t": "trampas", "permitir": permitir})
+        self._a_todos({
+            "t": "aviso",
+            "texto": es("El dueño del servidor ha permitido el menú de trampas.") if permitir else es("El dueño del servidor ha bloqueado el menú de trampas."),
+            "son": "notificacion",
+        })
 
     def _tiempo_en_marcha(self):
         if not self.t_inicio:
@@ -3374,6 +3397,19 @@ class Servidor(Bots, Trafico, Peatones, Policia):
             return " ".join(avisos + [
                 (tr("Aplicado: %s.") % ", ".join(nombre(c) for c in al_momento)) if al_momento else tr("No había nada que aplicar al momento."),
                 (tr("Esperan a que reinicies el servidor: %s.") % ", ".join(nombre(c) for c in con_reinicio)) if con_reinicio else ""]).strip()
+        if que == "trampas":
+            if quien != "consola":
+                return tr("Esta orden solo se puede dar desde la consola o el panel del servidor.")
+            if not resto:
+                return tr("El menú de trampas está permitido en este servidor.") if si(self.cfg["permitir_trampas"]) else tr("El menú de trampas está bloqueado en este servidor.")
+            valor, error = opciones.validar_valor("permitir_trampas", resto)
+            if error:
+                return tr("Escribe trampas si o trampas no.")
+            cambio = self.cfg["permitir_trampas"] != valor
+            self.cfg["permitir_trampas"] = valor
+            if cambio:
+                self._notificar_trampas()
+            return tr("El menú de trampas está permitido en este servidor.") if valor == "si" else tr("El menú de trampas está bloqueado en este servidor.")
         if que in ("actualizar", "reiniciar", "mantenimiento"):
             if self.parando:
                 return tr("El servidor ya se está parando.")

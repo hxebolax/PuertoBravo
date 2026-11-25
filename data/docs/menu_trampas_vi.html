@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Cẩm nang Bảng gian lận Puerto Bravo</title>
+<style>
+body { font-family: Segoe UI, Arial, sans-serif; max-width: 54em; margin: 1em auto; padding: 0 1em; line-height: 1.6; background: #111; color: #f2f2f2; font-size: 1.1em; }
+h1, h2, h3 { color: #ffd84d; }
+a { color: #8fd0ff; }
+code { color: #9fe89f; }
+kbd { border: 1px solid #aaa; border-radius: 4px; padding: 0 .35em; background: #2a2a2a; }
+li { margin-bottom: .3em; }
+</style>
+</head>
+<body>
+<h1>Cẩm nang Bảng gian lận Puerto Bravo</h1>
+<p>Bảng gian lận là một chương trình Windows bên ngoài với các điều khiển chuẩn dễ tiếp cận, được thiết kế cho bàn phím và trình đọc màn hình trong khi bạn chơi. Công cụ này giúp bạn thử nghiệm bản mod, di chuyển nhanh trên bản đồ, kích hoạt các tình huống cụ thể và chỉnh sửa thông số lượt chơi theo thời gian thực mà không phải chơi lại nhiệm vụ. Tài liệu này được sắp xếp theo từng tiêu đề: với trình đọc màn hình, bạn có thể nhảy qua từng mục bằng phím <kbd>H</kbd>.</p>
+
+<h2>1. Yêu cầu, kích hoạt và ngôn ngữ</h2>
+<ul>
+<li>Chạy <strong>MenuTrampas.exe</strong> nằm ngay cạnh <strong>PuertoBravo.exe</strong>.</li>
+<li>Vì lý do an toàn, tính năng này mặc định tắt: trước khi mở kết nối, hãy vào Tùy chọn, Chiến đấu và độ khó trong trò chơi và đặt <strong>Cho phép bảng gian lận</strong> thành <strong>có</strong>.</li>
+<li>Khi tùy chọn đó đang ở mức <strong>không</strong>, trò chơi không mở cổng nội bộ nào và cũng không tạo tệp liên kết tạm, nên bảng gian lận sẽ không phát hiện phiên chơi.</li>
+</ul>
+<p>Ngôn ngữ hiển thị của cửa sổ được chọn khi mở <strong>MenuTrampas.exe</strong> theo thứ tự ưu tiên sau:</p>
+<ol>
+<li>Biến môi trường <code>PUERTOBRAVO_IDIOMA</code>, nếu được thiết lập.</li>
+<li>Tùy chọn <strong>Ngôn ngữ</strong> được lưu trong cấu hình trò chơi (<code>data\config</code>).</li>
+<li>Nếu đang để <strong>auto</strong> (tự động), lấy ngôn ngữ của Windows (hoặc hệ thống): nếu có gói ngôn ngữ đã cài đặt thì dùng gói đó; nếu chưa có thì dùng tiếng Anh (và tiếng Tây Ban Nha nếu không có tiếng Anh).</li>
+</ol>
+<p>Nếu bạn đổi ngôn ngữ bên trong trò chơi, hãy đóng rồi mở lại <strong>MenuTrampas.exe</strong> để cửa sổ tải lại ngôn ngữ mới.</p>
+
+<h2>2. Kết nối, đồng bộ và điều khiển bằng bàn phím</h2>
+<p>Phần trên cùng của cửa sổ chứa các điều khiển kết nối, phía dưới là các thẻ công cụ. Khi kết nối và khi làm mới, cửa sổ đọc giá trị hiện tại từ trò chơi (tiền mặt, máu, giáp, sao truy nã, giờ, ngày, thời tiết, phương tiện và người xung quanh) để luôn đồng bộ.</p>
+<ul>
+<li><kbd>Alt 1</kbd> (Phiên bản trò chơi): danh sách các phiên chơi đang chạy được phát hiện trên máy.</li>
+<li><kbd>Alt 2</kbd> (Kết nối / Ngắt kết nối): liên kết với phiên bản đã chọn. Khi đã kết nối, nút chuyển nhãn thành <strong>Ngắt kết nối</strong> và không mở kết nối trùng lặp; hãy nhấn lại nếu bạn muốn đóng liên kết hiện tại hoặc kết nối lại sau đó.</li>
+<li><kbd>F5</kbd> hoặc <kbd>Alt 3</kbd> (Làm mới): đồng bộ lại ngay trạng thái chung, các ô nhập liệu và danh sách thực thể.</li>
+<li><kbd>Alt 4</kbd> và <kbd>Alt 5</kbd>: các ô chỉ đọc hiển thị trạng thái kết nối cùng bản tóm tắt nhanh về người chơi và môi trường.</li>
+<li><kbd>Control Tab</kbd> và <kbd>Control Shift Tab</kbd>: chuyển đổi qua lại giữa các thẻ chính và thẻ phụ.</li>
+<li><kbd>Tab</kbd> và <kbd>Alt</kbd> kèm chữ cái được gạch chân: di chuyển qua các điều khiển hoặc nhảy thẳng tới trường hay nút bấm tương ứng.</li>
+<li><kbd>Control H</kbd>: đọc phần trợ giúp theo ngữ cảnh của điều khiển đang có tiêu điểm qua trình đọc màn hình.</li>
+</ul>
+<p>Xem <a href="teclas_vi.html">các phím và nút bấm</a> để biết toàn bộ phím tắt.</p>
+
+<h2>3. Những gì công cụ cho phép làm theo từng thẻ</h2>
+<h3>Người chơi</h3>
+<ul>
+<li><strong>Chiến đấu và Trạng thái</strong>: chỉnh máu hiện tại, máu tối đa, giáp, độ tập trung, bật/tắt chế độ bất tử hoặc hồi phục toàn bộ.</li>
+<li><strong>Kinh tế và Tiến trình</strong>: chỉnh tiền mặt, tiền ngân hàng, tâm trạng, uy tín khu phố, danh tiếng đường phố, điểm bằng lái và vệ sĩ; cộng +5.000 hoặc +50.000 euro, xóa tiền án hoặc mở khóa toàn bộ tài sản.</li>
+<li><strong>Nhu cầu và Kỹ năng</strong>: chỉnh độ đói, độ khát, buồn ngủ và độ bẩn (hoặc đưa tất cả về 0), đặt cấp độ (0 đến 10) cho từng kỹ năng, chỉnh nấu ăn thực hành hoặc nâng tối đa mọi kỹ năng.</li>
+<li><strong>Băng đảng và Chó</strong>: sửa tên băng đảng, biệt danh thủ lĩnh và số thành viên, gọi băng đảng, chiếm khu phố hiện tại hoặc toàn bộ khu phố; nhận nuôi/gọi chó và chỉnh tên, độ đói, độ tin cậy của chó.</li>
+</ul>
+<h3>Túi đồ</h3>
+<ul>
+<li><strong>Vũ khí</strong>: chọn bất kỳ vũ khí nào trong danh mục, chỉnh băng đạn, đạn dự trữ, ống giảm thanh và băng đạn mở rộng; trao, trang bị, bỏ hoặc nhận toàn bộ vũ khí.</li>
+<li><strong>Vật phẩm và Ba lô</strong>: đặt hoặc cộng số lượng vật phẩm hữu ích, bỏ vật phẩm giá trị vào ba lô, bật ba lô lớn (40 ô) và xóa dấu hàng ăn cắp.</li>
+<li><strong>Chất và Đồ ăn</strong>: đặt đơn vị các chất (hoặc cộng +10) và thêm sản phẩm đồ ăn vào túi.</li>
+</ul>
+<h3>Phương tiện</h3>
+<ul>
+<li><strong>Tạo xe</strong>: tạo bất kỳ mẫu phương tiện nào ngay gần bạn, đặt tên riêng tùy chọn, đánh dấu là xe của tôi, lên xe ngay lập tức và nâng cấp tối đa.</li>
+<li><strong>Phương tiện đang hoạt động</strong>: liệt kê các xe đang có trong khu vực hiện tại để lên xe, đưa tới đây, sửa chữa, đổ đầy bình xăng, xóa hỏng hóc, nâng cấp tối đa, chuyển thành xe riêng, kích nổ, xóa hoặc dọn giao thông.</li>
+<li><strong>Thông số và Xưởng xe</strong>: sửa tên, chế độ AI, tốc độ tối đa, gia tốc, phanh, máu hiện tại và tối đa, cờ thù địch hoặc khóa cửa (chỉ chiếc xe này hoặc cả dòng xe) và chỉnh từng nâng cấp xưởng xe.</li>
+</ul>
+<h3>NPC và Băng đảng</h3>
+<ul>
+<li><strong>Tạo NPC</strong>: tạo dân thường, kẻ địch, đồng minh hoặc cảnh sát theo lớp danh mục, băng đảng, vũ khí, số lượng, máu, đến bằng phương tiện và thái độ thù địch.</li>
+<li><strong>Người đang hoạt động</strong>: liệt kê những người ở khu vực hiện tại và chỉnh tên, máu, độ chính xác, trạng thái, độ tin cậy dân thường, thù địch hiện tại; đưa tới đây, chữa trị, hạ gục, gỡ bỏ, xóa kẻ thù địch hoặc làm sạch xác chết.</li>
+<li><strong>Danh tiếng với Băng đảng</strong>: xem và đặt danh tiếng với từng băng đảng (-100 đến +100), hoặc chuyển nhanh thành đồng minh (+100), trung lập (0) hay kẻ thù (-100).</li>
+</ul>
+<h3>Cảnh sát, Sự kiện và Thế giới</h3>
+<ul>
+<li><strong>Cảnh sát</strong>: đặt số sao truy nã hiện tại (0 đến 5), xóa truy nã và truy đuổi, gửi đội tuần tra hoặc tuần tra vòng quanh, điều động hoặc rút trực thăng, chơi không có cảnh sát và bật trực thăng cảnh sát ở cấp 5.</li>
+<li><strong>Sự kiện</strong>: kích hoạt hoặc hủy sự kiện đường phố, bắt đầu truy đuổi với mẫu xe bỏ trốn và tốc độ mục tiêu, mở chiến tranh khu phố, tìm cuộc ẩu đả, cướp cửa hàng hoặc ngân hàng gần đây, xóa lệnh cấm vào cửa hàng, gọi xe cứu thương, thả vali 1.000 euro hoặc nhận hợp đồng và nhiệm vụ giao xe.</li>
+<li><strong>Thế giới</strong>: dịch chuyển tới bất kỳ khu vực và địa điểm nào trong danh mục (có ô lọc theo chữ), đặt giờ, ngày, mưa và loại ngày, hoặc bật/tắt nhanh các quy tắc lối chơi (+18, bắn nhầm đồng đội, chiến tranh khu phố, cuộc sống thực tế, nhiên liệu, hỏng hóc, luật giao thông, rơi vũ khí, kẻ thù mạnh và cảnh sát nghiêm khắc).</li>
+</ul>
+<h3>Trình kiểm tra</h3>
+<p>Cho phép đọc và chỉnh sửa an toàn các phạm vi được hỗ trợ của lượt lưu và cấu hình (như người chơi, thống kê, cấu hình, phương tiện hiện tại hoặc người ở gần). Trước lần chỉnh sửa đầu tiên từ Trình kiểm tra, cầu nối tự động lưu một bản sao dự phòng của ván chơi vào <code>respaldo_antes_trampas.json</code> trong thư mục tệp lưu.</p>
+
+<h2>4. Những gì không được phép và giới hạn an toàn</h2>
+<ul>
+<li><strong>Không hỗ trợ tay cầm</strong>: vì đây là cửa sổ Windows bên ngoài, không thể điều khiển bằng tay cầm chơi game; hãy dùng bàn phím và trình đọc màn hình.</li>
+<li><strong>Trò chơi chưa mở hoặc chưa bật tùy chọn</strong>: nếu <strong>PuertoBravo.exe</strong> không chạy hoặc <strong>Cho phép bảng gian lận</strong> đang đặt là <strong>không</strong>, cầu nối không được khởi tạo và không lệnh nào thực thi được.</li>
+<li><strong>Chơi cùng bạn bè và máy chủ trực tuyến</strong>: trong chế độ chơi cùng bạn bè, bảng gian lận bị khóa hoàn toàn. Trên máy chủ trực tuyến chuyên dụng, công cụ chỉ hoạt động nếu chủ máy chủ bật <code>permitir_trampas = si</code> trong cấu hình máy chủ; nếu không, kết nối vẫn bị chặn và mọi gian lận bị từ chối. Lưu ý rằng khi chủ máy chủ bật tùy chọn này, máy chủ sẽ ngừng kiểm soát tiền cho tất cả người chơi trên máy chủ đó (xem <a href="servidor_vi.html">cẩm nang máy chủ</a>).</li>
+<li><strong>Vô hiệu hóa thành tựu</strong>: ngay khi bạn dùng bất kỳ gian lận nào trong lượt chơi đơn, lượt lưu đó sẽ bị đánh dấu và không nhận thêm thành tựu nữa.</li>
+<li><strong>Giới hạn của Trình kiểm tra</strong>: không cho phép sửa các trường tùy ý, thuộc tính nội bộ bắt đầu bằng <code>_</code> hoặc các khóa cấu hình nhạy cảm (như <code>permitir_trampas</code>, <code>servidores</code>, <code>teclas</code>, địa chỉ cập nhật hay thiết bị âm thanh). Trình kiểm tra kiểm tra chặt chẽ cú pháp JSON và kiểu dữ liệu: nếu có lỗi (ví dụ dùng nháy đơn, sai kiểu hoặc số vượt giới hạn), chương trình sẽ báo lỗi rõ ràng và không sửa hay thêm bất cứ thứ gì.</li>
+<li><strong>Phạm vi cầu nối IPC</strong>: chỉ lắng nghe nội bộ (<code>127.0.0.1</code>), yêu cầu mã xác thực theo từng phiên và giới hạn số kết nối đồng thời (tối đa 8) để tránh quá tải luồng.</li>
+</ul>
+
+<h2>5. Các cẩm nang khác</h2>
+<ul>
+<li><a href="manual_vi.html">Quay lại cẩm nang chính của trò chơi</a>.</li>
+<li><a href="teclas_vi.html">Hướng dẫn đầy đủ phím và nút bấm</a>.</li>
+<li><a href="servidor_vi.html">Cẩm nang máy chủ trực tuyến</a> (để biết thêm về tùy chọn <code>permitir_trampas</code>).</li>
+</ul>
+</body>
+</html>

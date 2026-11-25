@@ -28,7 +28,7 @@ SUELTOS = ("generar_datos.py", "preparar_carpeta_servidor.py")     # herramienta
 
 def del_codigo(raiz):
     r = {}
-    archivos = [f for carpeta in ("juego", "editor", "panel_servidor", "servidor") for f in glob.glob(os.path.join(raiz, carpeta, "**", "*.py"), recursive=True)]
+    archivos = [f for carpeta in ("juego", "editor", "panel_servidor", "servidor", "trampas") for f in glob.glob(os.path.join(raiz, carpeta, "**", "*.py"), recursive=True)]
     archivos += [os.path.join(raiz, "herramientas", n) for n in SUELTOS]
     if True:
         for f in archivos:

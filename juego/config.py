@@ -36,6 +36,7 @@ POR_DEFECTO = {
     "mando_textos": True,          # con un mando conectado, decir los botones en lugar de las teclas
     "invulnerable": False,
     "sin_policia": False,
+    "permitir_trampas": False,
     "baliza": True,
     "gps_voz": True,
     "sonar": True,

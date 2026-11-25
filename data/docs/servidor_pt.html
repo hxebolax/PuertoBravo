@@ -394,6 +394,7 @@ a { color: #9fd0ff; }
 <li><code>backup (copia)</code>: faz um backup.</li>
 <li><code>backups (copias)</code>: os backups que existem.</li>
 <li><code>reload (recargar)</code>: lê servidor.conf novamente e aplica o que pode ser alterado sem reiniciar.</li>
+<li><code>cheats (trampas) si ou no</code>: permite ou bloqueia o menu de trapaças neste servidor (somente pelo console ou painel).</li>
 <li><code>update (actualizar)</code>: avisa a todos que o servidor está reiniciando para atualizar, aguarda a contagem regressiva, salva tudo e para; os jogos esperam e voltam sozinhos quando você os inicia novamente. Você pode adicionar os segundos de aviso depois.</li>
 <li><code>restart (reiniciar)</code>: o mesmo, mas dizendo que é para manutenção. Você pode adicionar os segundos de aviso depois.</li>
 <li><code>shutdown (apagar)</code>: avisa todo mundo, salva tudo e para o servidor.</li>
@@ -488,6 +489,7 @@ a { color: #9fd0ff; }
 <li>Entre amigos de confiança: aumente<code>ganancia_hora</code>sem medo, para 100.000 ou mais, ou desligue o rastreamento de dinheiro com<code>economia = no</code>. O limite existe para servidores abertos a estranhos, para não estragar as coisas para o seu pessoal.</li>
 <li>Em um servidor aberto: deixe o limite padrão e, se seu pessoal vive de contratos ou roubos e reclama, aumente<code>encargos_hora</code>antes<code>ganancia_hora</code>.</li>
 <li>Se alguém lhe disser que o servidor está tirando dinheiro deles, pergunte o que o jogo lhes disse: desde 1.7.1 ele fornece os números. O log do servidor mostra uma linha a cada vez, com o que foi retirado e o limite.</li>
+<li>Se você ativar <code>permitir_trampas = si</code> (ou executar <code>trampas si</code>), o servidor deixa de vigiar o dinheiro de todos os jogadores, não apenas de quem usa o menu: qualquer pessoa pode colocar quanto dinheiro quiser, ignorando <code>ganancia_hora</code> e <code>economia</code>. Use apenas entre amigos de confiança.</li>
 <li>Todas essas opções podem ser alteradas com o servidor em execução.</li>
 </ul>
 <h3>Se a conexão cair logo após a compra</h3>
@@ -816,6 +818,13 @@ a { color: #9fd0ff; }
 </ul>
 <h4>Permitir duas sessões com a mesma identidade: <code>varias_sesiones</code></h4>
 <p>Apenas para teste. Por padrão, não: se alguém entrar com seu personagem de outro lugar, a sessão anterior será encerrada.</p>
+<ul>
+<li>Valores: sim ou não.</li>
+<li>Padrão: <code>no</code>.</li>
+<li>Aplica-se sem reiniciar o servidor.</li>
+</ul>
+<h4>Permitir menu de trapaças: <code>permitir_trampas</code></h4>
+<p>Com no, que é o padrão, os jogos anulam completamente o menu de trapaças ao entrar neste servidor. Com si, o servidor deixa de vigiar o dinheiro de todos os jogadores e qualquer pessoa poderá colocar quanto dinheiro quiser.</p>
 <ul>
 <li>Valores: sim ou não.</li>
 <li>Padrão: <code>no</code>.</li>

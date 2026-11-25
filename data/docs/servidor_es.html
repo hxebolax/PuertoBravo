@@ -394,6 +394,7 @@ a { color: #9fd0ff; }
 <li><code>copia</code>: hace una copia de seguridad.</li>
 <li><code>copias</code>: las copias de seguridad que hay.</li>
 <li><code>recargar</code>: vuelve a leer servidor.conf y aplica lo que se puede cambiar sin reiniciar.</li>
+<li><code>trampas si o no</code>: permite o bloquea el menú de trampas en este servidor (solo desde consola o panel).</li>
 <li><code>actualizar</code>: avisa a todos de que el servidor se reinicia para actualizarse, espera la cuenta atrás, lo guarda todo y lo para; los juegos esperan y vuelven a entrar solos cuando lo arranques otra vez. Detrás se pueden poner los segundos de aviso.</li>
 <li><code>reiniciar</code>: lo mismo, pero diciendo que es por mantenimiento. Detrás se pueden poner los segundos de aviso.</li>
 <li><code>apagar</code>: avisa a todos, lo guarda todo y para el servidor.</li>
@@ -488,6 +489,7 @@ a { color: #9fd0ff; }
 <li>Entre amigos de confianza: sube <code>ganancia_hora</code> sin miedo, a 100.000 o más, o quita la cuenta del dinero con <code>economia = no</code>. El tope está para los servidores abiertos a desconocidos, no para amargar a tu gente.</li>
 <li>En un servidor abierto: deja el tope de serie y, si tu gente vive de los contratos o de los atracos y se queja, sube antes <code>encargos_hora</code> que <code>ganancia_hora</code>.</li>
 <li>Si alguien te dice que el servidor le quita dinero, pregúntale qué le ha dicho el juego: desde la 1.7.1 le da las cifras. En el registro del servidor sale una línea cada vez, con lo que se le retira y el tope.</li>
+<li>Si activas <code>permitir_trampas = si</code> (o ejecutas <code>trampas si</code>), el servidor deja de vigilar el dinero de todos los jugadores, no solo del que usa el menú: cualquiera que lo abra podrá ponerse todo el dinero que quiera, por encima de <code>ganancia_hora</code> y <code>economia</code>. Úsalo solo entre gente de confianza.</li>
 <li>Todas estas opciones se cambian con el servidor en marcha.</li>
 </ul>
 <h3>Si se corta la conexión nada más comprar</h3>
@@ -817,6 +819,13 @@ a { color: #9fd0ff; }
 </ul>
 <h4>Permitir dos sesiones con la misma identidad: <code>varias_sesiones</code></h4>
 <p>Solo para pruebas. De serie, no: si alguien entra con su personaje desde otro sitio, la sesión anterior se cierra.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>no</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Permitir menú de trampas: <code>permitir_trampas</code></h4>
+<p>Con no, que es lo de serie, los juegos anulan por completo el menú de trampas al entrar en este servidor. Con si, el servidor deja de vigilar el dinero de todos los jugadores y cualquiera podrá ponerse el dinero que quiera.</p>
 <ul>
 <li>Valores: si o no.</li>
 <li>De serie: <code>no</code>.</li>
