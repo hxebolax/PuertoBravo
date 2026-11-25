@@ -209,6 +209,9 @@
 " Debes {fiado} de fiado: se paga en el móvil, en Vida, reputación y consecuencias.": [
 "juego/honrado.py"
 ],
+" Delito: {texto}.": [
+"juego/combate.py"
+],
 " Depósito al {int} por ciento, {int2} litros": [
 "juego/combustible.py"
 ],
@@ -22535,6 +22538,9 @@
 "data/datos/vida.json"
 ],
 "Has atropellado a un peatón.": [
+"juego/combate.py"
+],
+"Has atropellado a un policía.": [
 "juego/combate.py"
 ],
 "Has caído ante {get}. Se lleva {n} euros de lo que llevabas encima.": [
@@ -50831,6 +50837,9 @@
 "atraco a un negocio": [
 "juego/enlinea.py"
 ],
+"atropello": [
+"juego/combate.py"
+],
 "auxiliar de emergencias": [
 "data/datos/vida.json"
 ],
@@ -51060,6 +51069,9 @@
 ],
 "chino": [
 "juego/i18n.py"
+],
+"chocar contra un coche patrulla": [
+"juego/conduccion.py"
 ],
 "chula y presumida": [
 "juego/gente.py",
@@ -52656,6 +52668,9 @@
 ],
 "hombre": [
 "juego/menus_juego.py"
+],
+"homicidio": [
+"juego/combate.py"
 ],
 "hora": [
 "panel_servidor/ventana.py"

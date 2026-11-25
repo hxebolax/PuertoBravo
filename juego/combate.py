@@ -448,11 +448,11 @@ class Combate:
             if not getattr(p, "inofensivo", False) and not getattr(p, "deportivo", False):
                 self.aviso_ambulancia(p.x, p.y)                  # al rato acude una ambulancia
             if p.tipo == "civil":
-                self.delito(3 if atropello else 4, "atropello" if atropello else "homicidio")
+                self.delito(3 if atropello else 4, tr("atropello") if atropello else tr("homicidio"))
                 self.decir(tr("Has atropellado a un peatón.") if atropello else tr('{nombre} cae al suelo.').format(nombre=(p.nombre)))
             elif p.tipo == "policia":
                 self.delito(6, tr("agresión a un agente"), siempre=True)
-                self.decir(tr("Policía abatido."))
+                self.decir(tr("Has atropellado a un policía.") if atropello else tr("Policía abatido."))
             elif getattr(p, "inofensivo", False):                # un muñeco o una diana de prácticas: ni delito, ni botín, ni cuenta
                 self.decir(tr('{nombre}: al suelo.').format(nombre=(p.nombre)))
                 return
@@ -616,6 +616,8 @@ class Combate:
             puntos *= 0.7            # a un buen vecino se le pasan por alto las faltas pequeñas
         if j.estrellas == 0 and j.puntos_busqueda + puntos >= UMBRAL[0] and texto:
             self.decir(tr('Te han visto. Delito: {texto}.').format(texto=(texto)))
+        elif j.estrellas > 0 and texto:
+            self.ultimo_delito = (texto, self.t)                 # si sube el nivel, actualizar_policia dice por qué
         j.puntos_busqueda += puntos
         self.sv_delito(puntos)                                   # en un servidor, la cuenta la lleva él
 
@@ -655,7 +657,11 @@ class Combate:
             self.app.vibrar(0.5, 0.5, 250)
             pista = tr(" Aléjate de las sirenas hasta que dejen de buscarte, o pinta el vehículo en un taller.") if j.estrellas == 0 else ""
             aviso = G.aviso_nivel(n) if self.mundo.policia and not self.sv_policia_comun() else ""      # con mucha búsqueda sale gente mejor armada: lo dicen los datos
-            self.decir(tr('Nivel de búsqueda {n} de 5.{pista}').format(n=(n), pista=(pista)) + (" " + aviso if aviso else ""))
+            # por qué sube, si ya te buscaban: al empezar lo dice delito() («Te han visto»), pero después no lo decía nadie
+            ultimo = getattr(self, "ultimo_delito", None)
+            motivo = tr(' Delito: {texto}.').format(texto=ultimo[0]) if j.estrellas > 0 and ultimo and self.t - ultimo[1] < 5.0 else ""
+            self.ultimo_delito = None
+            self.decir(tr('Nivel de búsqueda {n} de 5.{pista}').format(n=(n), pista=(pista)) + motivo + (" " + aviso if aviso else ""))
         j.estrellas = n
         if n == 0:
             return

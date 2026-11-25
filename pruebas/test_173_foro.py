@@ -74,7 +74,7 @@ def test_el_piloto_temerario_va_al_cien_por_cien_y_no_frena_por_el_de_delante(ro
     assert p.piloto_completo()
     p._piloto_semaforo = lambda *a: None                            # sin semáforos ni curvas: solo cuenta la velocidad que busca
     p._piloto_curva = lambda *a: 999.0
-    for estilo, parte in (("mucha_prisa", 0.95), ("temerario", 1.0)):
+    for estilo, parte in (("mucha_prisa", 1.0), ("temerario", 1.0)):         # los dos, a toda velocidad (issue #32)
         p.cfg["piloto_estilo"] = estilo
         v.vel = v.modelo["vel_max"] + 5.0                            # por encima: con un frenazo enorme se queda en la suya
         p._pilotar(v, 1.0, 100.0)

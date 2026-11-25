@@ -628,17 +628,15 @@ class Conduccion:
         # semáforos con la sirena o en una misión: en un trabajo (el autobús, el taxi, el reparto) te costaría multas y
         # puntos del carné, así que espera en rojo como cualquiera, aunque vaya más deprisa.
         # El estilo que eliges manda además: con prisa corre como en un trabajo contra el reloj y espera en rojo; con mucha
-        # prisa va a todo lo que da el vehículo y no para en los semáforos, para huir de la policía o llegar a tiempo; y el
-        # temerario, además, va al cien por cien y no frena por el de delante (ver conducir). Todos frenan para las curvas.
+        # prisa va a todo lo que da el vehículo, como dicen sus textos, y no para en los semáforos, para huir de la policía o
+        # llegar a tiempo; y el temerario, además, no frena por el de delante (ver conducir). Todos frenan para las curvas.
         estilo = self.estilo_piloto()
         salta = bool(self.sirena_propia) or bool(self.mision and self.mision.get("limite") is not None) or estilo in ("mucha_prisa", "temerario")
         prisa = salta or bool(self.trabajo and self.trabajo.get("limite") is not None) or estilo == "prisa"
         # lo que da de verdad el vehículo: con sus mejoras de motor y tu habilidad, como cuando conduces tú (ver conducir)
         from . import sistemas
         tope = mo["vel_max"] * sistemas.factor_velocidad(v) * (1 + 0.01 * self.nivel("conduccion"))
-        if estilo == "mucha_prisa":
-            objetivo = tope * 0.95
-        elif estilo == "temerario":                              # al cien por cien, y sin la frenada automática (ver conducir)
+        if estilo in ("mucha_prisa", "temerario"):               # a toda velocidad; el temerario, además, sin la frenada automática (ver conducir)
             objetivo = tope
         else:
             objetivo = min(mo["vel_max"] * 0.85, 21.0) if prisa else min(mo["vel_max"] * 0.6, 14.0)
@@ -690,7 +688,7 @@ class Conduccion:
                 self.t_aviso_rojo = self.t
                 self.decir(tr('Semáforo en rojo. {quien} espera.').format(quien=(quien)))
         if v.vel < objetivo:
-            v.vel = min(objetivo, v.vel + mo["acel"] * 0.8 * dt)
+            v.vel = min(objetivo, v.vel + mo["acel"] * 0.8 * sistemas.factor_aceleracion(v) * dt)      # con la mejora de motor, como al conducir tú
         elif v.vel > objetivo:
             v.vel = max(objetivo, v.vel - freno * dt)
 
@@ -948,7 +946,7 @@ class Conduccion:
                 if o.ia == "trafico":
                     self.son(o.modelo.get("claxon", "claxon"), xy=(o.x, o.y))
                 if o.ia == "policia":
-                    self.delito(1, None, siempre=True)
+                    self.delito(1, tr("chocar contra un coche patrulla"), siempre=True)
                 return
         if abs(v.vel) > 3:
             for p in self.personas:
