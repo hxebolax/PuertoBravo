@@ -47,7 +47,7 @@ class Realismo:
 
     def _con_averias(self, v):
         from .combustible import deposito
-        return self.averias_activas() and v is not None and not v.tag and (deposito(v.modelo) > 0 or v.modelo.get("id") == "bici")
+        return not (v is self.j.veh and self.cheat_on("invulnerable")) and self.averias_activas() and v is not None and not v.tag and (deposito(v.modelo) > 0 or v.modelo.get("id") == "bici")
 
     def rodar(self, v, dt):
         """Se llama mientras conduces: cuenta kilómetros y, de tarde en tarde, pincha."""
@@ -73,6 +73,8 @@ class Realismo:
         return sistemas.factor_pinchazo(v)
 
     def pinchar(self, v):
+        if self.cheat_repair(v):
+            return
         v.pinchada = True
         self.son("pinchazo", xy=(v.x, v.y))
         if v is self.j.veh:

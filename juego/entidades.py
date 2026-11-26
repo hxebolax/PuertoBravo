@@ -11,6 +11,8 @@ class Jugador:
         self.rumbo = 0.0
         self.salud = 100.0
         self.salud_max = 100.0
+        self.cheat_bajas = 0
+        self.cheat_salud_aplicada = 0
         self.mapa = "puerto_bravo"
         self.banco = 0
         self.barcos = []            # [{"modelo", "salud", "nombre", "en": id del embarcadero}]

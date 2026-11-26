@@ -409,6 +409,8 @@ class Crucero:
 
     def _dano(self, pct, texto):
         v = self.v
+        if self.p.cheat_repair(v):
+            return
         v.salud = max(1.0, v.salud - v.salud_max * pct / 100.0)
         self.app.son("choque_leve", vol=0.8)
         self.app.vibrar(0.9, 0.7, 350)
@@ -562,7 +564,8 @@ class Crucero:
         self._callar()
         self.app.cerrar(self)
         pct = random.uniform(*sorted((AJ("caida_min"), AJ("caida_max"))))
-        v.salud = max(1.0, v.salud - v.salud_max * pct / 100.0)
+        if not p.cheat_repair(v):
+            v.salud = max(1.0, v.salud - v.salud_max * pct / 100.0)
         rumbo = V.rumbo_entre(self.pos, V.punto_aire(cerca.id))
         rad = math.radians(rumbo)
         cx, cy = cerca.ancho / 2.0, cerca.alto / 2.0

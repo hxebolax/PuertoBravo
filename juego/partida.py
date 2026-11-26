@@ -48,6 +48,7 @@ from .online import Online
 from .enlinea import EnLinea
 from .trabajos import Trabajos
 from .vida import Vida
+from .cheats import Cheats
 
 UMBRAL_ESTRELLAS = [1, 4, 8, 13, 20]
 
@@ -90,7 +91,7 @@ def migrar(d):
     return d
 
 
-class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3, Adultos, Vida, Online, EnLinea, Charla, Intimidad, Necesidades, Azar, Combustible, Realismo, MisVehiculos, Calle, Guerra,
+class Partida(Cheats, Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3, Adultos, Vida, Online, EnLinea, Charla, Intimidad, Necesidades, Azar, Combustible, Realismo, MisVehiculos, Calle, Guerra,
               Domicilio, Atracos, Golpes, Vuelo, Pactos, Contratos, Reacciones, Convivencia, Agente, Compra, Reconquista, Escolta, Destinos, Honrado, Alquiler, Mochila, Bolsa, Capo):
     pausa_mundo = False
 
@@ -519,6 +520,7 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         if isinstance(jug, dict):              # guardada en otro idioma: lo que se guarda por nombre, al de ahora
             d["jugador"] = i18n.al_idioma_de_ahora(jug, respetar=("nombre", "apellido", "dicho", "semilla"))
         self.j.de_dict(d.get("jugador", {}))
+        self.cheat_sync_growth()
         genero.poner(self.j.genero)
         if self.j.personaje == "propio":
             registro.ocultar(self.j.nombre)
@@ -1170,7 +1172,10 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
             else:
                 self.perro_busca()
         elif k == pygame.K_u:
-            self.alternar_paseo()
+            if self.cheat_on("cheat_teleport"):
+                self.cheat_travel()
+            else:
+                self.alternar_paseo()
         elif k == pygame.K_j:
             if mayus:
                 self.mirar_jugador()
@@ -1867,7 +1872,9 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
 
     def recoger(self, o):
         j = self.j
-        if o.tipo == "mision" and self.mision_abrir(o):          # una caja que tarda en abrirse: empieza, y se coge sola al acabar
+        if getattr(o, "recogido", False) or o not in self.objetos:
+            return
+        if o.tipo == "mision" and not self.cheat_on("cheat_recoger") and self.mision_abrir(o):          # una caja que tarda en abrirse: empieza, y se coge sola al acabar
             return
         if o.canal:
             o.canal.parar()
@@ -2011,6 +2018,7 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
             self.caminar(dt)
         if self.pesca:
             self.actualizar_pesca(dt)
+        self.cheat_step()
         self.actualizar_vehiculos(dt)
         self.actualizar_chofer(dt)
         self.actualizar_personas(dt)
@@ -2020,7 +2028,9 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
             return
         self.actualizar_mision(dt)
         self.actualizar_trabajo(dt)
+        self.cheat_collect()
         self.actualizar_extras(dt)
+        self.cheat_collect()
         self.actualizar_adultos(dt)
         self.actualizar_calle(dt)
         self.actualizar_reconquista(dt)
@@ -2037,6 +2047,7 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         if self.t_poblar <= 0:
             self.t_poblar = 0.6
             self._poblar()
+        self.cheat_collect()
         self._avisos(dt)
         self._gps(dt)
         self._ambiente(dt)

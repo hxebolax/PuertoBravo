@@ -362,6 +362,8 @@ class Conduccion:
             v.robado = True                                      # para el desguace: no es tuyo, con papeles, hasta que lo mejores
         v.propio = True
         j.veh = v
+        self.cheat_sync_flight()
+        self.cheat_repair(v)
         if v.modelo.get("vuela") and self.vuelo_real():
             self.vuelo_prep(v)                                   # altura, fase y combustible (vuelo.py)
         con_chofer = self.chofer_al_subir(v)                     # si lo trae tu chófer, vas de pasajero
@@ -481,6 +483,7 @@ class Conduccion:
         v = j.veh
         if not v:
             return
+        self.cheat_sync_flight(exiting=True)
         j.veh = None
         self._parar_intermitente()
         if v.canal:
@@ -586,8 +589,12 @@ class Conduccion:
             self.cfg["piloto_gps"] = not self.cfg["piloto_gps"]
             if not self.cfg["piloto_gps"]:
                 self.decir(tr("Piloto del GPS desactivado."), True)
-            elif v.modelo.get("barco") or self.mundo.tipo == "mar":
-                self.decir(tr("Piloto del GPS activado, pero en el agua no conduce: solo en tierra."), True)
+            elif (v.modelo.get("barco") or self.mundo.tipo == "mar") and not v.modelo.get("vuela"):
+                from .cheats import text
+                self.decir(text("Piloto del GPS para barcos activado. Marca un destino; las flechas dan control manual.", "Water GPS autopilot enabled. Set a destination; arrow keys override it.") if self.cheat_on("cheat_piloto_agua") else text("Activa también el piloto para barcos en Opciones, Trucos.", "Also enable water autopilot in Options, Cheats."), True)
+            elif v.modelo.get("vuela") and self.cheat_on("cheat_piloto_aire"):
+                from .cheats import text
+                self.decir(text("Piloto del GPS aéreo activado. Marca un destino; las flechas dan control manual.", "Air GPS autopilot enabled. Set a destination; arrow keys override it."), True)
             elif v.modelo.get("vuela"):
                 self.decir(tr("Piloto del GPS activado para cuando conduzcas en tierra. En el aire no lleva los mandos")
                            + (tr(": para eso está el piloto automático del vuelo.") if self.vuelo_real() else "."), True)
@@ -710,6 +717,10 @@ class Conduccion:
         t = self.app.teclas
         if self.chofer_conduce():                       # conduce tu chófer: los pedales y el volante son suyos
             t = frozenset()
+        self.cheat_sync_flight()
+        self.cheat_repair(v)
+        if self.cheat_drive(v, dt, t):
+            return
         mo = v.modelo
         if mo.get("vuela") and self.vuelo_real():       # volar de verdad: despegue, altura, combustible y aterrizaje (vuelo.py)
             t = self.vuelo_controles(v, dt, t)
@@ -1103,6 +1114,8 @@ class Conduccion:
                     v.alarma.parar()
                     v.alarma = None
             if v is j.veh:
+                continue
+            if self.cheat_empty_vehicle(v, dt):
                 continue
             d = v.dist(px, py)
             if v.ia in ("aparcado", None):

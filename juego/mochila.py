@@ -120,7 +120,7 @@ class Mochila:
         o = CATALOGO.get(ident)
         if o is None:
             return False
-        if self.moc_libre() < o["peso"]:
+        if self.moc_libre() < o["peso"] and not self.cheat_on("cheat_recoger"):
             if not callar:
                 self.son("error", cat="interfaz")
                 self.decir(AJ.frase("frases_llena", objeto=o["nombre"]))
