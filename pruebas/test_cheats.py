@@ -114,6 +114,7 @@ def test_briefcase_wins_before_timeout(app):
 def test_collect_in_vehicle_and_full_backpack(app):
     p = fresh(app)
     p.cfg["cheat_recoger"] = True
+    p.cfg["cheat_mochila"] = True
     p.j.veh = car(p)
     ident = next(iter(CATALOGO))
     p.j.mochila = [{"id": ident, "robado": False} for _ in range(100)]
@@ -734,3 +735,979 @@ def test_disabling_flight_over_sea_waits_for_land_for_a_car(app):
     p.cheat_sync_flight()
     assert v.modelo.get("vuela") and v.fase == "vuelo" and v.alt == 40
 
+
+def owned_ammo(p, kind, clip=0, reserve=0):
+    a = next(a for a in p.datos["armas"] if a["tipo"] == kind)
+    p.j.armas[a["id"]] = {"cargador": clip, "reserva": reserve}
+    p.j.arma = a["id"]
+    p.j.t_ataque = 0
+    return a, p.j.armas[a["id"]]
+
+
+def ammo_drop(p, ident, amount, kind="municion"):
+    o = Objeto(kind, kind, p.j.x + 100, p.j.y)
+    o.arma, o.valor = ident, amount
+    p.objetos.append(o)
+    return o
+
+
+def test_new_ammo_and_backpack_options_registered_and_default_off(app):
+    p = fresh(app)
+    keys = {"cheat_municion", "cheat_explosivos", "cheat_mochila"}
+    assert keys <= {row[0] for row in OPTIONS}
+    for enabled in keys:
+        assert all(p.cfg[key] is False for key in keys)
+        p.cfg[enabled] = True
+        assert all(p.cfg[key] is False for key in keys - {enabled})
+        p.cfg[enabled] = False
+
+
+def test_infinite_firearm_shoots_at_zero_without_creating_or_spending_ammo(app):
+    p = fresh(app)
+    p.cfg["cheat_municion"] = True
+    a, m = owned_ammo(p, "fuego")
+    sounds = []
+    p.son = lambda name, *args, **kwargs: sounds.append(name)
+    for clip, reserve in ((0, 0), (2, 3)):
+        m.update(cargador=clip, reserva=reserve)
+        before = copy.deepcopy(m)
+        for _ in range(3):
+            p.j.t_ataque = 0
+            p.atacar()
+            assert m == before and p.j.t_ataque == a["cadencia"]
+    assert sounds.count(a["sonido"]) == 6 and "sin_balas" not in sounds
+
+
+def test_infinite_firearm_empty_magazine_still_damages_target(app):
+    from juego import combate
+    p = fresh(app)
+    p.cfg["cheat_municion"] = True
+    a, m = owned_ammo(p, "fuego")
+    q = enemy(p)
+    q.salud = 10000
+    p.objetivo = q
+    before = q.salud
+    random_roll = combate.random.random
+    try:
+        combate.random.random = lambda: 0.0
+        p.atacar()
+    finally:
+        combate.random.random = random_roll
+    assert q.salud < before and m == {"cargador": 0, "reserva": 0}
+
+
+def test_infinite_builtin_throwables_and_rockets_launch_with_zero_ammo(app):
+    p = fresh(app)
+    p.cfg["cheat_explosivos"] = True
+    explosives = [a for a in p.datos["armas"] if a["tipo"] == "explosivo"]
+    assert explosives
+    for a in explosives:
+        p.j.arma = a["id"]
+        for clip, reserve in ((0, 0), (1, 2)):
+            m = p.j.armas[a["id"]] = {"cargador": clip, "reserva": reserve}
+            before = copy.deepcopy(m)
+            for _ in range(2):
+                n = len(p.explosiones)
+                p.j.t_ataque = 0
+                p.atacar()
+                assert len(p.explosiones) == n + 1
+                assert p.explosiones[-1]["arma"] == a["id"] and m == before
+
+
+def test_mod_explosive_infinity_uses_weapon_type(app):
+    p = fresh(app)
+    model = copy.deepcopy(next(a for a in p.datos["armas"] if a["tipo"] == "explosivo"))
+    model.update(id="test_mod_throwable", nombre="Test mod throwable", cargador=2, balas=7)
+    p.armas_d[model["id"]] = model
+    p.orden_armas.append(model["id"])
+    p.j.arma = model["id"]
+    m = p.j.armas[model["id"]] = {"cargador": 0, "reserva": 0}
+    p.cfg["cheat_municion"] = True
+    assert not p.cheat_infinite_ammo()
+    p.cfg["cheat_explosivos"] = True
+    assert p.cheat_infinite_ammo() and p.cheat_ammo_capacity(model["id"]) == 9
+    p.atacar()
+    assert len(p.explosiones) == 1 and p.explosiones[0]["arma"] == model["id"]
+    assert m == {"cargador": 0, "reserva": 0}
+
+
+def test_ammo_toggles_are_independent_and_switching_off_restores_consumption(app):
+    p = fresh(app)
+    for kind, option, other in (("fuego", "cheat_municion", "cheat_explosivos"),
+                                ("explosivo", "cheat_explosivos", "cheat_municion")):
+        a, m = owned_ammo(p, kind, 1, 2)
+        p.cfg[option], p.cfg[other] = False, True
+        assert not p.cheat_infinite_ammo(a["id"])
+        p.atacar()
+        assert m["cargador"] + m["reserva"] == 2
+        p.cfg[option] = True
+        before = copy.deepcopy(m)
+        p.j.t_ataque = 0
+        p.atacar()
+        assert m == before
+        p.cfg[option] = False
+        p.j.t_ataque = 0
+        if kind == "fuego":
+            p.recargar()
+            p.j.t_ataque = 0
+        p.atacar()
+        assert m["cargador"] + m["reserva"] == 1
+
+
+def test_infinite_reload_explains_no_reload_and_keeps_real_counts(app):
+    p = fresh(app)
+    said = []
+    p.decir = lambda message, *args, **kwargs: said.append(message)
+    for kind, option in (("fuego", "cheat_municion"), ("explosivo", "cheat_explosivos")):
+        a, m = owned_ammo(p, kind, 0, 2)
+        p.cfg[option] = True
+        p.recargar()
+        assert m == {"cargador": 0, "reserva": 2} and p.j.t_ataque == 0
+        assert said and ("recargar" in said[-1].lower() or "reload" in said[-1].lower())
+        p.cfg[option] = False
+        p.recargar()
+        assert m["cargador"] > 0 and m["cargador"] + m["reserva"] == 2
+
+
+def test_online_attacks_consume_ammo_and_restore_normal_pickup_and_bag_limits(app):
+    p = fresh(app)
+    for key in ("cheat_municion", "cheat_explosivos", "cheat_mochila"):
+        p.cfg[key] = True
+    normal_bag = p.moc_capacidad()
+    p.en_servidor = True
+    # Exercise normal combat without connecting to a network or spawning peers.
+    p.sv_ruido = lambda *args: None
+    p.sv_objetivos = lambda *args: []
+    for kind in ("fuego", "explosivo"):
+        a, m = owned_ammo(p, kind, 1, 1)
+        assert not p.cheat_infinite_ammo() and p.cheat_ammo_room(a["id"]) is None
+        p.atacar()
+        assert m["cargador"] + m["reserva"] == 1
+        amount = p.cheat_ammo_capacity(a["id"]) + 5
+        assert p.sumar_municion(a["id"], amount) == amount
+        m.update(cargador=0, reserva=0)
+        n = len(p.explosiones)
+        p.j.t_ataque = 0
+        p.atacar()
+        assert m == {"cargador": 0, "reserva": 0} and len(p.explosiones) == n
+    p.cfg["cheat_mochila"] = False
+    expected_bag = p.moc_capacidad()
+    p.cfg["cheat_mochila"] = True
+    assert p.moc_capacidad() == expected_bag <= normal_bag
+    ident = next(iter(CATALOGO))
+    p.j.mochila = [{"id": ident, "robado": False} for _ in range(expected_bag + 1)]
+    before = copy.deepcopy(p.j.mochila)
+    assert not p.moc_meter(ident, callar=True) and p.j.mochila == before
+
+
+def test_ammo_cheats_never_grant_an_unowned_weapon(app):
+    p = fresh(app)
+    p.cfg["cheat_municion"] = p.cfg["cheat_explosivos"] = True
+    before = copy.deepcopy(p.j.armas)
+    for a in p.datos["armas"]:
+        if a["tipo"] not in ("fuego", "explosivo"):
+            continue
+        p.j.arma, p.j.t_ataque = a["id"], 0
+        assert not p.cheat_infinite_ammo() and p.cheat_ammo_room(a["id"]) is None
+        assert p.sumar_municion(a["id"], 100) == 0
+        p.atacar()
+        assert p.j.armas == before and not p.explosiones
+
+
+def test_ammo_pickup_capacity_uses_normal_reserve_and_expanded_magazine(app):
+    p = fresh(app)
+    for kind, option in (("fuego", "cheat_municion"), ("explosivo", "cheat_explosivos")):
+        a, m = owned_ammo(p, kind)
+        ident = a["id"]
+        expected = int(a.get("cargador", 0)) + int(a.get("balas", 0))
+        assert p.cheat_ammo_capacity(ident) == expected
+        assert p.cheat_ammo_room(ident) is None
+        p.cfg[option] = True
+        assert p.cheat_ammo_room(ident) == expected
+        m["ampliado"] = True
+        expanded = p.capacidad(ident) + int(a.get("balas", 0))
+        assert p.cheat_ammo_capacity(ident) == expanded
+        if kind == "fuego":
+            assert expanded > expected
+        else:
+            assert expanded == expected
+        m.update(cargador=1, reserva=1)
+        assert p.cheat_ammo_room(ident) == max(0, expanded - 2)
+
+
+def test_real_ammo_additions_stop_at_ceiling_and_resume_uncapped_when_off(app):
+    p = fresh(app)
+    for kind, option in (("fuego", "cheat_municion"), ("explosivo", "cheat_explosivos")):
+        a, m = owned_ammo(p, kind)
+        ident = a["id"]
+        p.cfg[option] = True
+        cap = p.cheat_ammo_capacity(ident)
+        m.update(cargador=1, reserva=max(0, cap - 3))
+        before = copy.deepcopy(m)
+        assert p.sumar_municion(ident, 100) == 2
+        assert m["cargador"] == before["cargador"]
+        assert m["cargador"] + m["reserva"] == cap
+        assert p.cheat_ammo_room(ident) == 0
+        at_cap = copy.deepcopy(m)
+        assert p.sumar_municion(ident, 5) == 0 and m == at_cap
+        p.cfg[option] = False
+        assert p.cheat_ammo_room(ident) is None
+        assert p.sumar_municion(ident, 5) == 5
+        assert m["cargador"] + m["reserva"] == cap + 5
+
+
+def test_enabling_infinity_preserves_preexisting_over_capacity_ammo(app):
+    p = fresh(app)
+    for kind, option in (("fuego", "cheat_municion"), ("explosivo", "cheat_explosivos")):
+        a, m = owned_ammo(p, kind, 1, 1000)
+        before = copy.deepcopy(m)
+        p.cfg[option] = True
+        assert p.cheat_ammo_room(a["id"]) == 0
+        assert p.sumar_municion(a["id"], 50) == 0 and m == before
+        o = ammo_drop(p, a["id"], 50)
+        p.recoger(o)
+        assert o.recogido and o not in p.objetos and m == before
+        p.atacar()
+        assert m == before
+        p.cfg[option] = False
+        assert m == before
+
+
+def test_full_ammo_pickups_are_consumed_once_without_overflow(app):
+    p = fresh(app)
+    p.cfg["cheat_recoger"] = True
+    for kind, option in (("fuego", "cheat_municion"), ("explosivo", "cheat_explosivos")):
+        a, m = owned_ammo(p, kind)
+        ident = a["id"]
+        p.cfg[option] = True
+        cap = p.cheat_ammo_capacity(ident)
+        m.update(cargador=1, reserva=cap - 2)
+        pickups = [ammo_drop(p, ident, 100), ammo_drop(p, ident, 100, "arma")]
+        p.cheat_collect()
+        assert m["cargador"] + m["reserva"] == cap
+        assert all(o.recogido and o not in p.objetos for o in pickups)
+        at_cap = copy.deepcopy(m)
+        for o in pickups:
+            p.recoger(o)
+        p.cheat_collect()
+        assert m == at_cap
+        extra = ammo_drop(p, ident, 5)
+        p.cheat_collect()
+        assert extra.recogido and extra not in p.objetos and m == at_cap
+        p.cfg[option] = False
+        uncapped = ammo_drop(p, ident, 5)
+        p.cheat_collect()
+        assert uncapped.recogido and m["cargador"] + m["reserva"] == cap + 5
+
+
+def test_new_weapon_pickups_acquire_only_real_capped_ammo(app):
+    p = fresh(app)
+    p.cfg["cheat_recoger"] = True
+    for kind, option in (("fuego", "cheat_municion"), ("explosivo", "cheat_explosivos")):
+        a = next(a for a in p.datos["armas"] if a["tipo"] == kind)
+        ident = a["id"]
+        p.cfg[option] = True
+        assert ident not in p.j.armas and not p.cheat_infinite_ammo(ident)
+        o = ammo_drop(p, ident, 1000, "arma")
+        p.cheat_collect()
+        assert o.recogido and ident in p.j.armas and p.cheat_infinite_ammo(ident)
+        m = p.j.armas[ident]
+        assert m["cargador"] + m["reserva"] == p.cheat_ammo_capacity(ident)
+        assert set(m) == {"cargador", "reserva"}
+
+
+def test_ammo_only_drop_does_not_acquire_a_missing_weapon(app):
+    p = fresh(app)
+    p.cfg["cheat_recoger"] = p.cfg["cheat_municion"] = p.cfg["cheat_explosivos"] = True
+    before = copy.deepcopy(p.j.armas)
+    for kind in ("fuego", "explosivo"):
+        ident = next(a["id"] for a in p.datos["armas"] if a["tipo"] == kind)
+        o = ammo_drop(p, ident, 100)
+        p.cheat_collect()
+        assert o.recogido and o not in p.objetos and p.j.armas == before
+
+
+def test_unlimited_backpack_grows_with_actual_items_and_integer_headroom(app):
+    p = fresh(app)
+    base = p.moc_capacidad()
+    p.cfg["cheat_mochila"] = True
+    ident = max(CATALOGO, key=lambda ident: CATALOGO[ident]["peso"])
+    weight = CATALOGO[ident]["peso"]
+    limit = base // weight + 6
+    assert not p.j.mochila
+    for n in range(limit):
+        assert p.moc_meter(ident, robado=bool(n % 2), callar=True)
+        capacity = p.moc_capacidad()
+        assert type(capacity) is int and capacity >= p.moc_usado() + weight
+        assert capacity <= max(base, p.moc_usado() + max(o["peso"] for o in CATALOGO.values()))
+        assert len(p.j.mochila) == n + 1
+        assert p.j.mochila[-1] == {"id": ident, "robado": bool(n % 2)}
+    assert p.moc_usado() > base and all(set(o) == {"id", "robado"} for o in p.j.mochila)
+
+
+def test_unlimited_backpack_off_retains_items_and_restores_admission_limits(app):
+    p = fresh(app)
+    base = p.moc_capacidad()
+    ident = next(iter(CATALOGO))
+    p.cfg["cheat_mochila"] = True
+    while p.moc_usado() <= base:
+        assert p.moc_meter(ident, robado=True, callar=True)
+    before = copy.deepcopy(p.j.mochila)
+    p.cfg["cheat_mochila"] = False
+    assert p.moc_capacidad() == base and p.j.mochila == before
+    assert not p.moc_meter(ident, callar=True) and p.j.mochila == before
+    p.cfg["cheat_mochila"] = True
+    assert p.moc_meter(ident, callar=True) and len(p.j.mochila) == len(before) + 1
+
+
+def test_auto_collect_needs_separate_backpack_toggle_when_full(app):
+    p = fresh(app)
+    p.cfg["cheat_recoger"] = True
+    ident = next(iter(CATALOGO))
+    p.j.mochila = [{"id": ident, "robado": False} for _ in range(p.moc_capacidad() + 1)]
+    o = Objeto("valor", "valuable", p.j.x + 100, p.j.y)
+    o.item, o.robado = ident, True
+    p.objetos.append(o)
+    before = copy.deepcopy(p.j.mochila)
+    for _ in range(3):
+        p.cheat_collect()
+    assert o in p.objetos and not getattr(o, "recogido", False) and p.j.mochila == before
+    p.cfg["cheat_mochila"] = True
+    p.cheat_collect()
+    assert o.recogido and o not in p.objetos
+    assert p.j.mochila == before + [{"id": ident, "robado": True}]
+    p.cheat_collect()
+    assert len(p.j.mochila) == len(before) + 1
+
+
+def test_ammo_and_overfull_backpack_save_without_changing_item_schema(app):
+    p = fresh(app)
+    base = p.moc_capacidad()
+    for key in ("cheat_municion", "cheat_explosivos", "cheat_mochila"):
+        p.cfg[key] = True
+    a, m = owned_ammo(p, "fuego", 0, 1000)
+    m.update(ampliado=True, silenciador=True)
+    owned_ammo(p, "explosivo", 0, 0)
+    ident = next(iter(CATALOGO))
+    p.j.mochila = [{"id": ident, "robado": bool(n % 2)} for n in range(base + 5)]
+    arms, items = copy.deepcopy(p.j.armas), copy.deepcopy(p.j.mochila)
+    app.empezar_partida(copy.deepcopy(p.a_dict()))
+    loaded = app.partida
+    assert loaded.j.armas == arms and loaded.j.mochila == items
+    assert all(set(o) == {"id", "robado"} for o in loaded.j.mochila)
+    assert loaded.cheat_ammo_room(a["id"]) == 0
+    for key in ("cheat_municion", "cheat_explosivos", "cheat_mochila"):
+        assert loaded.cfg[key] is True
+        loaded.cfg[key] = False
+    assert loaded.j.armas == arms and loaded.j.mochila == items
+    assert loaded.moc_capacidad() == base
+
+
+def test_new_game_plus_keeps_ammo_options_and_overfull_inventory(app):
+    p = fresh(app)
+    for key in ("cheat_ngplus", "cheat_municion", "cheat_explosivos", "cheat_mochila"):
+        p.cfg[key] = True
+    a, m = owned_ammo(p, "fuego", 0, 1000)
+    m["ampliado"] = True
+    owned_ammo(p, "explosivo", 0, 0)
+    ident = next(iter(CATALOGO))
+    p.j.mochila = [{"id": ident, "robado": True} for _ in range(100)]
+    arms, items = copy.deepcopy(p.j.armas), copy.deepcopy(p.j.mochila)
+    old = copy.deepcopy(p.a_dict())
+    read = menus_juego.leer_ranura
+    try:
+        menus_juego.leer_ranura = lambda r, *args: copy.deepcopy(old)
+        menus_juego.partida_mas(app)
+        app.pila[-1].opciones[0].accion()
+    finally:
+        menus_juego.leer_ranura = read
+    new = app.partida
+    assert new.j.armas == arms and new.j.mochila == items
+    assert all(new.cfg[key] is True for key in ("cheat_municion", "cheat_explosivos", "cheat_mochila"))
+    assert new.cheat_ammo_room(a["id"]) == 0 and new.moc_libre() > 0
+
+
+def test_duplicate_weapon_withdrawal_keeps_excess_ammo_in_home_storage(app):
+    from juego.i18n import tr
+    from juego.mochila import menu_armario
+    p = fresh(app)
+    a, m = owned_ammo(p, "fuego")
+    ident = a["id"]
+    p.cfg["cheat_municion"] = True
+    cap = p.cheat_ammo_capacity(ident)
+    m.update(cargador=1, reserva=cap - 3)
+    home = next(l for l in p.lugares.values() if l.tipo == "casa")
+    storage = p.almacen(home.id)["armas"]
+    storage[ident] = {"cargador": 5, "reserva": 45, "ampliado": True}
+    menu_armario(p, home)
+    menu = app.pila[-1]
+
+    def withdraw():
+        label = tr('Sacar {nombre}').format(nombre=a["nombre"])
+        next(o for o in menu.opciones if o.texto == label).accion()
+
+    withdraw()
+    assert m["cargador"] + m["reserva"] == cap
+    assert storage[ident]["cargador"] + storage[ident]["reserva"] == 48
+    assert storage[ident]["ampliado"] is True
+    before = copy.deepcopy(storage[ident])
+    withdraw()
+    assert storage[ident] == before and m["cargador"] + m["reserva"] == cap
+    p.cfg["cheat_municion"] = False
+    withdraw()
+    assert ident not in storage and m["cargador"] + m["reserva"] == cap + 48
+
+
+def test_storage_withdraw_and_store_cycle_preserves_all_rounds_and_upgrades(app):
+    from juego.i18n import tr
+    from juego.mochila import menu_armario
+    p = fresh(app)
+    a, m = owned_ammo(p, "fuego")
+    ident = a["id"]
+    p.cfg["cheat_municion"] = True
+    cap = p.cheat_ammo_capacity(ident)
+    m.update(cargador=1, reserva=cap - 3, silenciador=True)
+    home = next(l for l in p.lugares.values() if l.tipo == "casa")
+    storage = p.almacen(home.id)["armas"]
+    storage[ident] = {"cargador": 5, "reserva": 45, "ampliado": True}
+    total = cap - 2 + 50
+    menu_armario(p, home)
+    menu = app.pila[-1]
+
+    def action(template):
+        label = tr(template).format(nombre=a["nombre"])
+        next(o for o in menu.opciones if o.texto == label).accion()
+
+    action('Sacar {nombre}')
+    action('Guardar {nombre}')
+    assert ident not in p.j.armas
+    assert storage[ident]["cargador"] + storage[ident]["reserva"] == total
+    assert storage[ident]["ampliado"] is True and storage[ident]["silenciador"] is True
+    action('Sacar {nombre}')
+    restored = p.j.armas[ident]
+    assert ident not in storage and restored["cargador"] + restored["reserva"] == total
+    assert restored["ampliado"] is True and restored["silenciador"] is True
+
+
+def test_unlimited_inventory_merchandise_headroom_is_finite_and_over_one_hundred(app):
+    p = fresh(app)
+    ident = next(iter(CATALOGO))
+    p.j.mochila = [{"id": ident, "robado": False} for _ in range(p.moc_capacidad() + 1)]
+    p.j.sustancias = {"test_merchandise": 250}
+    p.cfg["cheat_mochila"] = True
+    before = copy.deepcopy(p.j.sustancias)
+    room = p.hueco_mercancia(1000)
+    assert type(room) is int and 1000 <= room < 10000
+    assert p.j.sustancias == before
+    p.j.sustancias["test_merchandise"] += 1000
+    assert p.carga() == 1250 and p.hueco_mercancia(1) >= 1
+    assert type(p.moc_capacidad()) is int and p.moc_capacidad() > p.moc_usado()
+    before = copy.deepcopy(p.j.sustancias)
+    p.cfg["cheat_mochila"] = False
+    assert p.hueco_mercancia(1000) == 0 and p.j.sustancias == before
+    p.cfg["cheat_mochila"] = True
+    p.en_servidor = True
+    assert p.hueco_mercancia(1000) == 0 and p.j.sustancias == before
+
+
+def test_ammo_shop_caps_partial_purchase_and_does_not_charge_at_full_capacity(app):
+    p = fresh(app)
+    a, m = owned_ammo(p, "fuego")
+    p.cfg["cheat_municion"] = True
+    cap = p.cheat_ammo_capacity(a["id"])
+    m.update(cargador=0, reserva=cap - 1)
+    store = next(l for l in p.lugares.values() if l.tipo == "armeria")
+    menus_juego._armeria(p, store)
+    menu = app.pila[-1]
+
+    def buy():
+        next(o for o in menu.opciones if a["nombre"] in o.texto and o.texto.startswith(("Munici\u00f3n para ", "Ammunition for "))).accion()
+
+    money = p.j.dinero
+    buy()
+    assert m["cargador"] + m["reserva"] == cap and p.j.dinero < money
+    money, before = p.j.dinero, copy.deepcopy(m)
+    buy()
+    buy()
+    assert p.j.dinero == money and m == before
+    p.cfg["cheat_municion"] = False
+    buy()
+    assert p.j.dinero < money and m["cargador"] + m["reserva"] == cap + a["balas"]
+
+
+def test_unlimited_inventory_withdraws_large_merchandise_batches_with_full_bag(app):
+    from juego.i18n import tr
+    from juego.mochila import menu_armario
+    p = fresh(app)
+    p.cfg["cheat_mochila"] = True
+    ident = next(iter(CATALOGO))
+    p.j.mochila = [{"id": ident, "robado": False} for _ in range(100)]
+    p.j.sustancias = {"pastillas": 250}
+    home = next(l for l in p.lugares.values() if l.tipo == "casa")
+    storage = p.almacen(home.id)
+    storage["sust"] = {"pastillas": 1000, "polvo": 25}
+    menu_armario(p, home)
+    menu = app.pila[-1]
+    label = tr('Sacar mercanc\u00eda: hay {sum} unidades').format(sum=1025)
+    next(o for o in menu.opciones if o.texto == label).accion()
+    assert p.j.sustancias == {"pastillas": 1250, "polvo": 25}
+    assert storage["sust"] == {} and len(p.j.mochila) == 100
+    p.cfg["cheat_mochila"] = False
+    storage["sust"] = {"pastillas": 10}
+    menu.refrescar(False)
+    label = tr('Sacar mercanc\u00eda: hay {sum} unidades').format(sum=10)
+    next(o for o in menu.opciones if o.texto == label).accion()
+    assert p.j.sustancias == {"pastillas": 1250, "polvo": 25}
+    assert storage["sust"] == {"pastillas": 10}
+
+
+def test_unlimited_inventory_supplier_purchase_above_normal_merchandise_cap(app):
+    from juego import menus_adultos
+    from juego.i18n import tr
+    p = fresh(app)
+    p.cfg["adultos"] = True
+    app.aplicar_adultos()
+    try:
+        p.cfg["cheat_mochila"] = True
+        ident = next(iter(CATALOGO))
+        p.j.mochila = [{"id": ident, "robado": False} for _ in range(100)]
+        substance = next(s for s in p.dato_adulto("sustancias") if not s.get("legal"))
+        p.j.sustancias = {substance["id"]: 150}
+        store = next(l for l in p.lugares.values() if l.tipo == "proveedor")
+        menus_adultos.proveedor(p, store)
+        next(o for o in app.pila[-1].opciones if o.texto.startswith(substance["nombre"] + ":")).accion()
+        buy = next(o for o in app.pila[-1].opciones if o.texto == tr("Comprar 10"))
+        money = p.j.dinero
+        buy.accion()
+        assert p.j.sustancias[substance["id"]] == 160 and p.j.dinero < money
+        p.cfg["cheat_mochila"] = False
+        money = p.j.dinero
+        buy.accion()
+        assert p.j.sustancias[substance["id"]] == 160 and p.j.dinero == money
+    finally:
+        p.cfg["adultos"] = False
+        app.aplicar_adultos()
+
+
+def test_unlimited_inventory_lab_production_above_normal_merchandise_cap(app):
+    from juego import laboratorio
+    from juego.i18n import tr
+    from juego.menus import Menu, Opcion
+    p = fresh(app)
+    p.cfg["adultos"] = p.cfg["cheat_mochila"] = True
+    p.cfg["minijuego_laboratorio"] = False
+    home = next(l for l in p.lugares.values() if l.tipo == "casa")
+    p.j.propiedades.append(home.id)
+    p.j.laboratorios.append(home.id)
+    p.j.material = 2
+    p.j.sustancias = {"cristal": 150}
+    ident = next(iter(CATALOGO))
+    p.j.mochila = [{"id": ident, "robado": False} for _ in range(100)]
+    p.delito = lambda *args, **kwargs: None
+    laboratorio.opciones_casa(p, home, Menu, Opcion)[0].accion()
+    substance = p.sustancia("cristal")
+    label = tr('Fabricar {lower}').format(lower=substance["nombre"].lower())
+    produce = next(o for o in app.pila[-1].opciones if o.texto == label)
+    produce.accion()
+    expected = int(round(4 + 12 * laboratorio.CALIDAD_SIN_MINIJUEGO))
+    assert p.j.sustancias["cristal"] == 150 + expected and p.j.material == 1
+    assert p.almacen(home.id)["sust"] == {}
+    p.cfg["cheat_mochila"] = False
+    produce.accion()
+    assert p.j.sustancias["cristal"] == 150 + expected and p.j.material == 1
+    p.cfg["cheat_mochila"] = True
+    p.en_servidor = True
+    produce.accion()
+    assert p.j.sustancias["cristal"] == 150 + expected and p.j.material == 1
+
+
+
+def test_all_business_upgrades_ignore_prestige_and_keep_cost(app):
+    p = fresh(app)
+    businesses = [l for l in p.lugares.values() if l.tipo == "negocio"]
+    assert businesses
+    p.j.ciudadania = 0
+    p.j.titulos = {"direccion": {"s": 1, "ok": 1}}
+    upgrade = p.hon_mejora(4)
+    assert upgrade and upgrade.get("prestigio", 0) > 0
+    for l in businesses:
+        p.j.propiedades.append(l.id)
+        e = p.hon_emp(l)
+        e["nivel"] = 3
+        p.cfg["cheat_negocios"] = False
+        assert p.hon_mejora_motivo(l)
+        p.cfg["cheat_negocios"] = True
+        assert not p.hon_mejora_motivo(l)
+        before = p.j.dinero
+        p.hon_mejorar(l)
+        assert e["nivel"] == 4
+        assert p.j.dinero == before - p.hon_mejora_coste(l, upgrade)
+        assert p.hon_mejora_motivo(l)  # Still respects the highest upgrade.
+
+
+def test_business_upgrade_still_requires_qualification(app):
+    p = fresh(app)
+    l = next(l for l in p.lugares.values() if l.tipo == "negocio")
+    p.j.propiedades.append(l.id)
+    p.hon_emp(l)["nivel"] = 3
+    p.j.ciudadania = 0
+    p.j.titulos = {}
+    p.cfg["cheat_negocios"] = True
+    before = p.j.dinero
+    assert p.hon_mejora_motivo(l)
+    p.hon_mejorar(l)
+    assert p.hon_emp(l)["nivel"] == 3 and p.j.dinero == before
+
+
+def test_business_upgrade_prestige_cheat_disabled_online(app):
+    p = fresh(app)
+    l = next(l for l in p.lugares.values() if l.tipo == "negocio")
+    p.hon_emp(l)["nivel"] = 3
+    p.j.ciudadania = 0
+    p.j.titulos = {"direccion": {"s": 1, "ok": 1}}
+    p.cfg["cheat_negocios"] = True
+    assert not p.hon_mejora_motivo(l)
+    p.en_servidor = True
+    assert p.hon_mejora_motivo(l)
+
+
+def test_f_enters_q_police_helicopter_and_detaches_pursuit(app):
+    p = fresh(app)
+    app.vuelo_en_pruebas = True
+    p.cfg["cheat_entrar"] = True
+    p._heli_llega()
+    v = p.heli["veh"]
+    v.x, v.y = p.j.x + 100, p.j.y
+    p.fijar(callar=True)
+    assert p.objetivo is v
+    assert v.volando and v.ocupado
+    p.entrar_salir()
+    assert p.j.veh is v and v in p.vehiculos
+    assert p.heli is None and v.ia is None and v.tag is None
+    assert not v.volando and not v.ocupado and not v.hostil
+    assert v.fase == "vuelo" and v.alt > 0 and v.queroseno > 0
+    assert p.objetivo is None
+    xy = p.pos()
+    p._helicoptero(0.05)
+    p.actualizar_vehiculos(0.05)
+    assert p.j.veh is v and v in p.vehiculos and p.pos() == xy
+    p.cfg["cheat_entrar"] = False
+    assert p.j.veh is v
+    p.salir_vehiculo(forzado=True)
+    assert p.j.veh is None and v in p.vehiculos and v.fase == "tierra"
+
+
+def test_f_selected_vehicle_retains_stock_rules_off_and_online(app):
+    p = fresh(app)
+    p._heli_llega()
+    v = p.heli["veh"]
+    p.objetivo = v
+    p.entrar_salir()
+    assert p.j.veh is None and p.heli["veh"] is v
+    p.cfg["cheat_entrar"] = True
+    p.en_servidor = True
+    assert p.cheat_enter_target() is False
+    assert p.j.veh is None and p.heli["veh"] is v
+
+
+def test_f_ignores_removed_destroyed_and_coordinate_only_targets(app):
+    p = fresh(app)
+    p.cfg["cheat_entrar"] = True
+    v = car(p)
+    v.x += 100
+    p.objetivo = v
+    v.muerto = True
+    assert p.cheat_enter_target() is False
+    v.muerto = False
+    p.vehiculos.remove(v)
+    assert p.cheat_enter_target() is False
+    p.objetivo = None
+    p.vehiculos.append(v)
+    p.fijar_gps(v.x, v.y, v.nombre, callar=True)
+    assert p.cheat_enter_target() is False
+    assert p.j.veh is None
+
+
+def test_f_q_target_takes_priority_over_gps_vehicle(app):
+    p = fresh(app)
+    p.cfg["cheat_entrar"] = True
+    q = car(p)
+    q.x += 60
+    g = car(p)
+    g.x += 40
+    p.fijar_gps(g.x, g.y, g.nombre, sigue=g, cosa=g, callar=True)
+    p.objetivo = q
+    p.entrar_salir()
+    assert p.j.veh is q and g in p.vehiculos
+
+def test_f_enters_gps_u_vehicle_across_models_and_occupants(app):
+    models = []
+    p = fresh(app)
+    for predicate in (lambda m: not m.get("vuela") and not m.get("barco"),
+                      lambda m: m.get("barco"), lambda m: m.get("vuela")):
+        models.append(next(m for m in p.datos["vehiculos"] if predicate(m)))
+    for model in models:
+        for ia in ("policia", "enemigos", "ambulancia", "trafico", "barco"):
+            p = fresh(app)
+            p.cfg["cheat_entrar"] = True
+            p.cfg["invulnerable"] = True
+            v = Vehiculo(model, p.j.x + 100, p.j.y + 70, ia=ia)
+            v.cerrado = v.ocupado = v.hostil = True
+            v.vel, v.ardiendo, v.salud = 35.0, 4.0, 1.0
+            p.vehiculos.append(v)
+            p.fijar_gps(v.x, v.y, v.nombre, sigue=v, cosa=v, callar=True)
+            p.tecla_pie(pygame.event.Event(pygame.KEYDOWN, key=pygame.K_u, mod=0), False)
+            assert p.paseo_auto
+            p.entrar_salir()
+            assert p.j.veh is v and p.pos() == (v.x, v.y)
+            assert not v.cerrado and not v.ocupado and not v.hostil
+            assert not p.paseo_auto and v.vel == 0
+            assert v.salud == v.salud_max and v.ardiendo < 0
+
+
+def test_f_preserves_enemy_passengers_when_taking_their_vehicle(app):
+    p = fresh(app)
+    p.cfg["cheat_entrar"] = True
+    v = car(p)
+    v.x += 80
+    v.ia, v.ocupado, v.hostil, v.tag = "enemigos", True, True, "enemigos"
+    q = Persona("enemigo", v.x, v.y)
+    q.hostil = True
+    v.pasajeros = [q]
+    p.objetivo = v
+    p.entrar_salir()
+    assert p.j.veh is v and q in p.personas and not q.muerto
+    assert not v.pasajeros and v.tag is None
+    assert p.j.stats["enemigos"] == 0
+
+def test_f_enters_air_vehicle_after_u_teleport(app):
+    p = fresh(app)
+    p.cfg["cheat_entrar"] = p.cfg["cheat_teleport"] = True
+    p._heli_llega()
+    v = p.heli["veh"]
+    p.fijar_gps(v.x, v.y, v.nombre, sigue=v, cosa=v, callar=True)
+    p.tecla_pie(pygame.event.Event(pygame.KEYDOWN, key=pygame.K_u, mod=0), False)
+    assert p.j.veh is None and p.gps["cosa"] is v
+    p.entrar_salir()
+    assert p.j.veh is v and p.heli is None and v in p.vehiculos
+
+
+def test_f_targeted_entry_stays_off_during_transition(app):
+    p = fresh(app)
+    p.cfg["cheat_entrar"] = True
+    v = car(p)
+    v.x += 60
+    p.objetivo = v
+    p.transicion = True
+    assert p.cheat_enter_target() is False
+    assert p.j.veh is None
+
+def test_f_transfers_from_moving_and_airborne_vehicle(app):
+    for flight in (False, True):
+        p = fresh(app)
+        p.cfg["cheat_entrar"] = p.cfg["invulnerable"] = True
+        p.cfg["cheat_volar"] = flight
+        app.vuelo_en_pruebas = flight
+        old = car(p)
+        original = old.modelo
+        p._subir(old, False)
+        old.vel = 25.0
+        if flight:
+            old.fase, old.alt = "vuelo", 80.0
+            assert old.modelo.get("vuela")
+        new = car(p)
+        new.x += 100
+        new.cerrado, new.ocupado = True, True
+        p.objetivo = new
+        p.entrar_salir()
+        assert p.j.veh is new and p.pos() == (new.x, new.y)
+        assert old in p.vehiculos and old.modelo is original and old.vel == 0
+        assert not hasattr(old, "_cheat_ground_model")
+        if flight:
+            assert old.fase == "tierra" and old.alt == 0
+        old.salud -= 10
+        assert not p.cheat_repair(old)
+        assert old.salud < old.salud_max
+        assert p.cheat_repair(new)
+
+
+def test_f_no_other_target_keeps_exit_and_landing_controls(app):
+    p = fresh(app)
+    p.cfg["cheat_entrar"] = True
+    v = car(p)
+    p._subir(v, False)
+    v.vel = 20.0
+    p.entrar_salir()
+    assert p.j.veh is v
+    v.vel = 0.0
+    p.fijar_gps(v.x, v.y, v.nombre, sigue=v, cosa=v, callar=True)
+    p.entrar_salir()
+    assert p.j.veh is None
+    p = fresh(app)
+    app.vuelo_en_pruebas = True
+    p.cfg["cheat_entrar"] = True
+    model = next(m for m in p.datos["vehiculos"] if m.get("vuela"))
+    v = Vehiculo(model, p.j.x, p.j.y)
+    p.vehiculos.append(v)
+    p._subir(v, False)
+    v.fase, v.alt = "vuelo", 60.0
+    p.objetivo = v
+    p.entrar_salir()
+    assert p.j.veh is v and v.fase == "aterrizando"
+
+
+def test_f_transfers_from_friendly_passenger_seat(app):
+    p = fresh(app)
+    p.cfg["cheat_entrar"] = True
+    p.pasajero = "friend"
+    v = car(p)
+    v.x += 70
+    p.objetivo = v
+    p.entrar_salir()
+    assert p.pasajero is None and p.j.veh is v
+
+
+# Append to test_cheats.py: uses its fresh/enemy helpers and imported entities.
+
+def _reflection_shooter(p, weapon="pistola", tipo="enemigo", distance=10):
+    q = enemy(p, tipo=tipo, distance=distance)
+    q.arma = weapon
+    q.estado = "quieto"
+    q.t_disparo = 0
+    q.punteria = 0
+    q.salud = 100000
+    return q
+
+
+def test_reflected_firearm_hits_original_shooter_without_target_lock(app):
+    p = fresh(app)
+    p.cfg["cheat_reflejar"] = True
+    q = _reflection_shooter(p)
+    bystander = Persona("civil", p.j.x + 40, p.j.y)
+    bystander.estado = "quieto"
+    p.personas.append(bystander)
+    p.objetivo = bystander
+    health, other, shooter = p.j.salud, bystander.salud, q.salud
+    p.actualizar_personas(0.01)
+    assert p.j.salud == health and bystander.salud == other
+    assert q.salud == shooter - p.armas_d[q.arma]["dano"] * 0.4
+    assert q.t_disparo > 0
+
+
+def test_reflection_protects_occupied_land_water_and_air_vehicles(app):
+    for category in ("land", "water", "air"):
+        for invulnerable in (False, True):
+            p = fresh(app)
+            p.cfg["cheat_reflejar"] = True
+            p.cfg["invulnerable"] = invulnerable
+            model = next(m for m in p.datos["vehiculos"] if
+                         (bool(m.get("vuela")) if category == "air" else
+                          bool(m.get("barco")) and not m.get("vuela") if category == "water" else
+                          not m.get("vuela") and not m.get("barco")))
+            v = Vehiculo(model, p.j.x, p.j.y)
+            p.vehiculos.append(v)
+            p.j.veh = v
+            q = _reflection_shooter(p)
+            health, vehicle, shooter = p.j.salud, v.salud, q.salud
+            p.actualizar_personas(0.01)
+            assert p.j.salud == health and v.salud == vehicle
+            assert q.salud < shooter
+
+
+def test_police_and_explosive_typed_shots_return_as_well(app):
+    p = fresh(app)
+    explosive_ids = [a["id"] for a in p.datos["armas"] if a["tipo"] == "explosivo"]
+    for weapon in ["pistola"] + explosive_ids + ["reflection_mod_rocket"]:
+        p = fresh(app)
+        p.cfg["cheat_reflejar"] = True
+        p.j.estrellas = 3
+        if weapon == "reflection_mod_rocket":
+            a = dict(next(a for a in p.datos["armas"] if a["tipo"] == "explosivo"))
+            a["id"] = weapon
+            p.armas_d[weapon] = a
+        q = _reflection_shooter(p, weapon=weapon, tipo="policia")
+        health, shooter = p.j.salud, q.salud
+        p.actualizar_personas(0.01)
+        assert p.j.salud == health
+        assert q.salud == shooter - p.armas_d[weapon]["dano"] * 0.4
+        assert not p.explosiones
+
+
+def test_reflection_off_restores_incoming_shot_damage(app):
+    from juego import combate
+    p = fresh(app)
+    q = _reflection_shooter(p)
+    q.punteria = 1
+    health, shooter = p.j.salud, q.salud
+    saved = combate.random.random
+    combate.random.random = lambda: 0
+    try:
+        p.actualizar_personas(0.01)
+    finally:
+        combate.random.random = saved
+    assert p.j.salud < health and q.salud == shooter
+
+
+def test_reflection_does_not_return_melee_or_player_explosions(app):
+    from juego import combate
+    p = fresh(app)
+    p.cfg["cheat_reflejar"] = True
+    q = _reflection_shooter(p, weapon="punos", distance=1)
+    health, shooter = p.j.salud, q.salud
+    saved = combate.random.random
+    combate.random.random = lambda: 0
+    try:
+        p.actualizar_personas(0.01)
+    finally:
+        combate.random.random = saved
+    assert p.j.salud < health and q.salud == shooter
+    p.personas = []
+    health = p.j.salud
+    p._estallar({"x": p.j.x, "y": p.j.y, "radio": 8, "dano": 10, "arma": "granada"})
+    assert p.j.salud < health
+
+
+def test_reflection_never_targets_missing_dead_or_online_sources(app):
+    p = fresh(app)
+    p.cfg["cheat_reflejar"] = True
+    q = _reflection_shooter(p)
+    a = p.armas_d[q.arma]
+    health = q.salud
+    p.en_servidor = True
+    assert not p.reflejar_disparo(q, a) and q.salud == health
+    p.en_servidor = False
+    p.personas.remove(q)
+    assert not p.reflejar_disparo(q, a) and q.salud == health
+    p.personas.append(q)
+    q.muerto = True
+    assert not p.reflejar_disparo(q, a) and q.salud == health
+    assert not p.reflejar_disparo(None, a)
+
+
+def test_reflected_kill_uses_normal_growth_once(app):
+    p = fresh(app)
+    p.cfg["cheat_reflejar"] = p.cfg["cheat_crecer"] = True
+    q = _reflection_shooter(p)
+    q.salud = 1
+    p.actualizar_personas(0.01)
+    assert q.muerto and p.j.cheat_bajas == 1
+    p.actualizar_personas(0.01)
+    assert p.j.cheat_bajas == 1
+
+
+def test_reflection_is_disabled_for_actual_online_npc_shots(app):
+    from juego import combate
+    p = fresh(app)
+    p.cfg["cheat_reflejar"] = True
+    p.cfg["defensa_propia"] = False
+    p.en_servidor = True
+    q = _reflection_shooter(p)
+    q.punteria = 1
+    health, shooter = p.j.salud, q.salud
+    saved = combate.random.random
+    combate.random.random = lambda: 0
+    try:
+        p.actualizar_personas(0.01)
+    finally:
+        combate.random.random = saved
+    assert p.j.salud < health and q.salud == shooter

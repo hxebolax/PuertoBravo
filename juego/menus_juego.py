@@ -1603,7 +1603,11 @@ def menu_armas(p):
             a = p.armas_d[ident]
             t = a["nombre"]
             if a["tipo"] in ("fuego", "explosivo"):
-                t += tr(', {v} disparos').format(v=(j.armas[ident]['cargador'] + j.armas[ident]['reserva']))
+                if p.cheat_infinite_ammo(ident):
+                    from .cheats import text
+                    t += text(', munición infinita', ', infinite ammunition')
+                else:
+                    t += tr(', {v} disparos').format(v=(j.armas[ident]['cargador'] + j.armas[ident]['reserva']))
             ops.append(Opcion(t + ", " + ficha_corta(a) + (tr(", en la mano") if ident == j.arma else ""), elegir(ident), ayuda=ayuda_arma(a)))
     m = Menu(app, tr("Tus armas"), ops, intro=tr("Intro para empuñar. F1 describe el arma: daño, alcance, cadencia y precisión"))
     m.i = next((k for k, i in enumerate([i for i in p.orden_armas if i in j.armas]) if i == j.arma), 0)
@@ -2020,8 +2024,10 @@ def armas_en_venta(p, l, factor=1.0, con_arma=False):
                     p.son("dinero", cat="interfaz")
             elif a["tipo"] == "cuerpo":
                 p.app.decir(tr('Ya tienes {nombre}.').format(nombre=(a['nombre'])), True)
+            elif p.cheat_ammo_shop_full(a["id"]):
+                return
             elif p.pagar(int(a.get("precio_balas", 0) * factor)):
-                j.armas[a["id"]]["reserva"] += a.get("balas", 0)
+                p.sumar_municion(a["id"], a.get("balas", 0))
                 p.son("recarga", cat="interfaz")
                 p.app.decir(tr('Munición comprada. Reserva: {reserva} balas.').format(reserva=(j.armas[a['id']]['reserva'])), True)
         return f
@@ -2051,8 +2057,10 @@ def _armeria(p, l):
                     p.son("dinero", cat="interfaz")
                     m.refrescar(False)
             else:
+                if p.cheat_ammo_shop_full(a["id"]):
+                    return
                 if p.pagar(int(a["precio_balas"] * factor)):
-                    j.armas[a["id"]]["reserva"] += a["balas"]
+                    p.sumar_municion(a["id"], a["balas"])
                     p.son("recarga", cat="interfaz")
                     app.decir(tr('Munición comprada. Reserva: {reserva} balas.').format(reserva=(j.armas[a['id']]['reserva'])), True)
         return f

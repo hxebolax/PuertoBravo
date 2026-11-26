@@ -215,12 +215,69 @@ class Conduccion:
 
     # ---------------------------------------------------- entrar y salir
     def entrar_salir(self):
+        if self.cheat_enter_target():
+            return
         if getattr(self, "pasajero", None) is not None:
             self.bajar_de_amigo()
             return
         if not self.j.veh and self.subir_con_amigo():
             return
         self._entrar_salir()
+
+    def cheat_enter_target(self):
+        """F takes a selected, live local vehicle, including airborne police.
+
+        Use actual entity references from Q or the GPS used by U. Never guess
+        a vehicle from coordinates or revive a removed/destroyed entity.
+        """
+        if not self.cheat_on("cheat_entrar") or self.transicion:
+            return False
+        g = self.gps or {}
+        candidates = (getattr(self, "objetivo", None), g.get("cosa"), g.get("sigue"))
+        v = next((v for v in candidates if isinstance(v, Vehiculo) and v in self.vehiculos and not v.muerto), None)
+        if v is None or v is self.j.veh:
+            return False
+        # Validate the destination before releasing a current vehicle/seat.
+        # Normal exit cleanup restores a temporary flight model, stops its
+        # audio and ends vehicle work; the target takes over immediately.
+        if self.j.veh:
+            self.salir_vehiculo(forzado=True)
+        if getattr(self, "pasajero", None) is not None:
+            self.bajar_de_amigo()
+        self.parar_paseo()
+        if self.forzando:
+            self.forzando["canal"].parar()
+            self.forzando = None
+        airborne = bool(getattr(v, "volando", False) or getattr(v, "alt", 0) > 0)
+        police_heli = v.ia == "heli_policia"
+        h = getattr(self, "heli", None)
+        if h and h["veh"] is v:
+            # _heli_fuera removes the vehicle. Hand it over instead, so the
+            # pursuit cannot move, despawn or crash the player's aircraft.
+            from .calle import aj
+            self.heli = None
+            self.t_heli = self.t + aj("helicoptero_vuelve")
+        if police_heli:
+            v.tag = None
+            self.delito(3, tr("robo de un coche patrulla"), siempre=True)
+        if getattr(v, "pasajeros", []):
+            self.bajar_enemigos(v)
+        v.cerrado = False
+        v.hostil = False
+        v.volando = False                         # NPC helicopter flag; player flight uses fase/alt.
+        if v.modelo.get("vuela") and airborne:
+            from .calle import aj
+            v.fase = "vuelo"
+            v.alt = max(float(getattr(v, "alt", 0)), float(aj("helicoptero_altura")) if police_heli else 35.0)
+        self.j.x, self.j.y = v.x, v.y
+        if self.objetivo is v:
+            self.objetivo = None
+        self._subir(v, v.ia in ("policia", "heli_policia") or not getattr(v, "propio", False), callar=airborne)
+        if airborne:
+            from .cheats import text
+            self.decir(text("Subes a ", "You enter ") + v.nombre + text(" en el aire. Izquierda y derecha giran; D sube, A baja y F aterriza.",
+                                                                                      " in the air. Left and right steer; D climbs, A descends and F lands."), True)
+        return True
 
     def _entrar_salir(self):
         j = self.j

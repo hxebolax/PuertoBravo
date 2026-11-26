@@ -11,8 +11,8 @@ def text(es, en):
 # Each option is independently saved by Config; the stock game starts unchanged.
 OPTIONS = (
     ("cheat_recoger", "Recoger todos los objetos al instante", "Collect all loose items instantly",
-     "Incluye maletines, coleccionables y objetos de misión en el mapa actual; sin límite de mochila.",
-     "Includes briefcases, collectibles and mission items on the current map; bypasses backpack capacity."),
+     "Incluye maletines, coleccionables y objetos de misión en el mapa actual. Activa también la mochila ilimitada para recoger objetos de valor sin límite de espacio.",
+     "Includes briefcases, collectibles and mission items on the current map. Enable unlimited backpack slots too to collect valuables without a space limit."),
     ("cheat_contacto", "Eliminar enemigos al contacto", "Kill enemies on contact",
      "A pie, elimina enemigos hostiles a dos metros. No afecta a civiles ni aliados.",
      "On foot, defeats hostile enemies within two metres. Leaves civilians and allies alone."),
@@ -52,12 +52,58 @@ OPTIONS = (
     ("cheat_vehiculos_aliados", "Vehículos vacíos: perseguir y embestir enemigos", "Empty vehicles pursue and ram enemies",
      "Los vehículos vacíos cercanos persiguen enemigos hostiles. No recluta vehículos ocupados ni de misión. Apagado, se detienen.",
      "Nearby empty vehicles autonomously pursue hostile enemies. Excludes occupied and mission vehicles. Switching off stops them."),
+    ("cheat_municion", "Munición infinita para armas adquiridas", "Infinite ammunition for acquired firearms",
+     "Dispara sin gastar las balas guardadas, incluso si están a cero. No concede armas. Las recogidas se limitan a un cargador completo más la reserva normal de compra; respeta cargadores ampliados.",
+     "Fire owned guns without spending stored rounds, even at zero. Grants no weapons. New ammunition is capped at a full magazine plus the normal purchase reserve, including expanded magazines."),
+    ("cheat_explosivos", "Explosivos y proyectiles infinitos una vez adquiridos", "Infinite acquired throwables and rockets",
+     "Granadas, cócteles, cohetes y otros explosivos adquiridos no se gastan. Las recogidas se consumen al llegar al límite normal de carga; el sobrante se descarta.",
+     "Owned grenades, petrol bombs, rockets and other explosives are not consumed. Pickups are collected at the standard-loadout ceiling; surplus is discarded."),
+    ("cheat_mochila", "Espacio ilimitado en la mochila", "Unlimited backpack slots",
+     "La capacidad de objetos y mercancía crece con lo que recoges, sin reservar una lista enorme ni guardar infinito. Al apagarlo conservas tus cosas y vuelven los límites normales para añadir más.",
+     "Item and merchandise capacity grows with actual contents, without allocating a huge list or storing infinity. Switching off keeps your items and restores normal limits for further additions."),
+    ("cheat_negocios", "Mejorar negocios sin prestigio", "Business upgrades ignore community standing",
+     "Todos los negocios ignoran el prestigio entre los vecinos al mejorar. Los títulos necesarios, el coste y el nivel máximo se mantienen.",
+     "All business upgrades ignore community prestige. Required qualifications, normal costs and the maximum level still apply."),
+    ("cheat_entrar", "F: entrar en cualquier vehículo seleccionado", "F: enter any selected vehicle",
+     "F entra en el vehículo vivo fijado con Q o marcado en el GPS para U, aunque esté lejos, cerrado, ocupado, en marcha o en el aire. No revive vehículos destruidos. Cambia directamente desde tu vehículo o asiento de pasajero; sin otro vehículo seleccionado, F conserva los controles normales para salir y aterrizar.",
+     "F enters the live vehicle selected with Q or marked in the GPS for U, regardless of distance, locks, occupants, speed or airborne state. Never revives destroyed vehicles. Transfers directly from your current vehicle or passenger seat; without a different selected vehicle, F keeps its normal exit and landing controls."),
+    ("cheat_reflejar", "Devolver disparos a quien te ataca", "Return incoming ranged shots",
+     "Los disparos dirigidos a ti o a tu vehículo ocupado vuelven al tirador, incluso si iban a fallar. Incluye armas de fuego y explosivas de los enemigos. No cambia golpes, peligros ni tus explosiones.",
+     "Ranged shots aimed at you or your occupied vehicle return to their shooter, even if they would miss. Includes enemy firearm and explosive weapons. Melee, hazards and your own explosions remain unchanged."),
 )
 
 
 class Cheats:
     def cheat_on(self, key):
         return not getattr(self, "en_servidor", False) and bool(self.cfg.v.get(key, False))
+
+    def cheat_infinite_ammo(self, ident=None):
+        ident = self.j.arma if ident is None else ident
+        if ident not in self.j.armas:
+            return False
+        kind = self.armas_d.get(ident, {}).get("tipo")
+        option = {"fuego": "cheat_municion", "explosivo": "cheat_explosivos"}.get(kind)
+        return bool(option and self.cheat_on(option))
+
+    def cheat_ammo_capacity(self, ident):
+        """User-chosen pickup ceiling, not a stock reserve-ammunition limit."""
+        a = self.armas_d.get(ident, {})
+        return max(0, self.capacidad(ident)) + max(0, int(a.get("balas", 0) or 0))
+
+    def cheat_ammo_room(self, ident):
+        if not self.cheat_infinite_ammo(ident):
+            return None
+        m = self.j.armas[ident]
+        stored = max(0, int(m.get("cargador", 0))) + max(0, int(m.get("reserva", 0)))
+        # Previously acquired surplus is never deleted by enabling a toggle.
+        return max(0, self.cheat_ammo_capacity(ident) - stored)
+
+    def cheat_ammo_shop_full(self, ident):
+        if self.cheat_ammo_room(ident) != 0:
+            return False
+        self.decir(text("Ya llevas la carga máxima. La munición infinita está activada; no necesitas comprar más.",
+                        "You already carry the maximum loadout. Infinite ammunition is enabled; no purchase is needed."), True)
+        return True
 
     def cheat_growth(self):
         return max(0, int(self.j.cheat_bajas)) if self.cheat_on("cheat_crecer") else 0
@@ -275,6 +321,11 @@ class Cheats:
         # mission's own recoger handler records progress; no duplicate awards.
         for obj in list(self.objetos):
             if obj in self.objetos and not getattr(obj, "recogido", False) and obj.tipo in ("dinero", "municion", "arma", "valor", "casete", "mision"):
+                if obj.tipo == "valor" and not self.cheat_on("cheat_mochila"):
+                    from .mochila import CATALOGO
+                    item = CATALOGO.get(getattr(obj, "item", ""))
+                    if item and self.moc_libre() < item["peso"]:
+                        continue  # a full bag must not announce an error every frame
                 self.recoger(obj)
 
     def cheat_step(self):

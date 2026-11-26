@@ -3,6 +3,7 @@ from .i18n import tr
 import random
 
 from .menus import Dialogo, Menu, Opcion
+from .cheats import text as cheat_text
 
 
 def _volver_al_juego(p):
@@ -526,7 +527,12 @@ def menu_sustancias(p):
         enganches = [tr('{nombre} {int} de 100').format(nombre=(p.sustancia(s)['nombre']), int=(int(n))) for s, n in j.adiccion.items() if p.sustancia(s)]
         lista.append(Opcion(tr("Dependencia: ") + (", ".join(enganches) if enganches else "ninguna") + (tr(". Tienes síndrome de abstinencia") if p._abstinencia() else ""),
                             ayuda=tr("A partir de 40 necesitas tomar cada día o sufres abstinencia. Baja sola poco a poco, y en un hospital te desintoxican.")))
-        lista.append(Opcion(tr('Llevas {carga} de {v} unidades de mercancía; te caben {hueco_mercancia} más. {moc_txt}. Para vender, ponte junto a un peatón sin arma en la mano y pulsa E').format(carga=(p.carga()), v=(100), hueco_mercancia=(p.hueco_mercancia()), moc_txt=(p.moc_txt())),
+        if p.cheat_on("cheat_mochila"):
+            estado_carga = cheat_text('Llevas {carga} unidades de mercancía, sin límite de inventario. {moc_txt}. Para vender, ponte junto a un peatón sin arma en la mano y pulsa E',
+                                      'Carrying {carga} merchandise units, with unlimited inventory. {moc_txt}. To sell, stand beside an unarmed pedestrian and press E').format(carga=p.carga(), moc_txt=p.moc_txt())
+        else:
+            estado_carga = tr('Llevas {carga} de {v} unidades de mercancía; te caben {hueco_mercancia} más. {moc_txt}. Para vender, ponte junto a un peatón sin arma en la mano y pulsa E').format(carga=(p.carga()), v=(100), hueco_mercancia=(p.hueco_mercancia()), moc_txt=(p.moc_txt()))
+        lista.append(Opcion(estado_carga,
                             ayuda=tr("La mercancía va en la mochila: cada diez unidades ocupan un hueco. Lo que no quieras llevar encima, guárdalo en el armario de una de tus casas.")))
         lista.append(Opcion(tr("Volver"), lambda: app.cerrar()))
         return lista
@@ -630,7 +636,7 @@ def proveedor(p, l):
     def comprar(s, n):
         def f():
             precio, _ = p.precio_sustancia(s["id"], l)
-            if n > p.hueco_mercancia():                          # el tope de cien y el sitio de la mochila (mochila.py)
+            if n > p.hueco_mercancia(n):                         # el tope de cien y el sitio de la mochila (mochila.py)
                 app.son("error")
                 app.decir(tr('No te cabe: llevas {carga} de 100 unidades y te caben {hueco_mercancia} más. {moc_txt}.').format(carga=(p.carga()), hueco_mercancia=(p.hueco_mercancia()), moc_txt=(p.moc_txt())), True)
                 return
@@ -696,7 +702,12 @@ def proveedor(p, l):
             from . import golpes
             from .atracos import AYUDA_GOLPE, TEXTO_GOLPE
             lista.append(Opcion(TEXTO_GOLPE, lambda: golpes.preparar(p, l, lambda plan: p.asaltar_proveedor(l, plan), tr("el asalto")), ayuda=AYUDA_GOLPE))
-        lista.append(Opcion(tr('Mochila: {carga} de 100 unidades. En la calle, {reputacion_txt}').format(carga=(p.carga()), reputacion_txt=(p.reputacion_txt())),
+        if p.cheat_on("cheat_mochila"):
+            estado_carga = cheat_text('Mochila: {carga} unidades, sin límite. En la calle, {reputacion_txt}',
+                                      'Backpack: {carga} units, unlimited. On the street, {reputacion_txt}').format(carga=p.carga(), reputacion_txt=p.reputacion_txt())
+        else:
+            estado_carga = tr('Mochila: {carga} de 100 unidades. En la calle, {reputacion_txt}').format(carga=(p.carga()), reputacion_txt=(p.reputacion_txt()))
+        lista.append(Opcion(estado_carga,
                             ayuda=tr("Los precios cambian cada día y en cada localidad: compra donde esté barato y vende donde esté caro, o al menudeo en la calle, que se paga mejor pero es más arriesgado.")))
         lista.append(Opcion(tr("Volver"), lambda: app.cerrar()))
         return lista

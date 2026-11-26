@@ -479,14 +479,16 @@ class Calle:
                 self.decir(tr('Munición de {nombre}: ya no llevas esa arma, así que no te sirve.').format(nombre=(a['nombre'])))
                 return
             cap = int(a.get("cargador", 0) or 0)
-            j.armas[a["id"]] = {"cargador": min(cap, n), "reserva": max(0, n - cap)}
+            j.armas[a["id"]] = {"cargador": min(cap, n), "reserva": 0}
+            self.sumar_municion(a["id"], max(0, n - cap))
+            n = sum(j.armas[a["id"]][k] for k in ("cargador", "reserva"))
             num = self.orden_armas.index(a["id"]) + 1
             self.decir(tr('Recoges del suelo: {nombre}').format(nombre=(a['nombre'])) + (tr(", con una bala") if n == 1 else tr(', con {n} balas').format(n=(n)) if n else "") + "."
                        + (tr(' Es el arma número {num}.').format(num=(num)) if num <= 9 else tr(" Elígela con la coma o con la tecla I.")))
         elif n:
             m = j.armas[a["id"]]
-            m["reserva"] += n
-            self.decir(tr('Recoges {n} {v} de {nombre}. Llevas {v2}.').format(n=(n), v=(tr('bala') if n == 1 else tr('balas')), nombre=(a['nombre']), v2=(m['cargador'] + m['reserva'])))
+            added = self.sumar_municion(a["id"], n)
+            self.decir(tr('Recoges {n} {v} de {nombre}. Llevas {v2}.').format(n=(added), v=(tr('bala') if added == 1 else tr('balas')), nombre=(a['nombre']), v2=(m['cargador'] + m['reserva'])))
         else:
             self.decir(tr('{nombre}: ya llevas una igual.').format(nombre=(a['nombre'])))
 

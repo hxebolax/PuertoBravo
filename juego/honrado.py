@@ -977,7 +977,7 @@ class Honrado:
             return tr("Este negocio ya no puede crecer más.")
         if m.get("titulo") and m["titulo"] not in self.hon_titulos():
             return tr('Para esa mejora hace falta el título de {hon_titulo_nombre}: se saca en una academia.').format(hon_titulo_nombre=(self.hon_titulo_nombre(m['titulo'])))
-        if self.j.ciudadania < _n(m, "prestigio"):
+        if self.j.ciudadania < _n(m, "prestigio") and not self.cheat_on("cheat_negocios"):
             return tr('Para esa mejora los vecinos tienen que hablar mejor de ti: hacen falta {int} de prestigio y tienes {int2}.').format(int=(int(_n(m, 'prestigio'))), int2=(int(self.j.ciudadania)))
         return ""
 

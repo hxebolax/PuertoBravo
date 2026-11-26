@@ -14,7 +14,6 @@
 Los números, las frases y el catálogo de objetos están en los datos (vida.json, secciones mochila y objetos_valor).
 """
 from .i18n import tr
-import math
 import random
 
 from .ajustes import Ajustes
@@ -95,10 +94,16 @@ class Mochila:
 
     # ------------------------------------------------------------------ sitio
     def moc_capacidad(self):
-        return AJ.entero("capacidad_grande") if getattr(self.j, "mochila_grande", False) else AJ.entero("capacidad")
+        base = AJ.entero("capacidad_grande") if getattr(self.j, "mochila_grande", False) else AJ.entero("capacidad")
+        if self.cheat_on("cheat_mochila"):
+            headroom = max(1, max((o["peso"] for o in CATALOGO.values()), default=1))
+            return max(base, self.moc_usado() + headroom)
+        return base
 
     def moc_huecos_mercancia(self):
-        return int(math.ceil(self.carga() / max(1, AJ.entero("unidades_por_hueco")))) if self.carga() > 0 else 0
+        carga = self.carga()
+        por = max(1, AJ.entero("unidades_por_hueco"))
+        return (carga + por - 1) // por if carga > 0 else 0
 
     def moc_usado(self):
         return sum(CATALOGO.get(x["id"], {"peso": 1})["peso"] for x in self.j.mochila) + self.moc_huecos_mercancia()
@@ -106,13 +111,19 @@ class Mochila:
     def moc_libre(self):
         return max(0, self.moc_capacidad() - self.moc_usado())
 
-    def hueco_mercancia(self):
-        """Cuántas unidades de mercancía caben todavía: lo que deja el tope de cien y lo que deja la mochila."""
+    def hueco_mercancia(self, cantidad=None):
+        """Sitio para la tanda; normalmente limitado a cien unidades y los huecos de la mochila."""
+        if self.cheat_on("cheat_mochila"):
+            # Give this batch finite headroom without inventing inventory or saving infinity.
+            return max(100, int(cantidad or 0))
         por = max(1, AJ.entero("unidades_por_hueco"))
         sobra = self.moc_huecos_mercancia() * por - self.carga()           # lo que queda del último hueco empezado
         return max(0, min(100 - self.carga(), self.moc_libre() * por + sobra))
 
     def moc_txt(self):
+        if self.cheat_on("cheat_mochila"):
+            from .cheats import text
+            return text("Mochila sin límite de huecos; ocupados: ", "Unlimited backpack slots; occupied: ") + str(self.moc_usado())
         return tr('Mochila: {moc_usado} de {moc_capacidad} huecos ocupados').format(moc_usado=(self.moc_usado()), moc_capacidad=(self.moc_capacidad()))
 
     # ------------------------------------------------------------------ meter y sacar
@@ -120,7 +131,7 @@ class Mochila:
         o = CATALOGO.get(ident)
         if o is None:
             return False
-        if self.moc_libre() < o["peso"] and not self.cheat_on("cheat_recoger"):
+        if self.moc_libre() < o["peso"]:
             if not callar:
                 self.son("error", cat="interfaz")
                 self.decir(AJ.frase("frases_llena", objeto=o["nombre"]))
@@ -312,7 +323,7 @@ def menu_armario(p, l):
         a = p.almacen(l.id)
         n = 0
         for s, c in list(a["sust"].items()):
-            cabe = min(c, p.hueco_mercancia())
+            cabe = min(c, p.hueco_mercancia(c))
             if cabe <= 0:
                 break
             j.sustancias[s] = j.sustancias.get(s, 0) + cabe
@@ -347,7 +358,15 @@ def menu_armario(p, l):
 
     def guardar_arma(ident):
         def f():
-            p.almacen(l.id)["armas"][ident] = j.armas.pop(ident)
+            weapons = p.almacen(l.id)["armas"]
+            carried = j.armas.pop(ident)
+            stored = weapons.get(ident)
+            if stored is not None:
+                carried["reserva"] += int(stored.get("cargador", 0)) + int(stored.get("reserva", 0))
+                for upgrade in ("ampliado", "silenciador"):
+                    if stored.get(upgrade):
+                        carried[upgrade] = True
+            weapons[ident] = carried
             if j.arma == ident:
                 j.arma = "punos"
             app.son("menu_ok")
@@ -358,13 +377,24 @@ def menu_armario(p, l):
     def sacar_arma(ident):
         def f():
             a = p.almacen(l.id)["armas"]
-            m_ = a.pop(ident)
+            m_ = a[ident]
             if ident in j.armas:                                 # ya llevas una igual: te quedas con las balas
-                j.armas[ident]["reserva"] += int(m_.get("cargador", 0)) + int(m_.get("reserva", 0))
+                total = int(m_.get("cargador", 0)) + int(m_.get("reserva", 0))
+                remaining = total - p.sumar_municion(ident, total)
+                if remaining:
+                    loaded = min(int(m_.get("cargador", 0)), remaining)
+                    m_["cargador"], m_["reserva"] = loaded, remaining - loaded
+                else:
+                    a.pop(ident)
             else:
-                j.armas[ident] = m_
+                j.armas[ident] = a.pop(ident)
             app.son("menu_ok")
-            app.decir(tr('Sacas del armario {nombre}.').format(nombre=(p.armas_d[ident]['nombre'])), True)
+            if ident in a:
+                from .cheats import text
+                app.decir(text("La munición que supera la carga máxima se queda en el armario.",
+                               "Ammunition beyond the maximum loadout stays in storage."), True)
+            else:
+                app.decir(tr('Sacas del armario {nombre}.').format(nombre=(p.armas_d[ident]['nombre'])), True)
             m.refrescar(False)
         return f
 
