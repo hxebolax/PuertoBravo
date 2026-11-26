@@ -53,11 +53,11 @@ OPTIONS = (
      "Los vehículos vacíos cercanos persiguen enemigos hostiles. No recluta vehículos ocupados ni de misión. Apagado, se detienen.",
      "Nearby empty vehicles autonomously pursue hostile enemies. Excludes occupied and mission vehicles. Switching off stops them."),
     ("cheat_municion", "Munición infinita para armas adquiridas", "Infinite ammunition for acquired firearms",
-     "Dispara sin gastar las balas guardadas, incluso si están a cero. No concede armas. Las recogidas se limitan a un cargador completo más la reserva normal de compra; respeta cargadores ampliados.",
-     "Fire owned guns without spending stored rounds, even at zero. Grants no weapons. New ammunition is capped at a full magazine plus the normal purchase reserve, including expanded magazines."),
+     "Dispara sin gastar las balas guardadas, incluso si están a cero. No concede armas. Puedes recoger hasta diez millones de balas por arma, contando cargador y reserva.",
+     "Fire owned guns without spending stored rounds, even at zero. Grants no weapons. Collect up to ten million rounds per weapon, counting magazine and reserve."),
     ("cheat_explosivos", "Explosivos y proyectiles infinitos una vez adquiridos", "Infinite acquired throwables and rockets",
-     "Granadas, cócteles, cohetes y otros explosivos adquiridos no se gastan. Las recogidas se consumen al llegar al límite normal de carga; el sobrante se descarta.",
-     "Owned grenades, petrol bombs, rockets and other explosives are not consumed. Pickups are collected at the standard-loadout ceiling; surplus is discarded."),
+     "Granadas, cócteles, cohetes y otros explosivos adquiridos no se gastan. Puedes recoger hasta diez millones de unidades por arma; activa la conversión del sobrante para recibir dinero al llegar al límite.",
+     "Owned grenades, petrol bombs, rockets and other explosives are not consumed. Collect up to ten million units per weapon; enable surplus conversion to receive money at the ceiling."),
     ("cheat_mochila", "Espacio ilimitado en la mochila", "Unlimited backpack slots",
      "La capacidad de objetos y mercancía crece con lo que recoges, sin reservar una lista enorme ni guardar infinito. Al apagarlo conservas tus cosas y vuelven los límites normales para añadir más.",
      "Item and merchandise capacity grows with actual contents, without allocating a huge list or storing infinity. Switching off keeps your items and restores normal limits for further additions."),
@@ -70,6 +70,15 @@ OPTIONS = (
     ("cheat_reflejar", "Devolver disparos a quien te ataca", "Return incoming ranged shots",
      "Los disparos dirigidos a ti o a tu vehículo ocupado vuelven al tirador, incluso si iban a fallar. Incluye armas de fuego y explosivas de los enemigos. No cambia golpes, peligros ni tus explosiones.",
      "Ranged shots aimed at you or your occupied vehicle return to their shooter, even if they would miss. Includes enemy firearm and explosive weapons. Melee, hazards and your own explosions remain unchanged."),
+    ("cheat_municion_dinero", "Munición sobrante: convertir en dinero", "Convert surplus ammunition pickups into money",
+     "Hasta diez millones de unidades por arma, contando cargador y reserva. Cobras unidades sobrantes del suelo multiplicadas por el precio de compra de su munición. Si no tiene precio, un euro por unidad. No paga compras, premios ni traslados del armario.",
+     "Up to ten million rounds per weapon, counting magazine and reserve. Pays surplus ground rounds multiplied by the listed ammunition purchase price, or one euro each if no price is available. Never pays for purchases, rewards or storage transfers."),
+    ("cheat_foco", "Concentración infinita para el tiempo lento", "Infinite focus for slow time",
+     "Mantiene la concentración al cien por ciento. Retroceso activa o quita el tiempo lento, o abre el control del mundo si ese truco está activado. Al apagarlo vuelven el consumo y la recuperación normales. No se aplica con amigos conectados ni en servidores.",
+     "Keeps the focus meter at one hundred percent. Backspace toggles slow time, or opens the world speed control when that cheat is enabled. Switching off restores normal drain and recharge. Disabled with connected friends and on servers."),
+    ("cheat_tiempo", "Control de velocidad del mundo; jugador normal", "World speed control; normal player speed",
+     "Retroceso abre el control del mundo, de 0 por ciento (detenido) a 500 por ciento (cinco veces); 100 es normal. Tus movimientos, vehículos y disparos mantienen su velocidad. Los diálogos y menús no cambian de ritmo. Valor inicial: 25 por ciento. Apagado, Retroceso vuelve a la concentración. Solo sin conexión.",
+     "Backspace opens the world speed control, from 0 percent (stopped) to 500 percent (five times); 100 is normal. Your movement, vehicles and firing keep their speed. Dialogue and menus keep normal timing. Initial value: 25 percent. Switching off restores Backspace focus controls. Offline only."),
 )
 
 
@@ -86,12 +95,13 @@ class Cheats:
         return bool(option and self.cheat_on(option))
 
     def cheat_ammo_capacity(self, ident):
-        """User-chosen pickup ceiling, not a stock reserve-ammunition limit."""
-        a = self.armas_d.get(ident, {})
-        return max(0, self.capacidad(ident)) + max(0, int(a.get("balas", 0) or 0))
+        """Finite total ammunition ceiling, counted separately for each weapon."""
+        return 10_000_000
 
     def cheat_ammo_room(self, ident):
-        if not self.cheat_infinite_ammo(ident):
+        if ident not in self.j.armas or self.armas_d.get(ident, {}).get("tipo") not in ("fuego", "explosivo"):
+            return None
+        if not (self.cheat_infinite_ammo(ident) or self.cheat_on("cheat_municion_dinero")):
             return None
         m = self.j.armas[ident]
         stored = max(0, int(m.get("cargador", 0))) + max(0, int(m.get("reserva", 0)))
@@ -101,9 +111,18 @@ class Cheats:
     def cheat_ammo_shop_full(self, ident):
         if self.cheat_ammo_room(ident) != 0:
             return False
-        self.decir(text("Ya llevas la carga máxima. La munición infinita está activada; no necesitas comprar más.",
-                        "You already carry the maximum loadout. Infinite ammunition is enabled; no purchase is needed."), True)
+        self.decir(text("Ya llevas el máximo de diez millones de unidades de esta munición; no necesitas comprar más.",
+                        "You already carry the ten-million-round limit for this weapon; no purchase is needed."), True)
         return True
+
+    def cheat_ammo_overflow_value(self, ident, quantity):
+        """Price only discarded ground loot; callers never use this for grants."""
+        a = self.armas_d.get(ident, {})
+        if not self.cheat_on("cheat_municion_dinero") or ident not in self.j.armas or a.get("tipo") not in ("fuego", "explosivo"):
+            return 0
+        quantity = max(0, int(quantity))
+        listed_price = max(1, int(a.get("precio_balas", 0) or 0))
+        return quantity * listed_price
 
     def cheat_growth(self):
         return max(0, int(self.j.cheat_bajas)) if self.cheat_on("cheat_crecer") else 0
@@ -386,6 +405,7 @@ def menu_option(app):
                 p = getattr(app, "partida", None)
                 if p:
                     p.cheat_sync_growth()
+                    p.cheat_sync_focus()
                     p.cheat_sync_flight()
                     if p.j.veh:
                         p.cheat_repair(p.j.veh)
@@ -393,6 +413,10 @@ def menu_option(app):
             return Opcion(lambda: text(es, en) + ": " + (text("sí", "yes") if app.cfg[key] else text("no", "no")),
                           ajuste=change, ayuda=text(help_es, help_en))
         options = [option(*row) for row in OPTIONS]
+        from .cheat_time import open_speed_menu, speed_label
+        options.append(Opcion(lambda: speed_label(app.cfg), lambda: open_speed_menu(app),
+                              ayuda=text("Ajusta el mundo entre cero y quinientos por ciento. Solo actúa al activar el truco del tiempo. Retroceso abre este control durante la partida.",
+                                         "Set world speed from zero to five hundred percent. Takes effect only with the world-time cheat enabled. Backspace opens this control in game.")))
         p = getattr(app, "partida", None)
         if p:
             options.append(Opcion(lambda: text("Bajas que mejoran atributos: ", "Kills earned toward base stats: ") + str(p.j.cheat_bajas)

@@ -7,6 +7,7 @@ from . import rutas
 from .cheats import OPTIONS as CHEAT_OPTIONS
 
 POR_DEFECTO = {
+    "cheat_velocidad_mundo": 0.25,  # world multiplier, bounded 0..5; cheat_tiempo enables it
     "vol_maestro": 0.8,
     "vol_efectos": 1.0,
     "vol_ambiente": 0.6,

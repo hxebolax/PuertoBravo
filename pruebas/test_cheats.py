@@ -825,7 +825,7 @@ def test_mod_explosive_infinity_uses_weapon_type(app):
     p.cfg["cheat_municion"] = True
     assert not p.cheat_infinite_ammo()
     p.cfg["cheat_explosivos"] = True
-    assert p.cheat_infinite_ammo() and p.cheat_ammo_capacity(model["id"]) == 9
+    assert p.cheat_infinite_ammo() and p.cheat_ammo_capacity(model["id"]) == 10_000_000
     p.atacar()
     assert len(p.explosiones) == 1 and p.explosiones[0]["arma"] == model["id"]
     assert m == {"cargador": 0, "reserva": 0}
@@ -914,25 +914,20 @@ def test_ammo_cheats_never_grant_an_unowned_weapon(app):
         assert p.j.armas == before and not p.explosiones
 
 
-def test_ammo_pickup_capacity_uses_normal_reserve_and_expanded_magazine(app):
+def test_ammo_pickup_capacity_is_ten_million_including_expanded_magazine(app):
     p = fresh(app)
     for kind, option in (("fuego", "cheat_municion"), ("explosivo", "cheat_explosivos")):
         a, m = owned_ammo(p, kind)
         ident = a["id"]
-        expected = int(a.get("cargador", 0)) + int(a.get("balas", 0))
+        expected = 10_000_000
         assert p.cheat_ammo_capacity(ident) == expected
         assert p.cheat_ammo_room(ident) is None
         p.cfg[option] = True
         assert p.cheat_ammo_room(ident) == expected
         m["ampliado"] = True
-        expanded = p.capacidad(ident) + int(a.get("balas", 0))
-        assert p.cheat_ammo_capacity(ident) == expanded
-        if kind == "fuego":
-            assert expanded > expected
-        else:
-            assert expanded == expected
+        assert p.cheat_ammo_capacity(ident) == expected
         m.update(cargador=1, reserva=1)
-        assert p.cheat_ammo_room(ident) == max(0, expanded - 2)
+        assert p.cheat_ammo_room(ident) == expected - 2
 
 
 def test_real_ammo_additions_stop_at_ceiling_and_resume_uncapped_when_off(app):
@@ -959,7 +954,7 @@ def test_real_ammo_additions_stop_at_ceiling_and_resume_uncapped_when_off(app):
 def test_enabling_infinity_preserves_preexisting_over_capacity_ammo(app):
     p = fresh(app)
     for kind, option in (("fuego", "cheat_municion"), ("explosivo", "cheat_explosivos")):
-        a, m = owned_ammo(p, kind, 1, 1000)
+        a, m = owned_ammo(p, kind, 1, 10_000_123)
         before = copy.deepcopy(m)
         p.cfg[option] = True
         assert p.cheat_ammo_room(a["id"]) == 0
@@ -1008,7 +1003,7 @@ def test_new_weapon_pickups_acquire_only_real_capped_ammo(app):
         ident = a["id"]
         p.cfg[option] = True
         assert ident not in p.j.armas and not p.cheat_infinite_ammo(ident)
-        o = ammo_drop(p, ident, 1000, "arma")
+        o = ammo_drop(p, ident, 10_001_000, "arma")
         p.cheat_collect()
         assert o.recogido and ident in p.j.armas and p.cheat_infinite_ammo(ident)
         m = p.j.armas[ident]
@@ -1085,7 +1080,7 @@ def test_ammo_and_overfull_backpack_save_without_changing_item_schema(app):
     base = p.moc_capacidad()
     for key in ("cheat_municion", "cheat_explosivos", "cheat_mochila"):
         p.cfg[key] = True
-    a, m = owned_ammo(p, "fuego", 0, 1000)
+    a, m = owned_ammo(p, "fuego", 0, 10_000_123)
     m.update(ampliado=True, silenciador=True)
     owned_ammo(p, "explosivo", 0, 0)
     ident = next(iter(CATALOGO))
@@ -1107,7 +1102,7 @@ def test_new_game_plus_keeps_ammo_options_and_overfull_inventory(app):
     p = fresh(app)
     for key in ("cheat_ngplus", "cheat_municion", "cheat_explosivos", "cheat_mochila"):
         p.cfg[key] = True
-    a, m = owned_ammo(p, "fuego", 0, 1000)
+    a, m = owned_ammo(p, "fuego", 0, 10_000_123)
     m["ampliado"] = True
     owned_ammo(p, "explosivo", 0, 0)
     ident = next(iter(CATALOGO))
@@ -1711,3 +1706,771 @@ def test_reflection_is_disabled_for_actual_online_npc_shots(app):
     finally:
         combate.random.random = saved
     assert p.j.salud < health and q.salud == shooter
+
+
+# Append to test_cheats.py; uses its fresh helper and existing imports.
+
+def test_infinite_focus_backspace_starts_at_zero_and_does_not_drain(app):
+    p = fresh(app)
+    p.cfg["cheat_foco"] = True
+    p.j.foco = 0.0
+    ev = pygame.event.Event(pygame.KEYDOWN, key=pygame.K_BACKSPACE, mod=0, unicode="")
+    p.tecla(ev)
+    assert p.lento and p.foco_infinito()
+    for _ in range(1000):
+        assert p._paso_lento(0.05) == 0.05 * 0.4
+    assert p.lento and p.j.foco == 100.0
+    p.tecla(ev)
+    assert not p.lento and p.j.foco == 100.0
+
+
+def test_infinite_focus_off_resumes_normal_drain_from_full_meter(app):
+    p = fresh(app)
+    p.cfg["cheat_foco"] = True
+    p.j.foco = 0.5
+    p.alternar_lento()
+    assert p._paso_lento(1) == 0.4 and p.j.foco == 100.0
+    p.cfg["cheat_foco"] = False
+    assert p._paso_lento(0.05) == 0.05 * 0.4
+    assert p.lento and p.j.foco == 99.0
+    assert p._paso_lento(5) == 5
+    assert not p.lento and p.j.foco == 0.0
+    p._paso_lento(1)
+    assert p.j.foco == 3.0
+
+
+def test_focus_normal_threshold_drain_and_bounded_recharge_remain(app):
+    p = fresh(app)
+    p.j.foco = 14.0
+    p.alternar_lento()
+    assert not p.lento
+    p.j.foco = 20.0
+    p.alternar_lento()
+    assert p.lento
+    assert p._paso_lento(0.25) == 0.1 and p.j.foco == 15.0
+    assert p._paso_lento(1) == 1 and not p.lento and p.j.foco == 0.0
+    p._paso_lento(100)
+    assert p.j.foco == 100.0
+    p.cfg["cheat_foco"] = True
+    p.j.foco = 97.0
+    p._paso_lento(0.01)
+    assert p.j.foco == 100.0
+
+
+def test_infinite_focus_is_disabled_in_server_and_connected_friend_sessions(app):
+    from types import SimpleNamespace
+    for mode in ("server", "friends"):
+        p = fresh(app)
+        p.cfg["cheat_foco"] = True
+        p.j.foco = 0.0
+        if mode == "server":
+            p.en_servidor = True
+        else:
+            p.red = SimpleNamespace(conectado=True)
+        try:
+            assert not p.foco_infinito()
+            p.alternar_lento()
+            assert not p.lento
+            p.j.foco = 50.0
+            p.lento = True
+            assert p._paso_lento(1) == 0.4
+            assert p.j.foco == 30.0
+        finally:
+            p.red = None
+            p.en_servidor = False
+
+
+def test_infinite_focus_feedback_and_character_save_keep_real_meter(app):
+    from juego.cheats import text
+    p = fresh(app)
+    p.j.foco = 7.5
+    menu_option(app).accion()
+    focus_index = next(i for i, row in enumerate(OPTIONS) if row[0] == "cheat_foco")
+    app.pila[-1].opciones[focus_index].ajuste(1)
+    assert p.cfg["cheat_foco"] and p.j.foco == 100.0
+    app.cerrar(app.pila[-1])
+    said = []
+    p.decir = lambda message, *args, **kwargs: said.append(message)
+    p.alternar_lento()
+    assert text("Concentración infinita", "Infinite focus") in said[-1] and "100" in said[-1]
+    p.estado()
+    assert text("Concentración infinita", "Infinite focus") in said[-1] and "100" in said[-1]
+    p._paso_lento(10)
+    data = copy.deepcopy(p.j.a_dict())
+    assert data["foco"] == 100.0 and math.isfinite(data["foco"])
+    j = Jugador()
+    j.de_dict(data)
+    assert j.foco == 100.0
+    saved = copy.deepcopy(p.a_dict())
+    saved["jugador"]["foco"] = 7.5
+    app.empezar_partida(saved)
+    assert app.partida.j.foco == 100.0
+
+
+
+def _slow_world_ready(p):
+    p.t_poblar = 999
+    p.cfg["sin_policia"] = True
+    p.cfg["peatones"] = False
+    p.cfg["trafico"] = False
+
+
+def _slow_world_clear_heading(p):
+    for heading in (0, 90, 180, 270):
+        r = math.radians(heading)
+        if all(p.mundo.transitable(p.j.x + math.sin(r) * n / 4, p.j.y + math.cos(r) * n / 4) for n in range(1, 13)):
+            return heading
+    raise AssertionError("No clear player movement direction")
+
+
+def test_slow_world_keeps_walking_running_and_gps_walk_normal(app):
+    for mode in ("walk", "run", "gps"):
+        distances = []
+        for enabled in (False, True):
+            p = fresh(app)
+            _slow_world_ready(p)
+            p.cfg["cheat_tiempo"] = enabled
+            heading = _slow_world_clear_heading(p)
+            p.cfg["movimiento"] = "giro"
+            p.j.rumbo = heading
+            app.teclas = {pygame.K_UP}
+            if mode == "run":
+                app.teclas.add(pygame.K_LSHIFT)
+            if mode == "gps":
+                app.teclas = set()
+                r = math.radians(heading)
+                p.fijar_gps(p.j.x + math.sin(r) * 8, p.j.y + math.cos(r) * 8, "Walk target", callar=True)
+                p.paseo_auto = True
+            start = p.pos()
+            p.actualizar(0.04)
+            distances.append(math.dist(start, p.pos()))
+        assert distances[0] > 0
+        assert math.isclose(distances[0], distances[1], abs_tol=1e-8)
+
+
+def test_slow_world_keeps_land_water_air_driving_and_swimming_normal(app):
+    for kind in ("land", "boat", "air", "swim", "boat_auto", "air_auto"):
+        distances = []
+        for enabled in (False, True):
+            p = fresh(app)
+            _slow_world_ready(p)
+            p.cfg["cheat_tiempo"] = enabled
+            p.cfg["conduccion"] = "libre"
+            p.cfg["vuelo_combustible"] = False
+            if kind in ("boat", "swim", "boat_auto"):
+                sea(p)
+                heading = 90
+            else:
+                heading = _slow_world_clear_heading(p)
+            app.teclas = {pygame.K_RIGHT} if kind == "swim" else {pygame.K_UP}
+            if kind != "swim":
+                predicate = (lambda m: m.get("barco")) if kind.startswith("boat") else (lambda m: m.get("vuela")) if kind.startswith("air") else (lambda m: not m.get("barco") and not m.get("vuela"))
+                model = next(m for m in p.datos["vehiculos"] if predicate(m))
+                v = Vehiculo(model, p.j.x, p.j.y)
+                p.vehiculos.append(v)
+                p._subir(v, False, callar=True)
+                v.rumbo, v.dir, v.vel = heading, int(heading // 90), 8.0
+                if kind.startswith("air"):
+                    app.vuelo_en_pruebas = True
+                    v.fase, v.alt, v.queroseno = "vuelo", 80.0, 100.0
+                if kind.endswith("auto"):
+                    app.teclas = set()
+                    p.cfg["piloto_gps"] = True
+                    p.cfg["cheat_piloto_agua" if kind.startswith("boat") else "cheat_piloto_aire"] = True
+                    r = math.radians(heading)
+                    p.fijar_gps(v.x + math.sin(r) * 150, v.y + math.cos(r) * 150, "Pilot target", callar=True)
+            start = p.pos()
+            p.actualizar(0.04)
+            distances.append(math.dist(start, p.pos()))
+        assert distances[0] > 0, kind
+        assert math.isclose(distances[0], distances[1], abs_tol=1e-8), (kind, distances)
+
+
+def test_slow_world_quarters_traffic_calendar_and_deadline_clock(app):
+    samples = []
+    for enabled in (False, True):
+        p = fresh(app)
+        _slow_world_ready(p)
+        sea(p)
+        p.cfg["cheat_tiempo"] = enabled
+        model = next(m for m in p.datos["vehiculos"] if m.get("barco"))
+        v = Vehiculo(model, 200, 360, d=1, ia="barco")
+        v.destino, v.vel, v.vel_obj = (600, 360), 10.0, 10.0
+        p.vehiculos.append(v)
+        x, clock, timeline = v.x, p.reloj, p.t
+        p.actualizar(0.04)
+        samples.append((v.x - x, p.reloj - clock, p.t - timeline))
+    assert all(x > 0 for x in samples[0])
+    assert all(math.isclose(slow, normal * 0.25, abs_tol=1e-8) for normal, slow in zip(samples[0], samples[1]))
+
+
+def test_slow_world_quarters_hostile_attack_timer_and_keeps_player_cadence(app):
+    samples = []
+    for enabled in (False, True):
+        p = fresh(app)
+        _slow_world_ready(p)
+        p.cfg["cheat_tiempo"] = enabled
+        q = enemy(p, distance=1)
+        q.t_disparo = 10.0
+        p.j.t_ataque = 0.9
+        p.explosiones.append({"t": 2.0})
+        p.actualizar(0.04)
+        samples.append((10.0 - q.t_disparo, p.j.t_ataque, p.explosiones[0]["t"]))
+    assert math.isclose(samples[0][0], 0.04, abs_tol=1e-8)
+    assert math.isclose(samples[1][0], 0.01, abs_tol=1e-8)
+    assert all(math.isclose(s[1], 0.86, abs_tol=1e-8) and math.isclose(s[2], 1.96, abs_tol=1e-8) for s in samples)
+
+
+def test_slow_world_does_not_stack_focus_multiplier(app):
+    p = fresh(app)
+    _slow_world_ready(p)
+    p.cfg["cheat_tiempo"] = p.cfg["cheat_foco"] = True
+    p.lento = True
+    p.j.foco = 71.0
+    p.j.t_ataque = 0.9
+    before = p.t
+    p.actualizar(0.04)
+    assert math.isclose(p.t - before, 0.01, abs_tol=1e-8)
+    assert math.isclose(p.j.t_ataque, 0.86, abs_tol=1e-8)
+    assert p.j.foco == 100.0 and p.lento
+    p.cfg["cheat_tiempo"] = False
+    p.actualizar(0.04)
+    assert math.isclose(p.j.t_ataque, 0.844, abs_tol=1e-8)
+
+
+def test_slow_world_is_disabled_for_server_and_peer_connections(app):
+    for kind in ("server", "peer"):
+        p = fresh(app)
+        p.cfg["cheat_tiempo"] = True
+        if kind == "server":
+            p.en_servidor = True
+        else:
+            p.online_activo = lambda: True
+        calls = {}
+        methods = ("_tiempo", "caminar", "actualizar_capo", "actualizar_vehiculos", "actualizar_chofer", "actualizar_personas", "actualizar_policia", "actualizar_combate", "actualizar_mision", "actualizar_trabajo", "actualizar_extras", "actualizar_adultos", "actualizar_calle", "actualizar_reconquista", "actualizar_guerra", "actualizar_domicilio", "actualizar_atracos", "actualizar_golpe", "actualizar_vuelo", "actualizar_reacciones", "actualizar_convivencia", "actualizar_agente", "actualizar_honrado", "_avisos", "_gps", "_ambiente")
+        for name in methods:
+            setattr(p, name, lambda dt, key=name: calls.setdefault(key, dt))
+        p.t_poblar = 999
+        before = p.t
+        p.actualizar(0.04)
+        assert math.isclose(p.t - before, 0.04, abs_tol=1e-8)
+        assert calls and all(math.isclose(dt, 0.04, abs_tol=1e-8) for dt in calls.values())
+
+
+"""Append these tests to pruebas/test_cheats.py, using its shared helpers."""
+
+
+def test_ammo_overflow_option_is_independent_default_off_and_caps_each_weapon(app):
+    p = fresh(app)
+    assert not p.cfg["cheat_municion_dinero"]
+    p.cfg["cheat_municion_dinero"] = True
+    assert not p.cfg["cheat_municion"] and not p.cfg["cheat_explosivos"]
+    for kind in ("fuego", "explosivo"):
+        a, m = owned_ammo(p, kind, 1, 9_999_998)
+        assert not p.cheat_infinite_ammo(a["id"])
+        assert p.cheat_ammo_room(a["id"]) == 1
+        assert p.sumar_municion(a["id"], 9) == 1
+        assert m["cargador"] + m["reserva"] == 10_000_000
+    a, m = owned_ammo(p, "fuego", 1, 10_000_123)
+    before = copy.deepcopy(m)
+    assert p.cheat_ammo_room(a["id"]) == 0
+    assert p.sumar_municion(a["id"], 9) == 0 and m == before
+
+
+def test_ammo_overflow_pickup_fills_remaining_room_then_pays_surplus_once(app):
+    p = fresh(app)
+    p.cfg["cheat_municion_dinero"] = p.cfg["cheat_recoger"] = True
+    for kind in ("fuego", "explosivo"):
+        a, m = owned_ammo(p, kind, 1, 9_999_997)
+        listed_price = max(1, int(a.get("precio_balas", 0)))
+        before = p.j.dinero
+        o = ammo_drop(p, a["id"], 12)
+        p.cheat_collect()
+        assert o.recogido and o not in p.objetos
+        assert m["cargador"] + m["reserva"] == 10_000_000
+        assert p.j.dinero == before + 10 * listed_price
+        p.recoger(o)
+        p.cheat_collect()
+        assert p.j.dinero == before + 10 * listed_price
+
+
+def test_full_ammo_pickup_speaks_conversion_without_zero_round_announcement(app):
+    p = fresh(app)
+    p.cfg["cheat_municion_dinero"] = True
+    a, m = owned_ammo(p, "fuego", 0, 10_000_000)
+    said = []
+    p.decir = lambda message, *args, **kwargs: said.append(str(message))
+    before = p.j.dinero
+    o = ammo_drop(p, a["id"], 3)
+    p.recoger(o)
+    assert m["reserva"] == 10_000_000 and p.j.dinero > before
+    assert any("convert" in message.lower() for message in said)
+    assert not any("Recoges 0 " in message or "You collect 0 " in message for message in said)
+
+
+def test_oversized_new_weapon_and_duplicate_weapon_loot_pay_only_overflow(app):
+    p = fresh(app)
+    p.cfg["cheat_municion_dinero"] = True
+    a = next(a for a in p.datos["armas"] if a["tipo"] == "fuego")
+    ident = a["id"]
+    assert ident not in p.j.armas
+    before = p.j.dinero
+    listed_price = max(1, int(a.get("precio_balas", 0)))
+    first = ammo_drop(p, ident, 10_000_007, "arma")
+    p.recoger(first)
+    assert sum(p.j.armas[ident][key] for key in ("cargador", "reserva")) == 10_000_000
+    assert p.j.dinero == before + 7 * listed_price
+    duplicate = ammo_drop(p, ident, 5, "arma")
+    p.recoger(duplicate)
+    assert p.j.dinero == before + 12 * listed_price
+
+
+def test_overflow_never_grants_or_pays_for_an_unowned_ammunition_only_drop(app):
+    p = fresh(app)
+    p.cfg["cheat_municion_dinero"] = True
+    before, arms = p.j.dinero, copy.deepcopy(p.j.armas)
+    for kind in ("fuego", "explosivo"):
+        a = next(a for a in p.datos["armas"] if a["tipo"] == kind)
+        o = ammo_drop(p, a["id"], 10_000_010)
+        p.recoger(o)
+        assert o.recogido and p.j.dinero == before and p.j.armas == arms
+
+
+def test_overflow_payout_multiplies_rounds_by_listed_ammunition_price(app):
+    p = fresh(app)
+    p.cfg["cheat_municion_dinero"] = True
+    model = copy.deepcopy(next(a for a in p.datos["armas"] if a["tipo"] == "fuego"))
+    model.update(id="cheat_test_overflow", balas=24, precio_balas=20)
+    p.armas_d[model["id"]] = model
+    p.orden_armas.append(model["id"])
+    p.j.armas[model["id"]] = {"cargador": 0, "reserva": 10_000_000}
+    assert p.cheat_ammo_overflow_value(model["id"], 100) == 2000
+    before = p.j.dinero
+    p.recoger(ammo_drop(p, model["id"], 100))
+    assert p.j.dinero == before + 2000
+    model.update(balas=100, precio_balas=1)
+    assert p.cheat_ammo_overflow_value(model["id"], 6) == 6
+    model.pop("precio_balas")
+    model.pop("balas")
+    assert p.cheat_ammo_overflow_value(model["id"], 6) == 6
+    assert p.cheat_ammo_overflow_value(model["id"], 0) == 0
+    assert p.cheat_ammo_overflow_value(model["id"], -1) == 0
+
+
+def test_overflow_toggle_off_and_online_never_convert_pickups(app):
+    p = fresh(app)
+    a, m = owned_ammo(p, "fuego", 0, 10_000_000)
+    before = p.j.dinero
+    p.recoger(ammo_drop(p, a["id"], 5))
+    assert m["reserva"] == 10_000_005 and p.j.dinero == before
+    p.cfg["cheat_municion"] = True
+    p.recoger(ammo_drop(p, a["id"], 5))
+    assert m["reserva"] == 10_000_005 and p.j.dinero == before
+    p.cfg["cheat_municion_dinero"] = True
+    p.en_servidor = True
+    assert p.cheat_ammo_room(a["id"]) is None
+    p.recoger(ammo_drop(p, a["id"], 5))
+    assert m["reserva"] == 10_000_010 and p.j.dinero == before
+
+
+def test_direct_ammunition_grants_never_generate_overflow_money(app):
+    p = fresh(app)
+    p.cfg["cheat_municion_dinero"] = True
+    for kind in ("fuego", "explosivo"):
+        a, m = owned_ammo(p, kind, 0, 10_000_000)
+        before = p.j.dinero
+        assert p.sumar_municion(a["id"], 500) == 0
+        p.dar_arma(a["id"], 500)
+        assert m["reserva"] == 10_000_000 and p.j.dinero == before
+
+
+def test_overflow_toggle_only_does_not_make_shots_free(app):
+    p = fresh(app)
+    p.cfg["cheat_municion_dinero"] = True
+    for kind in ("fuego", "explosivo"):
+        a, m = owned_ammo(p, kind, 1, 2)
+        p.atacar()
+        assert m["cargador"] + m["reserva"] == 2
+
+
+def test_ammo_overflow_option_saves_without_fractional_money_or_new_ammo_schema(app):
+    p = fresh(app)
+    p.cfg["cheat_municion_dinero"] = True
+    a, m = owned_ammo(p, "fuego", 0, 10_000_000)
+    p.recoger(ammo_drop(p, a["id"], 3))
+    money, arms = p.j.dinero, copy.deepcopy(p.j.armas)
+    app.empezar_partida(copy.deepcopy(p.a_dict()))
+    loaded = app.partida
+    assert loaded.cfg["cheat_municion_dinero"] is True
+    assert loaded.j.dinero == money and type(loaded.j.dinero) is int
+    assert loaded.j.armas == arms
+    assert set(loaded.j.armas[a["id"]]) == {"cargador", "reserva"}
+
+
+def test_world_speed_zero_freezes_ready_events_but_player_acts(app):
+    p = fresh(app)
+    _slow_world_ready(p)
+    p.cfg["cheat_tiempo"] = p.cfg["cheat_recoger"] = True
+    p.cfg["cheat_velocidad_mundo"] = 0.0
+    q = enemy(p, distance=1)
+    q.t_disparo = -1.0
+    health, position, clock, timeline = p.j.salud, (q.x, q.y), p.reloj, p.t
+    p.t_poblar = 0
+    p.j.t_ataque = 0.9
+    p.explosiones.append({"t": 2.0})
+    o = Objeto("dinero", "Frozen briefcase", p.j.x + 100, p.j.y)
+    o.valor = 123
+    p.objetos.append(o)
+    money = p.j.dinero
+    blocked = ("_tiempo", "actualizar_capo", "actualizar_vehiculos", "actualizar_chofer", "actualizar_personas", "actualizar_policia", "actualizar_mision", "actualizar_trabajo", "actualizar_extras", "actualizar_adultos", "actualizar_calle", "actualizar_reconquista", "actualizar_guerra", "actualizar_domicilio", "actualizar_atracos", "actualizar_golpe", "actualizar_vuelo", "actualizar_reacciones", "actualizar_convivencia", "actualizar_agente", "actualizar_honrado", "_ambiente", "_poblar")
+    def forbidden(*args):
+        raise AssertionError("A world system ran while time was stopped")
+    for name in blocked:
+        setattr(p, name, forbidden)
+    p.actualizar(0.04)
+    assert p.j.salud == health and q.t_disparo == -1.0 and (q.x, q.y) == position
+    assert p.t == timeline and p.reloj == clock and p.t_poblar == 0
+    assert o not in p.objetos and p.j.dinero == money + 123
+    assert math.isclose(p.j.t_ataque, 0.86, abs_tol=1e-8)
+    assert math.isclose(p.explosiones[0]["t"], 1.96, abs_tol=1e-8)
+
+
+def test_world_speed_500_percent_uses_bounded_steps_and_player_once(app):
+    p = fresh(app)
+    _slow_world_ready(p)
+    p.cfg["cheat_tiempo"] = True
+    p.cfg["cheat_velocidad_mundo"] = 5.0
+    q = enemy(p, distance=1)
+    q.t_disparo = 10.0
+    p.j.t_ataque = 0.9
+    p.explosiones.append({"t": 2.0})
+    focus, clock, timeline = p.j.foco, p.reloj, p.t
+    world_steps, player_steps, focus_steps = [], [], []
+    actors, combat, concentration = p.actualizar_personas, p.actualizar_combate, p._paso_lento
+    def world_step(dt):
+        world_steps.append(dt)
+        actors(dt)
+    def player_step(dt):
+        player_steps.append(dt)
+        combat(dt)
+    def focus_step(dt):
+        focus_steps.append(dt)
+        return concentration(dt)
+    p.actualizar_personas, p.actualizar_combate, p._paso_lento = world_step, player_step, focus_step
+    p.actualizar(0.04)
+    assert len(world_steps) >= 4 and all(0 < dt <= 0.05 for dt in world_steps)
+    assert math.isclose(sum(world_steps), 0.2, abs_tol=1e-8)
+    assert player_steps == [0.04] and focus_steps == [0.04]
+    assert math.isclose(q.t_disparo, 9.8, abs_tol=1e-8)
+    assert math.isclose(p.t - timeline, 0.2, abs_tol=1e-8)
+    assert math.isclose(p.reloj - clock, 0.1, abs_tol=1e-8)
+    assert math.isclose(p.j.t_ataque, 0.86, abs_tol=1e-8)
+    assert math.isclose(p.explosiones[0]["t"], 1.96, abs_tol=1e-8)
+    assert p.j.foco == min(100.0, focus + 0.12)
+
+
+def test_world_speed_fast_world_does_not_add_held_fire_bursts(app):
+    counts = []
+    for rate in (0.0, 0.25, 1.0, 5.0):
+        p = fresh(app)
+        _slow_world_ready(p)
+        p.cfg["cheat_tiempo"] = True
+        p.cfg["cheat_velocidad_mundo"] = rate
+        a = next(a for a in p.armas_d.values() if a.get("tipo") == "fuego" and a.get("automatica"))
+        p.j.arma = a["id"]
+        p.j.armas[a["id"]] = {"cargador": 10, "reserva": 0}
+        p.j.t_ataque = 0.0
+        app.teclas = {pygame.K_SPACE}
+        shots = []
+        p.atacar = lambda: shots.append(True)
+        p.actualizar(0.04)
+        counts.append(len(shots))
+    assert counts == [1, 1, 1, 1]
+
+
+def test_world_speed_all_rates_keep_walking_normal(app):
+    distances = []
+    for rate in (0.0, 0.25, 1.0, 5.0):
+        p = fresh(app)
+        _slow_world_ready(p)
+        p.cfg["cheat_tiempo"] = True
+        p.cfg["cheat_velocidad_mundo"] = rate
+        p.cfg["movimiento"] = "giro"
+        p.j.rumbo = _slow_world_clear_heading(p)
+        app.teclas = {pygame.K_UP}
+        start = p.pos()
+        p.actualizar(0.04)
+        distances.append(math.dist(start, p.pos()))
+    assert distances[0] > 0 and all(math.isclose(d, distances[0], abs_tol=1e-8) for d in distances)
+
+
+def test_world_speed_zero_and_five_keep_all_vehicle_types_normal(app):
+    for kind in ("land", "boat", "air", "swim", "boat_auto", "air_auto"):
+        distances = []
+        for rate in (0.0, 1.0, 5.0):
+            p = fresh(app)
+            _slow_world_ready(p)
+            p.cfg["cheat_tiempo"] = True
+            p.cfg["cheat_velocidad_mundo"] = rate
+            p.cfg["conduccion"] = "libre"
+            p.cfg["vuelo_combustible"] = False
+            if kind in ("boat", "swim", "boat_auto"):
+                sea(p)
+                heading = 90
+            else:
+                heading = _slow_world_clear_heading(p)
+            app.teclas = {pygame.K_RIGHT} if kind == "swim" else {pygame.K_UP}
+            if kind != "swim":
+                predicate = (lambda m: m.get("barco")) if kind.startswith("boat") else (lambda m: m.get("vuela")) if kind.startswith("air") else (lambda m: not m.get("barco") and not m.get("vuela"))
+                model = next(m for m in p.datos["vehiculos"] if predicate(m))
+                v = Vehiculo(model, p.j.x, p.j.y)
+                p.vehiculos.append(v)
+                p._subir(v, False, callar=True)
+                v.rumbo, v.dir, v.vel = heading, int(heading // 90), 8.0
+                if kind.startswith("air"):
+                    app.vuelo_en_pruebas = True
+                    v.fase, v.alt, v.queroseno = "vuelo", 80.0, 100.0
+                if kind.endswith("auto"):
+                    app.teclas = set()
+                    p.cfg["piloto_gps"] = True
+                    p.cfg["cheat_piloto_agua" if kind.startswith("boat") else "cheat_piloto_aire"] = True
+                    r = math.radians(heading)
+                    p.fijar_gps(v.x + math.sin(r) * 150, v.y + math.cos(r) * 150, "Pilot target", callar=True)
+            start = p.pos()
+            p.actualizar(0.04)
+            distances.append(math.dist(start, p.pos()))
+        assert distances[0] > 0, kind
+        assert all(math.isclose(d, distances[0], abs_tol=1e-8) for d in distances), (kind, distances)
+
+
+def test_world_speed_zero_player_can_ram_again_after_collision(app):
+    p = fresh(app)
+    _slow_world_ready(p)
+    p.cfg["cheat_tiempo"] = p.cfg["invulnerable"] = p.cfg["cheat_atropellar"] = True
+    p.cfg["cheat_velocidad_mundo"] = 0.0
+    p.cfg["conduccion"] = "libre"
+    app.teclas = set()
+    v = car(p)
+    p._subir(v, False, callar=True)
+    v.rumbo = _slow_world_clear_heading(p)
+    obstacle = car(p)
+    obstacle.x, obstacle.y = v.x + 0.2, v.y + 0.2
+    v.vel = 8.0
+    timeline, clock = p.t, p.reloj
+    p.actualizar(0.05)
+    assert v._cheat_collision_wait == 0.6 and obstacle.salud < obstacle.salud_max
+    p.vehiculos.remove(obstacle)
+    for _ in range(14):
+        v.vel = 0.0
+        p.actualizar(0.05)
+    first = enemy(p, distance=0)
+    first.x, first.y = v.x, v.y
+    v.vel = 8.0
+    p.actualizar(0.05)
+    assert first.muerto
+    for _ in range(14):
+        v.vel = 0.0
+        p.actualizar(0.05)
+    second = enemy(p, distance=0)
+    second.x, second.y = v.x, v.y
+    v.vel = 8.0
+    p.actualizar(0.05)
+    assert second.muerto and p.j.stats["enemigos"] == 2
+    assert p.t == timeline and p.reloj == clock
+
+
+def test_world_speed_zero_wall_feedback_repeats_at_player_speed(app):
+    p = fresh(app)
+    _slow_world_ready(p)
+    p.cfg["cheat_tiempo"] = True
+    p.cfg["cheat_velocidad_mundo"] = 0.0
+    app.teclas = {pygame.K_UP}
+    p._avisos = lambda dt: None
+    sounds, voices = [], []
+    son = p.son
+    def sound(name, *args, **kw):
+        if name == "choque_pared":
+            sounds.append(name)
+        return son(name, *args, **kw)
+    p.son = sound
+    p.decir = lambda text, *args, **kw: voices.append(text)
+    transitable = p.mundo.transitable
+    p.mundo.transitable = lambda *args: False
+    timeline = p.t
+    try:
+        for _ in range(76):
+            p.actualizar(0.05)
+    finally:
+        p.mundo.transitable = transitable
+    assert len(sounds) >= 5 and len(voices) >= 2
+    assert p.t == timeline
+
+
+# Append to test_cheats.py; uses its existing helpers and imports.
+
+def _time_slider_key(key):
+    return pygame.event.Event(pygame.KEYDOWN, key=key, mod=0, unicode="")
+
+
+def test_world_rate_default_validation_clamp_and_local_guards(app):
+    from juego.cheat_time import DEFAULT_RATE, SETTING, configured_rate, world_rate
+    p = fresh(app)
+    assert p.cfg[SETTING] == DEFAULT_RATE == 0.25
+    assert not p.cfg["cheat_tiempo"] and world_rate(p) is None
+    p.cfg["cheat_tiempo"] = True
+    for raw, expected in ((None, .25), (True, .25), ("bad", .25),
+                          (float("nan"), .25), (float("inf"), .25), (float("-inf"), .25),
+                          (-3.0, 0.0), (9.0, 5.0), (0, 0.0), (.25, .25), (1.0, 1.0), (5, 5.0)):
+        p.cfg[SETTING] = raw
+        assert configured_rate(p.cfg) == world_rate(p) == expected
+        assert p.cfg.v[SETTING] is raw  # Validation never mutates options in the update loop.
+    p.en_servidor = True
+    assert world_rate(p) is None
+    p.en_servidor = False
+    p.online_activo = lambda: True
+    assert world_rate(p) is None
+
+
+def test_time_slider_mapping_announces_actual_world_percentage(app):
+    from juego.cheat_time import SETTING, open_speed_menu
+    p = fresh(app)
+    said = []
+    original = app.decir_menu
+    app.decir_menu = lambda message: said.append(message)
+    try:
+        m = open_speed_menu(app)
+        for position, rate, percent in ((0, 0.0, 0), (5, .25, 25), (20, 1.0, 100), (100, 5.0, 500)):
+            m.set_position(position)
+            m.leer()
+            assert p.cfg[SETTING] == rate
+            assert str(percent) in m.opciones[0].texto and str(percent) in said[-1]
+        p.cfg[SETTING] = .333
+        assert "33.3" in m.opciones[0].texto
+        m.tecla(_time_slider_key(pygame.K_HOME))
+        assert p.cfg[SETTING] == 0.0
+        m.tecla(_time_slider_key(pygame.K_LEFT))
+        assert p.cfg[SETTING] == 0.0
+        m.tecla(_time_slider_key(pygame.K_END))
+        assert p.cfg[SETTING] == 5.0
+        m.tecla(_time_slider_key(pygame.K_RIGHT))
+        assert p.cfg[SETTING] == 5.0
+    finally:
+        app.decir_menu = original
+
+
+def test_backspace_opens_world_slider_without_spending_focus(app):
+    from juego.cheat_time import WorldSpeedMenu
+    p = fresh(app)
+    p.cfg["cheat_tiempo"] = True
+    p.j.foco = 0.0
+    p.tecla(_time_slider_key(pygame.K_BACKSPACE))
+    assert isinstance(app.pila[-1], WorldSpeedMenu)
+    assert not p.lento and p.j.foco == 0.0
+    app.pila[-1].tecla(_time_slider_key(pygame.K_RETURN))
+    assert app.pila[-1] is p and p.j.foco == 0.0
+    p.cfg["cheat_foco"] = True
+    p.tecla(_time_slider_key(pygame.K_BACKSPACE))
+    assert isinstance(app.pila[-1], WorldSpeedMenu) and p.j.foco == 100.0
+
+
+def test_backspace_keeps_stock_focus_logic_with_time_cheat_off_or_online(app):
+    from juego.cheat_time import WorldSpeedMenu
+    for mode in ("off", "server", "peer"):
+        p = fresh(app)
+        p.cfg["cheat_tiempo"] = mode != "off"
+        if mode == "server":
+            p.en_servidor = True
+        elif mode == "peer":
+            p.online_activo = lambda: True
+        p.j.foco = 0.0
+        p.tecla(_time_slider_key(pygame.K_BACKSPACE))
+        assert not isinstance(app.pila[-1], WorldSpeedMenu) and not p.lento
+    p = fresh(app)
+    p.cfg["cheat_foco"] = True
+    p.j.foco = 0.0
+    p.tecla(_time_slider_key(pygame.K_BACKSPACE))
+    assert p.lento and app.pila[-1] is p
+
+
+def test_time_slider_arrows_enter_escape_and_saved_value_roundtrip(app):
+    import os
+    from juego import rutas
+    from juego.cheat_time import SETTING, open_speed_menu
+    p = fresh(app)
+    original_file = p.cfg.archivo
+    original_save = p.cfg.guardar
+    p.cfg.guardar = Config.guardar.__get__(p.cfg, Config)
+    filename = os.path.join(rutas.DATA, "cheat_world_speed_options.json")
+    p.cfg.archivo = filename
+    try:
+        m = open_speed_menu(app)
+        m.tecla(_time_slider_key(pygame.K_RIGHT))
+        assert p.cfg[SETTING] == .30 and Config(filename)[SETTING] == .30
+        m.tecla(_time_slider_key(pygame.K_RETURN))
+        assert app.pila[-1] is p and p.cfg[SETTING] == .30
+        m = open_speed_menu(app)
+        m.tecla(_time_slider_key(pygame.K_LEFT))
+        m.tecla(_time_slider_key(pygame.K_ESCAPE))
+        assert app.pila[-1] is p and Config(filename)[SETTING] == .25
+        assert not p.cfg["cheat_tiempo"]
+    finally:
+        p.cfg.archivo = original_file
+        p.cfg.guardar = original_save
+
+
+def test_time_slider_presets_close_and_do_not_enable_cheat(app):
+    from juego.cheat_time import SETTING, open_speed_menu, world_rate
+    p = fresh(app)
+    for index, rate in ((1, .25), (2, 1.0), (3, 0.0)):
+        m = open_speed_menu(app)
+        m.i = index
+        m.tecla(_time_slider_key(pygame.K_RETURN))
+        assert p.cfg[SETTING] == rate and app.pila[-1] is p
+        assert world_rate(p) is None and not p.cfg["cheat_tiempo"]
+
+
+def test_cheats_menu_exposes_world_speed_control_without_changing_toggles(app):
+    from juego.cheat_time import WorldSpeedMenu
+    p = fresh(app)
+    menu_option(app).accion()
+    cheats_menu = app.pila[-1]
+    control = cheats_menu.opciones[len(OPTIONS)]
+    assert control.ayuda and "25" in control.texto
+    control.accion()
+    assert isinstance(app.pila[-1], WorldSpeedMenu)
+    assert all(not p.cfg[row[0]] for row in OPTIONS)
+    app.pila[-1].tecla(_time_slider_key(pygame.K_ESCAPE))
+    assert app.pila[-1] is cheats_menu
+
+
+def test_world_speed_does_not_rescale_actual_story_dialog_dispatch(app):
+    from juego.menus import Dialogo
+    from juego.cheat_time import SETTING
+    for rate in (0.0, 5.0):
+        p = fresh(app)
+        p.cfg["cheat_tiempo"] = True
+        p.cfg[SETTING] = rate
+        p.cfg["voz_velocidad"] = 2
+        spoken, frames = [], []
+        original_say = app.decir
+        app.decir = lambda message, *args, **kwargs: spoken.append(message)
+        try:
+            story = Dialogo(app, [("Narrador", "First story line"), ("Narrador", "Second story line")])
+            actual_update = story.actualizar
+            def record_frame(dt):
+                frames.append(dt)
+                actual_update(dt)
+            story.actualizar = record_frame
+            app.abrir(story)
+            before = p.t
+            assert "First story line" in spoken[-1]
+            app.paso(0.04)
+            assert frames == [0.04] and story.i == 0 and p.t == before
+            story.tecla(_time_slider_key(pygame.K_RETURN))
+            assert story.i == 1 and "Second story line" in spoken[-1]
+            app.paso(0.04)
+            assert frames == [0.04, 0.04] and story.i == 1 and p.t == before
+            assert p.cfg["voz_velocidad"] == 2 and app.mez.mundo_pausado
+            app.cerrar(story)
+        finally:
+            app.decir = original_say

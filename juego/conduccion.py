@@ -771,6 +771,15 @@ class Conduccion:
     def conducir(self, dt):
         j = self.j
         v = j.veh
+        from .cheat_time import world_rate
+        if world_rate(self) is not None:
+            # Player impacts recover in player time even with a stopped or
+            # accelerated world. NPCs retain their ordinary world deadline.
+            remaining = getattr(v, "_cheat_collision_wait", max(0.0, v.t_choque - self.t))
+            v._cheat_collision_wait = max(0.0, remaining - dt)
+        elif hasattr(v, "_cheat_collision_wait"):
+            v.t_choque = self.t + v._cheat_collision_wait
+            del v._cheat_collision_wait
         t = self.app.teclas
         if self.chofer_conduce():                       # conduce tu chófer: los pedales y el volante son suyos
             t = frozenset()
@@ -996,7 +1005,8 @@ class Conduccion:
         self.t_sonar = max(0.08, mejor[0] / 45.0 * 0.8)
 
     def _choques_jugador(self, v):
-        if v.t_choque > self.t or v.modelo.get("vuela"):
+        waiting = v._cheat_collision_wait > 0 if hasattr(v, "_cheat_collision_wait") else v.t_choque > self.t
+        if waiting or v.modelo.get("vuela"):
             return
         for o in self.vehiculos:
             if o is v or o.muerto or getattr(o, "volando", False):
@@ -1007,7 +1017,10 @@ class Conduccion:
                 imp = abs(rel)
                 if imp < 1.5:
                     continue
-                v.t_choque = self.t + 0.6
+                if hasattr(v, "_cheat_collision_wait"):
+                    v._cheat_collision_wait = 0.6
+                else:
+                    v.t_choque = self.t + 0.6
                 fg = self._golpe(v)
                 self.son("choque" if imp > 8 else "choque_leve", xy=(o.x, o.y), ref=10, vol=0.5 + 0.5 * fg, tono=0.8 + 0.2 * fg)
                 self.app.vibrar(min(1.0, imp / 14.0), 0.5, 300)

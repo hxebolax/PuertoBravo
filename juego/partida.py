@@ -208,6 +208,7 @@ class Partida(Cheats, Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, 
             casa = self.mundo.lugares["bar_gaviota"]
             self.j.x, self.j.y = casa.x - 25, casa.y
             self.aplicar_personaje(personaje)
+        self.cheat_sync_focus()
         self.azar_iniciar()
         self._crear_casetes()
         self._hilo = False
@@ -521,6 +522,7 @@ class Partida(Cheats, Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, 
             d["jugador"] = i18n.al_idioma_de_ahora(jug, respetar=("nombre", "apellido", "dicho", "semilla"))
         self.j.de_dict(d.get("jugador", {}))
         self.cheat_sync_growth()
+        self.cheat_sync_focus()
         genero.poner(self.j.genero)
         if self.j.personaje == "propio":
             registro.ocultar(self.j.nombre)
@@ -1064,25 +1066,48 @@ class Partida(Cheats, Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, 
         return False
 
     # ------------------------------------------------------------------ tiempo lento
+    def foco_infinito(self):
+        return self.cheat_on("cheat_foco") and not self.online_activo()
+
+    def cheat_sync_focus(self):
+        if self.foco_infinito():
+            self.j.foco = 100.0
+
     def alternar_lento(self):
+        self.cheat_sync_focus()
+        from .cheat_time import open_speed_menu, world_rate
+        if world_rate(self) is not None:
+            open_speed_menu(self.app)
+            return
         j = self.j
         if self.lento:
             self.lento = False
             self.app.son("menu_atras")
-            self.decir(tr('Tiempo normal. Concentración {int} por ciento.').format(int=(int(j.foco))), True)
+            if self.foco_infinito():
+                from .cheats import text
+                self.decir(text("Tiempo normal. Concentración infinita, 100 por ciento.", "Normal time. Infinite focus, 100 percent."), True)
+            else:
+                self.decir(tr('Tiempo normal. Concentración {int} por ciento.').format(int=(int(j.foco))), True)
         elif self.online_activo():
             self.decir(tr("Con amigos conectados no se puede frenar el tiempo."), True)
-        elif j.foco < 15:
+        elif j.foco < 15 and not self.foco_infinito():
             self.app.son("error")
             self.decir(tr('Te falta concentración: {int} por ciento. Se recupera sola.').format(int=(int(j.foco))), True)
         else:
             self.lento = True
             self.app.son("pasan_horas", vol=0.5, tono=0.6)
-            self.decir(tr('Tiempo lento. Concentración {int} por ciento.').format(int=(int(j.foco))), True)
+            if self.foco_infinito():
+                from .cheats import text
+                self.decir(text("Tiempo lento. Concentración infinita, 100 por ciento.", "Slow time. Infinite focus, 100 percent."), True)
+            else:
+                self.decir(tr('Tiempo lento. Concentración {int} por ciento.').format(int=(int(j.foco))), True)
 
     def _paso_lento(self, dt):
         """Gasta o recupera la concentración. Devuelve el tiempo de mundo que corresponde a este fotograma."""
         j = self.j
+        self.cheat_sync_focus()
+        if self.foco_infinito():
+            return dt * 0.4 if self.lento else dt
         if not self.lento:
             j.foco = min(100.0, j.foco + 3.0 * dt)
             return dt
@@ -1209,6 +1234,7 @@ class Partida(Cheats, Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, 
         self.decir(t, True)
 
     def estado(self):
+        self.cheat_sync_focus()
         j = self.j
         a = self.arma()
         t = tr('Salud {int}').format(int=(int(j.salud)))
@@ -1223,7 +1249,10 @@ class Partida(Cheats, Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, 
             t += tr('Nivel de búsqueda {estrellas}. ').format(estrellas=(j.estrellas))
         if j.agachado and not j.veh:
             t += tr("Estás a cubierto. ") if self.cubierto else tr("Estás agachad[o|a]: caminas despacio. ")
-        if j.foco < 99:
+        if self.foco_infinito():
+            from .cheats import text
+            t += text("Concentración infinita, 100 por ciento. ", "Infinite focus, 100 percent. ")
+        elif j.foco < 99:
             t += tr('Concentración {int} por ciento. ').format(int=(int(j.foco)))
         if self.nadando:
             t += tr('Estás {v}. Fuerzas {int} por ciento, aire {int2}. ').format(v=(tr('buceando') if self.buceando else tr('nadando')), int=(int(self.aguante)), int2=(int(self.aire)))
@@ -1726,6 +1755,15 @@ class Partida(Cheats, Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, 
 
     def caminar(self, dt):
         j = self.j
+        from .cheat_time import world_rate
+        player_wall = world_rate(self) is not None
+        for key, stamp, interval in (("_cheat_wall_wait", "t_pared", 0.7), ("_cheat_wall_voice_wait", "t_pared_voz", 3.0)):
+            if player_wall:
+                remaining = getattr(self, key, max(0.0, interval - (self.t - getattr(self, stamp))))
+                setattr(self, key, max(0.0, remaining - dt))
+            elif hasattr(self, key):
+                setattr(self, stamp, self.t - interval + getattr(self, key))
+                delattr(self, key)
         t = self.app.teclas
         if self.forzando:
             self._forzar(dt)
@@ -1799,12 +1837,16 @@ class Partida(Cheats, Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, 
             if self.t_paseo_atasco > 2.5:
                 self.parar_paseo(tr("Hay un obstáculo y no puedo seguir solo. Sigue tú con las flechas."))
         if movido < paso * 0.5:
-            if self.t - self.t_pared > 0.7:
+            if (self._cheat_wall_wait <= 0 if player_wall else self.t - self.t_pared > 0.7):
                 self.t_pared = self.t
+                if player_wall:
+                    self._cheat_wall_wait = 0.7
                 self.son("choque_pared", vol=0.7)
                 self.app.vibrar(0.4, 0.0, 90)
-                if self.t - self.t_pared_voz > 3:
+                if (self._cheat_wall_voice_wait <= 0 if player_wall else self.t - self.t_pared_voz > 3):
                     self.t_pared_voz = self.t
+                    if player_wall:
+                        self._cheat_wall_voice_wait = 3.0
                     s = self.mundo.superficie(nx, ny)
                     self.decir(tr("Fin de la ciudad. No puedes seguir por aquí.") if s == "fuera" else tr("Pared."))
         if movido <= 0:
@@ -1984,82 +2026,114 @@ class Partida(Cheats, Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, 
                 self.decir(tr("Correr.") if self.correr_fijo else tr("Andar."), True)
 
     def actualizar(self, dt):
-        dt = min(dt, 0.05)
+        from .cheat_time import world_rate
+        real_dt = min(dt, 0.05)
+        rate = world_rate(self)
+        focus_dt = self._paso_lento(real_dt)
+        player_dt = focus_dt if rate is None else real_dt
+        world_dt = focus_dt if rate is None else real_dt * rate
+        # A faster world gets bounded physics steps. Player movement, held
+        # firing and focus consumption still run only once per real frame.
+        steps = max(1, math.ceil(world_dt / 0.05))
+        step_dt = world_dt / steps
+        for step in range(steps):
+            clock_dt = real_dt if rate is None else step_dt
+            world = self.mundo
+            if self._actualizar_paso(step_dt, player_dt if step == 0 else None, clock_dt):
+                break
+            if self.mundo is not world or self.app.partida is not self:
+                break
+            if self.app.pila and self.app.pila[-1] is not self:
+                break
+
+    def _actualizar_paso(self, dt, player_dt, clock_dt):
+        """One bounded world step; None skips already-completed player work."""
         j = self.j
-        self.t += dt
-        self.mayus_soltada()
-        if self.resumen_pendiente and self.t > 2.0 and not self.mision:
-            self.resumen_pendiente = False
-            self.decir(tr("Hace días que no jugabas. ") + self.resumen_historia() + tr(" Lo tienes también en el móvil, en Diario."))
-        if getattr(self, "_upnp_aviso", None):
-            aviso, self._upnp_aviso = self._upnp_aviso, None
-            self.decir(aviso)
-        dt = self._paso_lento(dt)
-        if self.cubierto and (j.veh or math.hypot(j.x - self.cubierto[0], j.y - self.cubierto[1]) > 0.8):
-            self.dejar_cobertura()
-        if self.acompanante:
-            from . import sistemas
-            sistemas.paso_acompanante(self, dt)
-        if self.j.quedadas:
-            from . import encuentros
-            encuentros.actualizar(self, dt)
-        self.actualizar_capo(dt)                                 # de noche, alguien puede intentar atracarte (capo.py)                      # avisos, llegadas y plantones de lo que has quedado
-        if self.mundo.tipo != "mar":
-            from . import transporte
-            transporte.paso(self, dt)                           # tranvías por las vías, y los trenes y aviones que se oyen de lejos
-        j.stats["tiempo"] += dt
-        self._tiempo(dt)
-        if j.veh:
-            self.conducir(dt)
-        elif self.mundo.tipo == "mar":
-            if self.nadar(dt):
-                return                                          # te has ahogado o has llegado a un muelle: ha cambiado el mapa
-        else:
-            self.caminar(dt)
-        if self.pesca:
-            self.actualizar_pesca(dt)
-        self.cheat_step()
-        self.actualizar_vehiculos(dt)
-        self.actualizar_chofer(dt)
-        self.actualizar_personas(dt)
-        self.actualizar_policia(dt)
-        self.actualizar_combate(dt)
+        self.t += clock_dt
+        if player_dt is not None:
+            self.mayus_soltada()
+            if self.resumen_pendiente and self.t > 2.0 and not self.mision:
+                self.resumen_pendiente = False
+                self.decir(tr("Hace días que no jugabas. ") + self.resumen_historia() + tr(" Lo tienes también en el móvil, en Diario."))
+            if getattr(self, "_upnp_aviso", None):
+                aviso, self._upnp_aviso = self._upnp_aviso, None
+                self.decir(aviso)
+            if self.cubierto and (j.veh or math.hypot(j.x - self.cubierto[0], j.y - self.cubierto[1]) > 0.8):
+                self.dejar_cobertura()
+        # Zero is a real freeze: do not call world systems with dt=0,
+        # because ready timers and deadline checks can still trigger events.
+        if dt > 0:
+            if self.acompanante:
+                from . import sistemas
+                sistemas.paso_acompanante(self, dt)
+            if self.j.quedadas:
+                from . import encuentros
+                encuentros.actualizar(self, dt)
+            self.actualizar_capo(dt)                                 # de noche, alguien puede intentar atracarte (capo.py)                      # avisos, llegadas y plantones de lo que has quedado
+            if self.mundo.tipo != "mar":
+                from . import transporte
+                transporte.paso(self, dt)                           # tranvías por las vías, y los trenes y aviones que se oyen de lejos
+            j.stats["tiempo"] += dt
+            self._tiempo(dt)
+        if player_dt is not None:
+            if j.veh:
+                self.conducir(player_dt)
+            elif self.mundo.tipo == "mar":
+                if self.nadar(player_dt):
+                    return True                                     # has cambiado de mapa
+            else:
+                self.caminar(player_dt)
+            if self.pesca:
+                self.actualizar_pesca(player_dt)
+            self.cheat_step()
+        if dt > 0:
+            self.actualizar_vehiculos(dt)
+            self.actualizar_chofer(dt)
+            self.actualizar_personas(dt)
+            self.actualizar_policia(dt)
+        if player_dt is not None:
+            self.actualizar_combate(player_dt)
         if self.transicion:
-            return
-        self.actualizar_mision(dt)
-        self.actualizar_trabajo(dt)
+            return True
+        if dt > 0:
+            self.actualizar_mision(dt)
+            self.actualizar_trabajo(dt)
+            self.cheat_collect()
+            self.actualizar_extras(dt)
+            self.cheat_collect()
+            self.actualizar_adultos(dt)
+            self.actualizar_calle(dt)
+            self.actualizar_reconquista(dt)
+            self.actualizar_guerra(dt)
+            self.actualizar_domicilio(dt)
+            self.actualizar_atracos(dt)
+            self.actualizar_golpe(dt)
+            self.actualizar_vuelo(dt)
+            self.actualizar_reacciones(dt)
+            self.actualizar_convivencia(dt)
+            self.actualizar_agente(dt)
+            self.actualizar_honrado(dt)
+            self.t_poblar -= dt
+            if self.t_poblar <= 0:
+                self.t_poblar = 0.6
+                self._poblar()
         self.cheat_collect()
-        self.actualizar_extras(dt)
-        self.cheat_collect()
-        self.actualizar_adultos(dt)
-        self.actualizar_calle(dt)
-        self.actualizar_reconquista(dt)
-        self.actualizar_guerra(dt)
-        self.actualizar_domicilio(dt)
-        self.actualizar_atracos(dt)
-        self.actualizar_golpe(dt)
-        self.actualizar_vuelo(dt)
-        self.actualizar_reacciones(dt)
-        self.actualizar_convivencia(dt)
-        self.actualizar_agente(dt)
-        self.actualizar_honrado(dt)
-        self.t_poblar -= dt
-        if self.t_poblar <= 0:
-            self.t_poblar = 0.6
-            self._poblar()
-        self.cheat_collect()
-        self._avisos(dt)
-        self._gps(dt)
-        self._ambiente(dt)
-        x, y = self.pos()
-        if j.veh:
-            self.oy_rumbo += M.norm180(j.veh.rumbo - self.oy_rumbo) * min(1.0, dt * 4)
-        self.mez.situar_oyente(x, y, self.frente())
-        # dónde suena todo: el eco del barrio, y la altura si vas volando (solo lo usa el motor envolvente)
-        from .audio_al import entorno_de
-        self.mez.entorno = entorno_de(self.mundo.barrio(x, y).get("ambiente", ""))
-        alt = self.vuelo_alt()
-        self.mez.altura = 0.0 if alt <= 0 else (35.0 if not self.vuelo_real() else min(110.0, 20.0 + alt * 0.15))
+        if player_dt is not None:
+            self._avisos(player_dt)
+            self._gps(player_dt)
+        if dt > 0:
+            self._ambiente(dt)
+        if player_dt is not None:
+            x, y = self.pos()
+            if j.veh:
+                self.oy_rumbo += M.norm180(j.veh.rumbo - self.oy_rumbo) * min(1.0, player_dt * 4)
+            self.mez.situar_oyente(x, y, self.frente())
+            # dónde suena todo: el eco del barrio, y la altura si vas volando (solo lo usa el motor envolvente)
+            from .audio_al import entorno_de
+            self.mez.entorno = entorno_de(self.mundo.barrio(x, y).get("ambiente", ""))
+            alt = self.vuelo_alt()
+            self.mez.altura = 0.0 if alt <= 0 else (35.0 if not self.vuelo_real() else min(110.0, 20.0 + alt * 0.15))
+        return False
 
     def _tiempo(self, dt):
         antes = int(self.reloj // 60)
