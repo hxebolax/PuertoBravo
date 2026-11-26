@@ -10,6 +10,7 @@ Tipos de campo:
 """
 
 from juego.i18n import tr
+from juego.extras import AGUAS
 TIPOS_LUGAR = [
     ("monumento", tr("Monumento o sitio de interés, solo descripción")), ("casa", tr("Vivienda que se puede comprar")),
     ("negocio", tr("Negocio que da ingresos")), ("armeria", tr("Armería")), ("tienda", tr("Tienda")), ("farmacia", tr("Farmacia")),
@@ -53,6 +54,10 @@ def c(k, e, t="texto", ayuda="", **kw):
 
 def _es(*tipos):
     return lambda d: d.get("tipo") in tipos
+
+
+def _es_clase(*clases):
+    return lambda d: d.get("clase", "objeto") in clases
 
 
 ESQUEMAS = {
@@ -105,7 +110,9 @@ ESQUEMAS = {
         c("precio_litro", tr("Precio del litro en esta gasolinera"), "decimal", tr("Vacío, el precio general, que está en la sección Combustible."), si=lambda d: d.get("tipo") == "tienda" and d.get("surtidor")),
         c("a_mapa", tr("Lleva a la localidad"), "ref", ref="mapa", si=_es("salida", "embarcadero", "muelle")),
         c("a_lugar", tr("Lugar de llegada"), "ref", tr("El lugar del otro mapa en el que apareces."), ref="lugar", si=_es("salida", "embarcadero", "muelle")),
-        c("km", tr("Kilómetros de carretera"), "entero", si=_es("salida")),
+        c("km", tr("Kilómetros de carretera"), "entero", tr("Los cuenta el viaje y también la policía: si te detienen donde no hay comisaría, te llevan a la que esté a menos kilómetros siguiendo las salidas. Igual con el hospital."), si=_es("salida")),
+        c("agua", tr("Qué agua es"), "opcion", tr("Decide qué peces pican aquí: cada pez dice en qué aguas vive. Sin valor, el mar, salvo si el lugar suena a río (el sonido lugar_rio), que es río."),
+          ops=AGUAS, si=_es("pesca", "embarcadero")),
         c("horas", tr("Horas de viaje"), "decimal", si=_es("salida")),
         c("embarcadero", tr("Embarcadero donde se amarran los barcos comprados"), "ref", ref="lugar", si=_es("nautica")),
         c("modelos", tr("Modelos a la venta"), "refs", tr("Sin marcar ninguno, vende todos los que tienen precio."), ref="modelo", si=_es("concesionario")),
@@ -278,7 +285,9 @@ ESQUEMAS = {
         c("nombre", tr("Nombre"), req=True), c("precio", tr("Precio"), "entero", req=True), c("desc", tr("Descripción"), "largo")]},
     "pez": {"titulo": tr("Pez"), "resumen": lambda d: tr('{get}: {get2} euros').format(get=(d.get('nombre', '?')), get2=(d.get('valor', '?'))), "campos": [
         c("nombre", tr("Nombre con artículo, por ejemplo: una merluza"), req=True), c("valor", tr("Valor"), "entero", req=True, defecto=20),
-        c("peso", tr("Frecuencia"), "entero", tr("Cuanto más alto, más veces pica."), req=True, defecto=10)]},
+        c("peso", tr("Frecuencia"), "entero", tr("Cuanto más alto, más veces pica."), req=True, defecto=10),
+        c("aguas", tr("En qué aguas vive"), "refs", tr("Mar, río o lago. Solo pica en los puntos de pesca de esas aguas. Sin marcar ninguna, pica en cualquier sitio."), ref="agua"),
+        c("mapas", tr("Solo en estas localidades"), "refs", tr("Para un pez propio de un sitio, como el de un río de tu pueblo. Sin marcar ninguna, en todas."), ref="mapa")]},
     "persona": {"titulo": tr("Persona, contenido para adultos"), "resumen": lambda d: tr('{get}, {get2} años').format(get=(d.get('nombre', '?')), get2=(d.get('edad', '?'))), "campos": [
         c("id", tr("Identificador"), req=True), c("nombre", tr("Nombre"), req=True),
         c("genero", tr("Es un hombre o una mujer"), "opcion", tr("El juego lo usa con la opción Me atraen: a quien no te atrae no se le pueden pedir citas románticas. Sin valor, sale para cualquiera."),
@@ -331,6 +340,9 @@ ESQUEMAS = {
         c("descripcion", tr("Descripción del mar"), "largo", si=_es("mar"), grupo=tr("Calles")),
         c("trafico", tr("Vehículos circulando"), "entero", defecto=3, grupo=tr("Vida")), c("peatones", tr("Peatones"), "entero", defecto=4, grupo=tr("Vida")),
         c("policia", tr("Hay policía"), "si_no", defecto=True, grupo=tr("Vida")), c("aparcados", tr("Hay coches aparcados"), "si_no", defecto=True, grupo=tr("Vida")),
+        c("sucesos", tr("Sucesos callejeros que admite"), "refs", tr("Para un pueblo tranquilo: marca solo los que pegan, como el maletín perdido. Sin marcar ninguno, salen todos. "
+          "Cada jugador puede quitar además los que no quiera, en Opciones, Combate y dificultad."), ref="suceso", si=lambda d: d.get("tipo") != "mar", grupo=tr("Vida")),
+        c("sin_sucesos", tr("Aquí no hay sucesos callejeros"), "si_no", tr("Con sí, no sale ninguno en esta localidad, aunque los de arriba estén marcados."), si=lambda d: d.get("tipo") != "mar", grupo=tr("Vida")),
         c("nombre_objeto", tr("Nombre de los objetos de colección"), defecto=tr("Cinta de casete"), grupo=tr("Vida")),
         c("casetes", tr("Posiciones de los objetos de colección"), "lista", sub="punto_xy", como_pares=("a", "b"), grupo=tr("Vida")),
         c("vias", tr("Recorrido de las vías del tranvía"), "lista", tr("Los cruces por los que pasan las vías, en orden. Basta con poner los cruces donde giran: entre uno y el siguiente, "
@@ -471,6 +483,7 @@ ESQUEMAS = {
                ("neumaticos", tr("Neumáticos: frena mejor con lluvia, pincha menos y rueda con menos ruido")), ("suspension", tr("Suspensión: los choques hacen menos daño")),
                ("escape", tr("Escape: el motor suena más bajo y la policía te oye de menos lejos")), ("deposito", tr("Depósito: caben más litros de combustible"))]),
         c("niveles", tr("Cuántos niveles tiene"), "entero", minimo=1, maximo=5, defecto=3),
+        c("aeronaves", tr("Se pone también a helicópteros y avionetas"), "si_no", tr("Con no, el taller no la ofrece a lo que vuela. El juego la ofrece en el motor y el blindaje.")),
         c("por_nivel", tr("Cuánto da cada nivel, en tanto por ciento"), "decimal", tr("Vacío, lo de serie: 7 el motor, 15 los frenos, 25 el blindaje, 25 los neumáticos, 15 la suspensión, 30 el escape y 30 el depósito."), minimo=0, maximo=100),
         c("precio", tr("Precio del primer nivel"), "entero", tr("Cada nivel cuesta este precio multiplicado por el número del nivel."), req=True, minimo=0),
         c("desc", tr("Explicación"), "largo")]},
@@ -553,6 +566,8 @@ ESQUEMAS = {
         c("patrullas", tr("Patrullas que hacen la ronda cerca del jugador, de día"), "entero", tr("Con cero no hay ninguna."), minimo=0, maximo=8, defecto=2, grupo=tr("Botín y patrullas")),
         c("patrullas_noche", tr("Y de noche"), "entero", minimo=0, maximo=8, defecto=1, grupo=tr("Botín y patrullas")),
         c("auxilio_prob", tr("Si atacan al jugador y no hay patrulla cerca, de cada cien veces, cuántas sale una"), "entero", minimo=0, maximo=100, defecto=60, grupo=tr("Botín y patrullas")),
+        c("disparos_cada", tr("Segundos en que una ráfaga de disparos cuenta como un solo delito"), "entero", tr("Disparar sin silenciador por la calle sube la búsqueda, pero los tiros seguidos dentro de este tiempo cuentan una vez. A cero, cuenta cada bala, como antes de la 1.7.6."), minimo=0, maximo=60, defecto=5, grupo=tr("Botín y patrullas")),
+        c("disparos_nivel_max", tr("Nivel de búsqueda máximo solo por disparar"), "entero", tr("Disparar sin herir a nadie no sube la búsqueda más allá de este nivel. Herir o matar a gente o a policías sí. Con 5, sin límite."), minimo=1, maximo=5, defecto=2, grupo=tr("Botín y patrullas")),
         c("frases_auxilio", tr("Lo que grita el agente que va a por el agresor"), "textos", tr("Una por línea."), grupo=tr("Botín y patrullas")),
         c("ambulancia_prob", tr("De cada cien veces que cae alguien, cuántas acude una ambulancia"), "entero", minimo=0, maximo=100, defecto=80, grupo=tr("Ambulancias y rendición")),
         c("ambulancia_espera_min", tr("La ambulancia tarda en salir, como poco, estos segundos"), "entero", minimo=1, maximo=600, defecto=12, grupo=tr("Ambulancias y rendición")),
@@ -1175,6 +1190,15 @@ ESQUEMAS = {
         c("desconfianza_dias", tr("Días que tu pareja tarda en volver a fiarse de ti si se entera de que hay alguien más"), "entero",
           tr("Mientras dura, lo que hacéis juntos acerca la mitad, y si vuelve a pasar, rompe."), minimo=1, maximo=120, defecto=10, grupo=tr("Confianza")),
         c("perdon_dias", tr("Días que quita pedir perdón si te escucha"), "entero", minimo=1, maximo=60, defecto=4, grupo=tr("Confianza")),
+        c("hielo_ex_dias", tr("Días que la expareja te guarda rencor tras romper"), "entero",
+          tr("Vale tanto si rompes tú como si te deja. Mientras dura, corta al charlar, cuelga si llamas, no contesta a lo que escribes y dice que no a los gestos, a las citas y a volver. Luego se puede ir recuperando la confianza. Con cero, nada de rencor."),
+          minimo=0, maximo=60, defecto=7, grupo=tr("Confianza")),
+        c("frases_hielo_charla", tr("Rencor de la expareja: si charlas en persona"), "textos", tr("Una por línea, con {n}, su nombre."), grupo=tr("Frases")),
+        c("frases_hielo_llamada", tr("Rencor de la expareja: si la llamas"), "textos", tr("Una por línea, con {n}."), grupo=tr("Frases")),
+        c("frases_hielo_mensaje", tr("Rencor de la expareja: si le escribes"), "textos", tr("Una por línea, con {n}."), grupo=tr("Frases")),
+        c("frases_hielo_gesto", tr("Rencor de la expareja: un gesto de cariño"), "textos", tr("Una por línea, con {n}."), grupo=tr("Frases")),
+        c("frases_hielo_cita", tr("Rencor de la expareja: una cita"), "textos", tr("Una por línea, con {n}."), grupo=tr("Frases")),
+        c("frases_hielo_pedir", tr("Rencor de la expareja: le pides volver"), "textos", tr("Una por línea, con {n}."), grupo=tr("Frases")),
         c("frases_planton", tr("Plantón"), "textos", tr("Una por línea, con {n} y {lugar}."), grupo=tr("Frases")),
         c("frases_planton_no", tr("No quiere quedar todavía, tras un plantón"), "textos", tr("Una por línea, con {n} y {d}, los días que le quedan."), grupo=tr("Frases")),
         c("frases_llega", tr("Llegas a la quedada"), "textos", tr("Una por línea, con {n} y {lugar}."), grupo=tr("Frases")),
@@ -1377,6 +1401,28 @@ ESQUEMAS = {
         c("n_max", tr("Y como mucho"), "entero", minimo=1, maximo=6, defecto=2, si=lambda d: d.get("tipo") == "robo"),
         c("modelos", tr("Vehículos que puede llevar"), "refs", ref="modelo", si=lambda d: d.get("tipo") in ("temerario", "persecucion")),
         c("frases", tr("Lo que dice la emisora"), "textos", tr("Una por línea; dice una al azar. {lugar} es el sitio y {modelo}, el vehículo."))]},
+    "suceso": {"titulo": tr("Suceso callejero"), "resumen": lambda d: f"{d.get('nombre', '?')} ({d.get('clase', '?')})", "campos": [
+        c("id", tr("Identificador"), req=True, ayuda=tr("Si coincide con uno del juego (maletin, atraco o banda), lo sustituye.")),
+        c("nombre", tr("Nombre"), req=True, ayuda=tr("Como sale en Opciones, Qué sucesos callejeros salen.")),
+        c("clase", tr("Qué clase de suceso es"), "opcion", tr("El juego sabe llevar estas tres. Al cambiarla aparecen sus campos."), req=True, recarga=True, defecto="objeto",
+          ops=[("objeto", tr("Algo perdido que se busca con el radar")), ("atraco", tr("Un atraco: una víctima y quien la atraca")), ("banda", tr("Un grupo que amenaza la calle"))]),
+        c("violento", tr("Tiene enemigos"), "si_no", tr("Lo dice Opciones al jugador, para que elija. Ponlo en sí en los atracos y los grupos.")),
+        c("peso", tr("Cuánto abunda"), "decimal", tr("Frente a los demás: el maletín del juego tiene 2, y el atraco y los pandilleros, 1."), minimo=0.01, maximo=100, defecto=1),
+        c("duracion", tr("Segundos para resolverlo"), "entero", minimo=20, maximo=900, defecto=120),
+        c("premio", tr("Premio, de cuánto a cuánto"), "par", tr("En euros. En los que tienen enemigos, por cada uno."), etiquetas=(tr("Premio mínimo"), tr("Premio máximo"))),
+        c("aviso", tr("Lo que dice al empezar"), "largo", tr("Escribe {situar} donde vaya el sitio, que empieza por la palabra de abajo. Por ejemplo: Suceso: alguien ha perdido un maletín por aquí cerca. {situar}."), req=True),
+        c("situar", tr("Palabra con la que empieza el sitio"), defecto=tr("Está"), ayuda=tr("Está, Ocurre, Están...")),
+        c("objeto", tr("Nombre de lo perdido"), ayuda=tr("Lo que dice el radar."), si=_es_clase("objeto")),
+        c("victima", tr("Nombre de la víctima"), si=_es_clase("atraco")),
+        c("enemigo", tr("Tipo de enemigo"), "ref", ref="tipo_enemigo", si=_es_clase("atraco", "banda")),
+        c("nombre_enemigo", tr("Nombre de cada enemigo"), si=_es_clase("atraco", "banda")),
+        c("cuantos", tr("Cuántos enemigos, de cuántos a cuántos"), "par", tr("De 1 a 6."), etiquetas=(tr("Enemigos, como poco"), tr("Enemigos, como mucho")), si=_es_clase("atraco", "banda")),
+        c("armas", tr("Armas que pueden llevar"), "refs", ref="arma", si=_es_clase("atraco", "banda")),
+        c("salud", tr("Salud de cada enemigo"), "entero", minimo=10, maximo=500, defecto=55, si=_es_clase("atraco", "banda")),
+        c("gracias", tr("Lo que dice si lo resuelves"), "largo", si=_es_clase("atraco", "banda")),
+        c("pierdes", tr("Lo que dice si se acaba el tiempo"), "largo"),
+        c("mapas", tr("Solo en estas localidades"), "refs", tr("Para un suceso propio de tu pueblo. Sin marcar ninguna, sale en todas las que lo admitan."), ref="mapa"),
+        c("sonido", tr("Sonido al empezar"), "ref", tr("Sin valor, el aviso de suceso de siempre."), ref="sonido")]},
     "capitulo": {"titulo": tr("Capítulo"), "resumen": lambda d: f"{d.get('clave', '?')}: {d.get('valor', '?')}", "campos": [
         c("clave", tr("Número"), req=True), c("valor", tr("Título"), req=True)]},
 }
@@ -1385,7 +1431,7 @@ ESQUEMAS = {
 SECCIONES = [
     ("lugares", tr("Lugares"), "lugar"), ("misiones", tr("Misiones"), "mision"), ("armas", tr("Armas"), "arma"),
     ("vehiculos", tr("Vehículos y barcos"), "vehiculo"), ("carreras", tr("Carreras"), "carrera"), ("mapas", tr("Localidades y mapas"), "mapa"),
-    ("comidas", tr("Comidas"), "comida"), ("objetos", tr("Objetos de tienda"), "objeto"), ("peces", tr("Peces"), "pez"),
+    ("comidas", tr("Comidas"), "comida"), ("objetos", tr("Objetos de tienda"), "objeto"), ("peces", tr("Peces"), "pez"), ("sucesos", tr("Sucesos callejeros"), "suceso"),
     ("capitulos", tr("Capítulos"), "capitulo"), ("personajes", tr("Personajes para elegir"), "personaje"),
     ("prendas", tr("Ropa"), "prenda"), ("complementos", tr("Complementos"), "complemento"), ("protecciones", tr("Protecciones de la armería"), "proteccion"),
     ("jornadas", tr("Jornadas de trabajo"), "jornada"), ("combates", tr("Combates del gimnasio"), "combate"), ("combustible", tr("Combustible"), "ajuste_combustible"),

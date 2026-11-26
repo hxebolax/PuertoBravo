@@ -560,6 +560,9 @@
 " No encuentran nada.": [
 "juego/capo.py"
 ],
+" No es tuyo: si coges otro vehículo o te alejas, se pierde. Para quedártelo, ponlo a tu nombre en el móvil, en Mis vehículos.": [
+"juego/conduccion.py"
+],
 " No habéis usado protección.": [
 "juego/intimidad.py"
 ],
@@ -2072,6 +2075,12 @@
 ", y algún comercio se niega a atenderte": [
 "juego/honrado.py"
 ],
+", y aún no quiere saber nada de ti: se le pasará en un día": [
+"juego/menus_adultos.py"
+],
+", y aún no quiere saber nada de ti: se le pasará en unos {d} días": [
+"juego/menus_adultos.py"
+],
 ", y cierra los {join}": [
 "juego/encuentros.py"
 ],
@@ -2276,6 +2285,9 @@
 ],
 ". Llevas {carga} de 100 unidades.": [
 "juego/atracos.py"
+],
+". Lo lleva un encargado": [
+"juego/honrado.py"
 ],
 ". Lo llevas puesto": [
 "juego/vestuario.py"
@@ -3853,6 +3865,9 @@
 "Algo he oído. Aquí se sabe todo.": [
 "juego/respuestas_datos2.py"
 ],
+"Algo perdido que se busca con el radar": [
+"editor/esquema.py"
+],
 "Algo que decidiste en la historia y, si es el caso, lo que te sigue dando o costando cada medianoche.": [
 "juego/menus_juego.py"
 ],
@@ -3949,7 +3964,7 @@
 "data/datos/misiones_adultos.json"
 ],
 "Alguien ha encontrado el maletín antes que tú.": [
-"juego/extras2.py"
+"data/datos/vida.json"
 ],
 "Alguien ha puesto vigilantes en el polvorín viejo, y el pueblo quiere saber qué guardan.": [
 "data/mods/penas_altas.json"
@@ -4714,6 +4729,9 @@
 "Aquí no hay servicio de patrulla. Fin del turno.": [
 "juego/agente.py"
 ],
+"Aquí no hay sucesos callejeros": [
+"editor/esquema.py"
+],
 "Aquí no pueden venir a buscarte: sal a la calle.": [
 "juego/guerra.py"
 ],
@@ -4848,6 +4866,9 @@
 ],
 "Armas colgadas tras un cristal. Huele a aceite.": [
 "juego/sistemas.py"
+],
+"Armas que pueden llevar": [
+"editor/esquema.py"
 ],
 "Armas y, dicen, algún explosivo que sobra de la mina.": [
 "data/datos/mapas/monteferro.json"
@@ -5210,7 +5231,8 @@
 "juego/agente.py",
 "juego/capo.py",
 "juego/extras2.py",
-"data/datos/gente.json"
+"data/datos/gente.json",
+"data/datos/vida.json"
 ],
 "Atracador {v}": [
 "juego/agente.py"
@@ -5248,6 +5270,9 @@
 ],
 "Atraco a otro jugador, en tanto por ciento": [
 "servidor/opciones.py"
+],
+"Atraco a un vecino": [
+"data/datos/vida.json"
 ],
 "Atraco a {nombre}": [
 "juego/atracos.py",
@@ -5551,6 +5576,9 @@
 "juego/sistemas.py"
 ],
 "Aviso de última hora: pandilleros alborotando en una calle cercana.": [
+"juego/sistemas.py"
+],
+"Aviso de última hora: {nombre}, cerca de aquí.": [
 "juego/sistemas.py"
 ],
 "Aviso del cobro de facturas e impuestos": [
@@ -6633,6 +6661,8 @@
 "editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
 "editor/esquema.py"
 ],
 "Botón de opción. Elija entre las opciones del grupo con las flechas.": [
@@ -7030,6 +7060,9 @@
 ],
 "Cada sitio tiene sus propias normas, que ponen quienes lo llevan.": [
 "juego/comunidad.py"
+],
+"Cada suceso, del juego y de tus mods, con sí o no: por ejemplo, los maletines sí y los atracos no. Algunas localidades solo admiten unos cuantos.": [
+"juego/menus_juego.py"
 ],
 "Cada sustancia tiene su sonido al tomarla, para reconocerla sin mirar.": [
 "juego/catalogo_sonidos.py"
@@ -7461,6 +7494,9 @@
 "editor/esquema.py"
 ],
 "Cambia cada opción con las flechas izquierda y derecha. F1 explica la opción": [
+"juego/menus_juego.py"
+],
+"Cambia cada uno con las flechas izquierda y derecha. Con no, ese suceso no sale nunca. Los sucesos solo salen con la opción Sucesos callejeros al azar en sí": [
 "juego/menus_juego.py"
 ],
 "Cambia cómo te hablan los demás y cómo te habla el juego: bienvenido o bienvenida, el sobrino o la sobrina de Encarna. La historia y todo lo demás son iguales.": [
@@ -9251,6 +9287,9 @@
 "Como para vivir.": [
 "juego/respuestas_datos1.py"
 ],
+"Como sale en Opciones, Qué sucesos callejeros salen.": [
+"editor/esquema.py"
+],
 "Como sale en el menú de preparar el golpe.": [
 "editor/esquema_golpes.py"
 ],
@@ -9659,11 +9698,14 @@
 "Con el vehículo parado, estando en él o al lado. Tardas un cuarto de hora. Las ruedas de repuesto se compran en los talleres y en las gasolineras.": [
 "juego/menus_extra.py"
 ],
-"Con el vuelo real. Con sí, cada aparato tiene su depósito, que se llena en helipuertos, aeropuertos y aeródromos; el juego avisa en la reserva, y si se acaba, el motor se para y planeas. Con no, el depósito no se gasta nunca.": [
+"Con el vuelo real. Con sí, cada aparato tiene su depósito; el juego avisa en la reserva, y si se acaba, el motor se para y planeas. Se reposta aterrizado en un helipuerto, un aeropuerto o un aeródromo, con Intro, en Repostar; en tu hangar; o desde el móvil, en Mis vehículos, donde te lo traen. Las gasolineras no sirven para lo que vuela. Con no, el depósito no se gasta nunca, y sigues pilotando igual: despegue, altura, aterrizaje y travesías. Lo único que quita el pilotaje es el vuelo real.": [
 "juego/menus_juego.py"
 ],
 "Con ella puedes hacer vuelos comerciales de pasaje y de carga desde los helipuertos, los aeropuertos y los aeródromos.": [
 "data/datos/vida.json"
+],
+"Con enemigos: hay que pelear.": [
+"juego/menus_juego.py"
 ],
 "Con ese libro, no le salva ni el Papa. Pero tiene la casa llena de guardias.": [
 "data/datos/misiones.json"
@@ -9936,6 +9978,9 @@
 "Con no, el historial guarda lo que pasa y no se repite: diálogos, conversaciones, compras, pagos y avisos. Lo que se lee al abrir un menú o al moverte por sus opciones no entra, porque se vuelve a oír volviendo a él. Con sí, entra todo, como antes.": [
 "juego/menus_juego.py"
 ],
+"Con no, el taller no la ofrece a lo que vuela. El juego la ofrece en el motor y el blindaje.": [
+"editor/esquema.py"
+],
 "Con no, los de la banda no os podéis herir entre vosotros.": [
 "juego/menus_enlinea.py"
 ],
@@ -10050,6 +10095,9 @@
 "Con si, quien firma un contrato fijo en la oficina de empleo cobra su nómina al acabar cada periodo. La paga el servidor: él cuenta los turnos y pone la cifra, que sale de los datos del juego y no gasta la ganancia por hora. Con no, en este servidor no hay contratos fijos. Hace falta que el mundo del servidor sea el de la versión 1.7.1 o posterior.": [
 "servidor/opciones.py"
 ],
+"Con su edad no se unirá nunca: no insistas.": [
+"juego/reacciones.py"
+],
 "Con su firma puedo poner una patrulla en esa calle. No le prometo que no lo intenten otra vez, pero ya no será gratis para ellos.": [
 "data/datos/misiones_honrada.json"
 ],
@@ -10153,6 +10201,9 @@
 "editor/esquema_honrado.py"
 ],
 "Con sí, no es una misión que se empiece en un lugar: sale en el móvil, en Misiones, con la palabra Explicación delante, y al pulsar Intro se leen seguidas las frases de todos sus pasos de diálogo. Los demás pasos no cuentan. Al llegar al final queda hecha y da su recompensa.": [
+"editor/esquema.py"
+],
+"Con sí, no sale ninguno en esta localidad, aunque los de arriba estén marcados.": [
 "editor/esquema.py"
 ],
 "Con sí, que es como viene, cada partida es la de su ranura: el guardado automático, el rápido y el de un cierre inesperado van a la ranura de la partida que juegas, y nunca pisan la de otro personaje. Una partida nueva toma la primera ranura libre al guardarse. Antes de escribir encima, lo que había queda como copia anterior, y en Cargar partida puedes volver a ella. Con no, como antes de la versión 1.7.4: el guardado automático y el rápido van a dos archivos que comparten todas las partidas.": [
@@ -10403,6 +10454,7 @@
 ],
 "Confianza": [
 "editor/esquema.py",
+"editor/esquema.py",
 "editor/esquema.py"
 ],
 "Confianza con la que alguien puede acompañarte un rato": [
@@ -10614,6 +10666,9 @@
 "Contratas a un abogado de confianza por {euros} euros a la semana. Mientras le pagues, lo que se sepa de ti hará la mitad de daño y él se encargará de la prensa.": [
 "juego/honrado.py",
 "data/datos/vida.json"
+],
+"Contratas a un encargado para {nombre}: cobra {sueldo} euros al día, que salen de la caja. Ya no hace falta que pases a diario: el negocio no se descuida y su nombre sube solo, poco a poco. Cómo va lo ves en el móvil, en Vida, reputación y consecuencias, Negocios. Ahora da {ingreso_negocio} euros al día.": [
+"juego/honrado.py"
 ],
 "Contratas a una persona: cobra {sueldo} euros al día, que salen de la caja. ": [
 "juego/honrado.py"
@@ -11358,6 +11413,7 @@
 "Cuánto abunda": [
 "editor/esquema.py",
 "editor/esquema.py",
+"editor/esquema.py",
 "editor/esquema.py"
 ],
 "Cuánto baja el precio por cada vehículo igual vendido estos días, por ciento": [
@@ -11434,6 +11490,9 @@
 "servidor/opciones.py"
 ],
 "Cuántos de los tuyos no cuentan": [
+"editor/esquema.py"
+],
+"Cuántos enemigos, de cuántos a cuántos": [
 "editor/esquema.py"
 ],
 "Cuántos estáis en la partida, contándote a ti. Debajo está cada uno de tus amigos.": [
@@ -11959,6 +12018,9 @@
 "De 1 a 120. Pasado ese tiempo sin que el servidor vuelva, el juego deja de intentarlo, lo dice y sale al menú principal. De serie, 10.": [
 "juego/menus_juego.py"
 ],
+"De 1 a 6.": [
+"editor/esquema.py"
+],
 "De Belmonte se cuentan mil cosas. Que si tiene una caja fuerte del tamaño de una habitación, que si no duerme nunca... Yo lo vi una vez de lejos. Es más bajito de lo que parece.": [
 "juego/respuestas_datos1.py"
 ],
@@ -12342,6 +12404,9 @@
 "juego/honrado.py"
 ],
 "Decide qué pasillos tiene al recorrerla por dentro y lo cara que es: supermercado, mercado, ultramarinos... Sin valor, el juego lo deduce del nombre de la tienda, según la sección Tipos de tienda de comida.": [
+"editor/esquema.py"
+],
+"Decide qué peces pican aquí: cada pez dice en qué aguas vive. Sin valor, el mar, salvo si el lugar suena a río (el sonido lugar_rio), que es río.": [
 "editor/esquema.py"
 ],
 "Decide qué se puede hacer en él. Al cambiarlo aparecen los campos propios de ese tipo.": [
@@ -13069,6 +13134,9 @@
 "Despides a {v}. Ya no te cobrarán.": [
 "juego/menus_extra.py"
 ],
+"Despides al encargado de {nombre}. Si no pasas por aquí, el negocio se resentirá. Ahora da {ingreso_negocio} euros al día.": [
+"juego/honrado.py"
+],
 "Despido": [
 "juego/catalogo_sonidos.py",
 "editor/esquema_honrado.py"
@@ -13595,6 +13663,12 @@
 "Dispara varillas de acero. Silencioso y lento de recargar.": [
 "data/mods/isla_de_los_vientos.json"
 ],
+"Disparar sin herir a nadie no sube la búsqueda más allá de este nivel. Herir o matar a gente o a policías sí. Con 5, sin límite.": [
+"editor/esquema.py"
+],
+"Disparar sin silenciador por la calle sube la búsqueda, pero los tiros seguidos dentro de este tiempo cuentan una vez. A cero, cuenta cada bala, como antes de la 1.7.6.": [
+"editor/esquema.py"
+],
 "Disparo de escopeta": [
 "juego/catalogo_sonidos.py"
 ],
@@ -14096,6 +14170,9 @@
 ],
 "Días que el negocio da menos tras el daño": [
 "editor/esquema_honrado.py"
+],
+"Días que la expareja te guarda rencor tras romper": [
+"editor/esquema.py"
 ],
 "Días que la tienda no te deja entrar si te han visto": [
 "editor/esquema.py"
@@ -14787,7 +14864,7 @@
 "juego/menus_enlinea.py"
 ],
 "El atracador ha huido con el botín.": [
-"juego/extras2.py"
+"data/datos/vida.json"
 ],
 "El atraco ha fallado.": [
 "juego/enlinea.py"
@@ -15782,6 +15859,9 @@
 "El juego original no tiene elementos en esta sección.": [
 "editor/ventana.py"
 ],
+"El juego sabe llevar estas tres. Al cambiarla aparecen sus campos.": [
+"editor/esquema.py"
+],
 "El juego sabe llevar estos cuatro. Al cambiarlo aparecen sus campos.": [
 "editor/esquema.py"
 ],
@@ -16652,6 +16732,10 @@
 "El taxi te deja en {nombre} por {coste} euros. Son las {hora_txt}.": [
 "juego/menus_juego.py"
 ],
+"El teléfono de {n} da dos tonos y salta el buzón. Te ha colgado.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
 "El teléfono del gestor ya no existe. Ni tu dinero.": [
 "juego/capo.py",
 "data/datos/vida.json"
@@ -17241,6 +17325,9 @@
 "editor/esquema_honrado.py",
 "editor/esquema_honrado.py",
 "editor/esquema_honrado.py",
+"editor/esquema_honrado.py",
+"editor/esquema_honrado.py",
+"editor/esquema_honrado.py",
 "editor/esquema_honrado.py"
 ],
 "Empresa de la bolsa": [
@@ -17584,6 +17671,9 @@
 ],
 "En euros.": [
 "servidor/opciones.py"
+],
+"En euros. En los que tienen enemigos, por cada uno.": [
+"editor/esquema.py"
 ],
 "En femenino": [
 "juego/menus_vida.py",
@@ -17943,6 +18033,9 @@
 "En puntos de delito: un golpe a un coche es uno; un disparo, más.": [
 "editor/esquema_honrado.py"
 ],
+"En qué aguas vive": [
+"editor/esquema.py"
+],
 "En qué idioma escribe el servidor lo que lee quien lo administra: la consola, el registro, la ayuda de las órdenes y los comentarios de servidor.conf. Lo que oyen los jugadores no cambia: el servidor se lo manda en español y el juego de cada uno lo dice en el suyo, así que en un mismo servidor puede jugar gente de idiomas distintos. Si el servidor va dentro del panel, habla el idioma del juego.": [
 "servidor/opciones.py"
 ],
@@ -18211,6 +18304,12 @@
 "Encargado de la Luna Llena. Traje impecable, memoria de elefante y un sentido del humor muy seco. Fue bailarín antes de que le fallara una rodilla.": [
 "data/mods/noches_de_neon.json"
 ],
+"Encargado: no. Contratarlo cuesta {sueldo} euros al día": [
+"juego/menus_honrado.py"
+],
+"Encargado: sí. Cobra {sueldo} euros al día": [
+"juego/menus_honrado.py"
+],
 "Encargo cumplido": [
 "juego/misiones.py"
 ],
@@ -18350,6 +18449,12 @@
 "editor/esquema.py"
 ],
 "Enemigos de una pelea buscada": [
+"editor/esquema.py"
+],
+"Enemigos, como mucho": [
+"editor/esquema.py"
+],
+"Enemigos, como poco": [
 "editor/esquema.py"
 ],
 "Enhorabuena. Y que dure.": [
@@ -19047,6 +19152,9 @@
 ],
 "Escribe y pulsa Intro. Escape cancela.": [
 "juego/menus.py"
+],
+"Escribe {situar} donde vaya el sitio, que empieza por la palabra de abajo. Por ejemplo: Suceso: alguien ha perdido un maletín por aquí cerca. {situar}.": [
+"editor/esquema.py"
 ],
 "Escribes cuántas balas de reserva le das. Tiene que estar a tu lado.": [
 "juego/menus_enlinea.py"
@@ -19822,7 +19930,9 @@
 "juego/misvehiculos.py",
 "juego/misvehiculos.py",
 "juego/reacciones.py",
-"juego/vuelo.py"
+"juego/vuelo.py",
+"editor/esquema.py",
+"data/datos/vida.json"
 ],
 "Está a {km_txt} kilómetros, rumbo {rumbo_txt}": [
 "juego/vuelo.py"
@@ -19887,6 +19997,9 @@
 "Está lloviendo: el suelo resbala más y se oye peor.": [
 "juego/catalogo_sonidos.py"
 ],
+"Está, Ocurre, Están...": [
+"editor/esquema.py"
+],
 "Estáis ": [
 "juego/menus_adultos.py"
 ],
@@ -19903,7 +20016,7 @@
 "juego/menus_adultos.py"
 ],
 "Están": [
-"juego/extras2.py"
+"data/datos/vida.json"
 ],
 "Están abiertos {lista}. Windows no deja sustituir un programa en marcha: ciérralos antes de actualizar.": [
 "juego/actualizador.py"
@@ -21017,6 +21130,12 @@
 "editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
 "editor/esquema.py"
 ],
 "Frases con sospechosos": [
@@ -21274,6 +21393,9 @@
 "data/datos/vida.json"
 ],
 "Frenos: frena en menos metros": [
+"editor/esquema.py"
+],
+"Frente a los demás: el maletín del juego tiene 2, y el atraco y los pandilleros, 1.": [
 "editor/esquema.py"
 ],
 "Fresca y ligera. No lleva fuego, así que no se quema.": [
@@ -22845,6 +22967,9 @@
 "Hasta cuántos golpes sigue aprendiendo": [
 "editor/esquema_golpes.py"
 ],
+"Hasta dónde sube el nombre solo con el encargado, de cero a cien": [
+"editor/esquema_honrado.py"
+],
 "Hasta la puerta de urgencias": [
 "data/datos/misiones_extra2.json"
 ],
@@ -23882,6 +24007,7 @@
 "editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py",
+"editor/esquema.py",
 "editor/esquema_golpes.py",
 "editor/esquema_golpes.py",
 "editor/esquema_honrado.py",
@@ -24221,6 +24347,9 @@
 ],
 "Intro lo contrata o lo da de baja. Cubre a todos tus vehículos de tierra desde el día siguiente a contratarlo, no a las aeronaves. Cada medianoche cobra {seguro_cuota} euros por cada vehículo tuyo en la calle, del bolsillo o del banco; los del garaje no pagan. Si uno explota, al día siguiente te lo devuelven reparado y con sus mejoras, en un garaje tuyo con sitio o a la puerta de un taller, pagando una franquicia: el {seguro_franquicia_pct} por ciento de lo que cuesta el modelo, y como poco {seguro_franquicia_min} euros.": [
 "juego/misvehiculos.py"
+],
+"Intro lo contrata o lo despide. El encargado lleva el negocio por ti: no hace falta que pases ni que eches horas, nunca se da por abandonado y su nombre sube solo hasta un {entero} sobre 100. Cobra al día un {entero2} por ciento de lo que da el negocio de base. Cómo va cada negocio lo ves en el móvil, en Vida, reputación y consecuencias, Negocios.": [
+"juego/menus_honrado.py"
 ],
 "Intro lo hace sonar otra vez. Su volumen se ajusta en Opciones, Sonido y música, Ajustar el volumen de cada sonido.": [
 "juego/menus_juego.py"
@@ -26286,7 +26415,7 @@
 "editor/esquema.py"
 ],
 "La víctima te da las gracias y una recompensa.": [
-"juego/extras2.py"
+"data/datos/vida.json"
 ],
 "La última gasolinera antes de la carretera de la costa.": [
 "data/datos/ciudad.json"
@@ -26323,6 +26452,9 @@
 "data/datos/misiones_extra.json",
 "data/datos/misiones_extra.json",
 "data/datos/misiones_extra.json"
+],
+"Lago o laguna": [
+"juego/extras.py"
 ],
 "Lancha de alquiler": [
 "juego/menus_lugares.py"
@@ -27135,6 +27267,10 @@
 "Llamas a {nombre}. {choice} Ahora {afinidad_txt}.": [
 "juego/menus_adultos.py"
 ],
+"Llamas a {n}. Lo coge, oye tu voz y cuelga sin decir nada.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
 "Llamas desde la esquina. La patrulla llega a tiempo. El tendero sabrá a quién se lo debe.": [
 "data/datos/vida.json"
 ],
@@ -27605,6 +27741,9 @@
 "Lo cerraste aceptando el dinero de una banda. Cuando pase ese día, pueden volver los ataques.": [
 "juego/sistemas.py"
 ],
+"Lo cobra cada día. El encargado lleva el negocio por el jugador: nunca se da por abandonado.": [
+"editor/esquema_honrado.py"
+],
 "Lo comunicas por la emisora: ha caído. No era lo que se esperaba de usted.": [
 "juego/agente.py",
 "data/datos/vida.json"
@@ -27689,6 +27828,9 @@
 ],
 "Lo detienen": [
 "editor/esquema_golpes.py"
+],
+"Lo dice Opciones al jugador, para que elija. Ponlo en sí en los atracos y los grupos.": [
+"editor/esquema.py"
 ],
 "Lo dices en la plaza, en voz alta. Hay quien aplaude y quien se marcha. Anselmo te pone una mano en el hombro.": [
 "data/datos/misiones_extra2.json"
@@ -27961,6 +28103,9 @@
 "Lo que dice al despedirlo": [
 "editor/esquema.py"
 ],
+"Lo que dice al empezar": [
+"editor/esquema.py"
+],
 "Lo que dice al llegar": [
 "editor/esquema.py"
 ],
@@ -27997,6 +28142,9 @@
 "Lo que dice el juego con la tecla N y en las listas.": [
 "editor/esquema.py"
 ],
+"Lo que dice el radar.": [
+"editor/esquema.py"
+],
 "Lo que dice el repartidor al llegar": [
 "editor/esquema.py"
 ],
@@ -28007,6 +28155,12 @@
 "editor/esquema.py"
 ],
 "Lo que dice por el altavoz": [
+"editor/esquema.py"
+],
+"Lo que dice si lo resuelves": [
+"editor/esquema.py"
+],
+"Lo que dice si se acaba el tiempo": [
 "editor/esquema.py"
 ],
 "Lo que dice tu personaje. Lo oye quien esté a menos de {metros} metros. También con Mayúsculas F10 durante el juego y, con mando, en el menú de acciones. Hay frases ya escritas: Tabulador, o el botón X o Cuadrado, pasa por ellas.": [
@@ -28371,6 +28525,9 @@
 "editor/esquema_honrado.py"
 ],
 "Lo que sube el negocio con cada empleado, por ciento": [
+"editor/esquema_honrado.py"
+],
+"Lo que sube el nombre cada día con encargado": [
 "editor/esquema_honrado.py"
 ],
 "Lo que sube el nombre cada vez que lo atiendes": [
@@ -28844,6 +29001,9 @@
 "Los cuatro pesos se comparan entre sí: el barrio con más puntos es el elegido.": [
 "editor/esquema.py"
 ],
+"Los cuenta el viaje y también la policía: si te detienen donde no hay comisaría, te llevan a la que esté a menos kilómetros siguiendo las salidas. Igual con el hospital.": [
+"editor/esquema.py"
+],
 "Los cumpleaños, a partir de cierta edad, son un recuento.": [
 "juego/respuestas_datos2.py"
 ],
@@ -29033,7 +29193,7 @@
 "data/mods/bahia_del_ocaso.json"
 ],
 "Los pandilleros se han marchado.": [
-"juego/extras2.py"
+"data/datos/vida.json"
 ],
 "Los pantalanes de Playa Dorada, en Puerto Bravo.": [
 "data/datos/mapas/mar.json"
@@ -29185,7 +29345,8 @@
 "juego/catalogo_sonidos.py"
 ],
 "Los vecinos, agradecidos, hacen una colecta para ti.": [
-"juego/extras2.py"
+"juego/extras2.py",
+"data/datos/vida.json"
 ],
 "Los vehículos del jugador no desaparecen. Al pasar de este número, el más antiguo va solo a un garaje con sitio; si no hay sitio, el juego avisa.": [
 "editor/esquema.py"
@@ -29426,7 +29587,9 @@
 "data/datos/misiones_extra3.json"
 ],
 "Maletín perdido": [
-"juego/extras2.py"
+"juego/extras2.py",
+"data/datos/vida.json",
+"data/datos/vida.json"
 ],
 "Manda al servidor la orden escrita. Es lo mismo que pulsar Intro en el campo.": [
 "panel_servidor/ventana.py"
@@ -29561,6 +29724,9 @@
 "Maquetas de barcos, un esqueleto de ballena y la historia del pirata Tuerto, que escondió su tesoro en Isla Tortuga.": [
 "data/datos/ciudad.json"
 ],
+"Mar": [
+"juego/extras.py"
+],
 "Mar abierto": [
 "editor/esquema.py"
 ],
@@ -29575,6 +29741,9 @@
 ],
 "Mar de Poniente": [
 "data/datos/mapas/mar.json"
+],
+"Mar, río o lago. Solo pica en los puntos de pesca de esas aguas. Sin marcar ninguna, pica en cualquier sitio.": [
+"editor/esquema.py"
 ],
 "Maratón de la bahía": [
 "data/datos/vehiculos.json"
@@ -31889,7 +32058,7 @@
 "Necesitas un arma de fuego. Cinco vigilantes, un botín enorme y cuatro niveles de búsqueda. Una vez al día por banco.": [
 "juego/menus_lugares.py"
 ],
-"Necesitas un territorio y hueco en la banda. Además, que te tenga confianza, que tu nombre suene en la calle y que tenga carácter para ello: los muy tímidos y la gente mayor dicen que no. Si acepta, cobra la prima, se queda contigo con su nombre y pelea a tu lado como los demás de tu banda.": [
+"Necesitas un territorio y hueco en la banda. Además, que te tenga confianza, que tu nombre suene en la calle y que tenga carácter para ello: la gente mayor no se une nunca, ni quien te habla así: {lista}. El carácter se nota en cómo te habla al saludar. Si acepta, cobra la prima, se queda contigo con su nombre y pelea a tu lado como los demás de tu banda.": [
 "juego/menus_charla.py"
 ],
 "Necesitas un vehículo para correr.": [
@@ -32123,6 +32292,9 @@
 "editor/esquema.py"
 ],
 "Nivel de búsqueda con el que todavía viene": [
+"editor/esquema.py"
+],
+"Nivel de búsqueda máximo solo por disparar": [
 "editor/esquema.py"
 ],
 "Nivel de búsqueda que te cae entonces": [
@@ -32622,6 +32794,9 @@
 ],
 "No hay sitio suficiente en el disco{v}: hacen falta {megas_txt} libres y hay {megas_txt2}. Libera al menos {megas_txt3} y vuelve a intentarlo.": [
 "juego/actualizador.py"
+],
+"No hay sucesos callejeros en los datos.": [
+"juego/menus_juego.py"
 ],
 "No hay texto en el portapapeles.": [
 "juego/menus.py"
@@ -33690,6 +33865,7 @@
 "editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py",
+"editor/esquema.py",
 "editor/esquema_golpes.py",
 "editor/esquema_honrado.py",
 "editor/esquema_honrado.py"
@@ -33700,11 +33876,20 @@
 "Nombre cuando el barrio cambia de manos": [
 "editor/esquema.py"
 ],
+"Nombre de cada enemigo": [
+"editor/esquema.py"
+],
 "Nombre de este final": [
 "editor/esquema.py",
 "editor/esquema_honrado.py"
 ],
 "Nombre de la decisión": [
+"editor/esquema.py"
+],
+"Nombre de la víctima": [
+"editor/esquema.py"
+],
+"Nombre de lo perdido": [
 "editor/esquema.py"
 ],
 "Nombre de los objetos de colección": [
@@ -34087,7 +34272,8 @@
 "data/datos/misiones.json"
 ],
 "Ocurre": [
-"juego/extras2.py"
+"juego/extras2.py",
+"data/datos/vida.json"
 ],
 "Oficialmente no hay presupuesto para las fuentes. Pero hay huchas repartidas por media ciudad. Si alguien de fiar las recogiera...": [
 "data/mods/bahia_del_ocaso.json"
@@ -34583,6 +34769,9 @@
 "Pajarita, solapas de raso y zapatos que brillan.": [
 "data/datos/vida.json"
 ],
+"Palabra con la que empieza el sitio": [
+"editor/esquema.py"
+],
 "Palanca derecha a los lados: cambiar de carril para adelantar. Pilotando un helicóptero o una avioneta, a la derecha sube y a la izquierda baja": [
 "juego/mando.py"
 ],
@@ -34629,7 +34818,8 @@
 "data/datos/gente.json",
 "data/datos/gente.json",
 "data/datos/gente.json",
-"data/datos/gente.json"
+"data/datos/gente.json",
+"data/datos/vida.json"
 ],
 "Pandillero de Los Lagartos": [
 "data/datos/misiones_extra2.json",
@@ -34640,6 +34830,9 @@
 "juego/guerra.py",
 "juego/reconquista.py",
 "juego/sistemas.py"
+],
+"Pandilleros en la calle": [
+"data/datos/vida.json"
 ],
 "Panel del servidor de Puerto Bravo": [
 "panel_servidor/__init__.py"
@@ -34929,6 +35122,9 @@
 "Para parejas con confianza. Mejora las noches de risas y juegos.": [
 "juego/intimidad.py"
 ],
+"Para pasar de ahí, el jugador tiene que atenderlo.": [
+"editor/esquema_honrado.py"
+],
 "Para pasear por la playa con el viento en la cara.": [
 "data/datos/vehiculos.json"
 ],
@@ -35053,6 +35249,15 @@
 "editor/esquema.py"
 ],
 "Para un objetivo al que solo hay que dar un escarmiento. Cuando le queda menos de la mitad de la salud, se rinde y cuenta como resuelto. Si el jugador le mata, la misión falla.": [
+"editor/esquema.py"
+],
+"Para un pez propio de un sitio, como el de un río de tu pueblo. Sin marcar ninguna, en todas.": [
+"editor/esquema.py"
+],
+"Para un pueblo tranquilo: marca solo los que pegan, como el maletín perdido. Sin marcar ninguno, salen todos. Cada jugador puede quitar además los que no quiera, en Opciones, Combate y dificultad.": [
+"editor/esquema.py"
+],
+"Para un suceso propio de tu pueblo. Sin marcar ninguna, sale en todas las que lo admitan.": [
 "editor/esquema.py"
 ],
 "Para una gala o una cena de las que no se olvidan.": [
@@ -36920,11 +37125,20 @@
 "Premio de más por cada victoria que lleves": [
 "editor/esquema.py"
 ],
+"Premio máximo": [
+"editor/esquema.py"
+],
+"Premio mínimo": [
+"editor/esquema.py"
+],
 "Premio por cada objeto de colección encontrado": [
 "data/datos/vida.json"
 ],
 "Premio por encontrar todos los objetos de colección": [
 "data/datos/vida.json"
+],
+"Premio, de cuánto a cuánto": [
+"editor/esquema.py"
 ],
 "Premios y frases": [
 "editor/esquema.py",
@@ -38031,6 +38245,9 @@
 "Qué abre": [
 "editor/esquema_honrado.py"
 ],
+"Qué agua es": [
+"editor/esquema.py"
+],
 "Qué amable. Tú también vas muy bien.": [
 "juego/respuestas_datos2.py"
 ],
@@ -38063,6 +38280,9 @@
 "juego/vuelo_pantalla.py"
 ],
 "Qué clase de aviso es": [
+"editor/esquema.py"
+],
+"Qué clase de suceso es": [
 "editor/esquema.py"
 ],
 "Qué clase de tienda de comida es": [
@@ -38176,6 +38396,10 @@
 ],
 "Qué servidor quitas de la lista": [
 "juego/menus_enlinea.py"
+],
+"Qué sucesos callejeros salen": [
+"juego/menus_juego.py",
+"juego/menus_juego.py"
 ],
 "Qué te cierran: ": [
 "juego/menus_honrado.py"
@@ -39025,6 +39249,24 @@
 "Remos, pesas y un cuadrilátero improvisado entre barcas.": [
 "data/datos/mapas/cala_brava.json"
 ],
+"Rencor de la expareja: le pides volver": [
+"editor/esquema.py"
+],
+"Rencor de la expareja: si charlas en persona": [
+"editor/esquema.py"
+],
+"Rencor de la expareja: si la llamas": [
+"editor/esquema.py"
+],
+"Rencor de la expareja: si le escribes": [
+"editor/esquema.py"
+],
+"Rencor de la expareja: un gesto de cariño": [
+"editor/esquema.py"
+],
+"Rencor de la expareja: una cita": [
+"editor/esquema.py"
+],
 "Rendirse: multa por cada nivel de búsqueda": [
 "editor/esquema.py"
 ],
@@ -39595,7 +39837,8 @@
 "data/datos/vida.json"
 ],
 "Río": [
-"juego/catalogo_sonidos.py"
+"juego/catalogo_sonidos.py",
+"juego/extras.py"
 ],
 "SERVIDOR ": [
 "juego/actualizador.py"
@@ -40052,6 +40295,9 @@
 ],
 "Salud": [
 "editor/esquema.py",
+"editor/esquema.py"
+],
+"Salud de cada enemigo": [
 "editor/esquema.py"
 ],
 "Salud de más en cada asalto": [
@@ -40612,6 +40858,9 @@
 "Se pone en verde.": [
 "juego/conduccion.py"
 ],
+"Se pone también a helicópteros y avionetas": [
+"editor/esquema.py"
+],
 "Se premia por las últimas cifras que coinciden con el número que sale: la última, el reintegro, {v} euros; las dos últimas, {v2}; las tres, {v3}; las cuatro, {v4}; y las cinco, el bote, que crece cada día que nadie lo acierta.": [
 "juego/loteria.py"
 ],
@@ -40898,6 +41147,9 @@
 "Segundos en los que cuentan esas bajas": [
 "editor/esquema.py"
 ],
+"Segundos en que una ráfaga de disparos cuenta como un solo delito": [
+"editor/esquema.py"
+],
 "Segundos entre ataques": [
 "editor/esquema.py"
 ],
@@ -40939,6 +41191,9 @@
 "editor/esquema.py"
 ],
 "Segundos para llegar a un aviso": [
+"editor/esquema.py"
+],
+"Segundos para resolverlo": [
 "editor/esquema.py"
 ],
 "Segundos para subir": [
@@ -41280,6 +41535,9 @@
 "editor/esquema.py"
 ],
 "Si coincide con uno de la carta del juego, lo cambia; si es nuevo, se añade a la carta.": [
+"editor/esquema.py"
+],
+"Si coincide con uno del juego (maletin, atraco o banda), lo sustituye.": [
 "editor/esquema.py"
 ],
 "Si coincide con uno del juego, lo cambia; si es nuevo, el tablón de las tabernas puede ofrecerlo.": [
@@ -41766,6 +42024,9 @@
 "Sin ducharte, una cita acerca este por ciento de lo normal": [
 "editor/esquema.py"
 ],
+"Sin enemigos.": [
+"juego/menus_juego.py"
+],
 "Sin fama, sin banda y sin escolta, tus negocios son presa fácil: alguna banda intentará cobrarte «protección». Con {entero} de fama te dejan en paz": [
 "juego/honrado.py"
 ],
@@ -41834,6 +42095,9 @@
 ],
 "Sin un solo barrio tuyo no eres nadie para cobrar a una banda. Conquista uno primero.": [
 "juego/pactos.py"
+],
+"Sin valor, el aviso de suceso de siempre.": [
+"editor/esquema.py"
 ],
 "Sin valor, lo decide el juego para cada partida.": [
 "editor/esquema.py"
@@ -42044,6 +42308,10 @@
 "Solo en el nivel exigente y donde te evitan. Se decide una vez al día en cada comercio.": [
 "editor/esquema_honrado.py"
 ],
+"Solo en estas localidades": [
+"editor/esquema.py",
+"editor/esquema.py"
+],
 "Solo en la casa en la que vivís": [
 "editor/esquema.py"
 ],
@@ -42091,6 +42359,9 @@
 ],
 "Solo puedes zarpar con él desde el muelle donde está amarrado.": [
 "juego/menus_lugares.py"
+],
+"Solo sale en algunas localidades.": [
+"juego/menus_juego.py"
 ],
 "Solo se alquilan las viviendas tuyas.": [
 "juego/alquiler.py"
@@ -42199,6 +42470,9 @@
 ],
 "Sonido": [
 "juego/registro.py",
+"editor/esquema.py"
+],
+"Sonido al empezar": [
 "editor/esquema.py"
 ],
 "Sonido de ambiente": [
@@ -42493,16 +42767,17 @@
 "data/datos/vida.json"
 ],
 "Suceso callejero": [
-"juego/catalogo_sonidos.py"
+"juego/catalogo_sonidos.py",
+"editor/esquema.py"
 ],
 "Suceso: alguien ha perdido un maletín por aquí cerca. {situar}. Búscalo con el radar, pulsando Tabulador.": [
-"juego/extras2.py"
+"data/datos/vida.json"
 ],
 "Suceso: están atracando a alguien. {situar}. Si quieres ayudar, pulsa Q para fijar al atracador.": [
-"juego/extras2.py"
+"data/datos/vida.json"
 ],
 "Suceso: unos pandilleros tienen atemorizada la calle. {situar}. Si quieres echarlos, pulsa Q para fijarlos.": [
-"juego/extras2.py"
+"data/datos/vida.json"
 ],
 "Sucesos": [
 "editor/esquema_vuelo.py",
@@ -42514,8 +42789,14 @@
 "editor/esquema_vuelo.py",
 "editor/esquema_vuelo.py"
 ],
+"Sucesos callejeros": [
+"editor/esquema.py"
+],
 "Sucesos callejeros al azar": [
 "juego/menus_juego.py"
+],
+"Sucesos callejeros que admite": [
+"editor/esquema.py"
 ],
 "Suciedad desde la que hueles mal": [
 "editor/esquema.py"
@@ -42537,6 +42818,9 @@
 ],
 "Sueldo de cada miembro de tu banda, cada medianoche": [
 "data/datos/vida.json"
+],
+"Sueldo del encargado, por ciento de lo que da el negocio de base": [
+"editor/esquema_honrado.py"
 ],
 "Sueldo diario de un empleado, por ciento de lo que da el negocio de base": [
 "editor/esquema_honrado.py"
@@ -43345,6 +43629,9 @@
 ],
 "Te habla de sus planes.": [
 "juego/menus_adultos.py"
+],
+"Te habla {desc}: con ese carácter no se unirá nunca, por mucho que insistas. Busca a alguien más decidido.": [
+"juego/reacciones.py"
 ],
 "Te hablan como a un hombre: bienvenido, el sobrino de Encarna, hijo.": [
 "juego/menus_vida.py"
@@ -44195,6 +44482,9 @@
 "Tiene alarma, y a ese club la policía llega pronto. Tráemelo entero, que rayado no lo quiere.": [
 "data/datos/misiones_extra3.json"
 ],
+"Tiene enemigos": [
+"editor/esquema.py"
+],
 "Tiene la palabra, por los comerciantes del Barrio Viejo y del Puerto, Dani Roca.": [
 "data/datos/misiones_honrada.json"
 ],
@@ -44357,6 +44647,7 @@
 "editor/esquema.py"
 ],
 "Tipo de enemigo": [
+"editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py"
 ],
@@ -46078,6 +46369,9 @@
 "Un arrecife poco profundo donde han encallado barcos durante siglos. Buen sitio para bucear.": [
 "data/datos/mapas/mar.json"
 ],
+"Un atraco: una víctima y quien la atraca": [
+"editor/esquema.py"
+],
 "Un audiojuego de mundo abierto, en español, pensado desde el principio para jugarse sin ver la pantalla": [
 "juego/menus_juego.py"
 ],
@@ -46402,6 +46696,9 @@
 ],
 "Un grito: los peatones de alrededor se apartan.": [
 "juego/mando.py"
+],
+"Un grupo que amenaza la calle": [
+"editor/esquema.py"
 ],
 "Un guarda te mira desde la garita y apunta algo en una libreta.": [
 "data/mods/bahia_del_ocaso.json"
@@ -47618,6 +47915,9 @@
 "editor/esquema.py",
 "editor/esquema.py"
 ],
+"Una por línea, con {n}, su nombre.": [
+"editor/esquema.py"
+],
 "Una por línea, con {n}, {casa} y {antes}, la casa que dejáis.": [
 "editor/esquema.py"
 ],
@@ -47625,6 +47925,11 @@
 "editor/esquema.py"
 ],
 "Una por línea, con {n}.": [
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py",
@@ -48327,6 +48632,9 @@
 "editor/esquema_honrado.py"
 ],
 "Vale también para los objetivos de los contratos a los que solo hay que asustar.": [
+"editor/esquema.py"
+],
+"Vale tanto si rompes tú como si te deja. Mientras dura, corta al charlar, cuelga si llamas, no contesta a lo que escribes y dice que no a los gestos, a las citas y a volver. Luego se puede ir recuperando la confianza. Con cero, nada de rencor.": [
 "editor/esquema.py"
 ],
 "Vale una palabra o un trozo: por ejemplo sirena, puerta o policía. Da igual escribirlo con tildes o sin ellas, y en mayúsculas o en minúsculas. Con varias palabras, salen los sonidos que las tienen todas.": [
@@ -49067,6 +49375,8 @@
 "editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
 "editor/esquema.py"
 ],
 "Vida delictiva. Mercancía vendida por valor de {get} euros": [
@@ -49443,6 +49753,7 @@
 "juego/menus_juego.py",
 "juego/menus_juego.py",
 "juego/menus_juego.py",
+"juego/menus_juego.py",
 "juego/menus_online.py",
 "juego/menus_online.py",
 "juego/menus_online.py",
@@ -49727,6 +50038,7 @@
 "data/datos/misiones_honrada.json"
 ],
 "Vuelve al menú de opciones. También sirve Escape.": [
+"juego/menus_juego.py",
 "juego/menus_juego.py"
 ],
 "Vuelve al muelle de Cala Brava, atraca con Intro y lleva el ancla a la náutica.": [
@@ -49811,7 +50123,8 @@
 "data/datos/gente.json"
 ],
 "Víctima del atraco": [
-"juego/extras2.py"
+"juego/extras2.py",
+"data/datos/vida.json"
 ],
 "W, A, S y D": [
 "juego/ayuda.py"
@@ -50196,6 +50509,9 @@
 ],
 "Ya no estás en ninguna banda.": [
 "juego/enlinea.py"
+],
+"Ya no hay nada que hacer: el suceso ha terminado.": [
+"juego/extras2.py"
 ],
 "Ya no hay quien avise. El escondite está junto a {nombre}: quedan {v}.": [
 "juego/reconquista.py"
@@ -53851,6 +54167,9 @@
 "nadando": [
 "juego/partida.py"
 ],
+"nadie": [
+"juego/menus_charla.py"
+],
 "nadie sospecha nada": [
 "juego/honrado.py"
 ],
@@ -53903,6 +54222,7 @@
 "juego/menus_enlinea.py",
 "juego/menus_extra.py",
 "juego/menus_extra.py",
+"juego/menus_juego.py",
 "juego/menus_juego.py",
 "juego/menus_juego.py",
 "juego/menus_juego.py",
@@ -54858,6 +55178,7 @@
 "juego/menus_juego.py",
 "juego/menus_juego.py",
 "juego/menus_juego.py",
+"juego/menus_juego.py",
 "juego/menus_online.py",
 "juego/vuelo_pantalla.py"
 ],
@@ -55231,6 +55552,7 @@
 "juego/menus_vida.py"
 ],
 "un barbo": [
+"data/datos/armas.json",
 "data/mods/valdeolmos.json"
 ],
 "un bidón con el nombre de la barca": [
@@ -55260,6 +55582,9 @@
 ],
 "un camión de bomberos": [
 "juego/menus_vida.py"
+],
+"un cangrejo de río": [
+"data/datos/armas.json"
 ],
 "un coche patrulla": [
 "juego/menus_vida.py"
@@ -55343,6 +55668,7 @@
 "juego/golpes.py"
 ],
 "un lucio": [
+"data/datos/armas.json",
 "data/mods/penas_altas.json"
 ],
 "un maletín": [
@@ -55462,6 +55788,9 @@
 "una ambulancia": [
 "juego/menus_vida.py"
 ],
+"una anguila": [
+"data/datos/armas.json"
+],
 "una baja más": [
 "juego/guerra.py"
 ],
@@ -55519,6 +55848,9 @@
 ],
 "una cana": [
 "juego/charla.py"
+],
+"una carpa": [
+"data/datos/armas.json"
 ],
 "una cartera de piel": [
 "juego/mochila.py",
@@ -55638,6 +55970,9 @@
 ],
 "una tecla atendida a mano": [
 "editor/accesibilidad/revision_teclado.py"
+],
+"una tenca": [
+"data/datos/armas.json"
 ],
 "una trucha": [
 "data/datos/armas.json"
@@ -57055,6 +57390,9 @@
 "{nombre} queda a tu nombre: ya no se pierde aunque cojas otro.": [
 "juego/misvehiculos.py"
 ],
+"{nombre} queda a {metros}, {direccion}. En tierra no se rueda: despega con flecha arriba y vuela hacia allí.": [
+"juego/partida.py"
+],
 "{nombre} queda en el hangar de {nombre2}. Aquí no se pierde.": [
 "juego/vuelo.py"
 ],
@@ -57331,6 +57669,9 @@
 ],
 "{nombre}, a {metros} al {cardinal} de {nombre2}": [
 "juego/mundo.py"
+],
+"{nombre}, a {metros} en línea recta, {direccion}.": [
+"juego/partida.py"
 ],
 "{nombre}, aparcado aquí al lado. ": [
 "juego/menus_juego.py"
@@ -57941,6 +58282,10 @@
 "{n} con pinta de {lower}": [
 "juego/atracos.py"
 ],
+"{n} contesta con monosílabos y no deja de mirar el móvil. Todavía le duele.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
 "{n} cuenta los billetes dos veces y sonríe: ya sabe en qué se lo va a gastar, en {cosa}.": [
 "juego/convivencia.py",
 "data/datos/vida.json"
@@ -58018,6 +58363,10 @@
 "{n} lee lo escrito. {n2} acepta y {n3} cancela.": [
 "juego/menus.py"
 ],
+"{n} lee tu mensaje y no contesta.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
 "{n} lee tu mensaje y tarda en contestar: «Después del plantón del otro día, mejor lo dejamos para más adelante.» Prueba dentro de {d} días.": [
 "juego/encuentros.py",
 "data/datos/vida.json"
@@ -58046,6 +58395,10 @@
 ],
 "{n} mete su ropa en una maleta. La planta se la lleva.": [
 "juego/convivencia.py",
+"data/datos/vida.json"
+],
+"{n} ni se lo piensa: «No voy a ir a ningún sitio contigo.»": [
+"juego/encuentros.py",
 "data/datos/vida.json"
 ],
 "{n} niega despacio: Cada uno en su casa. Es como mejor me va.": [
@@ -58130,6 +58483,10 @@
 "{n} saldrá cada día a vender lo que guardas en el armario de tus casas. Al final del día te trae lo suyo.": [
 "juego/golpes.py"
 ],
+"{n} se aparta en seco: «Ni se te ocurra.»": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
 "{n} se aparta un poco cuando te acercas. Se nota que no te has duchado.": [
 "juego/necesidades.py",
 "data/datos/vida.json"
@@ -58184,6 +58541,10 @@
 ],
 "{n} se ríe contra tu cuello.": [
 "juego/laboratorio.py"
+],
+"{n} se ríe sin ganas: «¿Volver? Hace nada que lo dejamos. Ni lo sueñes.»": [
+"juego/encuentros.py",
+"data/datos/vida.json"
 ],
 "{n} se sienta contigo a la mesa y no deja ni las migas.": [
 "juego/compra.py",
@@ -58279,6 +58640,10 @@
 ],
 "{n} te mira a los ojos, esperando.": [
 "juego/laboratorio.py"
+],
+"{n} te mira de arriba abajo: «No tengo nada que hablar contigo.» Y se da la vuelta.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
 ],
 "{n} te mira un momento y aparta la vista: «Hoy no, de verdad.»": [
 "juego/encuentros.py",
@@ -59538,6 +59903,10 @@
 "juego/honrado.py",
 "data/datos/vida.json"
 ],
+"«Dame tiempo. Mucho tiempo», te dice {n}.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
 "«Despacio. Hoy quiero que dure.»": [
 "juego/laboratorio.py"
 ],
@@ -59556,6 +59925,14 @@
 ],
 "«La venganza del boquerón»: cine de terror marinero. Sales con hambre.": [
 "juego/menus_lugares.py"
+],
+"«No me escribas, de momento», te responde {n}. Y nada más.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
+"«No me llames», te dice {n}, y cuelga.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
 ],
 "«No me sirve que me lo digas», dice {n}. «Demuéstramelo.»": [
 "juego/encuentros.py",
@@ -59637,11 +60014,23 @@
 "«¡Eh!». Uno sale corriendo; el otro te suelta un puñetazo antes de irse. Duele, pero la persiana sigue en su sitio.": [
 "data/datos/vida.json"
 ],
+"«¿Ahora quieres charlar?», te suelta {n}. «Déjame en paz una temporada.»": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
+"«¿En serio?», dice {n}, y da un paso atrás.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
 "«¿Has cocinado tú?», dice {n}, y te da un beso.": [
 "juego/compra.py",
 "data/datos/vida.json"
 ],
 "«¿Otra vez? La última vez me dejaste esperando», te contesta {n}. Todavía no quiere quedar contigo: dale {d} días.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
+"«¿Quedar? No, gracias. Todavía no», te contesta {n}.": [
 "juego/encuentros.py",
 "data/datos/vida.json"
 ],

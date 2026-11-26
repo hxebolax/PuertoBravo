@@ -979,7 +979,8 @@
       40
      ],
      "desc": "Truchas de lago y, con suerte, un lucio.",
-     "sonido": "lugar_rio"
+     "sonido": "lugar_rio",
+     "agua": "lago"
     },
     {
      "id": "pa_escombrera",
@@ -1055,12 +1056,22 @@
   {
    "nombre": "una trucha del Lago Negro",
    "valor": 34,
-   "peso": 14
+   "peso": 14,
+   "aguas": [
+    "lago"
+   ],
+   "mapas": [
+    "penas_altas"
+   ]
   },
   {
    "nombre": "un lucio",
    "valor": 70,
-   "peso": 4
+   "peso": 4,
+   "aguas": [
+    "lago",
+    "rio"
+   ]
   }
  ],
  "capitulos": {

@@ -3588,12 +3588,21 @@
   {
    "nombre": "una corvina del Ocaso",
    "valor": 46,
-   "peso": 10
+   "peso": 10,
+   "aguas": [
+    "mar"
+   ],
+   "mapas": [
+    "bahia_ocaso"
+   ]
   },
   {
    "nombre": "un pez limón",
    "valor": 90,
-   "peso": 4
+   "peso": 4,
+   "aguas": [
+    "mar"
+   ]
   }
  ],
  "capitulos": {

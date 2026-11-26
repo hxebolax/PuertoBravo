@@ -486,7 +486,7 @@ Gracias a todas las personas que han ayudado a mejorar Puerto Bravo desde GitHub
 
 ### Con avisos de fallos y propuestas
 
-- [lishi-lg](https://github.com/lishi-lg): el primer fallo avisado, con su registro de error, y las propuestas de bajar la fama en la calle con los chavales del barrio y de hacer más cosas con tu acompañante: invitarle a algo, regalarle un décimo, llegar juntos a casa y usar el móvil sin salir de ella.
+- [lishi-lg](https://github.com/lishi-lg): el primer fallo avisado, con su registro de error, y las propuestas de bajar la fama en la calle con los chavales del barrio y de hacer más cosas con tu acompañante: invitarle a algo, regalarle un décimo, llegar juntos a casa y usar el móvil sin salir de ella; y las de llevarte a la comisaría más cercana, distinguir la pesca de río y de mar, elegir los sucesos callejeros y crearlos en los mods, y unos días de rencor de la expareja.
 - [zeoltan](https://github.com/zeoltan): dos cierres inesperados del juego, el todoterreno que no aparecía y la propuesta de un pack de sonidos.
 - [aaronalostiza](https://github.com/aaronalostiza): el cierre del juego al entrar a un servidor y otro error.
 - [jgudino013-ship-it](https://github.com/jgudino013-ship-it): que las bandas no te ataquen en oleadas cuando solo te defiendes.
@@ -496,6 +496,7 @@ Gracias a todas las personas que han ayudado a mejorar Puerto Bravo desde GitHub
 - [UnDuende](https://github.com/UnDuende): el grupo de Telegram de la comunidad en español.
 - [ebram212131](https://github.com/ebram212131): la petición de que el juego funcione también en Linux y en Mac.
 - [matheus-raeski](https://github.com/matheus-raeski): el servidor de jugadores RP Brasil, de rol y en portugués.
+- [SeanTerry01](https://github.com/SeanTerry01): el aviso de que la ficha de Marisma Negra salía en español con el juego en inglés, y la propuesta de traducir el nombre del juego.
 
 ---
 

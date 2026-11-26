@@ -520,7 +520,11 @@ class Conduccion:
         self.sv_bajado(v)
         if not forzado:
             self.son_puerta(v)
-            self.decir(tr('Te bajas. {describir}.').format(describir=(self.mundo.describir(j.x, j.y))), True)
+            aviso = ""
+            if v.modelo.get("vuela") and not self.es_mio(v) and self.puede_ser_mio(v) and not getattr(v, "avisado_suyo", False):
+                v.avisado_suyo = True                            # un helicóptero robado se pierde si coges otro (foro, 1.7.6): se avisa una vez
+                aviso = tr(" No es tuyo: si coges otro vehículo o te alejas, se pierde. Para quedártelo, ponlo a tu nombre en el móvil, en Mis vehículos.")
+            self.decir(tr('Te bajas. {describir}.').format(describir=(self.mundo.describir(j.x, j.y))) + aviso, True)
 
     # ------------------------------------------------------ teclas al volante
     def tecla_coche(self, ev, mayus):

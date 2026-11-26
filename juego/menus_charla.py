@@ -81,7 +81,8 @@ def conversar(p, q):
         if not p.en_servidor:
             lista.append(Opcion(lambda: tr('Proponerle que se una a tu banda: prima de {prima_recluta} euros').format(prima_recluta=(p.prima_recluta())), reclutar,
                                 ayuda=tr("Necesitas un territorio y hueco en la banda. Además, que te tenga confianza, que tu nombre suene en la calle y que tenga carácter para ello: "
-                                      "los muy tímidos y la gente mayor dicen que no. Si acepta, cobra la prima, se queda contigo con su nombre y pelea a tu lado como los demás de tu banda.")))
+                                      "la gente mayor no se une nunca, ni quien te habla así: {lista}. El carácter se nota en cómo te habla al saludar. Si acepta, cobra la prima, se queda contigo con su nombre y pelea a tu lado como los demás de tu banda.").format(
+                                    lista=(", ".join(p.nunca_reclutan()) or tr("nadie")))))
         if p.modo_adulto():
             lista.append(Opcion(tr("Coquetear"), ligar, ayuda=tr("Puede salir bien o mal, según la confianza, tu ánimo y lo que busque la otra persona. Un no es un no.")))
             if p.puede_proponer(q):

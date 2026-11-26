@@ -38,6 +38,7 @@ AJ = Ajustes("vida_honrada", {
     "veto_dias": 10, "carta_periodos": 3, "incidencia_prob": 40, "prestigio_periodo": 2, "prestigio_despido": 6, "titulo_prestigio": 4,
     # la empresa
     "empleado_sueldo": 8, "empleado_rinde": 14, "rep_inicial": 50, "rep_factor": 25, "atender_horas": 2, "atender_rep": 4, "abandono_dias": 5, "abandono_baja": 3,
+    "encargado_sueldo": 25, "encargado_rep": 1.5, "encargado_tope": 80,
     "precios_bajos_ingreso": 10, "precios_bajos_rep": 1, "precios_altos_ingreso": 15, "precios_altos_rep": 2, "horario_ingreso": 20,
     "tapadera_capacidad": 400, "tapadera_comision": 15, "negro_umbral": 3000, "negro_decae": 4,
     "inspeccion_min": 10, "inspeccion_max": 18, "sancion_pct": 5, "soborno_pct": 3, "soborno_prob": 55, "plazo_asunto": 3,
@@ -922,6 +923,8 @@ class Honrado:
         if e.get("dano", 0) > 0:
             bruto *= 1.0 - AJ("extorsion_dano") / 100.0
         sueldos = int(e["emp"] * base * AJ("empleado_sueldo") / 100.0)
+        if e.get("encargado"):
+            sueldos += int(base * AJ("encargado_sueldo") / 100.0)
         neto = max(0, int(bruto) - sueldos)
         return (neto, sueldos) if detalle else neto
 
@@ -931,7 +934,8 @@ class Honrado:
         nombre = tr("por los suelos") if rep < 20 else "flojo" if rep < 40 else "normal" if rep < 60 else "bueno" if rep < 85 else "excelente"
         dias = self.dia - e["visto"]
         return (tr('{hon_nivel_txt}, nivel {int}. Da {ingreso_negocio} euros al día. Empleados: {emp} de {hon_max_empleados}. Su nombre entre la clientela es {nombre}. Precios {precios}, horario {horario}. ').format(hon_nivel_txt=(self.hon_nivel_txt(int(e['nivel']))), int=(int(e['nivel'])), ingreso_negocio=(self.ingreso_negocio(l)), emp=(e['emp']), hon_max_empleados=(self.hon_max_empleados(e)), nombre=(nombre), precios=(e['precios']), horario=(e['horario']))
-                + (tr("Lo has atendido hoy") if dias <= 0 else tr('Hace {dias} {v} que no pasas por aquí').format(dias=(dias), v=(tr('día') if dias == 1 else tr('días')))) + (tr(". Sirve de tapadera") if e["tapadera"] else ""))
+                + (tr("Lo has atendido hoy") if dias <= 0 else tr('Hace {dias} {v} que no pasas por aquí').format(dias=(dias), v=(tr('día') if dias == 1 else tr('días'))))
+                + (tr(". Lo lleva un encargado") if e.get("encargado") else "") + (tr(". Sirve de tapadera") if e["tapadera"] else ""))
 
     def hon_visitar(self, l):
         if not self.en_servidor and l.id in self.j.propiedades:
@@ -950,6 +954,18 @@ class Honrado:
         self.son("jornada", cat="interfaz")
         self.cambiar_ciudadania(0.5)
         self.decir(AJ.frase("frases_atender", negocio=l.nombre, horas=horas, hora=self.hora_txt()), True)
+
+    def hon_encargado(self, l):
+        """Contratar o despedir al encargado de un negocio tuyo (foro, 1.7.6): lo lleva por ti. Cobra cada día de la caja, el
+        negocio no se da nunca por abandonado y su nombre sube solo, poco a poco, hasta encargado_tope. Atender tú sigue
+        subiéndolo más."""
+        e = self.hon_emp(l)
+        sueldo = int(int(l.get("ingresos", 0)) * AJ("encargado_sueldo") / 100.0)
+        e["encargado"] = not e.get("encargado")
+        if e["encargado"]:
+            return self.decir(tr('Contratas a un encargado para {nombre}: cobra {sueldo} euros al día, que salen de la caja. Ya no hace falta que pases a diario: el negocio no se descuida y su nombre sube solo, poco a poco. Cómo va lo ves en el móvil, en Vida, reputación y consecuencias, Negocios. Ahora da {ingreso_negocio} euros al día.').format(
+                nombre=(l.nombre), sueldo=(sueldo), ingreso_negocio=(self.ingreso_negocio(l))), True)
+        return self.decir(tr('Despides al encargado de {nombre}. Si no pasas por aquí, el negocio se resentirá. Ahora da {ingreso_negocio} euros al día.').format(nombre=(l.nombre), ingreso_negocio=(self.ingreso_negocio(l))), True)
 
     def hon_mejora_coste(self, l, m):
         return int(int(l.get("precio", 0)) * _n(m, "coste") / 100.0)
@@ -1040,8 +1056,10 @@ class Honrado:
             if e.get("dano", 0) > 0:
                 e["dano"] -= 1
             if nivel and self.dia > h["gracia"]:                 # durante el periodo de gracia, el nombre del negocio no se mueve
-                dias = self.dia - max(e["visto"], h["gracia"])
+                dias = 0 if e.get("encargado") else self.dia - max(e["visto"], h["gracia"])       # con encargado, nunca está abandonado
                 d = {"bajos": AJ("precios_bajos_rep"), "altos": -AJ("precios_altos_rep")}.get(e["precios"], 0.0)
+                if e.get("encargado") and e["rep"] < AJ("encargado_tope"):
+                    d += AJ("encargado_rep")
                 if dias > AJ("abandono_dias"):
                     suelo = 45.0 if e["emp"] else 15.0           # con gente contratada el negocio aguanta sin ti; solo, se hunde
                     if e["rep"] > suelo:

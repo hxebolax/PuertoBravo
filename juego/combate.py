@@ -416,8 +416,14 @@ class Combate:
         app.abrir(menu)
 
     def _ruido_disparo(self, x, y):
-        if not self.en_defensa_propia():                         # disparar a quien te ha atacado primero no es delito
-            self.delito(0.4, tr("disparos en la vía pública"))
+        """Disparar sin silenciador por la calle es delito, pero una ráfaga cuenta una vez (calle, disparos_cada segundos) y,
+        sin herir a nadie, la búsqueda no pasa de disparos_nivel_max (foro, 1.7.6: antes cada bala la subía y en unos segundos
+        llegaba al máximo). Lo que la sube de verdad es herir o matar a gente y a policías."""
+        from . import calle
+        if not self.en_defensa_propia() and self.t - getattr(self, "_t_disparo_delito", -999.0) >= calle.aj("disparos_cada"):     # a quien te ha atacado primero, no es delito
+            self._t_disparo_delito = self.t
+            nivel = int(calle.aj("disparos_nivel_max"))
+            self.delito(0.4, tr("disparos en la vía pública"), tope=UMBRAL[nivel] - 0.01 if 1 <= nivel <= 4 else None)
         self.susto_por_tiros(x, y)
 
     def susto_por_tiros(self, x, y, radio=40):
@@ -591,7 +597,9 @@ class Combate:
         self.quitar_vehiculo(v)
 
     # ---------------------------------------------------------------- delitos
-    def delito(self, puntos, texto=None, siempre=False):
+    def delito(self, puntos, texto=None, siempre=False, tope=None):
+        """Un delito que suma «puntos» de búsqueda si alguien lo ve. Con «tope», no deja la cuenta por encima de él: un
+        delito menor no sube la búsqueda pasado cierto nivel."""
         j = self.j
         if self.cfg["sin_policia"]:
             return
@@ -615,6 +623,10 @@ class Combate:
         self.cambiar_ciudadania(-0.6 * puntos)
         if j.ciudadania >= 50:
             puntos *= 0.7            # a un buen vecino se le pasan por alto las faltas pequeñas
+        if tope is not None:
+            puntos = min(puntos, tope - j.puntos_busqueda)
+            if puntos <= 0:
+                return
         if j.estrellas == 0 and j.puntos_busqueda + puntos >= UMBRAL[0] and texto:
             self.decir(tr('Te han visto. Delito: {texto}.').format(texto=(texto)))
         elif texto:
@@ -1028,7 +1040,9 @@ class Combate:
         self.app.abrir(Dialogo(self.app, [(tr("Narrador"), tr('Todo se vuelve negro. Horas después despiertas en {nombre}, {nombre2}, con un vendaje nuevo y {coste} euros menos. Son las {hora_txt}.').format(nombre=(h.nombre), nombre2=(self.mundo.nombre), coste=(coste), hora_txt=(self.hora_txt())))], fin))
 
     def _reaparecer(self, tipo):
-        """Te lleva al hospital o comisaría más cercano (de este mapa, o del principal)."""
+        """Te lleva al hospital o comisaría más cercano: el de este mapa, si lo hay; si no, el de la localidad más cercana
+        por carretera, siguiendo las salidas (issue 41: de un pueblo sin comisaría, a la del pueblo de al lado, no siempre a
+        Puerto Bravo). Si no se llega por tierra (una isla, el mar), el de Puerto Bravo."""
         x, y = self.pos()
         aqui = [l for l in self.mundo.lugares.values() if l.tipo == tipo]
         if aqui:
@@ -1036,7 +1050,9 @@ class Combate:
             self.teletransportar(l.x, l.y)
             return l
         todos = [l for l in self.lugares.values() if l.tipo == tipo]
-        l = next((q for q in todos if q.mapa == "puerto_bravo"), todos[0])
+        km = self.km_por_tierra(self.mundo.id)
+        cerca = [q for q in todos if q.mapa in km]
+        l = min(cerca, key=lambda q: km[q.mapa]) if cerca else next((q for q in todos if q.mapa == "puerto_bravo"), todos[0])
         remolque = self.remolcar_barco(l.mapa)
         if remolque:
             self.decir(remolque)

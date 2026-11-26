@@ -500,7 +500,7 @@ Thanks to everyone who has helped make Puerto Bravo better through GitHub. Whene
 
 ### Bug reports and suggestions
 
-- [lishi-lg](https://github.com/lishi-lg): the first bug ever reported, with its error log, and the suggestions to lower your street reputation with the neighbourhood kids and to do more with your companion: buying them a drink, giving them a lottery ticket, getting home together and using the phone without leaving the house.
+- [lishi-lg](https://github.com/lishi-lg): the first bug ever reported, with its error log, and the suggestions to lower your street reputation with the neighbourhood kids and to do more with your companion: buying them a drink, giving them a lottery ticket, getting home together and using the phone without leaving the house; and the ones to take you to the nearest police station, to tell river and sea fishing apart, to choose street events and create them in mods, and a few days of grudge from your ex.
 - [zeoltan](https://github.com/zeoltan): two unexpected crashes, the missing four-by-four and a sound pack proposal.
 - [aaronalostiza](https://github.com/aaronalostiza): the game closing when joining a server, and another error.
 - [jgudino013-ship-it](https://github.com/jgudino013-ship-it): gangs not attacking in waves when you are only defending yourself.
@@ -510,6 +510,7 @@ Thanks to everyone who has helped make Puerto Bravo better through GitHub. Whene
 - [UnDuende](https://github.com/UnDuende): the community's Spanish Telegram group.
 - [ebram212131](https://github.com/ebram212131): the request for the game to run on Linux and Mac as well.
 - [matheus-raeski](https://github.com/matheus-raeski): the RP Brasil player server, a roleplay server in Portuguese.
+- [SeanTerry01](https://github.com/SeanTerry01): the report that the Marisma Negra card was in Spanish with the game in English, and the suggestion to translate the game's name.
 
 ---
 

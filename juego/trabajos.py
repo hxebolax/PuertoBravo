@@ -22,7 +22,8 @@ def _resto(t):
 class Trabajos:
     def _destino_azar(self, minimo=150, maximo=650, excluir=None, sin_tipos=()):
         x, y = self.pos()
-        todos = [l for l in self.mundo.lugares.values() if l.tipo not in ("salida", "muelle", "embarcadero") + tuple(sin_tipos) and "xy" not in l.d]
+        mias = set(self.j.propiedades)                           # nadie pide una pizza desde una casa tuya donde no vive nadie
+        todos = [l for l in self.mundo.lugares.values() if l.tipo not in ("salida", "muelle", "embarcadero") + tuple(sin_tipos) and "xy" not in l.d and l.id not in mias]
         ops = [l for l in todos if minimo <= math.hypot(l.x - x, l.y - y) <= maximo and l is not excluir]
         return random.choice(ops or todos or list(self.mundo.lugares.values()))
 
@@ -115,7 +116,7 @@ class Trabajos:
             self.gps_a_lugar(l, auto=True, callar=True)
         elif tipo == "mensajeria":
             x, y = self.pos()
-            ops = [l for l in self.mundo.lugares.values() if math.hypot(l.x - x, l.y - y) > 350]
+            ops = [l for l in self.mundo.lugares.values() if math.hypot(l.x - x, l.y - y) > 350 and l.id not in self.j.propiedades]
             l = random.choice(ops or list(self.mundo.lugares.values()))
             d = self._dist(l)
             t.update(lugar=l, limite=None, dist=d, texto=tr('Mensajería del mar: lleva el paquete a {nombre}.').format(nombre=(l.nombre)))

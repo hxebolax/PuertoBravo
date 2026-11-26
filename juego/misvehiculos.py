@@ -1042,7 +1042,7 @@ def lista_mis_vehiculos(p):
                 ficha_d(d, "garaje", tr('En el garaje de {v}').format(v=(p.nombre_lugar(l) if l else tr('una casa'))), garaje=pid)
     for l, h, d in p.hangares_naves():                            # las aeronaves guardadas en tus hangares (vuelo.py)
         if d.get("modelo") in p.modelos:
-            ficha_d(d, "hangar", tr('En el hangar de {nombre_lugar}').format(nombre_lugar=(p.nombre_lugar(l))) + (tr('. Combustible, {int} por ciento').format(int=(int(float(d.get('queroseno', 100))))) if p.cfg["vuelo_combustible"] else ""), hangar=l.id)
+            ficha_d(d, "hangar", tr('En el hangar de {nombre_lugar}').format(nombre_lugar=(p.nombre_lugar(l))) + (tr('. Combustible, {int} por ciento').format(int=(int(float(d.get('queroseno', 100))))) if p.vuelo_con_combustible() else ""), hangar=l.id)
     return fichas
 
 

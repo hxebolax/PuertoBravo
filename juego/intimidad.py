@@ -185,6 +185,9 @@ class Intimidad:
         """Un gesto de cariño con alguien con quien tienes una relación: beso, baile, masaje o un susurro."""
         nombre, afin, animo, minimo, frase = GESTOS[clave]
         r = self.relacion(pid)
+        if self.hielo_ex(r):                                     # recién rota la relación, ni se te ocurra (issue 41)
+            self.decir(self.frase_hielo("gesto", pers), True)
+            return False
         if r["afinidad"] < minimo and self.j.pareja != pid:
             self.decir(tr('{nombre} se aparta con una sonrisa. Todavía es pronto para eso.').format(nombre=(pers['nombre'])), True)
             return False

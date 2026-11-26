@@ -195,6 +195,9 @@ class Catalogo:
         sec = mod.secciones if mod else {}
         if ref == "sonido":
             return [(s, s) for s in self.sonidos]
+        if ref == "agua":
+            from juego.extras import AGUAS
+            return list(AGUAS)
         if ref == "habilidad":
             return [("conduccion", tr("Conducción")), ("punteria", tr("Puntería")), ("resistencia", tr("Resistencia")), ("pesca", tr("Pesca"))]
         if ref == "vendible":                                    # lo que una tienda puede vender además de comida
@@ -225,7 +228,7 @@ class Catalogo:
                  "tipo_enemigo": ("tipos_enemigo", b.get("tipos_enemigo", [])),
                  "titulo_estudios": ("titulos", b.get("titulos", [])), "objeto": ("objetos", b.get("objetos", [])),
                  "producto": ("productos", b.get("productos", [])), "pasillo": ("pasillos", b.get("pasillos", [])), "tipo_tienda": ("tipos_tienda", b.get("tipos_tienda", [])),
-                 "carta": ("cartas", b.get("cartas", [])),
+                 "carta": ("cartas", b.get("cartas", [])), "suceso": ("sucesos", b.get("sucesos", [])),
                  "sustancia": ("sustancias", b["adultos"].get("sustancias", [])), "persona": ("personas", b["adultos"].get("personas", [])),
                  "actividad": ("actividades", b["adultos"].get("actividades", [])), "regalo": ("regalos", b["adultos"].get("regalos", []))}
         if ref in tabla:

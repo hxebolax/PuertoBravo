@@ -655,6 +655,28 @@ def volumen_sonidos(app):
 
 
 # ======================================================================= opciones
+def menu_sucesos(app):
+    """Opciones, Qué sucesos callejeros salen (issue 41): cada suceso de los datos, con sí o no. Se guarda en
+    sucesos_apagados, por su id, así que vale también para los de los mods."""
+    cfg = app.cfg
+    sucesos = [s for s in (getattr(app, "datos", None) or {}).get("sucesos") or [] if isinstance(s, dict) and s.get("id")]
+
+    def opcion(s):
+        def aj(d):
+            apagados = [x for x in cfg["sucesos_apagados"] if x != s["id"]]
+            if s["id"] not in cfg["sucesos_apagados"]:
+                apagados.append(s["id"])
+            cfg["sucesos_apagados"] = apagados
+        ayuda_ = (tr("Con enemigos: hay que pelear.") if s.get("violento") else tr("Sin enemigos."))
+        if s.get("mapas"):
+            ayuda_ += " " + tr("Solo sale en algunas localidades.")
+        return Opcion(lambda: f"{s.get('nombre', s['id'])}: {tr('no') if s['id'] in cfg['sucesos_apagados'] else tr('sí')}", ajuste=aj, ayuda=ayuda_)
+    ops = [opcion(s) for s in sucesos] or [Opcion(tr("No hay sucesos callejeros en los datos."))]
+    m = Menu(app, tr("Qué sucesos callejeros salen"), ops + [Opcion(tr("Volver"), lambda: app.cerrar(m), ayuda=tr("Vuelve al menú de opciones. También sirve Escape."))],
+             al_cerrar=cfg.guardar, intro=tr("Cambia cada uno con las flechas izquierda y derecha. Con no, ese suceso no sale nunca. Los sucesos solo salen con la opción Sucesos callejeros al azar en sí"))
+    app.abrir(m)
+
+
 def opciones(app):
     """Opciones organizadas por secciones. Cada sección termina con «Volver»."""
     cfg = app.cfg
@@ -865,8 +887,9 @@ def opciones(app):
                   tr("Con sí, al acercarte al campo de destino el aparato baja y se encara solo, aunque pilotes a mano. Con no, lo haces tú: bajas a la altitud que dice la torre y mantienes en el centro los chasquidos de alineación; "
                   "si entras alto o torcido, la torre te manda dar otra vuelta, y a la segunda te guía ella. Se cambia también durante el vuelo, en el menú de vuelo.")),
             si_no("vuelo_combustible", tr("Las aeronaves gastan combustible"),
-                  tr("Con el vuelo real. Con sí, cada aparato tiene su depósito, que se llena en helipuertos, aeropuertos y aeródromos; el juego avisa en la reserva, y si se acaba, el motor se para y planeas. "
-                  "Con no, el depósito no se gasta nunca.")),
+                  tr("Con el vuelo real. Con sí, cada aparato tiene su depósito; el juego avisa en la reserva, y si se acaba, el motor se para y planeas. Se reposta aterrizado en un helipuerto, un aeropuerto o un aeródromo, con Intro, "
+                  "en Repostar; en tu hangar; o desde el móvil, en Mis vehículos, donde te lo traen. Las gasolineras no sirven para lo que vuela. "
+                  "Con no, el depósito no se gasta nunca, y sigues pilotando igual: despegue, altura, aterrizaje y travesías. Lo único que quita el pilotaje es el vuelo real.")),
             si_no("piloto_gps", tr("Piloto del GPS, el coche va solo hasta el destino"),
                   tr("Con un destino marcado en el GPS y en conducción asistida, el coche conduce solo: acelera, frena, gira, espera en los semáforos y se detiene al llegar. "
                   "Con cualquier flecha o el espacio mandas tú. Se activa también con la tecla Y al volante.")),
@@ -929,6 +952,8 @@ def opciones(app):
             si_no("multas", tr("Multa o soborno cuando te cogen por poco"),
                   tr("Con uno o dos niveles de búsqueda y dinero suficiente, cuando un agente te coge puedes pagar la multa en el acto, intentar sobornarle o dejarte detener. Con no, te detienen siempre, como antes.")),
             si_no("sucesos", tr("Sucesos callejeros al azar"), tr("Atracos, pandilleros y maletines perdidos que aparecen de vez en cuando por la calle.")),
+            Opcion(tr("Qué sucesos callejeros salen"), lambda: menu_sucesos(app),
+                   ayuda=tr("Cada suceso, del juego y de tus mods, con sí o no: por ejemplo, los maletines sí y los atracos no. Algunas localidades solo admiten unos cuantos.")),
             si_no("invulnerable", tr("Asistencia: no recibir daño"), tr("Para explorar sin preocuparte de nada.")),
             si_no("sin_policia", tr("Asistencia: sin policía"), tr("Los delitos no cuentan y nadie te persigue.")),
             si_no("vida_realista", tr("Vida realista: hambre, sed, sueño e higiene"), tr("Hay que comer, beber, dormir y lavarse. Con hambre, con sed o con sueño vas más despacio y apuntas peor, y si los ignoras pierdes salud. "
@@ -1159,7 +1184,7 @@ def pausa(p):
 # ========================================================================== móvil
 GRUPOS = [(tr("Todos los lugares"), None), (tr("Mis casas y negocios"), "propio"), (tr("Sin visitar"), "nuevo"),
           (tr("Tiendas y comida"), ("tienda", "comida", "pizzeria", "farmacia", "bar")), (tr("Armerías"), ("armeria",)),
-          (tr("Talleres y desguace"), ("taller", "desguace")), (tr("Casas y negocios en venta"), ("casa", "negocio")),
+          (tr("Talleres y desguace"), ("taller", "desguace")), (tr("Casas y negocios en venta"), "venta"),
           (tr("Servicios: hospital, comisaría y taxi"), ("hospital", "comisaria", "taxi", "periodico")),
           (tr("Ocio: casino y carreras"), ("casino", "carrera")), (tr("Monumentos y sitios de interés"), ("monumento",))]
 
@@ -1254,6 +1279,8 @@ def lista_lugares(p, al_elegir=None, titulo=None, mapa=None, otras=True):
                 if filtro == "propio" and l.id not in p.j.propiedades:
                     continue
                 if filtro == "nuevo" and l.id in p.j.visitados:
+                    continue
+                if filtro == "venta" and (l.tipo not in ("casa", "negocio") or l.id in p.j.propiedades):    # lo tuyo ya no está en venta
                     continue
                 if isinstance(filtro, tuple) and l.tipo not in filtro:
                     continue

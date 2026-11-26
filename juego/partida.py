@@ -575,6 +575,29 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
             nivel = sig
         return None
 
+    def km_por_tierra(self, origen):
+        """Los kilómetros de carretera desde una localidad hasta cada una a la que se llega sin cruzar el mar, siguiendo las
+        salidas como el viaje: {mapa: km}, con la de origen a 0. Una salida sin «km» cuenta 20, como en el viaje."""
+        import heapq
+        dist, cola = {origen: 0.0}, [(0.0, origen)]
+        while cola:
+            d, mid = heapq.heappop(cola)
+            m = self.mapas.get(mid)
+            if d > dist.get(mid, d) or m is None or m.tipo == "mar":
+                continue
+            for l in m.lugares.values():
+                dest = l.get("a_mapa") if l.tipo == "salida" else None
+                if dest not in self.mapas or self.mapas[dest].tipo == "mar":
+                    continue
+                try:
+                    km = max(0.1, float(l.get("km", 20)))
+                except (TypeError, ValueError):
+                    km = 20.0
+                if d + km < dist.get(dest, float("inf")):
+                    dist[dest] = d + km
+                    heapq.heappush(cola, (d + km, dest))
+        return dist
+
     def medio_por_rail(self, origen, destino):
         """Cómo se va por raíl de una localidad a otra: «tranvia» si son vecinas por carretera, «tren» si se llega por tierra
         aunque sea dando un rodeo, y None si hay mar por medio."""
@@ -1536,6 +1559,15 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         if v and d0 <= (g["radio"] or 16) and (g.get("final") or not g["auto"]) and g["sigue"] is None:
             # al volante y ya en el sitio: nada de «queda al este», que con el coche no se puede acercar más
             return ("fin", tr("Estás en {nombre}. {pista}").format(nombre=g['nombre'], pista=self.pista_de_llegada(self._lugar_del_gps()) or (tr('Pulsa Intro para continuar el viaje.') if g.get('final') else '')).strip())
+        if v and self.volando(v) and self.vuelo_real():
+            # en un helicóptero o una avioneta no se va por las calles (foro, 1.7.6: en tierra pedía giros que no se pueden
+            # hacer): en tierra, despegar; en el aire, hacia dónde queda y a cuánto, en línea recta
+            dx, dy = g["dest"]
+            if getattr(v, "fase", "tierra") == "tierra":
+                return ("tierra", tr('{nombre} queda a {metros}, {direccion}. En tierra no se rueda: despega con flecha arriba y vuela hacia allí.').format(
+                    nombre=(g['nombre']), metros=(M.metros(d0)), direccion=(self.direccion_txt(dx, dy))))
+            return (("aire", int(d0 // 150), M.cardinal(M.rumbo_a(dx - x, dy - y))), tr('{nombre}, a {metros} en línea recta, {direccion}.').format(
+                nombre=(g['nombre']), metros=(M.metros(d0)), direccion=(self.direccion_txt(dx, dy))))
         if not ruta:
             return ("fin", tr('{nombre}: estás en el destino.').format(nombre=(g['nombre'])))
         if len(ruta) == 1:
@@ -1642,7 +1674,7 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
                                 g["recordado"] = clave
                         except (ValueError, IndexError):
                             pass
-                elif clave != "fin" and g["recordado"] != clave and g["ruta"]:
+                elif isinstance(clave, tuple) and not isinstance(clave[0], str) and g["recordado"] != clave and g["ruta"]:     # un cruce; en el aire no los hay
                     p1 = (clave[0], clave[1])
                     if math.hypot(p1[0] - x, p1[1] - y) < (40 if self.j.veh else 10):
                         g["recordado"] = clave

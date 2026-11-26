@@ -4,6 +4,7 @@ import math
 import random
 
 from . import mundo as M
+from .extras import agua_de
 from .menus import Menu, Opcion
 
 PELICULAS = [
@@ -332,7 +333,7 @@ def embarcadero(p, l):
 
     def pescar():
         app.cerrar(m)
-        p.empezar_pesca(desde_muelle=True)
+        p.empezar_pesca(desde_muelle=True, agua=agua_de(l, p.mundo))
 
     def practicas():
         app.cerrar(m)
@@ -391,7 +392,7 @@ def punto_pesca(p, l):
         return
     p.app.decir(f"{l.nombre}. {l.desc}", True)
     if not p.pesca:
-        p.empezar_pesca(desde_muelle=p.mundo.tipo != "mar")
+        p.empezar_pesca(desde_muelle=p.mundo.tipo != "mar", agua=agua_de(l, p.mundo))
 
 
 def nautica(p, l):

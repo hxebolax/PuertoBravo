@@ -30,6 +30,7 @@ POR_DEFECTO = {
     "semaforos_coche": True,       # al conducir tú, el semáforo del próximo cruce: si está en rojo o en verde
     "frenada_auto": True,
     "sucesos": True,
+    "sucesos_apagados": [],        # los sucesos callejeros que no quieres que salgan, por su id (Opciones, La calle)
     "servidores": [],
     "comp_sin_interes": [],        # categorías de componentes que no quieres ver ni que te avisen: idioma, voces, documentacion, sonidos, mod              # servidores en línea guardados: nombre, dirección y huella de su certificado
     "mando_vibracion": True,

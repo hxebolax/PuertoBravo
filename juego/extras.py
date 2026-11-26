@@ -6,10 +6,34 @@ import random
 from . import mundo as M
 from .entidades import Persona
 
+# Las aguas donde se pesca (issue 41). Un punto de pesca dice la suya en «agua»; un pez, en «aguas», dónde vive, y en
+# «mapas», si solo vive en unas localidades. Un pez sin ellas pica en cualquier sitio, como antes de la 1.7.6.
+AGUAS = (("mar", tr("Mar")), ("rio", tr("Río")), ("lago", tr("Lago o laguna")))
+
+
+def agua_de(lugar, mundo):
+    """Qué agua es la de un punto de pesca o un embarcadero: la que diga su campo «agua»; sin él, el mar en el mapa del mar,
+    el río si suena a río, y si no, el mar, que es lo que había antes."""
+    a = lugar.get("agua") if lugar is not None else None
+    if a in dict(AGUAS):
+        return a
+    if mundo.tipo == "mar":
+        return "mar"
+    return "rio" if lugar is not None and lugar.get("sonido") == "lugar_rio" else "mar"
+
+
+def peces_de(peces, agua, mapa):
+    """Los peces que pican en esa agua y en esa localidad. Si ninguno, todos, para que siempre pique algo."""
+    def vale(p):
+        aguas, mapas = p.get("aguas") or [], p.get("mapas") or []
+        return (not aguas or agua in aguas) and (not mapas or mapa in mapas)
+    return [p for p in peces if vale(p)] or list(peces)
+
 
 class Extras:
     # ------------------------------------------------------------------ pesca
-    def empezar_pesca(self, desde_muelle=False):
+    def empezar_pesca(self, desde_muelle=False, agua=None):
+        """Lanza el anzuelo. «agua»: mar, río o lago (AGUAS), que decide qué peces pican; sin ella, el mar."""
         j = self.j
         if self.pesca:
             self.pesca = None
@@ -19,7 +43,7 @@ class Extras:
         if j.veh and abs(j.veh.vel) > 1.5:
             self.decir(tr("Detén el barco para pescar."), True)
             return
-        self.pesca = {"fase": "espera", "t": random.uniform(3, 10) * (1 - 0.05 * self.nivel("pesca")), "muelle": desde_muelle, "x": self.pos()[0], "y": self.pos()[1]}
+        self.pesca = {"fase": "espera", "t": random.uniform(3, 10) * (1 - 0.05 * self.nivel("pesca")), "muelle": desde_muelle, "agua": agua or "mar", "mapa": self.mundo.id, "x": self.pos()[0], "y": self.pos()[1]}
         self.son("pesca_lanzar", vol=0.7)
         self.decir(tr("Lanzas el anzuelo. Cuando oigas que pican, pulsa Espacio enseguida. No te muevas."), True)
 
@@ -51,7 +75,7 @@ class Extras:
             self.decir(tr("Has tirado antes de tiempo y espantas a los peces."), True)
             return
         self.pesca = None
-        peces = self.datos.get("peces") or [{"nombre": tr("Sardina"), "valor": 5, "peso": 10}]
+        peces = peces_de(self.datos.get("peces") or [{"nombre": tr("Sardina"), "valor": 5, "peso": 10}], ps.get("agua", "mar"), ps.get("mapa"))
         if ps["muelle"]:
             peces = [p for p in peces if p.get("valor", 0) <= 40] or peces
         pez = random.choices(peces, weights=[p.get("peso", 1) for p in peces])[0]

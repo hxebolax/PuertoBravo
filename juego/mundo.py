@@ -80,7 +80,7 @@ def _es_dato(nombre):
     return nombre.lower().endswith((".json", rutas.EXT_DATOS))
 
 
-SECCIONES_VIDA = ("prendas", "complementos", "protecciones", "jornadas", "combates", "combustible", "muebles", "mejoras", "realismo", "ambiente", "tarifas", "vehiculos_propios", "calle", "guerra_barrios",
+SECCIONES_VIDA = ("sucesos", "prendas", "complementos", "protecciones", "jornadas", "combates", "combustible", "muebles", "mejoras", "realismo", "ambiente", "tarifas", "vehiculos_propios", "calle", "guerra_barrios",
                   "carta_domicilio", "cartas", "domicilio", "atracos", "pactos", "reconquista", "contratos", "reacciones", "planes_pareja", "convivencia", "alquiler", "desguace", "mochila", "objetos_valor", "encuentros", "horarios_locales", "calzado", "vestuario", "bolsa", "bolsa_empresas", "necesidades", "capo", "policia_oficio", "avisos_policia",
                   "pasillos", "productos", "tipos_tienda", "recetas", "cocina", "escolta_misiones", "persecuciones", "golpes", "papeles_golpe", "vuelo", "aeronaves", "mapa_aire",
                   "vida_honrada", "titulos", "empleos_fijos", "mejoras_negocio", "incidencias_trabajo", "buenas_acciones")
@@ -388,6 +388,7 @@ class Mundo:
         self.trafico = int(c.get("trafico", 7))
         self.peatones = int(c.get("peatones", 7))
         self.policia = bool(c.get("policia", True))
+        self.sucesos = [] if c.get("sin_sucesos") else c.get("sucesos") if isinstance(c.get("sucesos"), list) else None    # los sucesos callejeros que admite; None, todos
         self.nombre_objeto = c.get("nombre_objeto", tr("Cinta de casete"))
         self.nombre = c["nombre"]
         self.avenidas = c["avenidas"]

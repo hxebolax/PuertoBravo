@@ -81,6 +81,11 @@ def vida_social(p, directo=None):
             if p._hecho_hoy(r, "charla"):
                 app.decir(tr('Ya habéis hablado hoy. {nombre} tiene cosas que hacer.').format(nombre=(pers['nombre'])), True)
                 return
+            if p.hielo_ex(r):                                    # recién rota la relación: corta o cuelga, y no acerca nada
+                if not cara:
+                    p.son("movil", cat="interfaz", vol=0.6)
+                app.decir(p.frase_hielo("charla" if cara else "llamada", pers), True)
+                return
             if cara:
                 p.sumar_afinidad(pid, 3)
                 p.cambiar_animo(2)
@@ -94,6 +99,10 @@ def vida_social(p, directo=None):
         def cita(act):
             def f():
                 r = p.relacion(pid)
+                if p.hielo_ex(r):
+                    app.son("error")
+                    app.decir(p.frase_hielo("cita", pers), True)
+                    return
                 if encuentros.en_persona_activo(p):              # cara a cara: se viene contigo y el plan pasa al llegar al sitio
                     if not en_persona():
                         app.son("error")
@@ -196,6 +205,8 @@ def vida_social(p, directo=None):
             elif j.pareja:
                 otra = p.persona_social(j.pareja)
                 app.decir(tr('Ya tienes pareja: {nombre}. Tendrías que romper antes.').format(nombre=(otra['nombre'])), True)
+            elif p.hielo_ex(r):
+                app.decir(p.frase_hielo("pedir", pers), True)
             elif r["afinidad"] < 60:
                 app.decir(tr('{nombre} sonríe, pero te dice que aún es pronto. Necesitáis más tiempo juntos.').format(nombre=(pers['nombre'])), True)
             else:
@@ -260,7 +271,7 @@ def vida_social(p, directo=None):
 
         def romper():
             r = p.relacion(pid)
-            r["estado"] = "ex"
+            p.marcar_ruptura(r)
             r["afinidad"] = max(0, r["afinidad"] - 40)
             r.pop("compromiso", None)
             if j.pareja == pid:
@@ -295,6 +306,8 @@ def vida_social(p, directo=None):
             def hecho(texto):
                 if not texto.strip():
                     return
+                if p.hielo_ex(r):                                # recién rota la relación: no contesta, o te corta
+                    return app.decir(p.frase_hielo("mensaje", pers), True)
                 antes = f["confianza"]
                 if not p.ia_disponible() and interpretar(texto)[0] == "ligar":
                     return app.decir(f"{pers['nombre']}: " + random.choice([tr("Eso me lo dices en persona, y con una cena delante."), tr("Qué cosas tienes. Anda, proponme un plan."), tr("Mira que eres. Luego hablamos.")]), True)
@@ -323,6 +336,9 @@ def vida_social(p, directo=None):
                                        ayuda=tr("Cuando estés en el sitio donde suele estar, abre su ficha desde Vida social y os presentáis. Hasta entonces no podéis hacer nada juntos.")),
                                 Opcion(tr("Volver"), lambda: app.cerrar())]
             estado = {"pareja": tr("Sois pareja"), "ex": tr("Lo dejasteis")}.get(r["estado"], tr("Os estáis conociendo"))
+            if p.hielo_ex(r):
+                d = p.hielo_ex(r)
+                estado += tr(", y aún no quiere saber nada de ti: se le pasará en un día") if d == 1 else tr(', y aún no quiere saber nada de ti: se le pasará en unos {d} días').format(d=(d))
             if r["estado"] == "pareja" and r.get("compromiso"):
                 estado = tr("Estáis prometidos") if r["compromiso"] == "prometidos" else tr("Estáis casados") if r["compromiso"] == "casados" else tr("Estáis ") + r["compromiso"]
             herida = encuentros.desconfianza(p, pid) if j.pareja == pid else 0

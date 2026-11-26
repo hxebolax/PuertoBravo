@@ -351,7 +351,7 @@ class Convivencia:
         pid = j.convive
         r = self.relacion(pid)
         r["afinidad"] = max(0, r["afinidad"] - 45)
-        r["estado"] = "ex"
+        self.marcar_ruptura(r)
         j.pareja = ""
         self.fin_convivencia("sola", callar=True)
         self.son("ruptura", cat="interfaz")

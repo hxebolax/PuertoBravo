@@ -777,7 +777,8 @@
       40
      ],
      "desc": "Truchas y barbos en agua limpia.",
-     "sonido": "lugar_rio"
+     "sonido": "lugar_rio",
+     "agua": "rio"
     },
     {
      "id": "vo_vina",
@@ -812,12 +813,21 @@
   {
    "nombre": "una trucha del Olmedilla",
    "valor": 30,
-   "peso": 14
+   "peso": 14,
+   "aguas": [
+    "rio"
+   ],
+   "mapas": [
+    "valdeolmos"
+   ]
   },
   {
    "nombre": "un barbo",
    "valor": 18,
-   "peso": 20
+   "peso": 20,
+   "aguas": [
+    "rio"
+   ]
   }
  ],
  "capitulos": {

@@ -200,7 +200,7 @@ class Adultos:
                     if random.random() < 0.12:
                         self.dar_dinero(random.randint(20, 80), tr('{nombre} te ha dejado un detalle en casa').format(nombre=(p['nombre'])))
                 if r["afinidad"] < 30:
-                    r["estado"] = "ex"
+                    self.marcar_ruptura(r)
                     r.pop("compromiso", None)
                     j.pareja = ""
                     self.son("ruptura", cat="interfaz")
@@ -210,6 +210,28 @@ class Adultos:
         j.animo = max(0.0, min(100.0, j.animo))
 
     # -------------------------------------------------------------- relaciones
+    def marcar_ruptura(self, r):
+        """Se acaba una relación, la dejes tú o te deje: pasa a ex y se apunta el día, para los días de hielo (hielo_ex)."""
+        r["estado"] = "ex"
+        r["ruptura_dia"] = self.dia
+
+    def hielo_ex(self, r):
+        """Cuántos días le quedan a la expareja de resentimiento tras la ruptura (issue 41): mientras tanto corta al
+        charlar, cuelga, no contesta, rechaza los gestos, las citas y volver. 0 si no es ex o ya se le ha pasado. Cuánto dura
+        está en los datos (encuentros, hielo_ex_dias); a cero, nunca. Una ruptura de antes de la 1.7.6 no tiene día: nada."""
+        from .encuentros import AJ
+        if not r or r.get("estado") != "ex" or r.get("ruptura_dia") is None:
+            return 0
+        try:
+            return max(0, int(r["ruptura_dia"]) + AJ.entero("hielo_ex_dias") - int(self.dia))
+        except (TypeError, ValueError):
+            return 0
+
+    def frase_hielo(self, que, pers):
+        """La frase cortante de la expareja para charlar, llamada, mensaje, gesto, cita o pedir."""
+        from .encuentros import AJ
+        return AJ.frase("frases_hielo_" + que, n=pers["nombre"])
+
     def relacion(self, pid):
         return self.j.relaciones.setdefault(pid, {"estado": "conocida", "afinidad": 5, "ultimo": self.dia, "hoy": {}})
 
@@ -250,7 +272,7 @@ class Adultos:
                 r["afinidad"] = min(r["afinidad"], 25)
             if r["afinidad"] < 30:
                 self.son("ruptura", cat="interfaz")
-                r["estado"] = "ex"
+                self.marcar_ruptura(r)
                 j.pareja = ""
                 self.decir(tr('{nombre} se ha enterado de todo y no quiere volver a verte.').format(nombre=(p['nombre'])))
             else:

@@ -32,7 +32,7 @@ NIVEL_MAX = 3                     # los niveles de una mejora que no diga los su
 MEJORAS = {}                      # identificador -> {"nombre", "precio", "desc", "efecto", "niveles", "por_nivel"}
 
 
-def _mejora(ident, nombre, precio_, desc, efecto=None, niveles=None, por_nivel=None):
+def _mejora(ident, nombre, precio_, desc, efecto=None, niveles=None, por_nivel=None, aeronaves=None):
     efecto = efecto if efecto in EFECTOS else (ident if ident in EFECTOS else "")
     try:
         niveles = max(1, min(5, int(niveles or NIVEL_MAX)))
@@ -42,7 +42,10 @@ def _mejora(ident, nombre, precio_, desc, efecto=None, niveles=None, por_nivel=N
         por_nivel = max(0.0, min(100.0, float(por_nivel if por_nivel not in (None, "") else EFECTOS.get(efecto, 0.0))))
     except (TypeError, ValueError):
         por_nivel = EFECTOS.get(efecto, 0.0)
-    return {"nombre": str(nombre or ident), "precio": int(precio_ or 0), "desc": str(desc or ""), "efecto": efecto, "niveles": niveles, "por_nivel": por_nivel}
+    if aeronaves is None:                                       # a lo que vuela, de serie, solo el motor y el blindaje
+        aeronaves = efecto in ("motor", "blindaje")
+    return {"nombre": str(nombre or ident), "precio": int(precio_ or 0), "desc": str(desc or ""), "efecto": efecto, "niveles": niveles, "por_nivel": por_nivel,
+            "aeronaves": bool(aeronaves)}
 
 
 for _m in _SERIE:
@@ -59,7 +62,7 @@ def configurar(datos):
     for m in mej:
         serie = next((x for x in _SERIE if x[0] == m["id"]), (m["id"], m["id"], 0, ""))
         MEJORAS[str(m["id"])] = _mejora(m["id"], m.get("nombre") or serie[1], m.get("precio", serie[2]) or serie[2], m.get("desc") or serie[3],
-                                         m.get("efecto"), m.get("niveles"), m.get("por_nivel"))
+                                         m.get("efecto"), m.get("niveles"), m.get("por_nivel"), m.get("aeronaves"))
     for x in _SERIE:                                           # las tres de siempre no faltan nunca
         MEJORAS.setdefault(x[0], _mejora(*x))
     mue = [m for m in datos.get("muebles", []) if isinstance(m, dict) and m.get("id") and m.get("habitacion")]
@@ -189,7 +192,8 @@ def opciones_taller(p, v, Opcion):
             return tr('Mejorar {lower}: nivel {n} de {niveles}').format(lower=(tr(MEJORAS[cual]['nombre']).lower()), n=(n), niveles=(niveles(cual))) + (tr('. Subir cuesta {precio} euros').format(precio=(precio(v, cual))) if n < niveles(cual) else tr(". Al máximo"))
         return f
     return [Opcion(texto(k), comprar(k), ayuda=tr(MEJORAS[k]["desc"]) + tr(" Las mejoras van con este vehículo, que desde la primera queda a tu nombre: no se pierde aunque lo dejes en la calle o cojas otro, "
-                                                              "y se conservan en el garaje. Vale también para los vehículos de trabajo.")) for k in MEJORAS]
+                                                              "y se conservan en el garaje. Vale también para los vehículos de trabajo.")) for k in MEJORAS
+            if not v.modelo.get("vuela") or MEJORAS[k].get("aeronaves")]      # a un helicóptero, nada de neumáticos ni frenos (foro, 1.7.6)
 
 
 # ============================================================ banda propia
@@ -662,7 +666,8 @@ def tablon_policia(p):
     ev = getattr(p, "evento", None)
     if ev:
         avisos.append({"atraco": tr("Aviso de última hora: están atracando a alguien cerca de aquí."), "banda": tr("Aviso de última hora: pandilleros alborotando en una calle cercana."),
-                       "maletin": tr("Objetos perdidos: alguien ha denunciado hoy la pérdida de un maletín por esta zona.")}.get(ev.get("tipo"), ""))
+                       "maletin": tr("Objetos perdidos: alguien ha denunciado hoy la pérdida de un maletín por esta zona.")}.get(ev.get("tipo"))
+                       or (tr('Aviso de última hora: {nombre}, cerca de aquí.').format(nombre=(ev["suceso"]["nombre"])) if (ev.get("suceso") or {}).get("nombre") else ""))
     if p.dia_txt():
         avisos.append(tr("Parte del día: ") + p.dia_txt())
     if s.get("vehiculos_robados", 0) > 2:

@@ -1136,7 +1136,8 @@
       40
      ],
      "desc": "Agua oscura y quieta, y debajo, anguilas y lisas.",
-     "sonido": "lugar_rio"
+     "sonido": "lugar_rio",
+     "agua": "lago"
     },
     {
      "id": "mn_observatorio",
@@ -1187,12 +1188,25 @@
   {
    "nombre": "una anguila de los caños",
    "valor": 42,
-   "peso": 14
+   "peso": 14,
+   "aguas": [
+    "lago",
+    "rio"
+   ],
+   "mapas": [
+    "marisma_negra"
+   ]
   },
   {
    "nombre": "una lisa de la laguna",
    "valor": 16,
-   "peso": 20
+   "peso": 20,
+   "aguas": [
+    "lago"
+   ],
+   "mapas": [
+    "marisma_negra"
+   ]
   }
  ],
  "capitulos": {

@@ -679,17 +679,29 @@
   {
    "nombre": "una lubina de rompiente",
    "valor": 44,
-   "peso": 10
+   "peso": 10,
+   "aguas": [
+    "mar"
+   ],
+   "mapas": [
+    "isla_vientos"
+   ]
   },
   {
    "nombre": "una morena",
    "valor": 62,
-   "peso": 4
+   "peso": 4,
+   "aguas": [
+    "mar"
+   ]
   },
   {
    "nombre": "un sargo",
    "valor": 20,
-   "peso": 18
+   "peso": 18,
+   "aguas": [
+    "mar"
+   ]
   }
  ],
  "capitulos": {

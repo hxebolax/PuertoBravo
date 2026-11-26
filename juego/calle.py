@@ -23,10 +23,11 @@ _AJUSTES = {
     "helicoptero_nivel": 5, "helicoptero_llega": 20, "helicoptero_salud": 260, "helicoptero_altura": 40, "helicoptero_radio": 45,
     "helicoptero_pierde": 8, "helicoptero_busca": 35, "helicoptero_reconoce": 4, "helicoptero_vuelve": 90,
     "helicoptero_dano_minimo": 40, "helicoptero_multa": 2000,
+    "disparos_cada": 5, "disparos_nivel_max": 2,
 }
 # Los que pueden valer cero: una probabilidad a cero apaga esa parte, y cero patrullas es ninguna.
 _CERO = ("grito_prob", "parejas", "municion_prob", "arma_prob", "patrullas", "patrullas_noche", "auxilio_prob", "ambulancia_prob",
-         "rendicion_dinero", "helicoptero_multa", "helicoptero_dano_minimo")
+         "rendicion_dinero", "helicoptero_multa", "helicoptero_dano_minimo", "disparos_cada")
 _LISTAS = {
     "frases_huye": [tr("{quien} sale corriendo."), tr("{quien} grita y echa a correr."), tr("{quien} huye calle abajo."), tr("{quien} se asusta y corre.")],
     "frases_huyen": [tr("{n} personas salen corriendo."), tr("La gente huye: {n} personas echan a correr."), tr("{n} personas gritan y se dispersan.")],

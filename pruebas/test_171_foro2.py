@@ -725,7 +725,7 @@ def test_parar_al_atracador_de_un_suceso_disparando_tu_primero_tampoco(robot, da
     original = random.choice
     p.cfg["sucesos"] = True
     p.t_evento = 0.0
-    random.choice = lambda seq: "atraco" if "maletin" in seq else original(seq)
+    p.cfg["sucesos_apagados"] = ["maletin", "banda"]                # desde la 1.7.6 los sucesos son datos: solo queda el atraco
     try:
         for _ in range(300):
             p.actualizar_extras(1 / 30)

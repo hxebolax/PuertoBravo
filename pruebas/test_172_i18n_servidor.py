@@ -74,7 +74,7 @@ def test_con_la_variable_de_entorno_todo_lo_de_quien_administra_sale_en_ingles()
               "print(opciones.texto_conf().splitlines()[0]); print(opciones.POR_CLAVE['bienvenida'].defecto)")
     r = subprocess.run([sys.executable, "-c", codigo], cwd=RAIZ, env=_entorno(PUERTOBRAVO_IDIOMA="en"), capture_output=True, text=True, encoding="utf-8")
     assert r.returncode == 0, r.stderr
-    assert r.stdout.splitlines() == ["en", "Port", "aviso text", "# Puerto Bravo: Ley del Asfalto online server",
+    assert r.stdout.splitlines() == ["en", "Port", "aviso text", "# Puerto Bravo: Law of the Asphalt online server",
                                      "Bienvenido. Juega limpio."]          # la bienvenida la oyen los jugadores: en español
 
 

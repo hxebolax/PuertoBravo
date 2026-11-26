@@ -194,6 +194,10 @@ class Reacciones:
         return AJ.frase("frases_favor_barrio", nombre=n)
 
     # ------------------------------------------------------------------ reclutar
+    def nunca_reclutan(self):
+        """Cómo habla la gente que no se une nunca a una banda, por su carácter: «amable, con timidez». Sale de los datos."""
+        return [str(c.get("desc", k)) for k, c in G.CARACTERES.items() if float(c.get("valor", 1)) * 100 < AJ("recluta_valor")]
+
     def prima_recluta(self):
         return int(self.precio("recluta", sistemas.PRECIO_RECLUTA) * AJ("recluta_prima") / 100.0)
 
@@ -209,9 +213,9 @@ class Reacciones:
         if j.banda >= sistemas.cupo(j):
             return "x", sistemas.sin_sitio_en_banda(j)
         if f["edad"] > AJ("recluta_edad_max"):
-            return "frases_recluta_no_edad", ""
-        if G.caracter(f["caracter"])["valor"] * 100 < AJ("recluta_valor"):
-            return "frases_recluta_no_caracter", ""
+            return "frases_recluta_no_edad", tr("Con su edad no se unirá nunca: no insistas.")
+        if G.caracter(f["caracter"])["valor"] * 100 < AJ("recluta_valor"):         # foro, 1.7.6: se dice que no cambiará, para no insistir
+            return "frases_recluta_no_caracter", tr('Te habla {desc}: con ese carácter no se unirá nunca, por mucho que insistas. Busca a alguien más decidido.').format(desc=(G.caracter(f["caracter"]).get("desc", "")))
         if f["confianza"] < AJ("recluta_confianza"):
             return "frases_recluta_no_confianza", ""
         if j.reputacion < AJ("recluta_fama"):

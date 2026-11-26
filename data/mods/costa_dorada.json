@@ -1189,12 +1189,24 @@
   {
    "nombre": "una dorada de roca",
    "valor": 38,
-   "peso": 12
+   "peso": 12,
+   "aguas": [
+    "mar"
+   ],
+   "mapas": [
+    "costa_dorada"
+   ]
   },
   {
    "nombre": "un pulpo de Costa Dorada",
    "valor": 55,
-   "peso": 6
+   "peso": 6,
+   "aguas": [
+    "mar"
+   ],
+   "mapas": [
+    "costa_dorada"
+   ]
   }
  ],
  "capitulos": {

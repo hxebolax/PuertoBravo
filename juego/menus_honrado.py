@@ -321,6 +321,9 @@ def opciones_negocio(p, l, refrescar):
                   ayuda=tr('Cada empleado cobra al día un {entero} por ciento de lo que da el negocio de base y hace que dé un {entero2} por ciento más. Con gente contratada, el negocio aguanta aunque tú no pases.').format(entero=(AJ.entero('empleado_sueldo')), entero2=(AJ.entero('empleado_rinde')))),
            Opcion(tr("Despedir a un empleado"), hacer(p.hon_empleado, -1),
                   ayuda=tr("Te ahorras su sueldo, pero el negocio da menos. Si te quedas sin nadie, el horario ampliado vuelve a ser normal.")),
+           Opcion(lambda: (tr('Encargado: sí. Cobra {sueldo} euros al día') if e.get("encargado") else tr('Encargado: no. Contratarlo cuesta {sueldo} euros al día')).format(sueldo=(int(int(l.get("ingresos", 0)) * AJ("encargado_sueldo") / 100.0))),
+                  hacer(p.hon_encargado),
+                  ayuda=tr('Intro lo contrata o lo despide. El encargado lleva el negocio por ti: no hace falta que pases ni que eches horas, nunca se da por abandonado y su nombre sube solo hasta un {entero} sobre 100. Cobra al día un {entero2} por ciento de lo que da el negocio de base. Cómo va cada negocio lo ves en el móvil, en Vida, reputación y consecuencias, Negocios.').format(entero=(AJ.entero('encargado_tope')), entero2=(AJ.entero('encargado_sueldo')))),
            Opcion(lambda: tr('Precios: {precios}').format(precios=(e['precios'])), hacer(p.hon_precios), ayuda=tr("Intro cambia entre bajos, normales y altos. Bajos: ganas menos y sube el nombre. Altos: ganas más y baja.")),
            Opcion(lambda: tr('Horario: {horario}').format(horario=(e['horario'])), hacer(p.hon_horario), ayuda=tr('Con horario ampliado da un {entero} por ciento más, pero necesitas al menos un empleado.').format(entero=(AJ.entero('horario_ingreso'))))]
     if p.hon_nivel():

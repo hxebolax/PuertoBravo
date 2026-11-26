@@ -62,6 +62,19 @@ LOGROS = [
 ]
 
 
+# Las clases de suceso callejero que sabe llevar el juego; cada suceso de los datos (sección sucesos) es de una.
+CLASES_SUCESO = ("objeto", "atraco", "banda")
+
+
+def _rango(v, lo, hi):
+    """Un [mínimo, máximo] de los datos como dos enteros, o los de serie si no vale."""
+    try:
+        a, b = int(v[0]), int(v[1])
+        return (a, b) if a <= b else (b, a)
+    except (TypeError, ValueError, IndexError, KeyError):
+        return lo, hi
+
+
 class Extras2:
     # -------------------------------------------------------------- habilidades
     def nivel(self, hab):
@@ -175,54 +188,77 @@ class Extras2:
         if texto:
             self.decir(texto)
 
+    def sucesos_posibles(self):
+        """Los sucesos callejeros que pueden salir aquí (issue 41): los de la sección sucesos de los datos, donde un mod añade
+        los suyos, menos los que el jugador ha quitado en Opciones, los que esta localidad no admite (su campo sucesos) y
+        los que son de otras localidades (el campo mapas del suceso)."""
+        apagados = set(self.cfg["sucesos_apagados"] or [])
+        admite = getattr(self.mundo, "sucesos", None)
+        out = []
+        for s in self.datos.get("sucesos") or []:
+            if not isinstance(s, dict) or s.get("clase") not in CLASES_SUCESO or s.get("id") in apagados:
+                continue
+            if admite is not None and s.get("id") not in admite:
+                continue
+            if s.get("mapas") and self.mundo.id not in s["mapas"]:
+                continue
+            out.append(s)
+        return out
+
     def _eventos(self, dt):
         j = self.j
         ev = self.evento
         if ev:
             ev["t"] -= dt
+            s = ev.get("suceso") or {}
             malos = [p for p in ev.get("personas", []) if p.tipo == "enemigo"]
-            if ev["tipo"] in ("atraco", "banda") and malos and all(p.muerto for p in malos):
-                premio = ev["premio"]
-                self._fin_evento(tr("La víctima te da las gracias y una recompensa.") if ev["tipo"] == "atraco" else tr("Los vecinos, agradecidos, hacen una colecta para ti."), premio)
-            elif ev["tipo"] == "maletin" and ev["objeto"] not in self.objetos:
+            if ev.get("clase", ev["tipo"]) in ("atraco", "banda") and malos and all(p.muerto for p in malos):
+                self._fin_evento(s.get("gracias") or tr("Los vecinos, agradecidos, hacen una colecta para ti."), ev["premio"])
+            elif ev.get("clase", ev["tipo"]) in ("objeto", "maletin") and ev["objeto"] not in self.objetos:
                 self.j.stats["eventos"] = self.j.stats.get("eventos", 0) + 1
                 self._fin_evento()
             elif ev["t"] <= 0:
-                self._fin_evento({"atraco": tr("El atracador ha huido con el botín."), "banda": tr("Los pandilleros se han marchado."),
-                                  "maletin": tr("Alguien ha encontrado el maletín antes que tú.")}[ev["tipo"]])
+                self._fin_evento(s.get("pierdes") or tr("Ya no hay nada que hacer: el suceso ha terminado."))
             return
         if self.mision or self.trabajo or self.guerra or j.estrellas or self.mundo.tipo in ("mar", "isla") or self.transicion or not self.cfg["sucesos"]:
             return
         self.t_evento -= dt
         if self.t_evento > 0:
             return
-        tipo = random.choice(["atraco", "banda", "maletin", "maletin"])
+        posibles = self.sucesos_posibles()
+        if not posibles:
+            self.t_evento = 60
+            return
+        s = random.choices(posibles, weights=[max(0.0, float(x.get("peso", 1) or 0)) or 0.01 for x in posibles])[0]
         pos = self._punto_cercano(45, 80)
         if pos is None:
             self.t_evento = 20
             return
         x, y = pos
-        self.son("evento", cat="interfaz")
-        if tipo == "maletin":
-            o = Objeto("dinero", tr("Maletín perdido"), x, y)
-            o.valor = random.randint(150, 600)
+        self.son(s.get("sonido") or "evento", cat="interfaz")
+        tipo = s["clase"]
+        lo, hi = _rango(s.get("premio"), 150, 400)
+        aviso = str(s.get("aviso") or s.get("nombre") or "")
+        if tipo == "objeto":
+            o = Objeto("dinero", str(s.get("objeto") or s.get("nombre") or tr("Maletín perdido")), x, y)
+            o.valor = random.randint(lo, hi)
             self.objetos.append(o)
-            self.evento = {"tipo": tipo, "t": 150.0, "objeto": o}
-            self.decir(tr('Suceso: alguien ha perdido un maletín por aquí cerca. {situar}. Búscalo con el radar, pulsando Tabulador.').format(situar=(self.situar(x, y, tr('Está')))))
+            self.evento = {"tipo": s.get("id", tipo), "clase": tipo, "t": float(s.get("duracion", 150)), "objeto": o, "suceso": s}
+            self.decir(aviso.replace("{situar}", self.situar(x, y, str(s.get("situar") or tr("Está")))))
             return
         personas = []
         if tipo == "atraco":
-            v = Persona("civil", x, y, tr("Víctima del atraco"))
+            v = Persona("civil", x, y, str(s.get("victima") or tr("Víctima del atraco")))
             v.estado = "quieto"
             v.tag = "evento"
             personas.append(v)
-            n = 1
-            clase, nombre = "atracador", tr("Atracador")
-        else:
-            n = random.randint(2, 3)
-            clase, nombre = "pandillero_calle", tr("Pandillero")
+        a, b = _rango(s.get("cuantos"), 1 if tipo == "atraco" else 2, 1 if tipo == "atraco" else 3)
+        n = max(1, min(6, random.randint(a, b)))
+        clase = str(s.get("enemigo") or ("atracador" if tipo == "atraco" else "pandillero_calle"))
+        nombre = str(s.get("nombre_enemigo") or (tr("Atracador") if tipo == "atraco" else tr("Pandillero")))
+        armas = [x for x in (s.get("armas") or ["navaja", "pistola", "bate"]) if x in self.armas_d] or ["navaja"]
         for _ in range(n):
-            f = G.enemigo(G.grupo(clase, tipo=nombre, arma=random.choice(["navaja", "pistola", "bate"]), salud=55))
+            f = G.enemigo(G.grupo(clase, tipo=nombre, arma=random.choice(armas), salud=int(s.get("salud", 55))))
             e = G.vestir(Persona("enemigo", *self.mundo.punto_libre(x + random.uniform(-3, 3), y + random.uniform(-3, 3)), f["nombre"]), f)
             e.hostil = True
             e.estado = "ataca"
@@ -231,12 +267,10 @@ class Extras2:
             e.agresor = True                                     # están atracando o amenazando a alguien: pararles los pies no es delito
             personas.append(e)
         self.personas += personas
-        self.evento = {"tipo": tipo, "t": 110.0, "personas": personas, "premio": random.randint(150, 400) * n}
+        self.evento = {"tipo": s.get("id", tipo), "clase": tipo, "t": float(s.get("duracion", 110)), "personas": personas, "premio": random.randint(lo, hi) * n, "suceso": s}
         if tipo == "atraco":
             self.son("grito", xy=(x, y), ref=10, maxd=120)
-            self.decir(tr('Suceso: están atracando a alguien. {situar}. Si quieres ayudar, pulsa Q para fijar al atracador.').format(situar=(self.situar(x, y, tr('Ocurre')))))
-        else:
-            self.decir(tr('Suceso: unos pandilleros tienen atemorizada la calle. {situar}. Si quieres echarlos, pulsa Q para fijarlos.').format(situar=(self.situar(x, y, tr('Están')))))
+        self.decir(aviso.replace("{situar}", self.situar(x, y, str(s.get("situar") or tr("Ocurre")))))
 
     # ------------------------------------------------------ encargos repetibles
     def _empezar_repetible(self, m):

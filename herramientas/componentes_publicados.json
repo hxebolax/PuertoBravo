@@ -1,7 +1,7 @@
 {
  "idioma-en": {
-  "version": 5,
-  "huella": "820b04e42518baff789301cdf96966684b8a23d00ee37e76a87a99fdabd6c1a2",
+  "version": 6,
+  "huella": "6bfb7c0891cff4d64e9e090c3a4f9e70eeb98f7f43775054e73b84c0514aa1e6",
   "archivos": [
    "data/idiomas/en/palabras.json",
    "data/idiomas/en/textos.json",
@@ -4035,8 +4035,8 @@
   ]
  },
  "idioma-vi": {
-  "version": 6,
-  "huella": "74c97658807a9dc18779b94f9ebaf12ac773b222ae184665c49fae4b09eb4e16",
+  "version": 7,
+  "huella": "c9185ce9a0f013219d0ab7cab5d08e6d9b3ee98a5ba5a96bc980e7e05cdaaa01",
   "archivos": [
    "data/idiomas/vi/idioma.json",
    "data/idiomas/vi/palabras.json",
@@ -4339,8 +4339,8 @@
   ]
  },
  "idioma-pt": {
-  "version": 5,
-  "huella": "0020b9116241b8997fcef777eac71abed782c7bd4c48bfdd7b7299ef12928c28",
+  "version": 6,
+  "huella": "3fc963c73fa6ad07fc587912f9b97d1134aba3619e67b5f98558e1cfeb8a43e9",
   "archivos": [
    "data/idiomas/pt/idioma.json",
    "data/idiomas/pt/palabras.json",
@@ -4360,8 +4360,8 @@
   ]
  },
  "idioma-ru": {
-  "version": 6,
-  "huella": "097a91e7781d15f9fc5bbb0c5a14b1dac6810a99fa50bd3f09ba5b633307b6eb",
+  "version": 7,
+  "huella": "684042d42b3bff865506ffeaac9fc7694d9754931ce82142e8ecf6b2821ea0f7",
   "archivos": [
    "data/idiomas/ru/idioma.json",
    "data/idiomas/ru/palabras.json",

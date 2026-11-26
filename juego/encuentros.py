@@ -32,6 +32,7 @@ AJ = Ajustes("encuentros", {
     "desconfianza_dias": 10, "perdon_dias": 4, "regalo_envio": 15, "regalo_envio_pct": 60, "planton_afinidad": 8,
     "llamada_afinidad": 2, "aviso_minutos": 30, "espera_minutos": 30, "persona_abre": 10, "persona_cierra": 20, "variacion_horas": 1,
     "conocido_precio": 8, "conocido_animo": 5, "conocido_amistad": 10, "planton_dias": 3, "planton_amistad": 15,
+    "hielo_ex_dias": 7,
 }, {
     "frases_planton": [tr("{n} te escribe: «Te he estado esperando en {lugar}. Ya me voy.» No le ha sentado nada bien."),
                        tr("{n} se ha cansado de esperarte en {lugar}. No contesta a tus mensajes.")],
@@ -53,8 +54,14 @@ AJ = Ajustes("encuentros", {
     "escenas_copas": [tr("Pedís en la barra y os vais a una esquina tranquila."), tr("La segunda ronda la paga {n}, que insiste."), tr("Os reís de alguien que canta fatal al fondo del local.")],
     "escenas_baile": [tr("La música está alta y la pista, llena."), tr("{n} baila sin vergüenza ninguna y te saca de la esquina."), tr("Salís sudando, con las orejas zumbando y sin ganas de iros.")],
     "escenas_paseo": [tr("Echáis a andar sin rumbo."), tr("{n} te enseña un rincón que no conocías."), tr("Volvéis despacio, alargando el camino.")],
+    "frases_hielo_charla": [tr("{n} te mira de arriba abajo: «No tengo nada que hablar contigo.» Y se da la vuelta."), tr("«¿Ahora quieres charlar?», te suelta {n}. «Déjame en paz una temporada.»"), tr("{n} contesta con monosílabos y no deja de mirar el móvil. Todavía le duele.")],
+    "frases_hielo_llamada": [tr("Llamas a {n}. Lo coge, oye tu voz y cuelga sin decir nada."), tr("El teléfono de {n} da dos tonos y salta el buzón. Te ha colgado."), tr("«No me llames», te dice {n}, y cuelga.")],
+    "frases_hielo_mensaje": [tr("{n} lee tu mensaje y no contesta."), tr("«No me escribas, de momento», te responde {n}. Y nada más.")],
+    "frases_hielo_gesto": [tr("{n} se aparta en seco: «Ni se te ocurra.»"), tr("«¿En serio?», dice {n}, y da un paso atrás.")],
+    "frases_hielo_cita": [tr("«¿Quedar? No, gracias. Todavía no», te contesta {n}."), tr("{n} ni se lo piensa: «No voy a ir a ningún sitio contigo.»")],
+    "frases_hielo_pedir": [tr("{n} se ríe sin ganas: «¿Volver? Hace nada que lo dejamos. Ni lo sueñes.»"), tr("«Dame tiempo. Mucho tiempo», te dice {n}.")],
     "frases_conocido": [tr("{n} llega puntual. Te cuenta cosas del barrio mientras os tomáis algo."), tr("Con {n} se te pasa la hora volando. Al despedirse, te cuenta un chisme.")],
-}, cero=("planton_afinidad", "variacion_horas", "regalo_envio", "conocido_precio", "planton_dias", "planton_amistad"))
+}, cero=("hielo_ex_dias", "planton_afinidad", "variacion_horas", "regalo_envio", "conocido_precio", "planton_dias", "planton_amistad"))
 
 # Horarios de los locales de serie: el tipo de lugar abre y cierra a esas horas, y cierra esos días. Lo que no está aquí,
 # abre siempre (hospitales, comisarías, hoteles, estaciones, casas...). Una hora de cierre menor que la de apertura es de madrugada.
