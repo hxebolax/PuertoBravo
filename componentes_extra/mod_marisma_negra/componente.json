@@ -6,14 +6,16 @@
   "en": "Marisma Negra",
   "vi": "Marisma Negra",
   "pt": "Marisma Negra",
-  "ru": "Марисма Негра"
+  "ru": "Марисма Негра",
+  "pl": "Marisma Negra"
  },
  "descripcion": "Un pueblo de marisma al sur de Puerto Bravo, con arrozales, laguna, anguileros, unas salinas cerradas y contrabandistas que usan los caños de noche. Cuatro misiones con voces, un encargo honrado, una escopeta de puesto, una fisga, una barca de caños, una ranchera, una carrera por los arrozales y un personaje. Se llega por la salida este de Puerto Bravo.",
  "descripciones": {
   "pt": "Um povoado de marismas ao sul de Puerto Bravo, com arrozais, uma lagoa, pescadores de enguias, salinas fechadas e contrabandistas que usam os canais à noite. Quatro missões, um serviço honesto, uma espingarda de tocaia, uma fisga, um barco para os canais, uma perua, uma corrida pelos arrozais e um personagem jogável. O acesso é pela saída leste de Puerto Bravo. As cenas em português são faladas pelo leitor de tela.",
   "en": "A marsh town south of Puerto Bravo, with rice fields, a lagoon, eel fishermen, a closed saltworks and smugglers who use the channels at night. Four voiced missions, an honest errand, a hide shotgun, an eel spear, a channel boat, a pickup, a race through the rice fields and a playable character. You get there by Puerto Bravo's east exit.",
   "vi": "Một thị trấn đầm lầy phía nam Puerto Bravo, với những cánh đồng lúa, đầm phá, người đánh lươn, ruộng muối đóng cửa và những kẻ buôn lậu hoạt động ban đêm trên các con lạch. Bốn nhiệm vụ có lồng tiếng, một công việc lương thiện, súng săn vịt trời, xiên bắt lươn, thuyền máy đi rạch, xe bán tải, đường đua ruộng lúa và một nhân vật mới. Đến đó qua lối ra phía đông của Puerto Bravo.",
-  "ru": "Болотный посёлок к югу от Пуэрто Браво, с рисовыми полями, лагуной, ловцами угрей, закрытыми соляными промыслами и контрабандистами, которые по ночам пользуются протоками. Четыре миссии, честное поручение, засадное ружьё, острога, протоковая лодка, универсал, гонка по рисовым полям и персонаж. Добраться можно через восточный выезд из Пуэрто Браво. По-русски сцены читает программа чтения экрана."
+  "ru": "Болотный посёлок к югу от Пуэрто Браво, с рисовыми полями, лагуной, ловцами угрей, закрытыми соляными промыслами и контрабандистами, которые по ночам пользуются протоками. Четыре миссии, честное поручение, засадное ружьё, острога, протоковая лодка, универсал, гонка по рисовым полям и персонаж. Добраться можно через восточный выезд из Пуэрто Браво. По-русски сцены читает программа чтения экрана.",
+  "pl": "Bagienna wioska na południe od Puerto Bravo, z polami ryżowymi, laguną, łowcami węgorzy, zamkniętymi salinami i przemytnikami, którzy nocą pływają kanałami. Cztery misje z głosami, uczciwe zlecenie, strzelba myśliwska, oścień, łódka na kanały, kombi, wyścig przez pola ryżowe i grywalna postać. Dojeżdża się wschodnim wyjazdem z Puerto Bravo."
  },
  "archivos": [
   {
@@ -36,6 +38,10 @@
   {
    "origen": "../../traduccion/ru/mods/marisma_negra.json",
    "destino": "data/idiomas/ru/mods/marisma_negra.json"
+  },
+  {
+   "origen": "../../traduccion/pl/mods/marisma_negra.json",
+   "destino": "data/idiomas/pl/mods/marisma_negra.json"
   },
   {
    "carpeta": "voces/marisma_negra_es",
