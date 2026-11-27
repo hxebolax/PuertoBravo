@@ -486,7 +486,7 @@ class Calle:
         elif n:
             m = j.armas[a["id"]]
             m["reserva"] += n
-            self.decir(tr('Recoges {n} {v} de {nombre}. Llevas {v2}.').format(n=(n), v=(tr('bala') if n == 1 else tr('balas')), nombre=(a['nombre']), v2=(m['cargador'] + m['reserva'])))
+            self.decir(tr('Recoges {n} {v} de {nombre}. Llevas {v2}.').format(n=(n), v=(_naboje_pl(n) if _pl() else (tr('bala') if n == 1 else tr('balas'))), nombre=(a['nombre']), v2=(m['cargador'] + m['reserva'])))
         else:
             self.decir(tr('{nombre}: ya llevas una igual.').format(nombre=(a['nombre'])))
 
@@ -906,3 +906,20 @@ class Calle:
         for p in self.personas:
             if p.tipo == "civil" and not p.muerto and p.dist(x, y) < 50:
                 self.asustar(p, 14)
+
+
+def _pl():
+    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
+    try:
+        from .i18n import actual
+        return actual() == "pl"
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def _naboje_pl(n):
+    if n == 1:
+        return "nabój"
+    if n % 10 in (2, 3, 4) and n % 100 not in (12, 13, 14):
+        return "naboje"
+    return "nabojów"

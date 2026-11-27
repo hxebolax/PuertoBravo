@@ -63,7 +63,7 @@ def codigo_de(motivo):
         return "lleno"
     if "pide la versión" in t or "versión más nueva del juego" in t or "demasiado antiguo" in t:
         return "version"
-    if "no se pudo conectar" in t or "no contesta" in t or "ha cortado la conexión" in t:
+    if "no se pudo conectar" in t or "nie udało się połączyć" in t or "no contesta" in t or "ha cortado la conexión" in t:
         return "red"
     return ""
 

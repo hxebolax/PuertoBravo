@@ -806,3 +806,125 @@ def _textos_mando_en(texto, mapa, tipo="xbox", contexto="pie"):
         return frase
 
     return "".join(una_frase(t) for t in re.split(r"(?<=[.!?:;])(\s+)", texto))
+
+
+def _pl():
+    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
+    try:
+        from .i18n import actual
+        return actual() == "pl"
+    except Exception:  # noqa: BLE001
+        return False
+
+# ---------------------------------------------------------------- łatka polskiej wersji (latki/pad_polski.py)
+_TECLAS_TXT.update({"enter": K.K_RETURN, "spacja": K.K_SPACE, "spację": K.K_SPACE, "spacji": K.K_SPACE, "tab": K.K_TAB,
+                    "ctrl": K.K_LCTRL, "przecinek": K.K_COMMA})
+_PISTAS_PL = {"freno_mano": "hamulec ręczn|ręczn", "atacar": "strzel|atak|uderz|bij", "recargar": "przeład",
+              "radio": "stacj|radio", "claxon": "klakson|trąb", "gritar": "krzyk|krzycz", "media_vuelta": "zawr",
+              "paseo": "spacer|chodz|idź|przejdź", "trabajo": "prac|zmian|służb", "hablar": "rozm|mów|pogad|zagad|powiedz"}
+for _k, _v in _PISTAS_PL.items():
+    if _PISTAS.get(_k):
+        _PISTAS[_k] = _PISTAS[_k] + "|" + _v
+
+_NARZEDNIK_PL = (("przycisk ", "przyciskiem "), ("lewy spust", "lewym spustem"), ("prawy spust", "prawym spustem"),
+                 ("krzyżak ", "krzyżakiem "), ("panel dotykowy", "panelem dotykowym"), ("wciśnięcie ", "wciśnięciem "))
+
+
+def _nazwa_pl(tipo, b):
+    """Przycisk w mianowniku: „przycisk A”, „lewy spust”, „krzyżak w górę”."""
+    if b.startswith("+"):
+        return f"{NOMBRES[tipo].get(COMBINAR, COMBINAR)} + {NOMBRES[tipo].get(b[1:], b[1:])}"
+    n = NOMBRES[tipo].get(b, b)
+    if "," in n:                                              # „L3, wciśnięcie lewej gałki”
+        n = n.split(",", 1)[0]
+    return "przycisk " + n if " " not in n else n
+
+
+def _biernik_pl(tipo, b):
+    n = _nazwa_pl(tipo, b)
+    return {"wciśnięcie lewej gałki": "lewą gałkę, wciskając ją", "wciśnięcie prawej gałki": "prawą gałkę, wciskając ją"}.get(n, n)
+
+
+def _narzednik_pl(tipo, b):
+    n = _nazwa_pl(tipo, b)
+    for a, z in _NARZEDNIK_PL:
+        if n.startswith(a):
+            return z + n[len(a):]
+    return n
+
+
+def _textos_mando_pl(texto, mapa, tipo="xbox", contexto="pie"):
+    import re
+    if not texto or not isinstance(texto, str):
+        return texto
+    TECLA = r"(?P<tecla>Enter|Spacj[aęi]|Tab|Escape|Ctrl|F1|F9|przecinek|[A-ZŃ])(?![\wąćęłńóśźż+])"
+
+    def una_frase(frase):
+        def tecla_de(nombre):
+            n = nombre.lower()
+            if n in _TECLAS_TXT:
+                return _TECLAS_TXT[n]
+            if len(n) == 1 and "a" <= n <= "z":
+                return getattr(K, "K_" + n, None)
+            return None
+
+        def boton(m, mayus=False):
+            key = tecla_de(m.group("tecla"))
+            if key is None:
+                return None
+            return _boton_de(mapa, key, S if mayus else 0, contexto, frase, tipo)
+
+        def z_czasownikiem(m):                                   # „naciśnij Q”, „Naciśnij Shift+Y”
+            b = boton(m, bool(m.group("mayus")))
+            return m.group(0) if b is None else f"{m.group('verbo')} {_biernik_pl(tipo, b)}"
+        frase = re.sub(r"(?P<verbo>\b[Nn]aciśnij|\b[Nn]aciśnięcie|\b[Nn]aciskasz|\b[Pp]rzytrzymaj) (?:klawisz )?(?P<mayus>Shift\+)?" + TECLA,
+                       z_czasownikiem, frase)
+
+        def narzednik(m):                                        # „klawiszem F”, „Klawiszem L”
+            b = boton(m, bool(m.group("mayus")))
+            if b is None:
+                return m.group(0)
+            t = _narzednik_pl(tipo, b)
+            return t[0].upper() + t[1:] if m.group(0)[0].isupper() else t
+        frase = re.sub(r"\b[Kk]lawiszem (?P<mayus>Shift\+)?" + TECLA, narzednik, frase)
+
+        def mianownik(m):                                        # „klawisz O mówi”, „Klawisz P włącza syrenę”
+            b = boton(m, bool(m.group("mayus")))
+            if b is None:
+                return m.group(0)
+            t = _nazwa_pl(tipo, b)
+            return t[0].upper() + t[1:] if m.group(0)[0].isupper() else t
+        frase = re.sub(r"\b[Kk]lawisz (?P<mayus>Shift\+)?" + TECLA, mianownik, frase)
+
+        def luzem(m):                                            # „i Spację, żeby uderzyć”, „strzelaj Ctrl”
+            b = boton(m)
+            return m.group(0) if b is None else f"{m.group(1)} {_biernik_pl(tipo, b)}"
+        frase = re.sub(r"(?<![\wąćęłńóśźż])(i|albo|ani|strzelaj) " + TECLA + r"(?=,? żeby| i | albo |\.|,|$)", luzem, frase)
+
+        f = frase.lower()
+        acel = next((b for b in ORDEN_BOTONES if mapa.get("coche", {}).get(b) == "acelerar"), None)
+        fren = next((b for b in ORDEN_BOTONES if mapa.get("coche", {}).get(b) == "frenar"), None)
+        if acel and re.search(r"przyspiesz|gaz", f):
+            frase = re.sub(r"\bstrzałk[aęi] w górę\b", _biernik_pl(tipo, acel), frase)
+        if fren and re.search(r"hamuj|hamow|wsteczn", f):
+            frase = re.sub(r"\bstrzałk[aęi] w dół\b", _biernik_pl(tipo, fren), frase)
+        frase = re.sub(r"\b([Ss])trzałkami w lewo i w prawo\b", lambda m: ("L" if m.group(1) == "S" else "l") + "ewą gałką na boki", frase)
+        frase = re.sub(r"\b([Ss])trzałki w lewo i w prawo\b", lambda m: ("L" if m.group(1) == "S" else "l") + "ewa gałka na boki", frase)
+        frase = re.sub(r"\bstrzałkę w górę\b", "lewą gałkę do przodu", frase)
+        frase = re.sub(r"\bstrzałkę w dół\b", "lewą gałkę do tyłu", frase)
+        frase = re.sub(r"\bstrzałka w górę\b", "lewa gałka do przodu", frase)
+        frase = re.sub(r"\bstrzałka w dół\b", "lewa gałka do tyłu", frase)
+        frase = re.sub(r"\b([Ss])trzałkami\b", lambda m: ("L" if m.group(1) == "S" else "l") + "ewą gałką", frase)
+        frase = re.sub(r"\b([Ss])trzałki\b", lambda m: ("L" if m.group(1) == "S" else "l") + "ewa gałka", frase)
+        frase = re.sub(r"\b([Tt]rzymaj|[Pp]rzytrzymaj) Shift\b", lambda m: m.group(1) + " lewą gałkę wychyloną do końca", frase)
+        return frase
+
+    return "".join(una_frase(t) for t in re.split(r"(?<=[.!?:;])(\s+)", texto))
+
+
+_textos_mando_es = textos_mando
+
+
+def textos_mando(texto, mapa, tipo="xbox", contexto="pie"):
+    """Po polsku – polskie zwroty; w innych językach – oryginał autora."""
+    return (_textos_mando_pl if _pl() else _textos_mando_es)(texto, mapa, tipo, contexto)

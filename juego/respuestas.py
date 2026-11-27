@@ -81,7 +81,7 @@ NO_SE_COMENTARIO = {
 
 def normal(texto):
     """Minúsculas y sin tildes, con un espacio delante y detrás, para buscar palabras."""
-    t = unicodedata.normalize("NFD", (texto or "").lower())
+    t = unicodedata.normalize("NFD", ((texto or "").lower().replace("ł", "l") if _pl() else (texto or "").lower()))
     t = "".join(c for c in t if unicodedata.category(c) != "Mn")          # sin tildes; la ñ queda como n
     t = " " + " ".join("".join(c if c.isalnum() else " " for c in t).split()) + " "
     return t.replace(" del ", " de el ").replace(" al ", " a el ")          # así «del alcalde» casa con «el alcalde»
@@ -138,7 +138,7 @@ def _elegir(opciones, dichas, rng):
 
 
 def _poner_datos(frase, ficha, ctx):
-    datos = {"yo": ficha.get("nombre", ""), "oficio": ficha.get("oficio", ""), "o": "a" if ficha.get("genero") == "m" else "o",
+    datos = {"yo": ficha.get("nombre", ""), "oficio": ficha.get("oficio", ""), "o": "a" if ficha.get("genero") == "m" else ("y" if _pl() else "o"),
              "barrio": ctx.get("barrio", tr("el barrio")), "ciudad": ctx.get("ciudad", tr("la ciudad")), "hora": ctx.get("hora", ""), "tu": ctx.get("tu", "")}
     for k, v in datos.items():
         frase = frase.replace("{" + k + "}", v)
@@ -180,7 +180,7 @@ def responder(texto, ficha, ctx, rng=random):
     tema = tema_de(texto)
     repetido = ""
     if tema is None:
-        tabla = NO_SE_PREGUNTA if "?" in (texto or "") or normal(texto).split()[:1] in (["que"], ["como"], ["cuando"], ["donde"], ["quien"], ["por"], ["cual"], ["cuanto"]) else NO_SE_COMENTARIO
+        tabla = NO_SE_PREGUNTA if "?" in (texto or "") or normal(texto).split()[:1] in (["que"], ["como"], ["cuando"], ["donde"], ["quien"], ["por"], ["cual"], ["cuanto"], ["co"], ["jak"], ["kiedy"], ["gdzie"], ["kto"], ["dlaczego"], ["czemu"], ["ile"], ["ktory"], ["ktora"], ["czy"], ["skad"], ["dokad"], ["jaki"], ["jaka"]) else NO_SE_COMENTARIO
         cuerpo = _elegir(tabla[""] + tabla[caracter] * 3, dichas, rng)
         cambio, ident = 0, None
     else:
@@ -204,8 +204,17 @@ def responder(texto, ficha, ctx, rng=random):
     if tema is not None and len(frase) < 140 and not cuerpo.endswith("?") and rng.random() < 0.45:
         frase += rng.choice(COLETILLAS[caracter])
     frase = _unir(repetido, frase)
-    datos = {"yo": ficha.get("nombre", ""), "oficio": ficha.get("oficio", ""), "o": "a" if ficha.get("genero") == "m" else "o",
+    datos = {"yo": ficha.get("nombre", ""), "oficio": ficha.get("oficio", ""), "o": "a" if ficha.get("genero") == "m" else ("y" if _pl() else "o"),
              "barrio": ctx.get("barrio", tr("el barrio")), "ciudad": ctx.get("ciudad", tr("la ciudad")), "hora": ctx.get("hora", ""), "tu": ctx.get("tu", "")}
     for k, v in datos.items():
         frase = frase.replace("{" + k + "}", v)
     return frase[0].upper() + frase[1:], cambio, ident
+
+
+def _pl():
+    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
+    try:
+        from .i18n import actual
+        return actual() == "pl"
+    except Exception:  # noqa: BLE001
+        return False

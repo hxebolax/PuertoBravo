@@ -1123,7 +1123,7 @@ def pedir_parada_servidores(fichas, trabajo=None):
                 pass
         if not f.get("datos") or not os.path.isdir(f["datos"]):
             que = NOMBRE_TIPO[f["tipo"]]
-            raise ErrorActualizacion(tr("No encuentro la carpeta de datos ") + ("del" + que[2:] if que.startswith(tr("el ")) else tr("de ") + que)
+            raise ErrorActualizacion(tr("No encuentro la carpeta de datos ") + ((": " + que) if _pl() else ("del" + que[2:] if que.startswith(tr("el ")) else tr("de ") + que))
                                      + tr(" para pedirle que se cierre. Ciérralo tú y vuelve a intentarlo."))
     nota = os.path.join(trabajo, NOTA_SERVIDORES)
     with open(nota, "w", encoding="utf-8") as fo:
@@ -1254,3 +1254,12 @@ def lanzar_instalador(ruta_bat):
 def limpiar():
     """Borra los restos de una actualización ya instalada o abandonada."""
     shutil.rmtree(carpeta_trabajo(), ignore_errors=True)
+
+
+def _pl():
+    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
+    try:
+        from .i18n import actual
+        return actual() == "pl"
+    except Exception:  # noqa: BLE001
+        return False

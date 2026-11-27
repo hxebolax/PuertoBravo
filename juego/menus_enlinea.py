@@ -520,7 +520,7 @@ def opciones_propiedad(p, l):
             p.red.enviar({"t": "prop_oferta", "lugar": l.id, "precio": n})
             app.decir(tr('En venta por {n} euros. Quien lo quiera, lo compra en la puerta.').format(n=(n)) if n else tr("Retirado de la venta."), True)
         app.abrir(EntradaTexto(app, tr("Precio para otros jugadores. Cero para no venderlo"), hecho, maximo=9))
-    return [Opcion(lambda: tr("En venta para otros jugadores: ") + (tr('{sv_oferta} euros').format(sv_oferta=(p.sv_oferta(l))) if p.sv_oferta(l) else "no"), a_jugadores,
+    return [Opcion(lambda: tr("En venta para otros jugadores: ") + (tr('{sv_oferta} euros').format(sv_oferta=(p.sv_oferta(l))) if p.sv_oferta(l) else tr("no")), a_jugadores,
                    ayuda=tr("Pones tu precio. Otro jugador lo compra en la puerta y el dinero te llega a ti, estés conectado o no.")),
             Opcion(tr('Vender al mercado por {v} euros').format(v=(int(l.get('precio', 0)) * pct // 100)), al_mercado,
                    ayuda=tr("Recuperas una parte de lo que costó y la propiedad vuelve a estar en venta para cualquiera. Saca antes los vehículos del garaje."))]
@@ -599,8 +599,8 @@ def grupo(p):
         if sv["grupo"] is None:
             out.append(Opcion(tr("No vas en ningún grupo"), ayuda=tr("Para formar uno, abre En línea, Quién hay, elige a alguien e invítale a tu grupo de misión. Caben cuatro.")))
         else:
-            lider = next((q["nombre"] for q in sv["miembros"] if q["id"] == sv["grupo"]), "alguien")
-            out.append(Opcion(tr("Vas en un grupo. Lo lleva ") + ("tú" if sv["grupo"] == p.red.id else lider) + tr(". Sois: ") + ", ".join(q["nombre"] for q in sv["miembros"]),
+            lider = next((q["nombre"] for q in sv["miembros"] if q["id"] == sv["grupo"]), tr("alguien"))
+            out.append(Opcion(tr("Vas en un grupo. Lo lleva ") + (tr("tú") if sv["grupo"] == p.red.id else lider) + tr(". Sois: ") + ", ".join(q["nombre"] for q in sv["miembros"]),
                               ayuda=tr("Quién lleva el grupo y quiénes vais en él. Caben cuatro.")))
             if sv["mision_grupo"]:
                 out.append(Opcion(tr('Misión del grupo, {titulo}: {texto}').format(titulo=(sv['mision_grupo']['titulo']), texto=(sv['mision_grupo']['texto'])),
@@ -710,13 +710,13 @@ def menu(p):
                                              "lo que su versión conoce: lo que solo tiene una versión más nueva no lo ven quienes van con una anterior.")),
             Opcion(tr("Caben ") + (tr('{get} jugadores a la vez').format(get=(i.get('max_jugadores'))) if i.get("max_jugadores") else tr("todos los jugadores que entren: no hay límite")),
                    ayuda=tr("Cuántos jugadores pueden estar dentro del servidor a la vez.")),
-            Opcion(tr("Combate entre jugadores: ") + ("sí" if i.get("pvp") else "no"),
+            Opcion(tr("Combate entre jugadores: ") + (tr("sí") if i.get("pvp") else tr("no")),
                    ayuda=tr("Con sí, los jugadores pueden herirse y tumbarse entre ellos, y quien tumba a otro se lleva parte del dinero que llevaba encima.")),
-            Opcion(tr("Zonas seguras en hospitales, comisarías, casas y dentro de los locales: ") + ("sí" if i.get("seguras") else "no"),
+            Opcion(tr("Zonas seguras en hospitales, comisarías, casas y dentro de los locales: ") + (tr("sí") if i.get("seguras") else tr("no")),
                    ayuda=tr("Con sí, en esos sitios ningún jugador puede herirte ni tú a ellos.")),
-            Opcion(tr("Modo pasivo permitido: ") + ("sí" if i.get("pasivo") else "no"),
+            Opcion(tr("Modo pasivo permitido: ") + (tr("sí") if i.get("pasivo") else tr("no")),
                    ayuda=tr("Con sí, y si hay combate entre jugadores, puedes ponerte en modo pasivo desde el menú En línea: ni hieres ni te hieren.")),
-            Opcion(tr("Contenido para adultos: ") + ("sí" if i.get("adultos") else "no"),
+            Opcion(tr("Contenido para adultos: ") + (tr("sí") if i.get("adultos") else tr("no")),
                    ayuda=tr("Si quien lleva el servidor permite el contenido para adultos del juego.")),
             Opcion(tr('Al llegar y al reaparecer, {get} segundos de protección').format(get=(i.get('proteccion', 0))),
                    ayuda=tr("Durante ese tiempo, al entrar en el servidor y después de que te tumben, nadie puede herirte.")),
@@ -729,9 +729,9 @@ def menu(p):
             Opcion(lambda: p.sv_economia_txt(),
                    ayuda=tr("En un servidor que lleva la cuenta del dinero, lo que ganas por tu cuenta tiene un tope por hora. No cuentan contra él las misiones de la historia, "
                          "lo que te da el servidor o te dan otros jugadores, ni los encargos repetibles que el servidor reconoce. Lo que pase del tope se retira, y el juego te dice cuánto.")),
-            Opcion(tr("Canales de rol: ") + ((tr('sí; lo dicho en personaje llega a {get} metros').format(get=(i.get('rol_metros', 30)))) if p.sv_rol() else "no"),
+            Opcion(tr("Canales de rol: ") + ((tr('sí; lo dicho en personaje llega a {get} metros').format(get=(i.get('rol_metros', 30)))) if p.sv_rol() else tr("no")),
                    ayuda=tr("Si se puede hablar en personaje, contar lo que hace tu personaje y escribir una ficha. Está en En línea, Rol.")),
-            Opcion(tr("Radio de los vehículos de otros jugadores: ") + (tr("sí, la de las emisoras del juego") if p.sv_sabe("radio") and i.get("radio_coches") else "no"),
+            Opcion(tr("Radio de los vehículos de otros jugadores: ") + (tr("sí, la de las emisoras del juego") if p.sv_sabe("radio") and i.get("radio_coches") else tr("no")),
                    ayuda=tr("Con sí, cerca del vehículo de otro jugador oyes floja la emisora que lleva puesta. En las opciones del juego puedes dejar de oírla.")),
         ] + ([Opcion(tr("Órdenes de administrador"), ayuda=tr("Escríbelas en el chat general con una barra delante: barra ayuda las dice todas. Por ejemplo, barra jugadores, barra aviso y el texto, "
                                                          "barra expulsar y el nombre, barra vetar y el nombre, barra invitar, barra guardar."))] if sv["admin"] else [])))
@@ -758,7 +758,7 @@ def menu(p):
                        ayuda=tr("Las guerras en marcha o a punto de empezar, todas las bandas y de quién es cada barrio.")),
                 Opcion(tr("Casas y negocios: en venta y de quién son"), lambda: en_venta(p),
                        ayuda=tr("En un servidor, cada casa y cada negocio es de un solo jugador. Aquí está lo que queda libre, lo que vende otro jugador a su precio y de quién es lo demás.")),
-                Opcion(lambda: tr("Grupo de misión: ") + ("sí" if sv["grupo"] is not None else "no"), lambda: grupo(p),
+                Opcion(lambda: tr("Grupo de misión: ") + (tr("sí") if sv["grupo"] is not None else tr("no")), lambda: grupo(p),
                        ayuda=tr("Tu grupo, las invitaciones que tengas, la misión del grupo y cómo funcionan las misiones en grupo."))]
         if sv["info"].get("pvp") and sv["info"].get("pasivo"):
             out.append(Opcion(lambda: tr('Modo pasivo: {v}').format(v=(tr('sí') if sv['pasivo'] else tr('no'))), pasivo,

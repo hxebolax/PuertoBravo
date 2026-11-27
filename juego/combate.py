@@ -45,10 +45,10 @@ def ficha_arma(a):
         partes.append(tr('Alcance {_grado}: {_num} metros').format(_grado=(_grado(alcance, ((25, 'corto'), (50, 'medio')), 'largo')), _num=(_num(alcance))))
     if tipo == "explosivo" and a.get("radio"):
         partes.append(tr('La explosión alcanza {_num} metros alrededor').format(_num=(_num(a['radio']))))
-    que = "golpe" if tipo == "cuerpo" else "lanzamiento" if tipo == "explosivo" else "disparo"
+    que = ("cios" if tipo == "cuerpo" else "rzut" if tipo == "explosivo" else "strzał") if _pl() else ("golpe" if tipo == "cuerpo" else "lanzamiento" if tipo == "explosivo" else "disparo")
     ritmo = _grado(cad, ((0.2, tr("muy rápida")), (0.5, tr("rápida")), (0.9, tr("media"))), tr("lenta"))
     if cad < 0.34:
-        partes.append(tr('Cadencia {ritmo}: unos {int} {que}s por segundo').format(ritmo=(ritmo), int=(int(round(1 / cad))), que=(que)) + (tr(", automática: dispara mientras mantienes pulsado") if a.get("automatica") else ""))
+        partes.append(tr('Cadencia {ritmo}: unos {int} {que}s por segundo').format(ritmo=(ritmo), int=(_ile_pl_walka(int(round(1 / cad)), que) if _pl() else int(round(1 / cad))), que=('' if _pl() else que)) + (tr(", automática: dispara mientras mantienes pulsado") if a.get("automatica") else ""))
     else:
         partes.append(tr('Cadencia {ritmo}: un {que} cada {v}').format(ritmo=(ritmo), que=(que), v=(tr('segundo') if cad == 1 else _num(cad) + tr(' segundos'))))
     if tipo != "explosivo":
@@ -1151,3 +1151,24 @@ class Combate:
         if quitado:
             texto += tr(" También te requisan ") + tr(" y ").join(quitado) + "."
         self.app.abrir(Dialogo(self.app, [(tr("Narrador"), texto)], fin))
+
+
+def _pl():
+    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
+    try:
+        from .i18n import actual
+        return actual() == "pl"
+    except Exception:  # noqa: BLE001
+        return False
+
+# ---------------------------------------------------------------- łatka polskiej wersji (latki/walka_liczebniki.py)
+_FORMY_WALKA = {"cios": ("cios", "ciosy", "ciosów"), "rzut": ("rzut", "rzuty", "rzutów"), "strzał": ("strzał", "strzały", "strzałów")}
+
+
+def _ile_pl_walka(n, que):
+    f = _FORMY_WALKA.get(que, (que, que, que))
+    if n == 1:
+        return f"{n} {f[0]}"
+    if n % 10 in (2, 3, 4) and n % 100 not in (12, 13, 14):
+        return f"{n} {f[1]}"
+    return f"{n} {f[2]}"
