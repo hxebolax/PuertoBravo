@@ -4,7 +4,10 @@ import os
 
 from . import rutas
 
+from .cheats import OPTIONS as CHEAT_OPTIONS
+
 POR_DEFECTO = {
+    "cheat_velocidad_mundo": 0.25,  # world multiplier, bounded 0..5; cheat_tiempo enables it
     "vol_maestro": 0.8,
     "vol_efectos": 1.0,
     "vol_ambiente": 0.6,
@@ -135,6 +138,8 @@ POR_DEFECTO = {
     "act_fuente": "servidor",      # servidor | github | ambas | personalizada
     "act_url": "",                 # dirección de version.json para la fuente personalizada
 }
+
+POR_DEFECTO.update({row[0]: False for row in CHEAT_OPTIONS})
 
 OPCIONES = {
     "movimiento": ["brujula", "giro"],

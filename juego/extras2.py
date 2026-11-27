@@ -78,7 +78,7 @@ def _rango(v, lo, hi):
 class Extras2:
     # -------------------------------------------------------------- habilidades
     def nivel(self, hab):
-        return min(10, int((self.j.hab.get(hab, 0.0) / 60.0) ** 0.5))
+        return min(10, int(((self.j.hab.get(hab, 0.0) + 60.0 * self.cheat_growth()) / 60.0) ** 0.5))
 
     def ganar_xp(self, hab, n):
         antes = self.nivel(hab)

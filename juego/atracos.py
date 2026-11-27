@@ -11,6 +11,7 @@ consecuencias: ese proveedor deja de venderte unos días, o te sube los precios,
 Los números y las frases están en los datos (vida.json, sección atracos).
 """
 from .i18n import tr
+from .cheats import text as cheat_text
 import random
 
 from . import gente as G
@@ -264,8 +265,8 @@ class Atracos:
 
         def hecho():
             ilegales = [s for s in self.dato_adulto("sustancias") if not s.get("legal")]
-            hueco = self.hueco_mercancia()                       # el tope de cien y el sitio de la mochila (mochila.py)
-            cuanto = min(hueco, random.randint(*sorted((AJ.entero("proveedor_mercancia_min"), AJ.entero("proveedor_mercancia_max")))))
+            disponible = random.randint(*sorted((AJ.entero("proveedor_mercancia_min"), AJ.entero("proveedor_mercancia_max"))))
+            cuanto = min(self.hueco_mercancia(disponible), disponible)
             cogido = {}
             for _ in range(cuanto if ilegales else 0):
                 s = random.choice(ilegales)
@@ -274,7 +275,9 @@ class Atracos:
                 j.sustancias[ident] = j.sustancias.get(ident, 0) + n
             if cogido:
                 self.son("trato", cat="interfaz")
-                self.decir(tr("Te llevas la mercancía: ") + ", ".join(tr('{n} de {lower}').format(n=(n), lower=(self.sustancia(i)['nombre'].lower())) for i, n in cogido.items()) + tr('. Llevas {carga} de 100 unidades.').format(carga=(self.carga())))
+                estado_carga = (cheat_text('. Llevas {carga} unidades, sin límite de inventario.', '. Carrying {carga} units, with unlimited inventory.')
+                                if self.cheat_on("cheat_mochila") else tr('. Llevas {carga} de 100 unidades.')).format(carga=self.carga())
+                self.decir(tr("Te llevas la mercancía: ") + ", ".join(tr('{n} de {lower}').format(n=(n), lower=(self.sustancia(i)['nombre'].lower())) for i, n in cogido.items()) + estado_carga)
             elif ilegales:
                 self.decir(tr("La mercancía no te cabe: llevas la mochila llena."))
             self.cambiar_reputacion(3)

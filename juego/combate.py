@@ -95,7 +95,18 @@ class Combate:
             self.decir(tr('Consigues: {nombre}.').format(nombre=(a['nombre'])) + (tr(' Es el arma número {n}.').format(n=(n)) if n <= 9 else tr(" Elígela con la coma o con la tecla I.")))
             j.arma = ident
         if a["tipo"] in ("fuego", "explosivo"):
-            j.armas[ident]["reserva"] += balas
+            self.sumar_municion(ident, balas)
+
+    def sumar_municion(self, ident, cantidad):
+        """Give real reserve ammunition, respecting an enabled cheat's ceiling."""
+        if ident not in self.j.armas:
+            return 0
+        n = max(0, int(cantidad))
+        room = self.cheat_ammo_room(ident)
+        if room is not None:
+            n = min(n, room)
+        self.j.armas[ident]["reserva"] += n
+        return n
 
     def elegir_arma(self, idx, paso=1):
         j = self.j
@@ -121,7 +132,11 @@ class Combate:
         t = a["nombre"]
         if a["tipo"] in ("fuego", "explosivo"):
             m = j.armas[j.arma]
-            t += ", " + municion_txt(a, m)
+            if self.cheat_infinite_ammo():
+                from .cheats import text
+                t += text(", munición infinita; guardadas: ", ", infinite ammunition; stored: ") + municion_txt(a, m)
+            else:
+                t += ", " + municion_txt(a, m)
         self.decir(t, True)
 
     def capacidad(self, ident):
@@ -134,6 +149,10 @@ class Combate:
         j = self.j
         a = self.arma()
         if a["tipo"] not in ("fuego", "explosivo"):
+            return
+        if self.cheat_infinite_ammo():
+            from .cheats import text
+            self.decir(text("Munición infinita: no necesitas recargar.", "Infinite ammunition: no reload is needed."), True)
             return
         m = j.armas[j.arma]
         falta = self.capacidad(j.arma) - m["cargador"]
@@ -218,6 +237,10 @@ class Combate:
         if self.rendido:
             self._romper_rendicion(tr("Atacas con las manos arriba: se acabó la rendición."))
         a = self.arma()
+        if a["tipo"] in ("fuego", "explosivo") and a["id"] not in j.armas:
+            self.app.son("error")
+            self.decir(tr('No tienes {nombre}.').format(nombre=a["nombre"]), True)
+            return
         x, y = self.pos()
         fuego = a["tipo"] == "fuego"
         if a["tipo"] == "explosivo":
@@ -229,7 +252,8 @@ class Combate:
             return
         if fuego:
             m = j.armas[j.arma]
-            if m["cargador"] <= 0:
+            infinito = self.cheat_infinite_ammo()
+            if m["cargador"] <= 0 and not infinito:
                 self.son("sin_balas")
                 j.t_ataque = 0.3
                 if m["reserva"] > 0:
@@ -237,7 +261,8 @@ class Combate:
                 else:
                     self.decir(tr("Sin munición."), True)
                 return
-            m["cargador"] -= 1
+            if not infinito:
+                m["cargador"] -= 1
             self.app.vibrar(0.35, 0.1, 70)                       # el retroceso en el mando, se acierte o no
             if m.get("silenciador"):                             # con silenciador: un chasquido seco, y nadie se entera
                 self.son(a["sonido"], vol=0.3, tono=random.uniform(1.5, 1.6))
@@ -305,7 +330,8 @@ class Combate:
     def _lanzar_explosivo(self, a, x, y):
         j = self.j
         m = j.armas[j.arma]
-        if m["cargador"] <= 0:
+        infinito = self.cheat_infinite_ammo()
+        if m["cargador"] <= 0 and not infinito:
             if m["reserva"] > 0:
                 m["reserva"] -= 1
                 m["cargador"] = 1
@@ -314,8 +340,9 @@ class Combate:
                 self.decir(tr('No te quedan: {nombre}.').format(nombre=(a['nombre'])), True)
                 j.t_ataque = 0.4
                 return
-        m["cargador"] -= 1
-        if m["reserva"] > 0 and a.get("cargador", 1) == 1:
+        if not infinito:
+            m["cargador"] -= 1
+        if not infinito and m["reserva"] > 0 and a.get("cargador", 1) == 1:
             m["reserva"] -= 1
             m["cargador"] = 1
         j.t_ataque = a["cadencia"]
@@ -332,7 +359,11 @@ class Combate:
         d = math.hypot(tx - x, ty - y)
         self.explosiones.append({"t": 0.35 + d / 45.0, "x": tx, "y": ty, "radio": a.get("radio", 8), "dano": a["dano"], "arma": a["id"],
                                  "sigue": o if getattr(o, "volando", False) else None})
-        self.decir(tr('Quedan {v}.').format(v=(m['cargador'] + m['reserva'])))
+        if infinito:
+            from .cheats import text
+            self.decir(text("Munición infinita.", "Infinite ammunition."))
+        else:
+            self.decir(tr('Quedan {v}.').format(v=(m['cargador'] + m['reserva'])))
 
     def _estallar(self, e):
         j = self.j
@@ -440,6 +471,10 @@ class Combate:
             self.herir_amigo(p, dano)
             return
         j = self.j
+        if dano > 0:
+            dano += 2.0 * self.cheat_growth()
+            if atropello and self.cheat_on("cheat_atropellar") and p.tipo != "civil":
+                dano = max(dano, p.salud)
         self.sv_golpe_eco(p, dano)                               # en una misión en grupo, el golpe cuenta para todos
         self.sv_golpe_policia(p, dano)                           # y si es un agente que persigue a otro jugador, le llega a su juego
         self.sv_golpe_peaton(p, dano)                            # y si es alguien de la calle, que es de todos, también
@@ -450,6 +485,7 @@ class Combate:
         p.salud -= dano
         if p.salud <= 0:
             p.muerto = True
+            self.cheat_kill(p)
             p.t_estado = self.t
             self.son("muerte_npc", xy=(p.x, p.y), ref=6, tono=p.tono)
             if not getattr(p, "inofensivo", False) and not getattr(p, "deportivo", False):
@@ -535,6 +571,8 @@ class Combate:
                 break
 
     def danar_vehiculo(self, v, dano):
+        if self.cheat_repair(v):
+            return
         if self.sv_dano_copia(v, dano):                          # un vehículo aparcado de otro jugador: lo lleva el servidor
             return
         if v.muerto or v.ardiendo >= 0:
@@ -562,6 +600,8 @@ class Combate:
                 self.decir(tr("¡El vehículo está ardiendo! ¡Pulsa F para salir, va a explotar!"), True)
 
     def explotar(self, v):
+        if self.cheat_repair(v):
+            return
         j = self.j
         x, y = v.x, v.y
         self.son("explosion", xy=(x, y), ref=30, maxd=400)
@@ -582,6 +622,7 @@ class Combate:
         for q in getattr(v, "pasajeros", []):                    # los enemigos que venían dentro y no se habían bajado caen con él
             if not q.muerto:
                 q.muerto = True
+                self.cheat_kill(q)
                 j.stats["enemigos"] += 1
         if v.tag == "objetivo" and self.mision:
             self.mision["restos"] = (x, y)
@@ -792,6 +833,16 @@ class Combate:
         if mejor is not None:
             p.x, p.y = mejor[1], mejor[2]
 
+    def reflejar_disparo(self, tirador, arma):
+        """Return an NPC's actual ranged shot; this engine resolves these instantly."""
+        if not self.cheat_on("cheat_reflejar") or arma.get("tipo") not in ("fuego", "explosivo"):
+            return False
+        if tirador is None or tirador.muerto or tirador not in self.personas:
+            return False
+        self.son("bala_impacto", xy=(tirador.x, tirador.y), ref=10, maxd=150)
+        self.danar_persona(tirador, arma["dano"] * 0.4)
+        return True
+
     def actualizar_personas(self, dt):
         j = self.j
         px, py = self.pos()
@@ -947,6 +998,8 @@ class Combate:
                 j.recordado.append("disparo_veh")
                 self.son("notificacion", cat="interfaz")
                 self.decir(tr("¡Te disparan! ") + self.DISPARO_VEH)
+            if self.reflejar_disparo(p, a):
+                continue
             prob = getattr(p, "punteria", G.PUNTERIA) * (1.0 - 0.6 * d / alcance)
             if j.agachado:
                 prob *= 0.45
@@ -1078,6 +1131,7 @@ class Combate:
             return
         j = self.j
         self.rendido = None
+        conservar = self.cheat_on("cheat_conservar")
         nivel = j.estrellas
         if not sin_trato and self.cfg["multas"] and 1 <= j.estrellas <= 2 and j.dinero >= self.coste_multa() and not self.mision:
             self._trato_policia()                                # con poca búsqueda y dinero en el bolsillo, se puede arreglar
@@ -1098,20 +1152,21 @@ class Combate:
             multa, horas, todas = self._pena_rendicion(nivel)
             j.stats["rendiciones"] = j.stats.get("rendiciones", 0) + 1
         j.dinero -= multa
-        for ident in [a for a in j.armas if a in self.armas_d and (self.armas_d[a]["tipo"] in ("fuego", "explosivo") or (todas and a != "punos"))]:
+        for ident in ([] if conservar else [a for a in j.armas if a in self.armas_d and (self.armas_d[a]["tipo"] in ("fuego", "explosivo") or (todas and a != "punos"))]):
             del j.armas[ident]
-        if todas:
+        if todas and not conservar:
             j.blindaje = 0.0
-        j.arma = "punos"
+        if not conservar:
+            j.arma = "punos"
         j.animo = max(0.0, j.animo - 15)
         j.reputacion = max(0.0, j.reputacion - 3)
         j.efectos = []
-        requisado = self.perder_mercancia()
+        requisado = 0 if conservar else self.perder_mercancia()
         if requisado:
             multa_extra = min(j.dinero, requisado * self.precio("multa_mercancia", 20))
             j.dinero -= multa_extra
             multa += multa_extra
-        robados = self.moc_requisar()                            # lo robado de la mochila se queda en comisaría (mochila.py)
+        robados = 0 if conservar else self.moc_requisar()                            # lo robado de la mochila se queda en comisaría (mochila.py)
         quitado = []
         if requisado:
             quitado.append(tr('las {requisado} unidades de mercancía que llevabas').format(requisado=(requisado)))
@@ -1140,6 +1195,9 @@ class Combate:
             texto = (tr('Te entregas con las manos arriba y nadie dispara. Te esposan y te llevan a {nombre}. Con nivel de búsqueda {nivel} no hay trato que valga: sales {horas} horas después, con {multa} euros menos y sin tus armas de fuego').format(nombre=(c.nombre), nivel=(nivel), horas=(horas), multa=(multa)) + (tr(", ni las demás armas, ni el chaleco") if todas else "") + tr('. Son las {hora_txt}.').format(hora_txt=(self.hora_txt())))
         else:
             texto = tr('Te esposan y te llevan a {nombre}. Tras una noche en el calabozo sales con {multa} euros menos de multa y sin tus armas de fuego. Son las {hora_txt}.').format(nombre=(c.nombre), multa=(multa), hora_txt=(self.hora_txt()))
+        if conservar:
+            from .cheats import text
+            texto = text("Te detienen y cumples la condena. Conservas todo tu inventario. Multa: ", "You serve your arrest sentence and keep your full inventory. Fine: ") + str(multa) + text(" euros. Son las ", " euros. The time is ") + self.hora_txt() + "."
         if cargos:
             texto += tr(' En la multa van {v} que derribaste.').format(v=(tr('el helicóptero') if cargos == 1 else tr('los {cargos} helicópteros').format(cargos=(cargos))))
         if quitado:

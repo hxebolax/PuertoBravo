@@ -412,8 +412,8 @@ class Misiones:
             if "arma" in p:
                 self.dar_arma(p["arma"], p.get("balas", 0))
             if "balas_arma" in p and p["balas_arma"] in self.j.armas:
-                self.j.armas[p["balas_arma"]]["reserva"] += p.get("balas", 0)
-                self.decir(tr('Recibes {get} balas.').format(get=(p.get('balas', 0))))
+                added = self.sumar_municion(p["balas_arma"], p.get("balas", 0))
+                self.decir(tr('Recibes {get} balas.').format(get=added))
             if "dinero" in p:
                 self.dar_dinero(p["dinero"], tr("Recibes"))
             if "sustancia" in p and self.sustancia(p["sustancia"]):

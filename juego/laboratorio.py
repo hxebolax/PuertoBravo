@@ -155,7 +155,7 @@ def opciones_casa(p, lugar, Menu, Opcion):
                 app.son("error")
                 app.decir(tr("No te queda material. Lo vende cualquier proveedor."), True)
                 return
-            if p.carga() >= 100:
+            if p.carga() >= 100 and not p.cheat_on("cheat_mochila"):
                 app.son("error")
                 app.decir(tr("No te cabe más mercancía encima. Vende antes."), True)
                 return
@@ -264,7 +264,7 @@ class Coccion:
             app.decir(tr("Lo dejas a medias. La tanda se ha echado a perder."), True)
             return
         unidades = max(1, int(round(4 + 12 * calidad)))
-        encima = min(unidades, p.hueco_mercancia())             # lo que cabe en la mochila; el resto, al armario de esta casa (mochila.py)
+        encima = min(unidades, p.hueco_mercancia(unidades))     # lo que cabe en la mochila; el resto, al armario de esta casa (mochila.py)
         j.sustancias[self.s["id"]] = j.sustancias.get(self.s["id"], 0) + encima
         resto = unidades - encima
         if resto:

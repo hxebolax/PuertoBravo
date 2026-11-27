@@ -215,12 +215,69 @@ class Conduccion:
 
     # ---------------------------------------------------- entrar y salir
     def entrar_salir(self):
+        if self.cheat_enter_target():
+            return
         if getattr(self, "pasajero", None) is not None:
             self.bajar_de_amigo()
             return
         if not self.j.veh and self.subir_con_amigo():
             return
         self._entrar_salir()
+
+    def cheat_enter_target(self):
+        """F takes a selected, live local vehicle, including airborne police.
+
+        Use actual entity references from Q or the GPS used by U. Never guess
+        a vehicle from coordinates or revive a removed/destroyed entity.
+        """
+        if not self.cheat_on("cheat_entrar") or self.transicion:
+            return False
+        g = self.gps or {}
+        candidates = (getattr(self, "objetivo", None), g.get("cosa"), g.get("sigue"))
+        v = next((v for v in candidates if isinstance(v, Vehiculo) and v in self.vehiculos and not v.muerto), None)
+        if v is None or v is self.j.veh:
+            return False
+        # Validate the destination before releasing a current vehicle/seat.
+        # Normal exit cleanup restores a temporary flight model, stops its
+        # audio and ends vehicle work; the target takes over immediately.
+        if self.j.veh:
+            self.salir_vehiculo(forzado=True)
+        if getattr(self, "pasajero", None) is not None:
+            self.bajar_de_amigo()
+        self.parar_paseo()
+        if self.forzando:
+            self.forzando["canal"].parar()
+            self.forzando = None
+        airborne = bool(getattr(v, "volando", False) or getattr(v, "alt", 0) > 0)
+        police_heli = v.ia == "heli_policia"
+        h = getattr(self, "heli", None)
+        if h and h["veh"] is v:
+            # _heli_fuera removes the vehicle. Hand it over instead, so the
+            # pursuit cannot move, despawn or crash the player's aircraft.
+            from .calle import aj
+            self.heli = None
+            self.t_heli = self.t + aj("helicoptero_vuelve")
+        if police_heli:
+            v.tag = None
+            self.delito(3, tr("robo de un coche patrulla"), siempre=True)
+        if getattr(v, "pasajeros", []):
+            self.bajar_enemigos(v)
+        v.cerrado = False
+        v.hostil = False
+        v.volando = False                         # NPC helicopter flag; player flight uses fase/alt.
+        if v.modelo.get("vuela") and airborne:
+            from .calle import aj
+            v.fase = "vuelo"
+            v.alt = max(float(getattr(v, "alt", 0)), float(aj("helicoptero_altura")) if police_heli else 35.0)
+        self.j.x, self.j.y = v.x, v.y
+        if self.objetivo is v:
+            self.objetivo = None
+        self._subir(v, v.ia in ("policia", "heli_policia") or not getattr(v, "propio", False), callar=airborne)
+        if airborne:
+            from .cheats import text
+            self.decir(text("Subes a ", "You enter ") + v.nombre + text(" en el aire. Izquierda y derecha giran; D sube, A baja y F aterriza.",
+                                                                                      " in the air. Left and right steer; D climbs, A descends and F lands."), True)
+        return True
 
     def _entrar_salir(self):
         j = self.j
@@ -362,6 +419,8 @@ class Conduccion:
             v.robado = True                                      # para el desguace: no es tuyo, con papeles, hasta que lo mejores
         v.propio = True
         j.veh = v
+        self.cheat_sync_flight()
+        self.cheat_repair(v)
         if v.modelo.get("vuela") and self.vuelo_real():
             self.vuelo_prep(v)                                   # altura, fase y combustible (vuelo.py)
         con_chofer = self.chofer_al_subir(v)                     # si lo trae tu chófer, vas de pasajero
@@ -481,6 +540,7 @@ class Conduccion:
         v = j.veh
         if not v:
             return
+        self.cheat_sync_flight(exiting=True)
         j.veh = None
         self._parar_intermitente()
         if v.canal:
@@ -586,8 +646,12 @@ class Conduccion:
             self.cfg["piloto_gps"] = not self.cfg["piloto_gps"]
             if not self.cfg["piloto_gps"]:
                 self.decir(tr("Piloto del GPS desactivado."), True)
-            elif v.modelo.get("barco") or self.mundo.tipo == "mar":
-                self.decir(tr("Piloto del GPS activado, pero en el agua no conduce: solo en tierra."), True)
+            elif (v.modelo.get("barco") or self.mundo.tipo == "mar") and not v.modelo.get("vuela"):
+                from .cheats import text
+                self.decir(text("Piloto del GPS para barcos activado. Marca un destino; las flechas dan control manual.", "Water GPS autopilot enabled. Set a destination; arrow keys override it.") if self.cheat_on("cheat_piloto_agua") else text("Activa también el piloto para barcos en Opciones, Trucos.", "Also enable water autopilot in Options, Cheats."), True)
+            elif v.modelo.get("vuela") and self.cheat_on("cheat_piloto_aire"):
+                from .cheats import text
+                self.decir(text("Piloto del GPS aéreo activado. Marca un destino; las flechas dan control manual.", "Air GPS autopilot enabled. Set a destination; arrow keys override it."), True)
             elif v.modelo.get("vuela"):
                 self.decir(tr("Piloto del GPS activado para cuando conduzcas en tierra. En el aire no lleva los mandos")
                            + (tr(": para eso está el piloto automático del vuelo.") if self.vuelo_real() else "."), True)
@@ -707,9 +771,22 @@ class Conduccion:
     def conducir(self, dt):
         j = self.j
         v = j.veh
+        from .cheat_time import world_rate
+        if world_rate(self) is not None:
+            # Player impacts recover in player time even with a stopped or
+            # accelerated world. NPCs retain their ordinary world deadline.
+            remaining = getattr(v, "_cheat_collision_wait", max(0.0, v.t_choque - self.t))
+            v._cheat_collision_wait = max(0.0, remaining - dt)
+        elif hasattr(v, "_cheat_collision_wait"):
+            v.t_choque = self.t + v._cheat_collision_wait
+            del v._cheat_collision_wait
         t = self.app.teclas
         if self.chofer_conduce():                       # conduce tu chófer: los pedales y el volante son suyos
             t = frozenset()
+        self.cheat_sync_flight()
+        self.cheat_repair(v)
+        if self.cheat_drive(v, dt, t):
+            return
         mo = v.modelo
         if mo.get("vuela") and self.vuelo_real():       # volar de verdad: despegue, altura, combustible y aterrizaje (vuelo.py)
             t = self.vuelo_controles(v, dt, t)
@@ -928,7 +1005,8 @@ class Conduccion:
         self.t_sonar = max(0.08, mejor[0] / 45.0 * 0.8)
 
     def _choques_jugador(self, v):
-        if v.t_choque > self.t or v.modelo.get("vuela"):
+        waiting = v._cheat_collision_wait > 0 if hasattr(v, "_cheat_collision_wait") else v.t_choque > self.t
+        if waiting or v.modelo.get("vuela"):
             return
         for o in self.vehiculos:
             if o is v or o.muerto or getattr(o, "volando", False):
@@ -939,7 +1017,10 @@ class Conduccion:
                 imp = abs(rel)
                 if imp < 1.5:
                     continue
-                v.t_choque = self.t + 0.6
+                if hasattr(v, "_cheat_collision_wait"):
+                    v._cheat_collision_wait = 0.6
+                else:
+                    v.t_choque = self.t + 0.6
                 fg = self._golpe(v)
                 self.son("choque" if imp > 8 else "choque_leve", xy=(o.x, o.y), ref=10, vol=0.5 + 0.5 * fg, tono=0.8 + 0.2 * fg)
                 self.app.vibrar(min(1.0, imp / 14.0), 0.5, 300)
@@ -1103,6 +1184,8 @@ class Conduccion:
                     v.alarma.parar()
                     v.alarma = None
             if v is j.veh:
+                continue
+            if self.cheat_empty_vehicle(v, dt):
                 continue
             d = v.dist(px, py)
             if v.ia in ("aparcado", None):

@@ -395,7 +395,7 @@ class Vuelo:
         if not self.mundo.transitable(v.x, v.y) and self.mundo.tipo != "mar":
             self.decir(tr("No puedes aterrizar aquí: debajo hay un edificio. Busca una calle o un espacio abierto; la tecla C te dice sobre qué estás."), True)
             return True
-        if self.mundo.tipo == "mar":
+        if self.mundo.tipo == "mar" and not getattr(v, "_cheat_ground_model", {}).get("barco"):
             self.decir(tr("No puedes posarte sobre el mar."), True)
             return True
         v.forzoso = False
@@ -418,7 +418,8 @@ class Vuelo:
         if getattr(v, "forzoso", False):
             v.forzoso = False
             dano = v.salud_max * random.uniform(*sorted((AJ("forzoso_min"), AJ("forzoso_max")))) / 100.0
-            v.salud = max(1.0, v.salud - dano)
+            if not self.cheat_repair(v):
+                v.salud = max(1.0, v.salud - dano)
             self.son("choque", vol=0.7)
             self.decir(AJ.frase("frases_forzoso") + tr(' Estado, {int} por ciento.').format(int=(int(100 * v.salud / v.salud_max))))
         campo = self._campo_cerca(v)
@@ -434,7 +435,8 @@ class Vuelo:
         if not libre:
             v.x, v.y = self.mundo.punto_libre(v.x, v.y)
         pct = random.uniform(*sorted((AJ("forzoso_min"), AJ("forzoso_max")))) if libre else random.uniform(*sorted((AJ("caida_min"), AJ("caida_max"))))
-        v.salud = max(1.0, v.salud - v.salud_max * pct / 100.0)
+        if not self.cheat_repair(v):
+            v.salud = max(1.0, v.salud - v.salud_max * pct / 100.0)
         self.son("choque", vol=0.9)
         self.son("aterrizaje", vol=0.7)
         self.app.vibrar(1.0, 0.8, 600)

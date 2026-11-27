@@ -223,7 +223,7 @@ class Vida:
 
     def curso(self, hab):
         j = self.j
-        if j.curso_dia == self.dia:
+        if j.curso_dia == self.dia and not self.cheat_on("cheat_estudiar"):
             self.app.son("error")
             self.decir(tr("Ya has ido a clase hoy. La cabeza no da para más."), True)
             return

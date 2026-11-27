@@ -3,6 +3,7 @@ la dirección de un negocio, los créditos y las obligaciones, los antecedentes 
 from .i18n import tr
 from .honrado import AJ, GRAVEDAD, NIVELES, _n
 from .menus import Menu, Opcion
+from .cheats import text as cheat_text
 
 NIVEL_TXT = {"apagado": tr("apagado, como en versiones anteriores"), "suave": "suave", "normal": "normal", "exigente": "exigente"}
 
@@ -316,7 +317,10 @@ def opciones_negocio(p, l, refrescar):
         return lambda: (f(l, *a), refrescar())
     ops = [Opcion(lambda: tr("Dirección. ") + p.hon_negocio_txt(l), ayuda=tr("Un negocio atendido rinde más y uno abandonado, menos. Su nombre entre la clientela sube si pasas por aquí, si echas horas y con precios bajos.")),
            Opcion(tr('Echar {entero} horas en el negocio').format(entero=(AJ.entero('atender_horas'))), hacer(p.hon_atender), ayuda=tr("Atiendes tú: sube el nombre del negocio. Una vez al día en cada negocio.")),
-           Opcion(mejora_txt, hacer(p.hon_mejorar), ayuda=tr("Cada nivel hace que el negocio dé más y admita más gente. Los niveles altos piden un título de gestión y buen prestigio.")),
+           Opcion(mejora_txt, hacer(p.hon_mejorar), ayuda=(cheat_text(
+               "Cada nivel hace que el negocio dé más y admita más gente. Con el truco activado, ningún negocio pide prestigio para mejorar. Los títulos y el coste siguen siendo necesarios.",
+               "Each level increases income and staff capacity. With this cheat enabled, all business upgrades ignore prestige. Qualifications and the normal cost still apply.")
+               if p.cheat_on("cheat_negocios") else tr("Cada nivel hace que el negocio dé más y admita más gente. Los niveles altos piden un título de gestión y buen prestigio."))),
            Opcion(lambda: tr('Contratar a un empleado. Tienes {emp} de {hon_max_empleados}').format(emp=(e['emp']), hon_max_empleados=(p.hon_max_empleados(e))), hacer(p.hon_empleado, 1),
                   ayuda=tr('Cada empleado cobra al día un {entero} por ciento de lo que da el negocio de base y hace que dé un {entero2} por ciento más. Con gente contratada, el negocio aguanta aunque tú no pases.').format(entero=(AJ.entero('empleado_sueldo')), entero2=(AJ.entero('empleado_rinde')))),
            Opcion(tr("Despedir a un empleado"), hacer(p.hon_empleado, -1),

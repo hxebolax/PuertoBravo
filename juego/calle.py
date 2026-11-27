@@ -473,22 +473,36 @@ class Calle:
         if not a:
             return
         self.son("recoger_municion", cat="interfaz")
-        n = int(o.valor)
+        n = max(0, int(o.valor))
+        excess = 0
         if a["id"] not in j.armas:
             if o.tipo != "arma":
                 self.decir(tr('Munición de {nombre}: ya no llevas esa arma, así que no te sirve.').format(nombre=(a['nombre'])))
                 return
-            cap = int(a.get("cargador", 0) or 0)
-            j.armas[a["id"]] = {"cargador": min(cap, n), "reserva": max(0, n - cap)}
+            cap = max(0, int(a.get("cargador", 0) or 0))
+            m = j.armas[a["id"]] = {"cargador": 0, "reserva": 0}
+            room = self.cheat_ammo_room(a["id"])
+            m["cargador"] = min(cap, n) if room is None else min(cap, n, room)
+            self.sumar_municion(a["id"], max(0, n - m["cargador"]))
+            stored = sum(j.armas[a["id"]][k] for k in ("cargador", "reserva"))
+            excess, n = max(0, n - stored), stored
             num = self.orden_armas.index(a["id"]) + 1
             self.decir(tr('Recoges del suelo: {nombre}').format(nombre=(a['nombre'])) + (tr(", con una bala") if n == 1 else tr(', con {n} balas').format(n=(n)) if n else "") + "."
                        + (tr(' Es el arma número {num}.').format(num=(num)) if num <= 9 else tr(" Elígela con la coma o con la tecla I.")))
         elif n:
             m = j.armas[a["id"]]
-            m["reserva"] += n
-            self.decir(tr('Recoges {n} {v} de {nombre}. Llevas {v2}.').format(n=(n), v=(tr('bala') if n == 1 else tr('balas')), nombre=(a['nombre']), v2=(m['cargador'] + m['reserva'])))
+            added = self.sumar_municion(a["id"], n)
+            excess = max(0, n - added)
+            if added or not self.cheat_on("cheat_municion_dinero"):
+                self.decir(tr('Recoges {n} {v} de {nombre}. Llevas {v2}.').format(n=(added), v=(tr('bala') if added == 1 else tr('balas')), nombre=(a['nombre']), v2=(m['cargador'] + m['reserva'])))
         else:
             self.decir(tr('{nombre}: ya llevas una igual.').format(nombre=(a['nombre'])))
+        money = self.cheat_ammo_overflow_value(a["id"], excess)
+        if money:
+            from .cheats import text
+            reason = text("Munición sobrante de {weapon}: {rounds} unidades convertidas",
+                          "Surplus {weapon} ammunition: converted {rounds} rounds").format(weapon=a["nombre"], rounds=excess)
+            self.dar_dinero(money, reason)
 
     # ------------------------------------------------------------------ 5. patrullas que circulan
     def patrullas_activas(self):

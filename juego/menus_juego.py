@@ -252,9 +252,19 @@ def partida_mas(app):
             viejo = d.get("jugador", {})
             app.empezar_partida(None, personaje=viejo.get("personaje"))
             p = app.partida
-            for k in CONSERVA:
+            claves = CONSERVA + ("cheat_bajas", "cheat_salud_aplicada")
+            if app.cfg["cheat_ngplus"]:
+                claves += ("titulos", "empresa")
+            for k in claves:
                 if k in viejo and hasattr(p.j, k):
                     setattr(p.j, k, viejo[k])
+            if app.cfg["cheat_ngplus"]:
+                for e in p.j.empresa.values():
+                    if isinstance(e, dict):
+                        e["visto"] = p.dia
+                        if "atendido" in e:
+                            e["atendido"] = p.dia
+            p.cheat_sync_growth()
             p.j.ciclo = int(viejo.get("ciclo", 0)) + 1
             __import__("juego.genero", fromlist=["x"]).poner(p.j.genero)
             if p.j.personaje == "propio":
@@ -954,7 +964,7 @@ def opciones(app):
             si_no("sucesos", tr("Sucesos callejeros al azar"), tr("Atracos, pandilleros y maletines perdidos que aparecen de vez en cuando por la calle.")),
             Opcion(tr("Qué sucesos callejeros salen"), lambda: menu_sucesos(app),
                    ayuda=tr("Cada suceso, del juego y de tus mods, con sí o no: por ejemplo, los maletines sí y los atracos no. Algunas localidades solo admiten unos cuantos.")),
-            si_no("invulnerable", tr("Asistencia: no recibir daño"), tr("Para explorar sin preocuparte de nada.")),
+            si_no("invulnerable", tr("Asistencia: no recibir daño"), __import__("juego.cheats", fromlist=["text"]).text("Sin daño personal. Repara al entrar y protege tu vehículo mientras lo ocupas.", "No player damage. Repairs vehicles on entry and protects them while occupied.")),
             si_no("sin_policia", tr("Asistencia: sin policía"), tr("Los delitos no cuentan y nadie te persigue.")),
             si_no("vida_realista", tr("Vida realista: hambre, sed, sueño e higiene"), tr("Hay que comer, beber, dormir y lavarse. Con hambre, con sed o con sueño vas más despacio y apuntas peor, y si los ignoras pierdes salud. "
                   "Se bebe en bares, tiendas y en tu cocina; la ducha, en tu casa o en un hotel. Ir sucio baja el ánimo. La tecla V te dice cómo estás, y Mayúsculas V, solo eso. "
@@ -972,6 +982,7 @@ def opciones(app):
                   "Se reposta en las gasolineras sin bajarte del vehículo, con un bidón comprado en ellas o llamando a la asistencia en carretera desde el móvil, en Servicios. "
                   "La tecla V te dice cuánto queda. No cuenta en los barcos, en lo que vuela, en las bicicletas ni en los vehículos de las misiones.")),
         ], tr("Dificultad, puntería y asistencias.")),
+        __import__("juego.cheats", fromlist=["menu_option"]).menu_option(app),
         seccion(tr("La calle: gente, policía y bandas"), [
             si_no("defensa_propia", tr("Defensa propia: defenderte de quien te ataca primero no es delito"),
                   tr("Con sí, si un atracador, un pandillero o cualquiera te ataca sin que tú le hayas tocado antes, dispararle o tumbarle no cuenta como delito, ni tampoco parar a los de un suceso callejero. "
@@ -1606,7 +1617,11 @@ def menu_armas(p):
             a = p.armas_d[ident]
             t = a["nombre"]
             if a["tipo"] in ("fuego", "explosivo"):
-                t += tr(', {v} disparos').format(v=(j.armas[ident]['cargador'] + j.armas[ident]['reserva']))
+                if p.cheat_infinite_ammo(ident):
+                    from .cheats import text
+                    t += text(', munición infinita', ', infinite ammunition')
+                else:
+                    t += tr(', {v} disparos').format(v=(j.armas[ident]['cargador'] + j.armas[ident]['reserva']))
             ops.append(Opcion(t + ", " + ficha_corta(a) + (tr(", en la mano") if ident == j.arma else ""), elegir(ident), ayuda=ayuda_arma(a)))
     m = Menu(app, tr("Tus armas"), ops, intro=tr("Intro para empuñar. F1 describe el arma: daño, alcance, cadencia y precisión"))
     m.i = next((k for k, i in enumerate([i for i in p.orden_armas if i in j.armas]) if i == j.arma), 0)
@@ -1617,11 +1632,12 @@ def menu_armas(p):
 def lugar(p, l):
     app = p.app
     j = p.j
-    if not p.lugar_abierto(l):
+    admision = l.tipo == "academia" and p.cheat_on("cheat_admision")
+    if not admision and not p.lugar_abierto(l):
         app.son("error")
         app.decir(tr('{nombre}. Está cerrado: aquí todavía no te conocen.').format(nombre=(l.nombre)), True)
         return
-    if p.entrada_vetada(l):                                      # lo atracaste hace poco: no te abren, o llaman a la policía
+    if not admision and p.entrada_vetada(l):                                      # lo atracaste hace poco: no te abren, o llaman a la policía
         return
     portero = p.portero_no_deja(l)                               # oliendo mal, en el club o el casino no entras (necesidades.py)
     if portero:
@@ -1630,11 +1646,11 @@ def lugar(p, l):
         return
     from . import encuentros
     abierto, cerrado_txt = encuentros.local_abierto(p, l)        # con los horarios de los locales, cada uno abre a sus horas
-    if not abierto:
+    if not admision and not abierto:
         app.son("error")
         app.decir(cerrado_txt, True)
         return
-    if p.hon_negativa(l):                                        # con el nivel exigente, donde te evitan hay comercios que no te atienden
+    if not admision and p.hon_negativa(l):                                        # con el nivel exigente, donde te evitan hay comercios que no te atienden
         return
     en_coche = j.veh is not None
     from .combustible import tiene_surtidor
@@ -2022,8 +2038,10 @@ def armas_en_venta(p, l, factor=1.0, con_arma=False):
                     p.son("dinero", cat="interfaz")
             elif a["tipo"] == "cuerpo":
                 p.app.decir(tr('Ya tienes {nombre}.').format(nombre=(a['nombre'])), True)
+            elif p.cheat_ammo_shop_full(a["id"]):
+                return
             elif p.pagar(int(a.get("precio_balas", 0) * factor)):
-                j.armas[a["id"]]["reserva"] += a.get("balas", 0)
+                p.sumar_municion(a["id"], a.get("balas", 0))
                 p.son("recarga", cat="interfaz")
                 p.app.decir(tr('Munición comprada. Reserva: {reserva} balas.').format(reserva=(j.armas[a['id']]['reserva'])), True)
         return f
@@ -2053,8 +2071,10 @@ def _armeria(p, l):
                     p.son("dinero", cat="interfaz")
                     m.refrescar(False)
             else:
+                if p.cheat_ammo_shop_full(a["id"]):
+                    return
                 if p.pagar(int(a["precio_balas"] * factor)):
-                    j.armas[a["id"]]["reserva"] += a["balas"]
+                    p.sumar_municion(a["id"], a["balas"])
                     p.son("recarga", cat="interfaz")
                     app.decir(tr('Munición comprada. Reserva: {reserva} balas.').format(reserva=(j.armas[a['id']]['reserva'])), True)
         return f
@@ -2259,11 +2279,15 @@ def _comisaria(p, l):
             p._fin_persecucion()
             p.app.decir(tr("Un sobre cambia de manos y tu expediente desaparece. Ya no te buscan."), True)
     from . import agente
+    from .cheats import text as cheat_text
+    expungir = lambda: [Opcion(cheat_text("Borrar antecedentes penales", "Expunge criminal record"),
+                                  lambda: (p.cheat_expunge(), m.refrescar(False)),
+                                  ayuda=cheat_text("Borra las condenas vigentes y la búsqueda. Conserva las estadísticas históricas.", "Clears active convictions and wanted status. Keeps lifetime statistics."))] if p.cheat_on("cheat_borrar") else []
     m = _menu_lugar(p, l, lambda: [Opcion(lambda: tr('Pagar un soborno para que dejen de buscarte: {v} euros').format(v=(p.precio('soborno_estrella', 400) * j.estrellas)), sobornar,
                                           ayuda=tr("Pagas por cada nivel de búsqueda que tienes y la policía deja de buscarte al momento. Si no te busca nadie, no pagas.")),
                                    Opcion(lambda: tr('Tu historial: {detenciones} detenciones').format(detenciones=(j.stats['detenciones'])), ayuda=tr("Cuántas veces te han detenido en toda la partida.")),
                                    Opcion(lambda: tr("Antecedentes penales. ") + p.hon_antecedentes_txt(), lambda: __import__("juego.menus_honrado", fromlist=["x"]).menu_antecedentes(p, l),
-                                          ayuda=tr("Lo que consta en tu ficha, cuándo caduca y cómo atenuarlo: servicios a la comunidad o un abogado."))] + agente.opciones_comisaria(p, l, Menu, Opcion, lambda: m.refrescar(False)))
+                                          ayuda=tr("Lo que consta en tu ficha, cuándo caduca y cómo atenuarlo: servicios a la comunidad o un abogado."))] + expungir() + agente.opciones_comisaria(p, l, Menu, Opcion, lambda: m.refrescar(False)))
 
 
 def _taller(p, l):

@@ -509,11 +509,11 @@ class Honrado:
             return tr("Ya tienes ese título.")
         if t.get("requiere") and t["requiere"] not in self.hon_titulos():
             return tr('Antes hay que tener el título de {hon_titulo_nombre}.').format(hon_titulo_nombre=(self.hon_titulo_nombre(t['requiere'])))
-        if j.ciudadania < _n(t, "prestigio"):
+        if j.ciudadania < _n(t, "prestigio") and not self.cheat_on("cheat_admision"):
             return tr('No te admiten todavía: piden que los vecinos hablen mejor de ti. Tu prestigio es {int} y hacen falta {int2}.').format(int=(int(j.ciudadania)), int2=(int(_n(t, 'prestigio'))))
-        if self.hon().get("estudio_dia") == self.dia:
+        if self.hon().get("estudio_dia") == self.dia and not self.cheat_on("cheat_estudiar"):
             return tr("Hoy ya has ido a clase del título. Una sesión al día.")
-        if j.estrellas:
+        if j.estrellas and not self.cheat_on("cheat_admision"):
             return tr("Con la policía buscándote no puedes sentarte en clase.")
         return ""
 
@@ -983,7 +983,7 @@ class Honrado:
             return tr("Este negocio ya no puede crecer más.")
         if m.get("titulo") and m["titulo"] not in self.hon_titulos():
             return tr('Para esa mejora hace falta el título de {hon_titulo_nombre}: se saca en una academia.').format(hon_titulo_nombre=(self.hon_titulo_nombre(m['titulo'])))
-        if self.j.ciudadania < _n(m, "prestigio"):
+        if self.j.ciudadania < _n(m, "prestigio") and not self.cheat_on("cheat_negocios"):
             return tr('Para esa mejora los vecinos tienen que hablar mejor de ti: hacen falta {int} de prestigio y tienes {int2}.').format(int=(int(_n(m, 'prestigio'))), int2=(int(self.j.ciudadania)))
         return ""
 
