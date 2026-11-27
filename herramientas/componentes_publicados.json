@@ -1,7 +1,7 @@
 {
  "idioma-en": {
-  "version": 6,
-  "huella": "6bfb7c0891cff4d64e9e090c3a4f9e70eeb98f7f43775054e73b84c0514aa1e6",
+  "version": 7,
+  "huella": "5e73ba22cfaa78ddd78cc63d1dac05b161c1561db27fea455d3f06edcff22acd",
   "archivos": [
    "data/idiomas/en/palabras.json",
    "data/idiomas/en/textos.json",
@@ -2533,8 +2533,8 @@
   ]
  },
  "docs-es": {
-  "version": 5,
-  "huella": "aef3c5e29bcc7117b85c865f554fc472bc59cdc15175e7299660d89c1cf96f37",
+  "version": 6,
+  "huella": "4b38bde44dc9448fc065cae204c7b6c338d17e4c4961e5d7c95e96710c6b017b",
   "archivos": [
    "data/docs/cambiar_sonidos_es.html",
    "data/docs/editor_mods_es.html",
@@ -2545,8 +2545,8 @@
   ]
  },
  "sonidos-alternativo": {
-  "version": 4,
-  "huella": "5cc180bb4a3e1e7841e83d77efd8e3c8f540c64ade998a94a14f15fa4ab63549",
+  "version": 5,
+  "huella": "3326689d41e710b46328aceae8f3e7aa7464e2621a35e0c27d61f7da816c4644",
   "archivos": [
    "data/sonidos/alternativo/CREDITOS.txt",
    "data/sonidos/alternativo/abstinencia.flac",
@@ -2835,8 +2835,8 @@
   ]
  },
  "sonidos-envolvente": {
-  "version": 4,
-  "huella": "0cb57d8ab54fb5cd9f491cf17c1d26f3cc811ed07d2f9c3204b6c450179af43f",
+  "version": 5,
+  "huella": "5527423234ab5904d82104ed50be56a14106f0a9bc3d095921682abf891632be",
   "archivos": [
    "data/sonidos/envolvente/CREDITOS.txt",
    "data/sonidos/envolvente/abstinencia.flac",
@@ -3125,8 +3125,8 @@
   ]
  },
  "sonidos-realista": {
-  "version": 4,
-  "huella": "edab8f2bb930a4b6b80d615ed9867673f63da541a8b5b8310174120199ab20fd",
+  "version": 5,
+  "huella": "4acc826bd35745617f773846cea8d8efd4cd9c338f3ab12951e3ec6ce2131f1b",
   "archivos": [
    "data/sonidos/realista/CREDITOS.txt",
    "data/sonidos/realista/abstinencia.flac",
@@ -3415,8 +3415,8 @@
   ]
  },
  "sonidos-retro": {
-  "version": 4,
-  "huella": "99106616641f7308d916e905a738dd2a5ed5420f9bf31904be07ac56bc8602ee",
+  "version": 5,
+  "huella": "2c401ecfe606c428ce34b103bca11bae63ffc1aed5609e8e4e4b91debf2f9b1c",
   "archivos": [
    "data/sonidos/retro/CREDITOS.txt",
    "data/sonidos/retro/abstinencia.flac",
@@ -3705,64 +3705,64 @@
   ]
  },
  "mod-bahia_del_ocaso": {
-  "version": 4,
-  "huella": "8e22f444cac08838d5d719ed829ea00f367c1c36ef6b680fc878ddf7760b91f5",
+  "version": 5,
+  "huella": "47a9828b208cb5d2134ecf9090d6a6ad26aa4ee4c981b9511075ec7179aecff9",
   "archivos": [
    "data/mods/bahia_del_ocaso.pbm"
   ]
  },
  "mod-costa_dorada": {
-  "version": 4,
-  "huella": "70249a79cea0c4e2d816a86407b5f71f1c2369e7c2ba3baeda7e8ad840396fbf",
+  "version": 5,
+  "huella": "d2bbf6ef855441be4a165c7311eda2c2ae52526d12e821ce6062af112cd3101b",
   "archivos": [
    "data/mods/costa_dorada.pbm"
   ]
  },
  "mod-isla_de_los_vientos": {
-  "version": 4,
-  "huella": "4c2adb8adc583eb3a782f651a7bd648763cfcb8ec3d2d84899630bb061643ab0",
+  "version": 5,
+  "huella": "6f1edba1400a8e56450f937f613481a9905b14e9f3a92711869978b2ccc57741",
   "archivos": [
    "data/mods/isla_de_los_vientos.pbm"
   ]
  },
  "mod-motor_y_asfalto": {
-  "version": 4,
-  "huella": "7952c74ed55b344150a33132754057fde3ec2812db6a101cec4c18e58f9184c2",
+  "version": 5,
+  "huella": "813ca3057876855d03992428454f3414540b9132cf541329add8f0e2d7196a71",
   "archivos": [
    "data/mods/motor_y_asfalto.pbm"
   ]
  },
  "mod-noches_de_neon": {
-  "version": 4,
-  "huella": "f090178a46c9a9bce7a08a75dd153f94ed52a44e98fc1368d3f92eade0fed88f",
+  "version": 5,
+  "huella": "00036910aa9ed269374b965366f9227e064d1cac4c13138e3e8eb87f1d062734",
   "archivos": [
    "data/mods/noches_de_neon.pbm"
   ]
  },
  "mod-oficios_y_recados": {
-  "version": 4,
-  "huella": "23be4bc5250f30a1f00b40b13b866bb0cc28ce079f82bc679eefadb6a1f49e63",
+  "version": 5,
+  "huella": "cb01262b941d5917716b242c30be11158087cf91bdafe3b356887ac48ed36009",
   "archivos": [
    "data/mods/oficios_y_recados.pbm"
   ]
  },
  "mod-penas_altas": {
-  "version": 4,
-  "huella": "533ae256fd83ef42cf3e5271c3981cfb6292587638023357130c2d43df78ea45",
+  "version": 5,
+  "huella": "c9faf2eacc863319ca3b10ef5de109f3038e6b402f5b37b5504eec9ac2561076",
   "archivos": [
    "data/mods/penas_altas.pbm"
   ]
  },
  "mod-valdeolmos": {
-  "version": 4,
-  "huella": "e304ae9204895aec71ea5ec11ad9870bb4cac73e8e8a57904e1ba8a215ad43cd",
+  "version": 5,
+  "huella": "383f6406c8864d1ad071e8867000a12385ae2a9b1059e95ff038f9f80b1e4bd9",
   "archivos": [
    "data/mods/valdeolmos.pbm"
   ]
  },
  "mod-marisma_negra": {
-  "version": 5,
-  "huella": "3eff01367d7759f5817f399a458397ebdb21c28943df069952160ebe3a0c4c21",
+  "version": 6,
+  "huella": "da3f75bff1f8a370d2b23a21211bb6ab149c3c5f71045c02a5910ee28235c099",
   "archivos": [
    "data/mods/marisma_negra.pbm",
    "data/idiomas/en/mods/marisma_negra.json",
@@ -4035,8 +4035,8 @@
   ]
  },
  "idioma-vi": {
-  "version": 7,
-  "huella": "c9185ce9a0f013219d0ab7cab5d08e6d9b3ee98a5ba5a96bc980e7e05cdaaa01",
+  "version": 8,
+  "huella": "1290d1da7a183f520d75c5871656db89b0e72578ac06096c4a4971072988d81e",
   "archivos": [
    "data/idiomas/vi/idioma.json",
    "data/idiomas/vi/palabras.json",
@@ -4339,8 +4339,8 @@
   ]
  },
  "idioma-pt": {
-  "version": 6,
-  "huella": "3fc963c73fa6ad07fc587912f9b97d1134aba3619e67b5f98558e1cfeb8a43e9",
+  "version": 7,
+  "huella": "0630c4e0e6caf097ba55fc27db926006292ef4513e4653cdecf96562aef5fe06",
   "archivos": [
    "data/idiomas/pt/idioma.json",
    "data/idiomas/pt/palabras.json",
@@ -4360,8 +4360,8 @@
   ]
  },
  "idioma-ru": {
-  "version": 7,
-  "huella": "684042d42b3bff865506ffeaac9fc7694d9754931ce82142e8ecf6b2821ea0f7",
+  "version": 8,
+  "huella": "f94680e74724b69c9f3f9332d7c959930786bccd0a65142b212d74901a59345d",
   "archivos": [
    "data/idiomas/ru/idioma.json",
    "data/idiomas/ru/palabras.json",
