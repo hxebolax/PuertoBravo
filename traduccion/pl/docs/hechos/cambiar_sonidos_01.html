@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Zmiana dźwięków i muzyki w Puerto Bravo</title>
+<style>
+body { font-family: Segoe UI, Arial, sans-serif; max-width: 54em; margin: 1em auto; padding: 0 1em; line-height: 1.6; background: #111; color: #f2f2f2; font-size: 1.1em; }
+h1, h2, h3 { color: #ffd84d; }
+a { color: #8fd0ff; }
+code { color: #9fe89f; }
+kbd { border: 1px solid #aaa; border-radius: 4px; padding: 0 .35em; background: #2a2a2a; }
+li { margin-bottom: .3em; }
+</style>
+</head>
+<body>
+<h1>Zmiana dźwięków i muzyki w Puerto Bravo</h1>
+<p>Wszystkie dźwięki gry to zwykłe pliki, które są w folderze <code>data</code>, obok pliku wykonywalnego. Możesz zastąpić dowolny z nich własnym nagraniem. Ten dokument wyjaśnia jak i opisuje każdy plik. Jest uporządkowany nagłówkami: w swoim czytniku ekranu możesz przeskakiwać między nimi klawiszem H.</p>
+
+<h2>1. Gdzie co jest</h2>
+<ul>
+<li><code>data\sonidos</code>: wszystkie efekty dźwiękowe, rozłożone w podfolderach.</li>
+<li><code>data\sonidos\por_defecto</code>: dźwięki domyślne, po jednym pliku na dźwięk. To 282 pliki. Jeśli któregoś brakuje albo go usuniesz, gra utworzy go z powrotem.</li>
+<li><code>data\radio</code>: muzyka stacji radiowych, po jednym pliku na stację.</li>
+<li><code>data\radio\mi_musica</code>: twoja własna stacja. Skopiuj tutaj piosenki, które chcesz.</li>
+<li><code>data\musica</code>: muzyka tła, z folderem na każdą sytuację i kilkoma utworami w każdym.</li>
+<li><code>data\sonidos\realista</code>, <code>data\sonidos\alternativo</code>, <code>data\sonidos\retro</code> i pozostałe podfoldery: paczki dźwięków, po jednej na folder. Wybiera się je w Opcjach.</li>
+</ul>
+
+<h2>2. Jak zmienić efekt dźwiękowy</h2>
+<ol>
+<li>Znajdź na liście na końcu nazwę dźwięku, który chcesz zmienić, na przykład <code>claxon</code>.</li>
+<li>Przygotuj swoje nagranie i nadaj mu dokładnie tę nazwę: <code>claxon.wav</code>.</li>
+<li>Skopiuj je do <code>data\sonidos\por_defecto</code>. Nie trzeba usuwać pliku gry, który nazywa się <code>claxon.flac</code>: jeśli są dwa o tej samej nazwie, gra twój.</li>
+<li>Zamknij grę i otwórz ją znowu. Dźwięki wczytują się przy uruchomieniu.</li>
+</ol>
+<h3>Obsługiwane formaty</h3>
+<ul>
+<li>WAV, OGG, FLAC i MP3. Dźwięki, które są z grą, są w FLAC. Jeśli są dwa pliki o tej samej nazwie i innym rozszerzeniu, używany jest ten, który nie jest FLAC, czyli twój. Żeby wrócić do dźwięku z gry, usuń swój.</li>
+<li>Dlaczego FLAC: kompresuje bez strat. Po odczytaniu daje dokładnie te same próbki co WAV, ale zajmuje mniej niż połowę. Do wersji 1.6.1 dźwięki gry były w WAV; przy aktualizacji gra usuwa stare WAV, które są identyczne z nowymi, i szanuje te, które zmieniłeś. OGG i MP3 zajmują jeszcze mniej, ale tracą trochę jakości: nadają się do twoich nagrań, jeśli ci to nie przeszkadza, a gra używa ich tylko tam, gdzie oryginał już taki był, czyli muzyka, radio, głosy i długie tła paczki Envolvente.</li>
+<li>Dowolna częstotliwość próbkowania: gra konwertuje ją do 44100 herców.</li>
+<li>Mono albo stereo. Efekty zawsze są zamieniane na mono, bo to gra umieszcza każdy dźwięk po twojej lewej, po prawej, z przodu albo z tyłu.</li>
+</ul>
+<h3>Przywracanie oryginalnego dźwięku</h3>
+<p>Usuń plik. Przy następnym uruchomieniu gra znowu utworzy oryginalny dźwięk. Żeby przywrócić wszystkie, usuń cały folder <code>data\sonidos\por_defecto</code>.</p>
+<h3>Wskazówki, żeby brzmiało dobrze</h3>
+<ul>
+<li>Przytnij ciszę na początku: jeśli dźwięk zaczyna się z opóźnieniem, będzie się wydawać, że gra reaguje wolno.</li>
+<li>Zachowaj czas trwania podobny do oryginału, zwłaszcza w krokach, ostrzeżeniach i sygnałach naprowadzających. Lista podaje czas trwania każdego.</li>
+<li>Nie zostawiaj go na maksymalnej głośności. Oryginały mają szczyt między 30 a 90 procent, zależnie od ważności. Jeśli twój brzmi za głośno albo za cicho, dostosuj go w swoim edytorze.</li>
+<li>Unikaj długiego pogłosu w dźwiękach orientacyjnych: rozmywa kierunek, z którego dochodzą.</li>
+<li>Dźwięki oznaczone jako pętla powtarzają się bez przerwy. Koniec musi łączyć się z początkiem bez trzasku i skoku: przytnij w miejscu przejścia przez zero albo zrób płynne przejście.</li>
+<li>Silniki nagrywa się na biegu jałowym i ze stałymi obrotami. Gra podnosi ton przy przyspieszaniu, do nieco ponad podwójnej wysokości.</li>
+</ul>
+<h3>Głośność wyrównuje się sama</h3>
+<p>Każde nagranie ma inną głośność. Żeby to nie psuło równowagi gry, przy wczytywaniu zmienionego dźwięku gra doprowadza go do tego samego poziomu, co oryginał: mierzy najmocniejszy fragment twojego pliku, porównuje go z oryginałem i podnosi albo obniża tyle, ile trzeba, nie dopuszczając do przesterowania. Dzięki temu kroki nie mogą być głośniejsze od strzału ani sygnał naprowadzający niesłyszalny. Można to wyłączyć w Opcjach, Dźwięk i muzyka, Wyrównuj głośność zmienionych dźwięków.</p>
+<p>Jeśli mimo to jakiś konkretny dźwięk wydaje ci się za głośny albo za cichy, wejdź w Opcje, Dźwięk i muzyka, Ustaw głośność każdego dźwięku. Są tam wszystkie, w tych samych grupach co lista na końcu tego dokumentu: Enter go odtwarza, a strzałki w lewo i w prawo ściszają go lub podgłaśniają, od 30 do 200 procent. Wyszukaj dźwięk znajduje go po słowie z nazwy, bez wiedzy, w której jest grupie. Menu mówi, ile masz zmienionych dźwięków, łącznie i w każdej grupie, i pozwala przywrócić domyślną głośność jednemu, całej grupie albo wszystkim. Ustawienie zapisuje się z twoimi opcjami i jest przypisane do nazwy pliku, więc nie ginie przy aktualizacji gry.</p>
+<h3>Odsłuchiwanie dowolnego dźwięku w grze</h3>
+<p>W menu głównym i w menu pauzy, Poznaj dźwięki ma 282 dźwięków gry: najpierw grupę Najważniejsze, potem Wyszukaj dźwięk, a potem wszystkie, w tych samych grupach co lista na końcu tego dokumentu i w tej samej kolejności. Wejdź do grupy i naciśnij Enter na dźwięku: gra mówi, jak się nazywa i co oznacza jego usłyszenie, i odtwarza go samego, z paczką, którą masz ustawioną. W Wyszukaj dźwięk wpisujesz słowo, na przykład syrena, i wychodzą wszystkie, które mają je w nazwie albo w opisie, z polskimi znakami albo bez. Służy do sprawdzenia, jak wyszło twoje nagranie, bez wywoływania dźwięku podczas gry.</p>
+
+<h2>3. Paczki dźwięków</h2>
+<p>Paczka to folder z plikami, które nazywają się tak samo jak dźwięki gry. Paczki idą do <code>data\sonidos</code>, każda w swoim podfolderze, obok <code>por_defecto</code>, i wybiera się je w grze w Opcjach, Dźwięk i muzyka, Paczka dźwięków, strzałkami w lewo i w prawo. Zmiana słychać od razu i nie rusza twoich plików w <code>data\sonidos\por_defecto</code>: żeby wrócić, wybierz „domyślna”.</p>
+<ul>
+<li>Twoja paczka nie musi mieć wszystkich: dźwięki, których nie ma, dalej brzmią oryginałem.</li>
+<li>Głośność każdego dźwięku paczki jest wyrównywana do oryginału, jak opisano wyżej.</li>
+<li>Paczki dołączone do gry mają dokładnie te same pliki co <code>por_defecto</code>, z tymi samymi nazwami: ani jednego więcej, ani jednego mniej. Ich nagrania są w domenie publicznej (licencja CC0) i pochodzą z kenney.nl, opengameart.org, freesound.org i bigsoundbank.com.</li>
+<li>Tony kanałów odgrywania ról (<code>chat_personaje</code>, <code>chat_fuera</code> i <code>chat_accion</code>) oraz ton oczekiwania na serwer (<code>espera_servidor</code>) są we wszystkich paczkach te domyślne, celowo: to kod tonów i dobrze, żeby brzmiały zawsze tak samo.</li>
+<li>Domyślnie zainstalowane są paczki „Alternatywna”, 282 dźwięków, „Otaczająca”, 282 dźwięków, „Realistyczna”, 282 dźwięków, „Retro”, 282 dźwięków. Każda ma wszystkie dźwięki gry: zastępuje nagraniami z domeny publicznej wszystko, co nie jest orientacją, a oryginał zostawia w dźwiękach orientacyjnych: sygnały naprowadzające, tony, sygnalizacje świetlne, radar, lokalizatory i dźwięki miejsc. Plik <code>CREDITOS.txt</code> każdej paczki mówi, skąd pochodzi każdy dźwięk i które są oryginalne.</li>
+</ul>
+<h3>Tworzenie własnej paczki</h3>
+<ol>
+<li>Utwórz folder wewnątrz <code>data\sonidos</code> z nazwą paczki, bez dziwnych spacji: na przykład <code>moja_paczka</code>.</li>
+<li>Skopiuj do niego swoje nagrania z dokładną nazwą dźwięku, który zastępują: <code>claxon.wav</code>, <code>paso_acera0.ogg</code>. Lista na końcu tego dokumentu ma wszystkie nazwy.</li>
+<li>Otwórz grę i wybierz paczkę w Opcjach.</li>
+</ol>
+<p>Jeśli chcesz, dodaj plik <code>pack.json</code> z nazwą, która będzie czytana w Opcjach, i kilkoma ustawieniami:</p>
+<pre><code>{
+  "nombre": "Moja paczka",
+  "descripcion": "Nagrane na mojej ulicy",
+  "autor": "Twoje imię",
+  "licencia": "CC0",
+  "igualar": true,
+  "volumenes": {"claxon": 0.8, "ladrido": 1.3}
+}</code></pre>
+<ul>
+<li><code>igualar</code>: przy <code>false</code> dźwięki tej paczki wchodzą tak jak są, bez wyrównywania głośności. Używaj tego tylko, jeśli sam[a] je już wyrównałeś.</li>
+<li><code>volumenes</code>: korekta dla pojedynczego dźwięku, stosowana po wyrównaniu. 1 zostawia bez zmian, 0.8 ścisza o dwadzieścia procent.</li>
+</ul>
+<p>Żeby udostępnić paczkę, spakuj jej folder. Osoba, która ją dostanie, rozpakowuje go do swojego <code>data\sonidos</code>.</p>
+
+<h2>4. Radio</h2>
+<h3>Zmiana muzyki stacji</h3>
+<p>Każda domyślna stacja ma nazwę pliku w <code>data\radio</code>. Zastąp plik inną piosenką o tej samej nazwie i zagra ona.</p>
+<p>Stacja może mieć kilka piosenek: wszystkie, które nazywają się jak stacja albo jak stacja, podkreślenie i cokolwiek, należą do niej. Na przykład <code>bravo.mp3</code>, <code>bravo_1.mp3</code> i <code>bravo_dos.ogg</code> to trzy piosenki Bravo FM: grają losowo, a gdy jedna się skończy, wchodzi inna. Przy jednej piosence powtarza się w pętli.</p>
+<ul>
+<li><code>bravo.mp3</code>: Bravo FM, rock drogi.</li>
+<li><code>latina.mp3</code>: Onda Caribe, rytmy latynoskie.</li>
+<li><code>neon.mp3</code>: Neón 84, syntezatory.</li>
+<li><code>calma.mp3</code>: Radio Bahía, spokojna muzyka.</li>
+<li><code>hierro.mp3</code>: Radio Hierro, twardy rock z Monteferro.</li>
+<li><code>club.mp3</code>: Lucero Club, elektronika.</li>
+<li><code>tropical.mp3</code>: Costa Tropical, zabawa taneczna.</li>
+</ul>
+<p>Jeśli usuniesz jeden z tych plików, gra znowu skomponuje oryginalną muzykę. Piosenki wyrównują się same przy wczytywaniu: nie ma znaczenia, z jaką głośnością przychodzi każdy plik.</p>
+<h3>Dodawanie nowych stacji</h3>
+<p>Każdy inny plik audio, który zostawisz w <code>data\radio</code>, to nowa stacja, o nazwie pliku. Na przykład <code>radio_clasica.mp3</code> pojawia się na skali jako „Radio clasica”. Podkreślenia czyta się jako spacje.</p>
+<h3>Moja muzyka</h3>
+<p>Pliki z <code>data\radio\mi_musica</code> tworzą stację „Moja muzyka”. W samochodzie klawisz R przechodzi do następnej piosenki, zanim przeskoczy do następnej stacji.</p>
+
+<h2>5. Muzyka tła</h2>
+<p>Poza pojazdami albo przy wyłączonym radiu gra cicha muzyka w tle, która zmienia się wraz z sytuacją. W każdej sytuacji jest kilka utworów: gra zaczyna od losowego, a gdy się kończy, przechodzi do innego. Po włączeniu radia w pojeździe muzyka tła milknie i wraca, gdy je wyłączysz albo wysiądziesz.</p>
+<p>Każda sytuacja to folder wewnątrz <code>data\musica</code>:</p>
+<ul>
+<li><code>data\musica\exploracion</code>: w dzień, spokojne zwiedzanie. Domyślnie ma 4 utwory, od <code>exploracion_1.mp3</code> do <code>exploracion_4.mp3</code>.</li>
+<li><code>data\musica\noche</code>: w nocy. Domyślnie ma 3 utwory, od <code>noche_1.mp3</code> do <code>noche_3.mp3</code>.</li>
+<li><code>data\musica\mar</code>: na morzu. Domyślnie ma 3 utwory, od <code>mar_1.mp3</code> do <code>mar_3.mp3</code>.</li>
+<li><code>data\musica\tension</code>: gdy policja jest za tobą albo wrogowie są blisko. Domyślnie ma 3 utwory, od <code>tension_1.mp3</code> do <code>tension_3.mp3</code>.</li>
+<li><code>data\musica\menu</code>: w menu głównym. Domyślnie ma 4 utwory, od <code>menu_1.mp3</code> do <code>menu_4.mp3</code>.</li>
+</ul>
+<ul>
+<li>Żeby dodać własną muzykę, skopiuj pliki audio do folderu wybranej sytuacji. Wszystkie pliki z folderu wchodzą do rotacji, niezależnie od liczby: jeśli w <code>exploracion</code> zostawisz <code>exploracion_5.wav</code> albo dwadzieścia piosenek o dowolnej nazwie, wszystkie są używane losowo razem z tymi, które już są. Działają WAV, OGG, FLAC i MP3.</li>
+<li>Cała muzyka wyrównuje się sama przy wczytywaniu: każdy utwór tła, każda stacja, każda nowa stacja i każda piosenka z Mojej muzyki mają ten sam poziom, żeby żadna nie brzmiała głośniej od innej. Jedynie to, co wybierzesz w Opcjach, zmienia głośność.</li>
+<li>Żeby usunąć domyślny utwór tak, żeby nie wrócił, zastąp go innym o tej samej nazwie. Jeśli tylko go usuniesz, gra skomponuje go z powrotem.</li>
+<li>Żeby w jakiejś sytuacji grała tylko twoja muzyka, zastąp wszystkie domyślne utwory w jej folderze.</li>
+<li>Muzykę tła włącza się, wyłącza i ustawia jej głośność w Opcjach, Dźwięk i muzyka.</li>
+</ul>
+<h2>6. Pełna lista dźwięków</h2>
+<p>Nazwa pliku to ta, która pojawia się na początku każdego wiersza, z rozszerzeniem <code>.flac</code> w tych, które są z grą. Twoje mogą mieć dowolne z obsługiwanych. Dalej jest nazwa, którą gra wypowiada na głos, i to, co oznacza jego usłyszenie.</p>
+<p>Grupy są te same, z tymi samymi nazwami i w tej samej kolejności, co w Poznaj dźwięki oraz w Opcjach, Dźwięk i muzyka, Ustaw głośność każdego dźwięku. Są uporządkowane według tego, co robi się w grze. W każdej grupie dźwięki są w kolejności alfabetycznej nazwy, która jest wypowiadana. Każda grupa to nagłówek: przeskakuj między nimi klawiszem H albo szukaj słowa wyszukiwarką przeglądarki.</p>
+
+<p>To 20 grup:</p>
+<ol>
+<li>Orientacja i GPS: 19 dźwięków.</li>
+<li>Dźwięki miejsc: 37 dźwięków.</li>
+<li>Poruszanie się pieszo i pływanie: 20 dźwięków.</li>
+<li>Pojazdy i prowadzenie: 19 dźwięków.</li>
+<li>Awarie, warsztat, paliwo i kradzież pojazdów: 10 dźwięków.</li>
+<li>Łodzie, helikoptery, pociąg, tramwaj i samolot: 16 dźwięków.</li>
+<li>Broń, strzał z każdej: 14 dźwięków.</li>
+<li>Walka, celowanie i rany: 20 dźwięków.</li>
+<li>Policja i służby ratunkowe: 12 dźwięków.</li>
+<li>Ludzie na ulicy i zwierzęta: 9 dźwięków.</li>
+<li>Dom, kuchnia i jedzenie: 8 dźwięków.</li>
+<li>Sklepy, pieniądze i przedmioty: 5 dźwięków.</li>
+<li>Menu, telefon i komunikaty gry: 17 dźwięków.</li>
+<li>Misje, praca, reputacja i nastrój: 14 dźwięków.</li>
+<li>Terytoria i bandy: 4 dźwięki.</li>
+<li>Gra online i odgrywanie ról: 7 dźwięków.</li>
+<li>Wędkowanie, kasyno i gry: 12 dźwięków.</li>
+<li>Otoczenie i pogoda: 19 dźwięków.</li>
+<li>Relacje, tylko z treściami dla dorosłych: 7 dźwięków.</li>
+<li>Substancje i handel, tylko z treściami dla dorosłych: 13 dźwięków.</li>
+</ol>
+<h3>Orientacja i GPS</h3>
+<p>19 dźwięków. To podstawa dostępności gry. Jeśli je zmieniasz, niech dalej będą krótkie, wyraźne i łatwe do zlokalizowania w przestrzeni. Lokalizatory brzmią w pętli z pozycji przedmiotu albo misji.</p>
+<ul>
+<li><code>baliza_destino</code>: Sygnał naprowadzający celu. Sygnał naprowadzający GPS zmienia się na ten dźwięk, gdy następny punkt to już twój cel. To też ton, który oznacza północ. Trwa 0,53 sekundy.</li>
+<li><code>baliza</code>: Sygnał naprowadzający GPS. Brzmi w kierunku następnego punktu trasy. Im bliżej jesteś, tym szybciej się powtarza. Trwa 0,35 sekundy.</li>
+<li><code>bordillo</code>: Krawężnik. W prowadzeniu swobodnym zjeżdżasz z jezdni po stronie, z której to brzmi. Trwa 0,12 sekundy.</li>
+<li><code>cruce</code>: Skrzyżowanie. Wjeżdżasz na skrzyżowanie ulic albo zbliżasz się do niego za kierownicą. Trwa 0,39 sekundy.</li>
+<li><code>cursor_mapa</code>: Kursor przeglądarki mapy. Kursor przeglądarki mapy przeszedł do następnego skrzyżowania. Brzmi też przy czytaniu tablicy w lokalu. Trwa 0,04 sekundy.</li>
+<li><code>tono_libre</code>: Skaner, droga wolna. Skaner kierunkowy nie znalazł żadnej ściany w tym kierunku. Trwa 0,08 sekundy.</li>
+<li><code>tono_pared</code>: Skaner, ściana. Skaner kierunkowy znalazł ścianę. Brzmi wyżej, im bliżej jest. Trwa 0,15 sekundy.</li>
+<li><code>llegada</code>: Przybycie. Dotarłeś do celu albo ukończyłeś etap misji. Trwa 0,82 sekundy.</li>
+<li><code>loc_mision</code>: Dostępna misja. Brzmi z miejsca, gdzie czeka na ciebie misja. Odtwarzany w pętli. Trwa 1,50 sekundy.</li>
+<li><code>loc_casete</code>: Przedmiot kolekcjonerski. Brzmi z jednej z kaset ukrytych w mieście albo z innego przedmiotu kolekcjonerskiego. Odtwarzany w pętli. Trwa 1,60 sekundy.</li>
+<li><code>loc_objeto</code>: Przedmiot do podniesienia. Brzmi z przedmiotu leżącego na ziemi. Stań na nim i podnieś go. Odtwarzany w pętli. Trwa 1,20 sekundy.</li>
+<li><code>loc_lugar</code>: Punkt zainteresowania. Brzmi z punktu zainteresowania, który nie ma własnego dźwięku. Odtwarzany w pętli. Trwa 2,00 sekundy.</li>
+<li><code>radar</code>: Radar. Brzmi z pozycji tego, co radar właśnie ogłosił. Trwa 0,06 sekundy.</li>
+<li><code>semaforo_rojo</code>: Czerwone światło, za kierownicą. Prowadzisz sam, a światło na najbliższym skrzyżowaniu jest czerwone albo właśnie zmieniło się na czerwone: dwie niskie nuty w dół. Trwa 0,52 sekundy.</li>
+<li><code>semaforo_verde</code>: Zielone światło, za kierownicą. Prowadzisz sam, a światło na najbliższym skrzyżowaniu jest zielone albo właśnie zmieniło się na zielone: dwie wysokie nuty w górę. Trwa 0,41 sekundy.</li>
+<li><code>semaforo_pio</code>: Sygnalizacja świetlna, wolne pikanie. Samochody na alei stoją: możesz przejść przez aleję, idąc na wschód albo na zachód. Trwa 0,09 sekundy.</li>
+<li><code>semaforo_tic</code>: Sygnalizacja świetlna, szybkie tykanie. Samochody na ulicy stoją: możesz przejść przez ulicę, idąc na północ albo na południe. Trwa 0,03 sekundy.</li>
+<li><code>sonar</code>: Czujnik odległości. Za kierownicą przed tobą jest pojazd: pika szybciej i wyżej, im bliżej jest. To też pikanie ciepło-zimno przy szukaniu skarbów. Trwa 0,05 sekundy.</li>
+<li><code>loc_vehiculo</code>: Pojazd z misji. Brzmi z pojazdu, którego wymaga misja, i z pojazdu twojego kierowcy, gdy na ciebie czeka. Odtwarzany w pętli. Trwa 1,80 sekundy.</li>
+</ul>
+<h3>Dźwięki miejsc</h3>
+<p>37 dźwięków. Każdy rodzaj miejsca wydaje swój dźwięk w pętli, żeby dało się go rozpoznać po przejściu. Muszą być różne między sobą i nie męczyć: pamiętaj, że słyszy się je wiele razy.</p>
+<ul>
+<li><code>lugar_academia</code>: Akademia albo szkoła nauki jazdy. Jesteś obok akademii albo szkoły nauki jazdy: dzwonek na lekcję. Odtwarzany w pętli. Trwa 3,50 sekundy.</li>
+<li><code>lugar_aeropuerto</code>: Lotnisko. Jesteś obok lotniska: zapowiedź przez megafon, trzy nuty w dół. Odtwarzany w pętli. Trwa 3,00 sekundy.</li>
+<li><code>lugar_armeria</code>: Sklep z bronią. Jesteś obok sklepu z bronią: przeładowywana broń. Odtwarzany w pętli. Trwa 2,60 sekundy.</li>
+<li><code>lugar_banco</code>: Bank albo lombard. Jesteś obok banku albo lombardu: pikanie bankomatu. Odtwarzany w pętli. Trwa 2,40 sekundy.</li>
+<li><code>lugar_bar</code>: Bar, tawerna albo dyskoteka. Jesteś obok baru, tawerny, dyskoteki albo interesu: basy muzyki przez ścianę. Odtwarzany w pętli. Trwa 2,00 sekundy.</li>
+<li><code>lugar_casa</code>: Dom. Jesteś obok mieszkania albo hotelu, swojego albo takiego, który możesz kupić: dzwonki wietrzne. Odtwarzany w pętli. Trwa 4,00 sekundy.</li>
+<li><code>lugar_casino</code>: Kasyno albo wesołe miasteczko. Jesteś obok kasyna albo wesołego miasteczka: melodyjka automatów. Odtwarzany w pętli. Trwa 2,40 sekundy.</li>
+<li><code>lugar_cine</code>: Kino. Jesteś obok kina: terkot projektora. Odtwarzany w pętli. Trwa 1,92 sekundy.</li>
+<li><code>lugar_club</code>: Klub nocny, treści dla dorosłych. Jesteś obok klubu nocnego: przytłumiona muzyka i kieliszki. Odtwarzany w pętli. Trwa 1,96 sekundy.</li>
+<li><code>lugar_ong</code>: Jadłodajnia społeczna. Jesteś obok jadłodajni społecznej albo organizacji charytatywnej: talerze i sztućce. Odtwarzany w pętli. Trwa 3,00 sekundy.</li>
+<li><code>lugar_comisaria</code>: Komisariat. Jesteś obok komisariatu: radiostacja policyjna. Odtwarzany w pętli. Trwa 3,00 sekundy.</li>
+<li><code>lugar_embarcadero</code>: Przystań albo sklep żeglarski. Jesteś obok przystani: woda uderzająca o pomosty i skrzypiące cumy. Odtwarzany w pętli. Trwa 3,80 sekundy.</li>
+<li><code>puerta_entrar</code>: Wejście do lokalu. Wchodzisz do lokalu: drzwi i ich dzwonek. Gdy jesteś w środku, w tle brzmi dźwięk miejsca. Trwa 1,10 sekundy.</li>
+<li><code>lugar_estacion</code>: Dworzec autobusowy. Jesteś obok dworca autobusowego: hamulce pneumatyczne i megafon. Odtwarzany w pętli. Trwa 4,00 sekundy.</li>
+<li><code>lugar_tren</code>: Stacja kolejowa. Jesteś obok stacji kolejowej: sapanie lokomotywy. Odtwarzany w pętli. Trwa 2,40 sekundy.</li>
+<li><code>lugar_fuente</code>: Fontanna. Jesteś obok fontanny: spadająca woda. Odtwarzany w pętli. Trwa 2,94 sekundy.</li>
+<li><code>lugar_gimnasio</code>: Siłownia. Jesteś obok siłowni: zderzające się ciężary. Odtwarzany w pętli. Trwa 3,00 sekundy.</li>
+<li><code>lugar_helipuerto</code>: Heliport. Jesteś obok heliportu: wirujące łopaty i pikanie wieży kontroli. Odtwarzany w pętli. Trwa 3,00 sekundy.</li>
+<li><code>lugar_hospital</code>: Szpital albo apteka. Jesteś obok szpitala albo apteki: pikanie monitora. Odtwarzany w pętli. Trwa 1,00 sekundy.</li>
+<li><code>lugar_iglesia</code>: Kościół. Jesteś obok kościoła: dzwon. Odtwarzany w pętli. Trwa 3,50 sekundy.</li>
+<li><code>lugar_contacto</code>: Miejsce z kontaktem. Jesteś obok miejsca, gdzie czeka na ciebie ktoś ze zleceniem. Odtwarzany w pętli. Trwa 1,50 sekundy.</li>
+<li><code>lugar_generico</code>: Miejsce bez własnego dźwięku. Jesteś obok miejsca typu, który nie ma własnego dźwięku. Odtwarzany w pętli. Trwa 2,00 sekundy.</li>
+<li><code>lugar_mina</code>: Kopalnia. Jesteś obok kopalni: kilofy uderzające w skałę. Odtwarzany w pętli. Trwa 3,00 sekundy.</li>
+<li><code>lugar_boya</code>: Molo, boja albo miejsce do łowienia. Jesteś obok mola, boi, miejsca do łowienia albo skarbu na morzu: dzwon boi między falami. Odtwarzany w pętli. Trwa 3,50 sekundy.</li>
+<li><code>lugar_empleo</code>: Urząd pracy. Jesteś obok urzędu pracy: klawiatury i zapowiedź numerka. Odtwarzany w pętli. Trwa 3,00 sekundy.</li>
+<li><code>lugar_taxi</code>: Postój taksówek albo start wyścigu. Jesteś obok postoju taksówek albo startu wyścigu: dwa krótkie trąbnięcia klaksonem. Odtwarzany w pętli. Trwa 2,50 sekundy.</li>
+<li><code>lugar_tranvia</code>: Przystanek tramwajowy. Jesteś obok przystanku tramwajowego: dwa dźwięki dzwonka. Odtwarzany w pętli. Trwa 2,40 sekundy.</li>
+<li><code>lugar_periodico</code>: Gazeta albo księgarnia. Jesteś obok gazety albo księgarni: stukanie maszyn do pisania. Odtwarzany w pętli. Trwa 2,00 sekundy.</li>
+<li><code>lugar_prision</code>: Więzienie. Jesteś obok więzienia: zamykana krata i daleka syrena. Odtwarzany w pętli. Trwa 4,00 sekundy.</li>
+<li><code>lugar_protectora</code>: Schronisko dla zwierząt. Jesteś obok schroniska, gdzie możesz adoptować psa: szczekanie. Odtwarzany w pętli. Trwa 4,00 sekundy.</li>
+<li><code>lugar_proveedor</code>: Dostawca, treści dla dorosłych. Jesteś obok dostawcy, gdzie kupuje się i sprzedaje towar: dwa syknięcia i metalowa roleta. Odtwarzany w pętli. Trwa 3,50 sekundy.</li>
+<li><code>lugar_comida</code>: Restauracja, pizzeria albo budka z jedzeniem. Jesteś obok miejsca, gdzie się je: coś smażącego się. Odtwarzany w pętli. Trwa 1,94 sekundy.</li>
+<li><code>lugar_rio</code>: Rzeka. Jesteś obok rzeki: woda płynąca między kamieniami. Odtwarzany w pętli. Trwa 3,80 sekundy.</li>
+<li><code>lugar_salida</code>: Wyjazd drogą. Jesteś obok wyjazdu z miasta: szybko przejeżdżające samochody. Tędy jedzie się do innej miejscowości. Odtwarzany w pętli. Trwa 3,00 sekundy.</li>
+<li><code>puerta_salir</code>: Wyjście z lokalu. Wychodzisz z lokalu: dzwonek i zamykające się drzwi. Trwa 0,70 sekundy.</li>
+<li><code>lugar_taller</code>: Warsztat, złomowisko albo salon samochodowy. Jesteś obok warsztatu, złomowiska albo salonu: klucz pneumatyczny. Odtwarzany w pętli. Trwa 3,00 sekundy.</li>
+<li><code>lugar_tienda</code>: Sklep. Jesteś obok sklepu: dzwonek przy drzwiach. Odtwarzany w pętli. Trwa 3,20 sekundy.</li>
+</ul>
+
+<h3>Poruszanie się pieszo i pływanie</h3>
+<p>20 dźwięków. Są dwa warianty kroków na każdej nawierzchni, które przełączają się między lewą a prawą nogą. Powinny trwać krócej niż ćwierć sekundy.</p>
+<ul>
+<li><code>agacharse</code>: Kucnięcie. Kucasz: robisz mniej hałasu i trudniej cię zobaczyć. Trwa 0,25 sekundy.</li>
+<li><code>bajo_agua</code>: Pod wodą. Nurkujesz: głuchy szum z bąbelkami. Odtwarzany w pętli. Trwa 3,00 sekundy.</li>
+<li><code>brazada</code>: Ruch ramion. Brzmi przy każdym ruchu ramion podczas pływania. Trwa 0,45 sekundy.</li>
+<li><code>salpicadura</code>: Plusk. Ktoś albo coś wpada do wody: ty, pojazd albo to, co wrzucasz do morza. Trwa 0,90 sekundy.</li>
+<li><code>choque_pared</code>: Uderzenie w ścianę. Próbowałeś[aś] iść w ścianę. Trwa 0,12 sekundy.</li>
+<li><code>levantarse</code>: Wstanie. Wstajesz po kucnięciu. Trwa 0,25 sekundy.</li>
+<li><code>paso_hierba1</code>: Kroki na trawie, prawa noga. Idziesz po trawie, drugą nogą. Trwa 0,16 sekundy.</li>
+<li><code>paso_hierba0</code>: Kroki na trawie, lewa noga. Idziesz po trawie w parku albo po polu. Trwa 0,16 sekundy.</li>
+<li><code>paso_muelle1</code>: Kroki na molo, prawa noga. Idziesz po deskach mola, drugą nogą. Trwa 0,14 sekundy.</li>
+<li><code>paso_muelle0</code>: Kroki na molo, lewa noga. Idziesz po deskach mola. Trwa 0,14 sekundy.</li>
+<li><code>paso_acera1</code>: Kroki na chodniku, prawa noga. Idziesz po chodniku. Obie nogi brzmią trochę inaczej. Trwa 0,09 sekundy.</li>
+<li><code>paso_acera0</code>: Kroki na chodniku, lewa noga. Idziesz po chodniku. Trwa 0,09 sekundy.</li>
+<li><code>paso_arena1</code>: Kroki na piasku, prawa noga. Idziesz po piasku, drugą nogą. Trwa 0,20 sekundy.</li>
+<li><code>paso_arena0</code>: Kroki na piasku, lewa noga. Idziesz po piasku na plaży. Trwa 0,20 sekundy.</li>
+<li><code>paso_calzada1</code>: Kroki na jezdni, prawa noga. Idziesz po asfalcie, tam gdzie jeżdżą samochody. Trwa 0,10 sekundy.</li>
+<li><code>paso_calzada0</code>: Kroki na jezdni, lewa noga. Idziesz po asfalcie: uwaga na samochody. Trwa 0,10 sekundy.</li>
+<li><code>paso_plaza1</code>: Kroki na placu, prawa noga. Idziesz po płytach placu, drugą nogą. Trwa 0,08 sekundy.</li>
+<li><code>paso_plaza0</code>: Kroki na placu, lewa noga. Idziesz po płytach placu. Trwa 0,08 sekundy.</li>
+<li><code>paso_via1</code>: Kroki po torach, prawa noga. Nadal idziesz po torach tramwaju albo pociągu: zejdź z nich. Trwa 0,20 sekundy.</li>
+<li><code>paso_via0</code>: Kroki po torach, lewa noga. Jesteś na torach tramwaju albo pociągu: metaliczny stuk szyny, a pod spodem żwir. Trwa 0,20 sekundy.</li>
+</ul>
+<h3>Pojazdy i prowadzenie</h3>
+<p>19 dźwięków. Silniki odtwarzane są w pętli, a gra podnosi im ton wraz z prędkością. Nagraj silnik na biegu jałowym, ze stałymi obrotami.</p>
+<ul>
+<li><code>arranque</code>: Uruchomienie silnika. Uruchamiasz silnik pojazdu. Trwa 0,90 sekundy.</li>
+<li><code>motor_bici</code>: Rower. Jedziesz na rowerze: kliknięcie łańcucha. Odtwarzany w pętli. Trwa 1,00 sekundy.</li>
+<li><code>claxon_camion</code>: Klakson ciężarówki. Klakson ciężarówki albo autobusu. Trwa 0,70 sekundy.</li>
+<li><code>radio_cambio</code>: Zmiana stacji. Zmieniasz stację w radiu pojazdu albo je wyłączasz. Trwa 0,30 sekundy.</li>
+<li><code>choque</code>: Mocne uderzenie. Mocne uderzenie pojazdem: uszkadza go. Trwa 0,60 sekundy.</li>
+<li><code>choque_leve</code>: Lekkie uderzenie. Otarcie albo słabe uderzenie pojazdem. Trwa 0,30 sekundy.</li>
+<li><code>claxon</code>: Klakson samochodu. Trąbisz klaksonem albo trąbi na ciebie inny kierowca. Twój kierowca trąbi dwa razy po przyjeździe, a twój mechanik, gdy zostawia ci pojazd. Trwa 0,45 sekundy.</li>
+<li><code>frenazo</code>: Gwałtowne hamowanie. Pojazd gwałtownie hamuje albo wpada w poślizg. Trwa 0,90 sekundy.</li>
+<li><code>intermitente</code>: Kierunkowskaz. Poprosiłeś[aś] o skręt na najbliższym skrzyżowaniu. Brzmi, aż skręcisz. Odtwarzany w pętli. Trwa 0,80 sekundy.</li>
+<li><code>motor_camion</code>: Silnik ciężarówki albo autobusu. Silnik ciężarówki albo autobusu, niski i ciężki. Odtwarzany w pętli. Trwa 1,00 sekundy.</li>
+<li><code>motor_coche</code>: Silnik samochodu. Silnik samochodu. Ton rośnie wraz z prędkością. Odtwarzany w pętli. Trwa 1,00 sekundy.</li>
+<li><code>motor_deportivo</code>: Silnik samochodu sportowego. Silnik samochodu sportowego, bardziej szorstki niż w zwykłym aucie. Odtwarzany w pętli. Trwa 1,00 sekundy.</li>
+<li><code>motor_furgoneta</code>: Silnik furgonetki albo terenówki. Silnik furgonetki albo terenówki. Odtwarzany w pętli. Trwa 1,00 sekundy.</li>
+<li><code>motor_moto</code>: Silnik motocykla. Silnik motocykla. Odtwarzany w pętli. Trwa 1,00 sekundy.</li>
+<li><code>motor_tractor</code>: Silnik traktora. Silnik traktora, wolny i nierówny. Odtwarzany w pętli. Trwa 1,00 sekundy.</li>
+<li><code>claxon_helados</code>: Melodyjka furgonetki z lodami. Furgonetka z lodami zamiast klaksonu gra swoją melodyjkę. Trwa 1,47 sekundy.</li>
+<li><code>puerta_coche</code>: Drzwi pojazdu. Wsiadasz do pojazdu albo z niego wysiadasz. Trwa 0,18 sekundy.</li>
+<li><code>rodadura</code>: Opony na asfalcie. Szum opon twojego pojazdu. Brzmi głośniej, im szybciej jedziesz. Odtwarzany w pętli. Trwa 1,44 sekundy.</li>
+<li><code>claxon_bici</code>: Dzwonek roweru. Dzwonek roweru. Trwa 0,54 sekundy.</li>
+</ul>
+<h3>Awarie, warsztat, paliwo i kradzież pojazdów</h3>
+<p>10 dźwięków. To, co dzieje się z pojazdem, gdy nie po prostu nim jedziesz.</p>
+<ul>
+<li><code>alarma</code>: Alarm samochodu. Włączył się alarm pojazdu albo lokalu. Odtwarzany w pętli. Trwa 1,00 sekundy.</li>
+<li><code>cristal</code>: Rozbite szkło. Rozbija się szkło: szyba albo witryna. Trwa 0,70 sekundy.</li>
+<li><code>fuego</code>: Ogień. Pojazd albo budynek płonie. Jeśli to pojazd, zaraz wybuchnie: oddal się. Odtwarzany w pętli. Trwa 1,94 sekundy.</li>
+<li><code>ganzua</code>: Wytrych. Otwierasz wytrychem zamek pojazdu. Odtwarzany w pętli. Trwa 1,00 sekundy.</li>
+<li><code>pinchazo</code>: Przebita opona. Pęka opona i uchodzi powietrze: pojazd ściąga w bok. Trwa 1,30 sekundy.</li>
+<li><code>pintura</code>: Malowanie pojazdu. Malują ci pojazd w warsztacie: policja przestaje go rozpoznawać. Trwa 1,20 sekundy.</li>
+<li><code>reserva</code>: Mało paliwa. Ostrzeżenie, że w pojeździe zostało mało paliwa: poszukaj stacji benzynowej. Trwa 0,62 sekundy.</li>
+<li><code>reparar</code>: Naprawa w warsztacie. Naprawiają ci pojazd w warsztacie. Trwa 0,75 sekundy.</li>
+<li><code>repostar</code>: Tankowanie. Dystrybutor napełnia bak. Trwa 1,60 sekundy.</li>
+<li><code>motor_seco</code>: Brak paliwa. Silnik krztusi się i gaśnie: skończyło ci się paliwo. Odtwarzany w pętli. Trwa 0,69 sekundy.</li>
+</ul>
+<h3>Łodzie, helikoptery, pociąg, tramwaj i samolot</h3>
+<p>16 dźwięków. Pociąg, tramwaj i kabina samolotu brzmią w pętli, tak jak silniki.</p>
+<ul>
+<li><code>alarma_cabina</code>: Alarm w kabinie. Podczas lotu cztery natarczywe piknięcia: zostało bardzo mało paliwa, przed tobą jest przeszkoda albo ruch, albo silnik zgasł. Trwa 0,62 sekundy.</li>
+<li><code>aterrizaje</code>: Lądowanie. Maszyna dotyka ziemi: uderzenie, pisk kół i cichnący bieg. Trwa 1,25 sekundy.</li>
+<li><code>avion</code>: Samolot pasażerski. Podróżujesz samolotem: szum kabiny w locie. Odtwarzany w pętli. Trwa 3,00 sekundy.</li>
+<li><code>motor_avioneta</code>: Awionetka. Szum śmigła awionetki. Odtwarzany w pętli. Trwa 1,00 sekundy.</li>
+<li><code>tranvia_campana</code>: Dzwonek tramwaju. Tramwaj rusza: dwa dźwięki dzwonka. Trwa 0,90 sekundy.</li>
+<li><code>avion_despegue</code>: Start samolotu. Samolot przyspiesza na pasie i startuje. Trwa 4,00 sekundy.</li>
+<li><code>motor_helicoptero</code>: Helikopter. Łopaty helikoptera, w którym lecisz. Odtwarzany w pętli. Trwa 1,00 sekundy.</li>
+<li><code>motor_barco</code>: Silnik łodzi. Silnik dużej łodzi: kutra, żaglówki albo jachtu. Odtwarzany w pętli. Trwa 1,00 sekundy.</li>
+<li><code>motor_lancha</code>: Silnik motorówki. Silnik motorówki albo innej szybkiej łodzi. Odtwarzany w pętli. Trwa 1,00 sekundy.</li>
+<li><code>tren_silbato</code>: Gwizdek pociągu. Pociąg odjeżdża ze stacji. Trwa 1,60 sekundy.</li>
+<li><code>sirena_barco</code>: Syrena statku. Statek wypływa. Na morzu oznacza też, że zapada noc. Trwa 1,80 sekundy.</li>
+<li><code>tono_alineacion</code>: Ton wyrównania. Podczas lotu bez autopilota dwa kliknięcia, które brzmią po stronie, w którą musisz skręcić. Pośrodku i wyżej, lecisz dobrze wyprostowany. Trwa 0,11 sekundy.</li>
+<li><code>tono_altitud</code>: Ton wysokości. Podczas lotu nuta, która brzmi za każdym razem, gdy zmieniasz wysokość: im wyższa, tym wyżej lecisz. Trwa 0,13 sekundy.</li>
+<li><code>tranvia</code>: Tramwaj. Jedziesz tramwajem: elektryczny szum na szynach. Odtwarzany w pętli. Trwa 2,00 sekundy.</li>
+<li><code>tren</code>: Pociąg. Podróżujesz pociągiem: jadący wagon, ze stukotem szyn. Odtwarzany w pętli. Trwa 2,00 sekundy.</li>
+<li><code>turbulencia</code>: Turbulencje. Maszyna się trzęsie: są turbulencje albo przelatujesz przez burzę. Trwa 1,30 sekundy.</li>
+</ul>
+<h3>Broń, strzał z każdej</h3>
+<p>14 dźwięków. Strzał z każdej broni powinien dać się rozpoznać bez patrzenia: postaraj się, żeby nie były do siebie podobne.</p>
+<ul>
+<li><code>disparo_escopeta</code>: Strzał ze strzelby. Ktoś strzela ze strzelby: szeroki huk. Trwa 0,70 sekundy.</li>
+<li><code>disparo_corredera</code>: Strzał ze strzelby powtarzalnej. Niski huk, a po nim przeładowanie zamka. Trwa 1,10 sekundy.</li>
+<li><code>disparo_fusil</code>: Strzał z karabinu szturmowego. Ktoś strzela z karabinu szturmowego. Trwa 0,30 sekundy.</li>
+<li><code>disparo_semiautomatico</code>: Strzał z karabinu półautomatycznego. Ktoś strzela z karabinu półautomatycznego: pojedyncze, mocne strzały. Trwa 0,42 sekundy.</li>
+<li><code>disparo_pistola</code>: Strzał z pistoletu. Ktoś strzela z pistoletu. Trwa 0,35 sekundy.</li>
+<li><code>disparo_silenciado</code>: Strzał z pistoletu z tłumikiem. Stłumiony strzał: prawie nikt wokół go nie słyszy. Trwa 0,12 sekundy.</li>
+<li><code>disparo_rafaga</code>: Strzał z pistoletu automatycznego. Suchy i bardzo krótki strzał, który powtarza się bardzo szybko. Trwa 0,16 sekundy.</li>
+<li><code>disparo_revolver</code>: Strzał z rewolweru. Ktoś strzela z rewolweru: niższy i bardziej zdecydowany niż pistolet. Trwa 0,50 sekundy.</li>
+<li><code>disparo_rifle</code>: Strzał z karabinu. Ktoś strzela z karabinu precyzyjnego albo karabinka: krótko i z echem. Trwa 0,80 sekundy.</li>
+<li><code>disparo_palanca</code>: Strzał z karabinu dźwigniowego. Strzał, a po nim dźwignia ładująca następny nabój. Trwa 1,00 sekundy.</li>
+<li><code>disparo_subfusil</code>: Strzał z pistoletu maszynowego. Ktoś strzela z pistoletu maszynowego albo karabinu maszynowego: szybkie serie. Trwa 0,20 sekundy.</li>
+<li><code>cohete</code>: Strzał z wyrzutni rakiet. Wylatuje rakieta: potem będzie wybuch. Trwa 1,00 sekundy.</li>
+<li><code>lanzagranadas</code>: Strzał z granatnika. Głuche uderzenie z rury: wylatuje granat. Trwa 0,60 sekundy.</li>
+<li><code>lanzar</code>: Rzut. Ktoś rzuca granat albo koktajl Mołotowa, albo strzela z kuszy. Trwa 0,30 sekundy.</li>
+</ul>
+
+<h3>Walka, celowanie i rany</h3>
+<p>20 dźwięków. Przeładowania, trafienia, ciosy, tony celowania i to, co słychać, gdy ktoś zostaje ranny.</p>
+<ul>
+<li><code>muerte_npc</code>: Ktoś pada. Ktoś pada powalony. Trwa 0,70 sekundy.</li>
+<li><code>bala_silbido</code>: Kula, która nie trafia. Strzał przeleciał tuż obok ciebie. Trwa 0,18 sekundy.</li>
+<li><code>curar</code>: Leczenie. Odzyskujesz zdrowie albo karetka opatruje rannych. Trwa 0,78 sekundy.</li>
+<li><code>hospital_despertar</code>: Przebudzenie w szpitalu. Straciłeś przytomność i budzisz się w szpitalu. Trwa 2,60 sekundy.</li>
+<li><code>tono_objetivo</code>: Namierzony wróg, w zasięgu. Brzmi z miejsca, gdzie jest namierzony wróg: jest w zasięgu twojej broni. Trwa 0,07 sekundy.</li>
+<li><code>tono_apuntado</code>: Namierzony wróg, poza zasięgiem. Brzmi z miejsca, gdzie jest namierzony wróg: jest za daleko dla twojej broni. Trwa 0,04 sekundy.</li>
+<li><code>explosion</code>: Wybuch. Wybuchł granat, rakieta albo pojazd. Trwa 1,80 sekundy.</li>
+<li><code>golpe_aire</code>: Cios w powietrze. Cios, który nikogo nie trafia. Trwa 0,15 sekundy.</li>
+<li><code>hacha</code>: Uderzenie toporem. Uderzenie toporem: świst i głuche trafienie ostrza. Trwa 0,42 sekundy.</li>
+<li><code>golpe</code>: Cios, który trafia. Cios pięścią, kijem baseballowym albo potrącenie, które trafia kogoś. Trwa 0,10 sekundy.</li>
+<li><code>bala_impacto</code>: Trafienie pocisku. Kula trafia w ścianę, pojazd albo coś innego. Trwa 0,12 sekundy.</li>
+<li><code>latido</code>: Bicie serca. Zostało ci bardzo mało zdrowia: ulecz się albo schowaj. Odtwarzany w pętli. Trwa 1,00 sekundy.</li>
+<li><code>recoger_municion</code>: Podniesiona amunicja. Podnosisz amunicję albo broń, którą upuścił powalony wróg: magazynek wchodzi i zamek. Trwa 0,50 sekundy.</li>
+<li><code>dolor_npc</code>: Jęk mężczyzny. Zraniłeś mężczyznę. Trwa 0,28 sekundy.</li>
+<li><code>dolor_mujer</code>: Jęk kobiety. Zraniłeś kobietę. Trwa 0,30 sekundy.</li>
+<li><code>recarga</code>: Przeładowanie. Przeładowujesz broń. Trwa 0,70 sekundy.</li>
+<li><code>sin_balas</code>: Brak naboi. Naciskasz spust, a broń jest pusta: przeładuj albo zmień broń. Trwa 0,04 sekundy.</li>
+<li><code>navaja</code>: Cięcie nożem. Cięcie nożem, maczetą albo kataną. Trwa 0,12 sekundy.</li>
+<li><code>dolor</code>: Zostałeś ranny. Otrzymałeś obrażenia. Trwa 0,30 sekundy.</li>
+<li><code>amartillar</code>: Zaraz do ciebie strzelą. Wróg przygotowuje broń: za pół sekundy strzeli. Brzmi też, gdy zmieniasz broń. Trwa 0,32 sekundy.</li>
+</ul>
+<h3>Policja i służby ratunkowe</h3>
+<p>12 dźwięków. Ostrzeżenia o poziomie poszukiwania, syreny i helikopter policyjny.</p>
+<ul>
+<li><code>megafono</code>: Megafon helikoptera. Helikopter policyjny odzywa się do ciebie przez megafon: sprzężenie i metaliczny głos. To, co mówi, jest czytane zaraz potem. Trwa 1,10 sekundy.</li>
+<li><code>estrella_baja</code>: Spada poziom poszukiwania. Policja szuka cię mniej intensywnie. Trwa 0,70 sekundy.</li>
+<li><code>emisora</code>: Radiostacja policyjna. Gdy pracujesz jako funkcjonariusz: trzask kanału i dwa piknięcia. Wchodzisz na służbę, przychodzi zgłoszenie albo kończy się zmiana. Trwa 0,75 sekundy.</li>
+<li><code>esposas</code>: Kajdanki. Zatrzymują cię. Trwa 0,45 sekundy.</li>
+<li><code>helicoptero_policia</code>: Helikopter policyjny. Na najwyższym poziomie poszukiwania helikopter policyjny: słychać, jak nadlatuje i krąży nad tobą. Odtwarzany w pętli. Trwa 2,00 sekundy.</li>
+<li><code>multa</code>: Mandat. Dostałeś mandat: gwizdek funkcjonariusza. Trwa 0,76 sekundy.</li>
+<li><code>policia_perdida</code>: Policja zgubiła trop. Już cię nie szukają. Trwa 1,38 sekundy.</li>
+<li><code>celda</code>: Drzwi aresztu. Zatrzymali cię i zamykają: drzwi aresztu. Trwa 0,90 sekundy.</li>
+<li><code>sirena_ambulancia</code>: Syrena karetki. Karetka: twoja albo ta, która przyjeżdża po strzelaninie lub potrąceniu. Odtwarzana w pętli. Trwa 1,60 sekundy.</li>
+<li><code>sirena</code>: Syrena policyjna. Radiowóz, który jedzie po ciebie, albo wóz strażacki. Odtwarzana w pętli. Trwa 2,00 sekundy.</li>
+<li><code>estrella_sube</code>: Rośnie poziom poszukiwania. Policja szuka cię intensywniej. Trwa 0,40 sekundy.</li>
+<li><code>buscando</code>: Szukają cię. Szukają cię, ale cię nie widzą: trzymaj się tak jeszcze kilka sekund i ich zgubisz. Wyżej, to helikopter cię nie widzi. Trwa 0,12 sekundy.</li>
+</ul>
+<h3>Ludzie na ulicy i zwierzęta</h3>
+<p>9 dźwięków. Głosy bez słów, kroki innych i pies.</p>
+<ul>
+<li><code>perro_olfatea</code>: Pies węszy. Twój pies szuka po zapachu najbliższego przedmiotu. Trwa 0,36 sekundy.</li>
+<li><code>grito</code>: Krzyk. Krzyk: twój, żeby przepłoszyć ludzi, albo wroga, który cię zobaczył i ostrzega swoich. Trwa 0,75 sekundy.</li>
+<li><code>grito_hombre</code>: Krzyk przestraszonego mężczyzny. Mężczyzna krzyczy ze strachu i ucieka. Trwa 0,63 sekundy.</li>
+<li><code>grito_mujer</code>: Krzyk przestraszonej kobiety. Kobieta krzyczy ze strachu i ucieka. Trwa 0,72 sekundy.</li>
+<li><code>ladrido</code>: Szczekanie. Pies szczeka. Jeśli to twój, ostrzega przed bliskim wrogiem albo przed tym, że coś wywęszył. Trwa 1,00 sekundy.</li>
+<li><code>murmullo</code>: Pomruk. Przechodzień mruczy, mówiąc do ciebie, albo dwoje przechodzących rozmawia ze sobą. Trwa 0,35 sekundy.</li>
+<li><code>panico</code>: Panika na ulicy. Mnóstwo ludzi krzyczy i ucieka jednocześnie: strzelanina, wybuch albo potrącenie wywołały wokół ciebie panikę. Trwa 2,20 sekundy.</li>
+<li><code>paso_npc</code>: Kroki innej osoby. Ktoś idzie blisko ciebie. Trwa 0,08 sekundy.</li>
+<li><code>evento</code>: Zdarzenie uliczne. Coś dzieje się w pobliżu: napad, bandyci albo zgubiona walizka. Pomoc jest opcjonalna. Trwa 0,74 sekundy.</li>
+</ul>
+<h3>Dom, kuchnia i jedzenie</h3>
+<p>8 dźwięków. Jedzenie, picie, gotowanie w domu i dzwonek do drzwi.</p>
+<ul>
+<li><code>beber</code>: Picie. Pijesz kilka łyków. Trwa 0,33 sekundy.</li>
+<li><code>cocina_cortar</code>: Gotowanie, nóż. Zaczynasz gotować: nóż siekający na desce. Trwa 1,50 sekundy.</li>
+<li><code>cocina_hervir</code>: Gotowanie, garnek. Gotujesz w garnku: bulgocząca woda. Trwa 2,40 sekundy.</li>
+<li><code>cocina_freir</code>: Gotowanie, patelnia. Gotujesz na patelni: skwierczący olej. Trwa 2,40 sekundy.</li>
+<li><code>comer</code>: Jedzenie. Jesz coś: odzyskujesz siły. Trwa 0,60 sekundy.</li>
+<li><code>nevera</code>: Lodówka. Otwierasz lodówkę w domu albo chowasz zakupy: uszczelka drzwi i szum silnika. Trwa 1,00 sekundy.</li>
+<li><code>plato_servido</code>: Podane danie. Danie gotowe: talerz na stole i sztućce. Trwa 0,90 sekundy.</li>
+<li><code>timbre</code>: Dzwonek do drzwi. Dzwonią do twojego domu: przyjechało jedzenie, które zamówiłeś na dowóz. Dwa dźwięki, ding, dong. Trwa 1,30 sekundy.</li>
+</ul>
+<h3>Sklepy, pieniądze i przedmioty</h3>
+<p>5 dźwięków. Kupowanie, zarabianie i podnoszenie rzeczy.</p>
+<ul>
+<li><code>bolsa</code>: Giełda. Kupiłeś akcje na giełdzie. Trwa 0,49 sekundy.</li>
+<li><code>caja</code>: Kasa fiskalna. Płacisz za zakupy albo robisz operację w banku. Trwa 0,67 sekundy.</li>
+<li><code>cesta</code>: Koszyk na zakupy. Wrzucasz produkt do koszyka: głuchy stuk i drżący drut. Niżej, odkładasz go na półkę. Trwa 0,40 sekundy.</li>
+<li><code>dinero</code>: Pieniądze. Zarobiłeś pieniądze. Trwa 0,55 sekundy.</li>
+<li><code>recoger</code>: Podniesiony przedmiot. Podnosisz przedmiot z ziemi. Trwa 0,18 sekundy.</li>
+</ul>
+<h3>Menu, telefon i komunikaty gry</h3>
+<p>17 dźwięków. Krótkie dźwięki interfejsu. Powinny być krótkie i dyskretne.</p>
+<ul>
+<li><code>gallo</code>: Świt. Jest siódma rano: pieje kogut. Trwa 1,10 sekundy.</li>
+<li><code>buho</code>: Zmierzch. Jest dziewiąta wieczorem: sowa. Trwa 1,60 sekundy.</li>
+<li><code>notificacion</code>: Powiadomienie. Ogólne powiadomienie: nowa misja, oznaczony cel albo wiadomość. Co to jest, jest czytane zaraz potem. Trwa 0,54 sekundy.</li>
+<li><code>reloj</code>: Odliczanie. Zostało mniej niż dziesięć sekund: brzmi z każdą sekundą. Trwa 0,03 sekundy.</li>
+<li><code>error</code>: Błąd. Tego nie da się teraz zrobić. Trwa 0,22 sekundy.</li>
+<li><code>dialogo</code>: Kwestia dialogu. Zaczyna się kwestia dialogu. Trwa 0,05 sekundy.</li>
+<li><code>logro</code>: Osiągnięcie zdobyte. Zdobyłeś jedno z osiągnięć gry. Trwa 1,05 sekundy.</li>
+<li><code>campanadas</code>: Północ. Zaczyna się nowy dzień: pobierasz przychody z interesów i zmieniają się ceny. Trwa 4,20 sekundy.</li>
+<li><code>menu_ajuste</code>: Menu, zmiana wartości. Zmieniasz wartość opcji strzałkami w lewo lub w prawo. Trwa 0,03 sekundy.</li>
+<li><code>menu_ok</code>: Menu, wybór. Wybierasz opcję z menu. Trwa 0,27 sekundy.</li>
+<li><code>menu_mover</code>: Menu, przejście po opcjach. Przechodzisz z jednej opcji do innej w menu. Trwa 0,03 sekundy.</li>
+<li><code>menu_borde</code>: Menu, początek albo koniec. Dotarłeś[aś] do początku albo końca menu, albo do krawędzi mapy. Trwa 0,08 sekundy.</li>
+<li><code>menu_atras</code>: Menu, powrót. Wracasz w menu. Trwa 0,27 sekundy.</li>
+<li><code>movil</code>: Telefon. Otwierasz telefon albo dostajesz połączenie lub wiadomość. Trwa 0,22 sekundy.</li>
+<li><code>guardado</code>: Gra zapisana. Gra została zapisana. Trwa 0,67 sekundy.</li>
+<li><code>pasan_horas</code>: Mijają godziny. Czas przeskakuje: śpisz, chowasz się albo czekasz. Trwa 1,85 sekundy.</li>
+<li><code>nivel</code>: Wzrost umiejętności. Poprawiłeś[aś] się w prowadzeniu, celności, wytrzymałości albo wędkowaniu. Trwa 0,80 sekundy.</li>
+</ul>
+
+<h3>Misje, praca, reputacja i nastrój</h3>
+<p>14 dźwięków. To, co brzmi po zakończeniu misji, w uczciwej pracy oraz gdy zmienia się to, jak cię widzą albo jak się czujesz.</p>
+<ul>
+<li><code>ascenso</code>: Awans. Awansujesz na wyższą rangę w fachu i zarabiasz więcej, albo dostajesz awans na stałym etacie. Trwa 1,40 sekundy.</li>
+<li><code>fama</code>: Zmiana sławy. Zmienia się to, jak widzą cię na ulicy. Trwa 0,68 sekundy.</li>
+<li><code>diploma</code>: Kurs ukończony. Ukończyłeś kurs w akademii i rośnie umiejętność. Trwa 1,38 sekundy.</li>
+<li><code>despido</code>: Zwolnienie. Zostałeś zwolniony ze stałej pracy: trzaśnięcie drzwiami i trzy nuty w dół. Trwa 1,20 sekundy.</li>
+<li><code>donativo</code>: Darowizna. Składasz darowiznę: spadające monety. Trwa 0,90 sekundy.</li>
+<li><code>animo_baja</code>: Pogorszenie nastroju. Twój nastrój spada o poziom: przy bardzo złym nastroju celujesz gorzej i biegasz wolniej. Trwa 0,57 sekundy.</li>
+<li><code>factura</code>: Rachunek, podatek albo rata. Pobrano ci rachunki, podatki albo ratę kredytu: drukarka paragonów i niski ton. Trwa 0,95 sekundy.</li>
+<li><code>inspeccion</code>: Kontrola. W jednym z twoich interesów była kontrola: pukanie do drzwi, papiery i pieczątka. Jeśli coś znalazła, masz to w telefonie, w Życie, reputacja i konsekwencje. Trwa 1,15 sekundy.</li>
+<li><code>jornada</code>: Dzień pracy. Odpracowujesz dzień pracy: syrena fabryki i mijają godziny. Trwa 2,50 sekundy.</li>
+<li><code>animo_sube</code>: Poprawa nastroju. Twój nastrój rośnie o poziom: celujesz lepiej. Trwa 0,48 sekundy.</li>
+<li><code>mision_ok</code>: Misja ukończona. Ukończyłeś misję. Trwa 1,36 sekundy.</li>
+<li><code>mision_fallo</code>: Misja nieudana. Nie udało ci się wykonać misji albo zostałeś[aś] powalony. Trwa 1,60 sekundy.</li>
+<li><code>prestigio</code>: Prestiż obywatelski. Sąsiedzi patrzą na ciebie przychylniej. Trwa 0,83 sekundy.</li>
+<li><code>titulo</code>: Tytuł zdobyty. Ukończyłeś naukę na tytuł: krótka fanfara i długi akord. Trwa 1,50 sekundy.</li>
+</ul>
+<h3>Terytoria i bandy</h3>
+<p>4 dźwięki. Ostrzeżenia o dzielnicach, które są twoje.</p>
+<ul>
+<li><code>amenaza_barrio</code>: Zagrożenie dla twojej dzielnicy. Banda szykuje atak na twoją dzielnicę albo właśnie go zaczęła: niskie bębny, coraz szybsze, i dwa napięte tony. Sprawdź telefon, w Terytoria. Trwa 1,15 sekundy.</li>
+<li><code>barrio_defendido</code>: Dzielnica obroniona. Odparłeś atak albo zniszczyłeś kryjówkę bandy: werbel i trzy nuty w górę. Trwa 1,25 sekundy.</li>
+<li><code>barrio_perdido</code>: Dzielnica utracona. Banda odebrała ci dzielnicę: niski dzwon i nuty w dół. Trwa 1,60 sekundy.</li>
+<li><code>territorio</code>: Terytorium zdobyte. Dzielnica staje się twoja. Trwa 1,56 sekundy.</li>
+</ul>
+<h3>Gra online i odgrywanie ról</h3>
+<p>7 dźwięków. Powiadomienia ze wspólnej gry i kanałów odgrywania ról na serwerach.</p>
+<ul>
+<li><code>chat_accion</code>: Akcja postaci. Na serwerze ktoś, kto jest blisko, opisuje, co robi jego postać, na przykład że otwiera drzwi: krótki szmer zakończony nutą. Trwa 0,45 sekundy.</li>
+<li><code>amigo_entra</code>: Znajomy dołącza. Grając ze znajomymi, ktoś dołącza do gry albo łączysz się ty. Trzy nuty w górę. Trwa 0,77 sekundy.</li>
+<li><code>amigo_sale</code>: Znajomy wychodzi. Grając ze znajomymi, ktoś wychodzi albo rozłączasz się ty. Trzy nuty w dół. Trwa 0,77 sekundy.</li>
+<li><code>espera_servidor</code>: Oczekiwanie na serwer. Na serwerze połączenie się urwało albo serwer się aktualizuje, a gra czeka, żeby wejść z powrotem sama: dwie wolne i ciche nuty, druga niższa. Powtarza się co kilka sekund. Trwa 1,64 sekundy.</li>
+<li><code>chat</code>: Wiadomość. Grając ze znajomymi, przychodzi albo wychodzi wiadomość: dwie wysokie i szybkie nuty. Jest czytana na głos zaraz potem. Trwa 0,29 sekundy.</li>
+<li><code>chat_personaje</code>: Wiadomość w postaci. Na serwerze ktoś, kto jest blisko, mówi jako swoją postać, albo robisz to ty: dwie niskie i ciepłe nuty, wolniejsze niż w zwykłej wiadomości. Trwa 0,64 sekundy.</li>
+<li><code>chat_fuera</code>: Wiadomość poza postacią. Na serwerze ktoś mówi jako gracz, a nie jako postać: dwa suche stuknięcia w drewno. Słyszy to cały serwer. Trwa 0,30 sekundy.</li>
+</ul>
+<h3>Wędkowanie, kasyno i gry</h3>
+<p>12 dźwięków. Wędkowanie oraz gry w kasynie, na wesołym miasteczku i na siłowni.</p>
+<ul>
+<li><code>campana_ring</code>: Gong walki bokserskiej. Zaczyna się walka na siłowni. Trwa 1,20 sekundy.</li>
+<li><code>dados</code>: Kości. Toczą się kości. Trwa 0,80 sekundy.</li>
+<li><code>diana_ok</code>: Tarcza trafiona. Trafiłeś[aś] tarczę w strzelnicy. Trwa 0,20 sekundy.</li>
+<li><code>diana</code>: Tarcza w strzelnicy. Pojawia się tarcza: strzelaj w stronę, z której brzmi. Trwa 0,25 sekundy.</li>
+<li><code>simon_2</code>: Maszyna pamięci, strzałka w dół. Najniższa nuta maszyny pamięci dźwięków. Trwa 0,45 sekundy.</li>
+<li><code>simon_0</code>: Maszyna pamięci, strzałka w górę. Najwyższa nuta maszyny pamięci dźwięków. Trwa 0,45 sekundy.</li>
+<li><code>simon_1</code>: Maszyna pamięci, strzałka w prawo. Druga najwyższa nuta maszyny pamięci dźwięków. Trwa 0,45 sekundy.</li>
+<li><code>simon_3</code>: Maszyna pamięci, strzałka w lewo. Druga najniższa nuta maszyny pamięci dźwięków. Trwa 0,45 sekundy.</li>
+<li><code>pesca_lanzar</code>: Wędkowanie, zarzut. Zarzucasz wędkę: haczyk wpada do wody. Trwa 1,15 sekundy.</li>
+<li><code>pez_pica</code>: Wędkowanie, bierze. Ryba chwyciła haczyk: szarpnij od razu, zanim minie sekunda. Trwa 0,60 sekundy.</li>
+<li><code>carrete</code>: Wędkowanie, zwijanie żyłki. Zwijasz żyłkę kołowrotkiem. Trwa 0,90 sekundy.</li>
+<li><code>ruleta</code>: Ruletka. Kręci się ruletka w kasynie. Trwa 2,40 sekundy.</li>
+</ul>
+<h3>Otoczenie i pogoda</h3>
+<p>19 dźwięków. Długie pętle brzmiące w tle w każdej dzielnicy, podczas deszczu i w nocy, oraz pojedyncze dźwięki, które pojawiają się od czasu do czasu wokół.</p>
+<ul>
+<li><code>amb_residencial</code>: Tło spokojnej dzielnicy. Jesteś w dzielnicy mieszkalnej. Odtwarzany w pętli. Trwa 7,70 sekundy.</li>
+<li><code>amb_campo</code>: Tło wsi. Jesteś na wsi: ptaki i dzwonki pasterskie. Odtwarzany w pętli. Trwa 9,70 sekundy.</li>
+<li><code>amb_ciudad</code>: Tło miasta. Jesteś w centrum miasta: daleki ruch. Odtwarzany w pętli. Trwa 7,70 sekundy.</li>
+<li><code>amb_mar</code>: Tło otwartego morza. Jesteś na morzu, daleko od brzegu. Odtwarzany w pętli. Trwa 9,70 sekundy.</li>
+<li><code>amb_montana</code>: Tło gór. Jesteś w górach: wiatr. Odtwarzany w pętli. Trwa 9,70 sekundy.</li>
+<li><code>amb_noche</code>: Tło nocy. Jest noc: świerszcze. Odtwarzany w pętli. Trwa 5,80 sekundy.</li>
+<li><code>amb_parque</code>: Tło parku. Jesteś w parku: ptaki. Odtwarzany w pętli. Trwa 9,70 sekundy.</li>
+<li><code>amb_playa</code>: Tło plaży. Jesteś na plaży: fale. Odtwarzany w pętli. Trwa 8,70 sekundy.</li>
+<li><code>amb_industrial</code>: Tło strefy przemysłowej. Jesteś w strefie przemysłowej: maszyny. Odtwarzany w pętli. Trwa 5,70 sekundy.</li>
+<li><code>amb_puerto</code>: Tło portu. Jesteś w porcie: fale i daleka syrena statku. Odtwarzany w pętli. Trwa 8,70 sekundy.</li>
+<li><code>claxon_lejano</code>: Daleki klakson. Klakson w oddali, tło: nie do ciebie. Trwa 0,45 sekundy.</li>
+<li><code>gaviota</code>: Mewy. Mewy, na plaży i w porcie. Trwa 2,00 sekundy.</li>
+<li><code>lluvia</code>: Deszcz. Pada deszcz: podłoże jest bardziej śliskie i gorzej słychać. Odtwarzany w pętli. Trwa 4,70 sekundy.</li>
+<li><code>martillo</code>: Uderzenia młotka na budowie. Budowa w oddali, w porcie i w strefach przemysłowych. Trwa 1,20 sekundy.</li>
+<li><code>multitud</code>: Gwar tłumu. Wokół jest dużo ludzi. Odtwarzany w pętli. Trwa 5,70 sekundy.</li>
+<li><code>pajaro</code>: Ptak. Ptak, w parkach i w spokojnych dzielnicach. Trwa 0,90 sekundy.</li>
+<li><code>sirena_lejana</code>: Daleka syrena. Syrena w oddali, tło: nie jadą po ciebie. Trwa 2,00 sekundy.</li>
+<li><code>trueno</code>: Grzmot. Grzmot, gdy pada. Trwa 3,50 sekundy.</li>
+<li><code>viento_playa</code>: Wiatr. Wiatr w twarz, gdy lecisz helikopterem. Trwa 8,70 sekundy.</li>
+</ul>
+<h3>Relacje, tylko z treściami dla dorosłych</h3>
+<p>7 dźwięków. Relacje uczuciowe.</p>
+<ul>
+<li><code>afinidad_baja</code>: Spadek sympatii. Ktoś się na ciebie obraził. Trwa 1,40 sekundy.</li>
+<li><code>cita</code>: Randka. Masz randkę albo chwilę bliskości ze swoją parą. Trwa 1,30 sekundy.</li>
+<li><code>noche_juntos</code>: Noc razem. Spędzacie razem noc. Scena kończy się wyciszeniem. Trwa 2,94 sekundy.</li>
+<li><code>pareja</code>: Nowa para. Zaczynacie związek: dwa uderzenia serca i arpeggio. Trwa 1,60 sekundy.</li>
+<li><code>regalo</code>: Prezent. Wręczasz prezent: papier do pakowania. Trwa 0,30 sekundy.</li>
+<li><code>ruptura</code>: Zerwanie. Związek się kończy. Trwa 2,60 sekundy.</li>
+<li><code>afinidad_sube</code>: Wzrost sympatii. Ktoś ceni cię bardziej, po rozmowie, randce albo prezencie. Trwa 1,09 sekundy.</li>
+</ul>
+<h3>Substancje i handel, tylko z treściami dla dorosłych</h3>
+<p>13 dźwięków. Każda substancja ma swój dźwięk przy zażyciu, żeby dało się ją rozpoznać bez patrzenia.</p>
+<ul>
+<li><code>abstinencia</code>: Zespół odstawienny. Twoje ciało domaga się substancji, od której jesteś uzależniony: drżenie. Trwa 1,20 sekundy.</li>
+<li><code>bajon</code>: Zjazd. Mija działanie substancji i przychodzi zjazd. Trwa 1,60 sekundy.</li>
+<li><code>paisano</code>: Policjant po cywilnemu. Kupujący był policjantem po cywilnemu. Trwa 1,10 sekundy.</li>
+<li><code>precio_escasez</code>: Cena z niedoboru. U dostawcy ta substancja jest dziś bardzo droga. Trwa 0,51 sekundy.</li>
+<li><code>precio_ganga</code>: Okazyjna cena. U dostawcy ta substancja jest dziś bardzo tania. Trwa 0,51 sekundy.</li>
+<li><code>rechazo</code>: Odmowa. Ta osoba nie jest zainteresowana tym, co oferujesz. Trwa 0,22 sekundy.</li>
+<li><code>sobredosis</code>: Przedawkowanie. Przesadziłeś: serce zwalnia, brzmi ciągły pisk i kończysz w szpitalu. Trwa 3,20 sekundy.</li>
+<li><code>tomar_cristal</code>: Zażycie kryształu. Zażywasz kryształ: trzeszczy. Trwa 1,50 sekundy.</li>
+<li><code>tomar_hierba</code>: Zażycie trawy. Palisz trawę: zapalniczka, zaciągnięcie i dym. Trwa 1,60 sekundy.</li>
+<li><code>tomar_pastillas</code>: Zażycie tabletek. Bierzesz tabletkę: blister i łyk. Trwa 0,90 sekundy.</li>
+<li><code>tomar_polvo</code>: Zażycie białego proszku. Zażywasz biały proszek: karta i wciągnięcie. Trwa 1,00 sekundy.</li>
+<li><code>tomar_copa</code>: Wypicie drinka. Pijesz alkohol: nalewanie i toast. Trwa 1,30 sekundy.</li>
+<li><code>trato</code>: Dobity interes. Kupiłeś[aś] albo sprzedałeś[aś] towar: banknoty i paczka zmieniająca ręce. Trwa 0,90 sekundy.</li>
+</ul>
+</body>
+</html>

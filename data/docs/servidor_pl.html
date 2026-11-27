@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Stawianie serwera Puerto Bravo</title>
+<style>
+body { font-family: Segoe UI, Arial, sans-serif; max-width: 56em; margin: 1em auto; padding: 0 1em; line-height: 1.6; background: #111; color: #f2f2f2; font-size: 1.1em; }
+h1, h2, h3, h4 { color: #ffd84d; }
+li { margin-bottom: .4em; }
+code, kbd { background: #2a2a2a; padding: 0 .3em; }
+a { color: #9fd0ff; }
+</style>
+</head>
+<body>
+<h1>Stawianie serwera Puerto Bravo</h1>
+<p>Serwer to mały program, który zostawia się włączony, żeby kilka osób mogło grać razem w tym samym mieście. Przechowuje postacie, bandy i dzielnice oraz rozstrzyga, co dzieje się między graczami. Nie potrzebuje mocnego komputera i nadaje się zarówno dla dwojga znajomych, jak i dla stu osób albo więcej.</p>
+<p>Wszystko da się zrobić klawiaturą i czytnikiem ekranu: jest panel z oknem dla Windowsa, a w każdym systemie serwer obsługuje się tekstowo.</p>
+<p>Po tym przewodniku można poruszać się nagłówkami. Każdy sposób postawienia serwera ma swój rozdział z krokami po kolei. Nie trzeba czytać całości: wybierz swój sposób w rozdziale 3 i przejdź do niego.</p>
+
+<h2 id="indice">Spis treści</h2>
+<ol>
+<li><a href="#que">Czego potrzeba</a></li>
+<li><a href="#carpeta">Co jest w folderze servidor</a></li>
+<li><a href="#elegir">Wybór sposobu postawienia</a></li>
+<li><a href="#panel">Na twoim Windowsie, z panelem</a></li>
+<li><a href="#consola">Na twoim Windowsie, w konsoli</a></li>
+<li><a href="#inicio">Uruchamianie razem z Windowsem</a></li>
+<li><a href="#linux">Na Linuksie albo wynajętym serwerze, z Pythonem</a></li>
+<li><a href="#systemd">Na Linuksie, jako usługa systemd</a></li>
+<li><a href="#raspberry">Na Raspberry Pi</a></li>
+<li><a href="#mac">Na Macu</a></li>
+<li><a href="#docker">Z Dockerem i docker compose</a></li>
+<li><a href="#synology">Na serwerze NAS Synology</a></li>
+<li><a href="#direccion">Adres, który dajesz swoim ludziom, i jak wejść spoza domu</a></li>
+<li><a href="#cifrado">Szyfrowanie i certyfikat</a></li>
+<li><a href="#entrada">Kto może wejść</a></li>
+<li><a href="#administrar">Zarządzanie serwerem</a></li>
+<li><a href="#versiones">Gra na różnych wersjach gry</a></li>
+<li><a href="#dinero">Pieniądze graczy: limit na godzinę i zlecenia</a></li>
+<li><a href="#rol">Gra fabularna przez tekst, głos i radio w pojazdach</a></li>
+<li><a href="#copias">Kopie zapasowe, przenoszenie i aktualizacja serwera</a></li>
+<li><a href="#grandes">Serwery z dużą liczbą ludzi</a></li>
+<li><a href="#problemas">Rozwiązywanie problemów</a></li>
+<li><a href="#privacidad">Co przechowuje serwer</a></li>
+<li><a href="#opciones">Wszystkie opcje konfiguracji</a></li>
+</ol>
+
+<h2 id="que">1. Czego potrzeba</h2>
+<ul>
+<li>Komputera, który zostaje włączony w czasie gry: twojego PC, starego laptopa, serwera NAS, Raspberry Pi albo wynajętego serwera.</li>
+<li>Na Windowsie nie trzeba niczego instalować: serwer jest dołączony do gry.</li>
+<li>Na Linuksie, Macu, serwerze NAS albo Raspberry Pi potrzebny jest Python 3.8 lub nowszy, który prawie zawsze jest już zainstalowany. Nic więcej nie trzeba instalować: serwer używa tylko tego, co ma Python. Tam gra nie jest potrzebna.</li>
+<li>Żeby mogli wejść ludzie spoza twojego domu: otwarcia portu na routerze albo użycia sieci prywatnej. Jest to wyjaśnione w rozdziale 13.</li>
+<li>Zużywa bardzo mało: przy kilku graczach prawie nie widać tego w obciążeniu procesora ani pamięci.</li>
+</ul>
+
+<h2 id="carpeta">2. Co jest w folderze servidor</h2>
+<p>W folderze gry jest folder o nazwie <code>servidor</code>. Tam jest wszystko, co dotyczy serwera, i tam zapisuje on wszystko, co swoje. Aktualizacje gry nie zmieniają twojej konfiguracji ani danych.</p>
+<ul>
+<li><code>Panel del servidor.bat</code>: otwiera okno panelu. To najwygodniejsze na Windowsie.</li>
+<li><code>Servidor por consola.bat</code>: uruchamia serwer w oknie tekstowym.</li>
+<li><code>Parar el servidor.bat</code>: porządnie zatrzymuje działający serwer.</li>
+<li><code>Arrancar con Windows - activar.bat</code> i <code>Arrancar con Windows - quitar.bat</code>: żeby serwer uruchamiał się sam po zalogowaniu.</li>
+<li><code>documentacion_es.html</code> i <code>documentacion_en.html</code>: ten przewodnik po hiszpańsku i po angielsku.</li>
+<li><code>servidor.conf.ejemplo</code>: wszystkie opcje, objaśnione jedna po drugiej.</li>
+<li><code>otros_sistemas</code>: to, co kopiuje się na Linuksa, Maca, serwer NAS albo Raspberry Pi. Zawiera kod serwera, skrypty <code>arrancar.sh</code>, <code>parar.sh</code>, <code>reiniciar.sh</code> i <code>estado.sh</code>, usługę systemd <code>puertobravo.service</code> oraz pliki Dockera: <code>Dockerfile</code>, <code>docker-compose.yml</code> i <code>entrada_docker.sh</code>.</li>
+</ul>
+<p>Po pierwszym uruchomieniu serwera pojawią się jeszcze:</p>
+<ul>
+<li><code>servidor.conf</code>: twoja konfiguracja.</li>
+<li><code>datos_servidor</code>: postacie, bandy, certyfikat i w środku folder <code>copias</code> z kopiami zapasowymi.</li>
+</ul>
+<p>Programy serwera na Windowsie są w folderze gry, obok gry: <code>PuertoBravoServidorPanel.exe</code>, czyli panel, i <code>PuertoBravoServidor.exe</code>, czyli konsola. Oba zawsze pracują z folderem <code>servidor</code>, skądkolwiek się je otworzy.</p>
+
+<h2 id="elegir">3. Wybór sposobu postawienia</h2>
+<ul>
+<li>Chcesz grać z kilkorgiem znajomych ze swojego PC z Windowsem i żeby było łatwo: <a href="#panel">panel</a>, rozdział 4.</li>
+<li>Wolisz okno tekstowe albo zamierzasz zostawić serwer włączony bez doglądania: <a href="#consola">konsola</a>, rozdział 5, i <a href="#inicio">samodzielne uruchamianie</a>, rozdział 6.</li>
+<li>Masz komputer z Linuksem albo wynajmujesz serwer: rozdziały <a href="#linux">7</a> i <a href="#systemd">8</a>.</li>
+<li>Masz Raspberry Pi: <a href="#raspberry">rozdział 9</a>.</li>
+<li>Masz Maca: <a href="#mac">rozdział 10</a>.</li>
+<li>Używasz Dockera: <a href="#docker">rozdział 11</a>.</li>
+<li>Masz serwer NAS Synology: <a href="#synology">rozdział 12</a>.</li>
+</ul>
+<p>Konfiguracja i dane są we wszystkich takie same: możesz zacząć na swoim PC, a później przenieść serwer na inny komputer. Rozdział 20 mówi, jak to zrobić.</p>
+
+<h2 id="panel">4. Na twoim Windowsie, z panelem</h2>
+<h3>Pierwsze uruchomienie</h3>
+<ol>
+<li>Otwórz folder gry, wejdź do folderu <code>servidor</code> i otwórz <code>Panel del servidor.bat</code>. Możesz też otworzyć bezpośrednio <code>PuertoBravoServidorPanel.exe</code> w folderze gry.</li>
+<li>Otwiera się okno panelu, z fokusem na stanie serwera, który powie, że serwer jest zatrzymany.</li>
+<li>Jeśli chcesz coś zmienić przed uruchomieniem, naciśnij Control+P, żeby otworzyć konfigurację. Minimum to nadanie nazwy serwerowi, na pierwszej karcie. Naciśnij OK, żeby zapisać.</li>
+<li>Naciśnij F5, żeby uruchomić. Za pierwszym razem trwa to kilka sekund, bo serwer tworzy swój certyfikat do szyfrowania połączenia.</li>
+<li>Gdy skończy, panel mówi, że serwer działa, i podaje port. Jeśli Windows zapyta, czy pozwalasz programowi komunikować się przez sieć, zgódź się: bez tego nikt nie wejdzie.</li>
+<li>Na karcie Stan jest adres, który trzeba dać osobom grającym w twoim domu. Przycisk Kopiuj adres umieszcza go w schowku.</li>
+<li>Wejdź pierwszy z gry: pierwsze konto, które wchodzi, jest kontem administratora.</li>
+</ol>
+<h3>Karty</h3>
+<p>Kartę zmienia się klawiszami Control+Tab i Control+Shift+Tab.</p>
+<ul>
+<li>Stan: czy serwer działa, ile jest ludzi, port, adres dla znajomych, szyfrowanie z odciskiem i świat, z którym pracuje. Jedna rzecz w wierszu. Odświeża się sam, gdy coś się zmieni, nie ruszając kursora z miejsca, w którym go masz; F6 odświeża od razu.</li>
+<li>Gracze: kto jest w środku, gdzie i na jakiej wersji gry. Przyciskami albo klawiszem kontekstowym na graczu możesz wysłać mu wiadomość, wyrzucić go, zablokować albo uczynić administratorem.</li>
+<li>Konta: wszystkie konta, które kiedykolwiek weszły. Stąd blokuje się konto, zdejmuje blokadę, nadaje albo odbiera uprawnienia administratora i usuwa konto, nawet gdy tej osoby nie ma w środku.</li>
+<li>Zaproszenia: kody zaproszeń, wolne i użyte. Tworzy się je, kopiuje i unieważnia.</li>
+<li>Dziennik: to, co mówi serwer, z najnowszymi wpisami na końcu. Pod spodem jest pole do wpisywania poleceń, tych samych co w konsoli.</li>
+</ul>
+<h3>Klawisze panelu</h3>
+<ul>
+<li>F5: uruchomienie serwera. Shift+F5: zatrzymanie. Control+F5: ponowne uruchomienie.</li>
+<li>Control+P: konfiguracja. Control+Q: wyjście.</li>
+<li>Control+N: ogłoszenie do wszystkich graczy. Control+M: wiadomość do wybranego gracza. Control+E: wyrzucenie wybranego gracza.</li>
+<li>Control+I: utworzenie zaproszenia. Control+D: zmiana wiadomości dnia. Control+O: wpisanie polecenia.</li>
+<li>F6: odświeżenie stanu i list.</li>
+<li>Control+S: zapis teraz. Control+B: kopia zapasowa teraz. Control+R: przywrócenie kopii. Control+G: zapis dziennika do pliku.</li>
+<li>F1: otwarcie tego przewodnika. Control+H: wyjaśnia kontrolkę, na której jesteś.</li>
+<li>Alt z podkreśloną literą: przejście do kontrolki na karcie albo otwarcie menu.</li>
+<li>Klawisz kontekstowy albo Shift+F10 na listach graczy i kont: działania na wybranym.</li>
+</ul>
+<h3>Konfiguracja</h3>
+<ul>
+<li>Control+P otwiera okno z kartą dla każdej grupy opcji. Control+H na dowolnej kontrolce mówi, co robi, jakie wartości przyjmuje i czy wymaga ponownego uruchomienia.</li>
+<li>OK zapisuje i zamyka. Zastosuj zapisuje bez zamykania. Anuluj niczego nie zmienia.</li>
+<li>Wartości domyślne przywraca ustawienia fabryczne opcji z karty, na której jesteś, albo wszystkich. Nic nie jest zapisywane, dopóki nie naciśniesz OK albo Zastosuj.</li>
+<li>Prawie wszystko działa przy włączonym serwerze. Jeśli zmienisz coś, co wymaga ponownego uruchomienia, na przykład port albo szyfrowanie, panel ci to powie i zaproponuje ponowne uruchomienie od razu.</li>
+<li>Konfiguracja jest zapisywana w <code>servidor.conf</code>, pliku tekstowym z objaśnieniem każdej opcji, który można też zmieniać w Notatniku.</li>
+</ul>
+<h3>Zatrzymywanie i zamykanie</h3>
+<ul>
+<li>Shift+F5 zatrzymuje serwer: ostrzega graczy, zapisuje wszystko i ich rozłącza. Jeśli ktoś jest w środku, najpierw pyta.</li>
+<li>Jeśli zamkniesz panel przy działającym serwerze, zapyta i, jeśli się zgodzisz, porządnie go zatrzyma przed zamknięciem.</li>
+<li>Serwer działa tylko wtedy, gdy panel jest otwarty. Możesz go zminimalizować.</li>
+<li>Control+F5 uruchamia go ponownie: gracze dowiadują się, że to ponowne uruchomienie, a ich gry czekają i same wchodzą z powrotem, gdy tylko serwer znów wystartuje.</li>
+<li>Jeśli zaktualizujesz grę przy otwartym panelu, panel sam się porządnie zamknie i otworzy ponownie po zakończeniu, z działającym serwerem, jeśli działał. Jest to opisane w <a href="#copias">rozdziale 20</a>.</li>
+</ul>
+
+<h2 id="consola">5. Na twoim Windowsie, w konsoli</h2>
+<ol>
+<li>W folderze <code>servidor</code> gry otwórz <code>Servidor por consola.bat</code>.</li>
+<li>Za pierwszym razem zapisuje <code>servidor.conf</code> ze wszystkimi objaśnionymi opcjami i uruchamia się z wartościami domyślnymi.</li>
+<li>Okno na bieżąco mówi, co się dzieje: na jakim porcie nasłuchuje, czy szyfruje, kto wchodzi, a kto wychodzi.</li>
+<li>W tym samym oknie wpisuje się polecenia. Wpisz <code>ayuda</code> i naciśnij Enter, żeby usłyszeć wszystkie. Są w rozdziale 16.</li>
+<li>Żeby zmienić konfigurację, otwórz <code>servidor.conf</code> w Notatniku, zmień, co chcesz, i zapisz. Potem wpisz w konsoli <code>recargar</code>: stosuje to, co można zmienić bez ponownego uruchomienia, i mówi, co czeka na ponowne uruchomienie.</li>
+<li>Żeby go zatrzymać, wpisz <code>apagar</code>, naciśnij Control+C albo zamknij okno. We wszystkich trzech przypadkach ostrzega graczy i wszystko zapisuje.</li>
+</ol>
+<p>Panel i konsola używają tej samej konfiguracji i tych samych danych: możesz jednego dnia używać jednego, a innego dnia drugiego, ale nie obu naraz.</p>
+<p>Kto umie obsługiwać wiersz poleceń, może wywołać program bezpośrednio z folderu gry:</p>
+<ul>
+<li><code>PuertoBravoServidor.exe --ejemplo</code>: zapisuje <code>servidor.conf</code> i kończy.</li>
+<li><code>PuertoBravoServidor.exe --comprobar</code>: sprawdza <code>servidor.conf</code>, mówi, co jest niepoprawne, i kończy.</li>
+<li><code>PuertoBravoServidor.exe --opciones</code>: podaje wszystkie opcje z objaśnieniem.</li>
+<li><code>PuertoBravoServidor.exe --parar</code>: porządnie zatrzymuje działający serwer.</li>
+<li><code>PuertoBravoServidor.exe --actualizar</code>: zatrzymuje go, ostrzegając graczy, że uruchamia się ponownie w celu aktualizacji. Ich gry czekają i same wchodzą z powrotem, gdy uruchomisz go znowu.</li>
+<li><code>PuertoBravoServidor.exe --reiniciar</code>: to samo, z informacją, że chodzi o konserwację.</li>
+<li><code>PuertoBravoServidor.exe --puerto=47821</code>: każdą opcję można podać w ten sposób, bez zmieniania pliku.</li>
+</ul>
+
+<h2 id="inicio">6. Uruchamianie razem z Windowsem</h2>
+<h3>Po zalogowaniu</h3>
+<ol>
+<li>W folderze <code>servidor</code> otwórz <code>Arrancar con Windows - activar.bat</code>. Zostawia skrót w folderze Autostart twojego użytkownika. Nie są potrzebne uprawnienia administratora.</li>
+<li>Od tej chwili przy każdym zalogowaniu serwer uruchamia się sam, w zminimalizowanym oknie.</li>
+<li>Żeby go zatrzymać bez szukania tego okna, otwórz <code>Parar el servidor.bat</code>.</li>
+<li>Żeby przestał uruchamiać się sam, otwórz <code>Arrancar con Windows - quitar.bat</code>.</li>
+</ol>
+<h3>Po włączeniu komputera, bez logowania</h3>
+<p>To dla kogoś, kto ma osobny komputer na serwer. Potrzebne jest konto z uprawnieniami administratora.</p>
+<ol>
+<li>Otwórz Harmonogram zadań Windowsa: naciśnij klawisz Windows, wpisz Harmonogram zadań i naciśnij Enter.</li>
+<li>W menu Akcja wybierz Utwórz zadanie.</li>
+<li>Na karcie Ogólne nadaj mu nazwę Serwer Puerto Bravo i zaznacz Uruchom niezależnie od tego, czy użytkownik jest zalogowany.</li>
+<li>Na karcie Wyzwalacze naciśnij Nowy i wybierz Przy uruchamianiu.</li>
+<li>Na karcie Akcje naciśnij Nowa. W polu Program wpisz pełną ścieżkę do <code>PuertoBravoServidor.exe</code>, który jest w folderze gry. W polu Dodaj argumenty wpisz <code>servidor.conf</code>.</li>
+<li>Na karcie Ustawienia odznacz Zatrzymaj zadanie, jeśli jest uruchomione dłużej niż, żeby nie przerwało go po trzech dniach.</li>
+<li>Zatwierdź. Windows poprosi o hasło do twojego konta, żeby móc je uruchamiać bez logowania.</li>
+</ol>
+<p>Uruchomiony w ten sposób nie ma okna. Żeby go porządnie zatrzymać, użyj <code>Parar el servidor.bat</code>, a do zarządzania – poleceń z czatu gry, które są w rozdziale 16. Jeśli w Harmonogramie zadań wybierzesz Zakończ, zostanie przerwany natychmiast: stracisz najwyżej to, co z ostatniej minuty, ale lepiej zatrzymać go porządnie.</p>
+
+<h2 id="linux">7. Na Linuksie albo wynajętym serwerze, z Pythonem</h2>
+<ol>
+<li>Sprawdź, czy jest Python 3.8 lub nowszy: wpisz <code>python3 --version</code>.</li>
+<li>Skopiuj folder <code>otros_sistemas</code> z gry na ten komputer, pod dowolną nazwą, na przykład <code>puertobravo</code> w swoim folderze domowym. Nada się każdy sposób kopiowania plików: pendrive, <code>scp</code> albo program do przesyłania plików.</li>
+<li>Wejdź do tego folderu: <code>cd puertobravo</code>. W środku musi być folder <code>servidor</code> z kodem.</li>
+<li>Zapisz przykładową konfigurację: <code>python3 -m servidor --ejemplo</code>. Tworzy <code>servidor.conf</code>.</li>
+<li>Zmień ją według uznania w edytorze tekstu, na przykład <code>nano servidor.conf</code>. Żeby sprawdzić, czy nie ma błędów: <code>python3 -m servidor --comprobar</code>.</li>
+<li>Uruchom: <code>python3 -m servidor</code>. Mówi, na jakim porcie nasłuchuje i czy szyfruje. W tym samym terminalu wpisuje się polecenia; <code>ayuda</code> podaje wszystkie. Zatrzymuje się go poleceniem <code>apagar</code> albo klawiszami Control+C.</li>
+</ol>
+<h3>Praca w tle</h3>
+<ul>
+<li><code>sh arrancar.sh</code>: uruchamia go w tle, jeśli jeszcze nie działa. To, co mówi, trafia do <code>servidor.log</code>.</li>
+<li><code>sh estado.sh</code>: mówi, czy działa, i pokazuje to, co powiedział ostatnio.</li>
+<li><code>sh parar.sh</code>: porządnie go zatrzymuje.</li>
+<li><code>sh reiniciar.sh</code>: ostrzega graczy odliczaniem, porządnie zatrzymuje serwer i uruchamia go ponownie. Tego trzeba użyć po wgraniu nowego kodu serwera: gry czekają i same wchodzą z powrotem.</li>
+<li>Żeby uruchamiał się po włączeniu komputera bez systemd, dodaj do crona wiersz w rodzaju <code>@reboot sh /home/tu_usuario/puertobravo/arrancar.sh</code>, poleceniem <code>crontab -e</code>.</li>
+<li>Uruchomiony w ten sposób nie ma konsoli. Zarządza się nim z czatu gry, poleceniami z rozdziału 16.</li>
+</ul>
+<h3>Zapora</h3>
+<ul>
+<li>Jeśli komputer ma zaporę, trzeba przepuścić port serwera dla TCP. Z ufw: <code>sudo ufw allow 47820/tcp</code>. Z firewalld: <code>sudo firewall-cmd --permanent --add-port=47820/tcp</code>, a potem <code>sudo firewall-cmd --reload</code>.</li>
+<li>Na wynajętym serwerze zwykle jest jeszcze zapora w panelu dostawcy, czasem nazywana grupą zabezpieczeń: otwórz tam też port 47820 dla TCP.</li>
+<li>Wynajęty serwer ma stały adres publiczny: nie ma routera do konfigurowania. Adres dla twoich ludzi to <code>puertobravo://</code>, adres komputera, dwukropek i port.</li>
+</ul>
+
+<h2 id="systemd">8. Na Linuksie, jako usługa systemd</h2>
+<p>W ten sposób uruchamia się sam z systemem, uruchamia się ponownie, jeśli padnie, i porządnie zatrzymuje się przy wyłączaniu. Trzeba móc używać <code>sudo</code>.</p>
+<ol>
+<li>Skopiuj folder serwera do <code>/opt/puertobravo</code>: <code>sudo cp -r puertobravo /opt/puertobravo</code>. W środku musi zostać folder <code>servidor</code>.</li>
+<li>Utwórz dla niego użytkownika bez uprawnień: <code>sudo useradd --system --home /opt/puertobravo puertobravo</code>.</li>
+<li>Przekaż mu folder: <code>sudo chown -R puertobravo: /opt/puertobravo</code>.</li>
+<li>Jeśli nie ma jeszcze konfiguracji, zapisz ją: <code>cd /opt/puertobravo</code> i <code>sudo -u puertobravo python3 -m servidor --ejemplo</code>. Zmień ją poleceniem <code>sudo -u puertobravo nano servidor.conf</code>.</li>
+<li>Skopiuj usługę: <code>sudo cp /opt/puertobravo/puertobravo.service /etc/systemd/system/</code>.</li>
+<li>Włącz ją: <code>sudo systemctl daemon-reload</code>, a potem <code>sudo systemctl enable --now puertobravo</code>.</li>
+</ol>
+<ul>
+<li>Sprawdzenie, jak działa: <code>systemctl status puertobravo</code>.</li>
+<li>Słuchanie tego, co mówi: <code>journalctl -u puertobravo -f</code>. Wychodzi się klawiszami Control+C.</li>
+<li>Zatrzymanie: <code>sudo systemctl stop puertobravo</code>. Uruchomienie: <code>sudo systemctl start puertobravo</code>. Ponowne uruchomienie, na przykład po zmianie portu: <code>sudo systemctl restart puertobravo</code>.</li>
+<li>Jeśli używasz innego folderu albo innego użytkownika, zmień wiersze <code>WorkingDirectory</code> i <code>User</code> w pliku usługi.</li>
+<li>Jako usługa nie ma konsoli: zarządza się nim z czatu gry.</li>
+<li>Ponowne uruchomienie z ostrzeżeniem, na przykład po aktualizacji: administrator wpisuje na czacie gry <code>/reiniciar</code> albo <code>/actualizar</code>, albo na komputerze, w folderze serwera, <code>sudo -u puertobravo python3 -m servidor --actualizar</code>. Serwer ostrzega odliczaniem, wszystko zapisuje i kończy z kodem 75; usługa uruchamia go sama ponownie po pięciu sekundach, a gry wchodzą z powrotem.</li>
+</ul>
+
+<h2 id="raspberry">9. Na Raspberry Pi</h2>
+<ul>
+<li>Nada się każdy model z Raspberry Pi OS: ma już Pythona 3. Dla kilkorga znajomych wystarczy najskromniejszy model.</li>
+<li>Kroki są takie same jak na Linuksie: rozdziały 7 i 8. Najwygodniej zostawić serwer jako usługę systemd, żeby uruchamiał się sam po włączeniu.</li>
+<li>Do skopiowania folderu <code>otros_sistemas</code> możesz użyć pendrive'a albo <code>scp</code> ze swojego komputera, jeśli masz włączone SSH na Raspberry.</li>
+<li>Na najwolniejszych modelach sprawdzenie tożsamości wchodzącego trwa trochę ponad sekundę. Dzieje się to tylko przy wejściu; w czasie gry tego nie widać.</li>
+<li>Daj Raspberry stały adres w swojej sieci w ustawieniach routera, w części o rezerwacji adresów albo statycznym DHCP. Dzięki temu adres, który dajesz swoim ludziom, się nie zmienia, a przekierowanie portu nadal na nią wskazuje.</li>
+<li>Używaj dobrej jakości karty pamięci i zostaw włączone automatyczne kopie zapasowe: karty się psują.</li>
+</ul>
+
+<h2 id="mac">10. Na Macu</h2>
+<ol>
+<li>Otwórz Terminal i wpisz <code>python3 --version</code>. Jeśli Mac zaproponuje instalację narzędzi programistycznych, zgódź się: zawierają Pythona. Możesz też zainstalować Pythona z jego oficjalnej strony.</li>
+<li>Skopiuj folder <code>otros_sistemas</code> na Maca, na przykład do swojego folderu domowego pod nazwą <code>puertobravo</code>.</li>
+<li>W Terminalu: <code>cd ~/puertobravo</code>, potem <code>python3 -m servidor --ejemplo</code>, a gdy już zmienisz <code>servidor.conf</code> według uznania, <code>python3 -m servidor</code>.</li>
+<li>Za pierwszym razem Mac zapyta, czy pozwalasz na połączenia przychodzące do Pythona: zgódź się.</li>
+<li>Do pracy w tle służą te same skrypty: <code>sh arrancar.sh</code>, <code>sh estado.sh</code>, <code>sh parar.sh</code> i <code>sh reiniciar.sh</code>.</li>
+<li>Żeby Mac nie usypiał, gdy ktoś gra, zajrzyj do Ustawień systemowych, do części o zasilaniu albo baterii.</li>
+</ol>
+
+<h2 id="docker">11. Z Dockerem i docker compose</h2>
+<ol>
+<li>Skopiuj folder <code>otros_sistemas</code> na komputer, na którym masz Dockera, pod nazwą <code>puertobravo</code>. W środku są <code>Dockerfile</code>, <code>docker-compose.yml</code>, <code>entrada_docker.sh</code> i folder <code>servidor</code>.</li>
+<li>Wejdź do tego folderu i wpisz <code>docker compose up -d --build</code>. Buduje obraz i uruchamia serwer.</li>
+<li>Obok pojawia się folder <code>datos</code>. W środku są <code>servidor.conf</code>, który zapisuje się sam za pierwszym razem, i <code>datos_servidor</code>, z postaciami i kopiami. Są poza kontenerem: przetrwają aktualizacje.</li>
+<li>Żeby zmienić konfigurację, edytuj <code>datos/servidor.conf</code> i uruchom ponownie: <code>docker compose restart</code>.</li>
+</ol>
+<ul>
+<li>Słuchanie tego, co mówi: <code>docker compose logs -f</code>. Wychodzi się klawiszami Control+C, bez zatrzymywania serwera.</li>
+<li>Porządne zatrzymanie: <code>docker compose down</code>. Ostrzega graczy i wszystko zapisuje.</li>
+<li>Wpisywanie poleceń: <code>docker attach puertobravo</code>, wpisz polecenie i naciśnij Enter. Żeby wyjść bez zatrzymywania, naciśnij Control+P, a potem Control+Q. Najwygodniej zarządzać nim z czatu gry.</li>
+<li>Nie używaj w Dockerze polecenia <code>apagar</code>, żeby go zatrzymać: Docker uruchomiłby go ponownie. Użyj <code>docker compose down</code>.</li>
+<li>Do ponownego uruchomienia z ostrzeżeniem nadają się polecenia <code>reiniciar</code> i <code>actualizar</code>, z czatu gry albo przez <code>docker attach</code>: serwer ostrzega odliczaniem, wszystko zapisuje i kończy, a Docker uruchamia go ponownie. Gry czekają i same wchodzą z powrotem.</li>
+<li>Jeśli zmienisz port w <code>servidor.conf</code>, zmień też obie liczby w wierszu <code>ports</code> w <code>docker-compose.yml</code>.</li>
+<li>W Dockerze wszystkie połączenia mogą docierać do serwera z tego samego adresu wewnętrznego. Dlatego opcja <code>conexiones_por_ip</code> musi zostać ustawiona na 0.</li>
+</ul>
+
+<h2 id="synology">12. Na serwerze NAS Synology</h2>
+<h3>Z Container Managerem</h3>
+<p>Container Manager to pakiet Dockera od Synology. Instaluje się go z Centrum pakietów i tworzy folder współdzielony o nazwie <code>docker</code>.</p>
+<ol>
+<li>Otwórz File Station, wejdź do folderu współdzielonego <code>docker</code> i utwórz w nim folder o nazwie <code>puertobravo</code>.</li>
+<li>Wgraj do tego folderu całą zawartość <code>otros_sistemas</code>: folder <code>servidor</code>, <code>Dockerfile</code>, <code>docker-compose.yml</code> i <code>entrada_docker.sh</code>. Pozostałe pliki nie przeszkadzają.</li>
+<li>Otwórz Container Managera i przejdź do części Projekt.</li>
+<li>Naciśnij Utwórz. Jako nazwę projektu wpisz <code>puertobravo</code>. W polu Ścieżka wybierz folder <code>docker/puertobravo</code>.</li>
+<li>Container Manager widzi, że jest tam już <code>docker-compose.yml</code>, i pyta, czy go użyć: zgódź się.</li>
+<li>Przechodź przyciskiem Dalej do końca, bez włączania portalu WWW, i naciśnij Gotowe. Buduje obraz i uruchamia serwer. Za pierwszym razem trwa to kilka minut.</li>
+<li>Konfiguracja jest w <code>docker/puertobravo/datos/servidor.conf</code>. Można ją zmienić z File Station pakietem Edytor tekstu. Potem w Container Managerze, w Projekt, wybierz <code>puertobravo</code> i w Akcja – Zatrzymaj, a potem Uruchom.</li>
+<li>To, co mówi serwer, jest w Container Managerze, w Kontener, <code>puertobravo</code>, na karcie Dziennik.</li>
+</ol>
+<ul>
+<li>Jeśli masz włączoną zaporę serwera NAS, w Panelu sterowania, Zabezpieczenia, Zapora dodaj regułę, która przepuszcza port 47820 dla TCP.</li>
+<li>Daj serwerowi NAS stały adres w swojej sieci albo zarezerwuj mu go na routerze, żeby przekierowanie portu nie przestało na niego wskazywać.</li>
+<li>Żeby zaktualizować serwer: wgraj nowy folder <code>servidor</code> na stary, a w projekcie wybierz Akcja, Kompiluj. Folder <code>datos</code> nie jest ruszany.</li>
+</ul>
+<h3>Bez Dockera, z Pythonem z serwera NAS</h3>
+<ol>
+<li>Zainstaluj pakiet Python 3 z Centrum pakietów, jeśli go nie masz.</li>
+<li>Skopiuj zawartość <code>otros_sistemas</code> do folderu na serwerze NAS, na przykład <code>puertobravo</code> w folderze współdzielonym.</li>
+<li>W Panelu sterowania, Harmonogram zadań utwórz Zadanie wyzwalane typu Skrypt zdefiniowany przez użytkownika, ze zdarzeniem Uruchomienie i ze swoim użytkownikiem, nie z administratorem systemu.</li>
+<li>W skrypcie wpisz <code>sh</code>, spację i pełną ścieżkę do <code>arrancar.sh</code>. Na przykład <code>sh /volume1/docker/puertobravo/arrancar.sh</code>.</li>
+<li>Żeby uruchomić go od razu, bez ponownego uruchamiania serwera NAS, wybierz zadanie i naciśnij Uruchom.</li>
+<li>Żeby go zatrzymać, utwórz drugie takie samo zadanie, bez zdarzenia, z <code>parar.sh</code>, i uruchamiaj je w razie potrzeby.</li>
+</ol>
+
+<h2 id="direccion">13. Adres, który dajesz swoim ludziom, i jak wejść spoza domu</h2>
+<h3>Jak wygląda adres</h3>
+<ul>
+<li>To <code>puertobravo://</code>, adres komputera, dwukropek i port. Na przykład <code>puertobravo://192.168.1.50:47820</code>.</li>
+<li>W grze dodaje się go w Gra na serwerze, Dodaj serwer.</li>
+<li>Jeśli nie zmieniałeś portu, który domyślnie ma numer 47820, można podać adres bez dwukropka i portu.</li>
+</ul>
+<h3>Dla osób grających w twoim domu</h3>
+<ul>
+<li>Wystarczy adres komputera w twojej sieci, który zwykle zaczyna się od 192.168. Panel podaje go na karcie Stan i kopiuje przyciskiem Kopiuj adres.</li>
+<li>Na Windowsie można go też sprawdzić, otwierając wiersz poleceń i wpisując <code>ipconfig</code>: to wiersz Adres IPv4. Na Linuksie poleceniem <code>hostname -I</code>.</li>
+<li>Jeśli serwer jest na tym samym komputerze, na którym grasz, możesz wejść adresem <code>puertobravo://127.0.0.1</code>.</li>
+</ul>
+<h3>Dla osób grających z zewnątrz: otwarcie portu na routerze</h3>
+<p>Z internetu widać tylko twój router. Trzeba mu powiedzieć, żeby to, co przychodzi na port serwera, przekazywał komputerowi, na którym on jest. Nazywa się to otwarciem portu, przekierowaniem portu albo, po angielsku, port forwarding.</p>
+<ol>
+<li>Daj komputerowi z serwerem stały adres w swojej sieci. Na routerze jest to zwykle w części o sieci lokalnej albo DHCP, pod nazwą w rodzaju rezerwacja adresów albo statyczny DHCP.</li>
+<li>Wejdź do ustawień routera z przeglądarki. Adres to zwykle <code>192.168.1.1</code> albo <code>192.168.0.1</code>, a nazwa użytkownika i hasło są na naklejce na routerze.</li>
+<li>Znajdź część o portach. Zależnie od marki nazywa się Porty, Przekierowanie portów, NAT, Serwer wirtualny albo Port forwarding.</li>
+<li>Dodaj regułę: protokół TCP, port zewnętrzny 47820, port wewnętrzny 47820 i jako cel adres komputera z serwerem w twojej sieci.</li>
+<li>Zapisz. Niektóre routery wymagają ponownego uruchomienia.</li>
+<li>Sprawdź swój adres publiczny: router pokazuje go na stronie stanu, pod nazwą w rodzaju adres IP internetu albo WAN. Ten adres z <code>puertobravo://</code> na początku dajesz swoim ludziom.</li>
+</ol>
+<h3>Samoczynne otwarcie, przez UPnP</h3>
+<ul>
+<li>Wiele routerów pozwala, żeby program z twojej sieci poprosił je o otwarcie portu. Ten mechanizm nazywa się UPnP.</li>
+<li>W panelu, przy działającym serwerze, wejdź w menu Zarządzanie i wybierz Otwórz port na routerze przez UPnP. Jeśli router na to pozwala, port zostaje otwarty, a panel o tym mówi; po zatrzymaniu serwera zamyka się sam.</li>
+<li>Jeśli router nie odpowiada albo odmawia, ma wyłączone UPnP albo go nie obsługuje. Możesz je włączyć w jego ustawieniach albo otworzyć port ręcznie, jak opisano wyżej.</li>
+<li>Serwer w konsoli i ten na Linuksie nie otwierają portu same: tam trzeba to zrobić ręcznie.</li>
+</ul>
+<h3>Jeśli twój adres publiczny się zmienia: dynamiczny DNS</h3>
+<ul>
+<li>W wielu domach adres publiczny co jakiś czas się zmienia. Żeby nie musieć za każdym razem zawiadamiać swoich ludzi, używa się nazwy, która zawsze wskazuje twój bieżący adres. To jest dynamiczny DNS.</li>
+<li>Są darmowe usługi, które go dają. Wiele routerów i serwerów NAS ma część o nazwie DDNS albo dynamiczny DNS, która sama go aktualizuje.</li>
+<li>Z nazwą adres dla twoich ludzi wygląda na przykład tak: <code>puertobravo://minombre.ejemplo.net:47820</code>.</li>
+</ul>
+<h3>Jeśli nie możesz otwierać portów</h3>
+<ul>
+<li>Niektórzy dostawcy nie dają każdemu domowi własnego adresu publicznego: kilka domów dzieli jeden. Nazywa się to CG-NAT. Poznasz to po tym, że adres WAN pokazywany przez router nie zgadza się z tym, który widzą strony podające twój adres. Wtedy otwarcie portu nic nie da. Możesz poprosić dostawcę o wyjęcie cię spod CG-NAT albo użyć sieci prywatnej.</li>
+<li>Sieć prywatna, taka jak te tworzone przez Tailscale albo ZeroTier, łączy przez internet wybrane przez ciebie komputery, jakby były w tym samym domu, bez otwierania żadnego portu. Ty i każda osoba, która ma grać, instalujecie program i dołączacie do tej samej sieci. Każdy komputer dostaje adres w tej sieci.</li>
+<li>Adres dla twoich ludzi to wtedy <code>puertobravo://</code> i adres, który sieć prywatna nadaje komputerowi z serwerem. W Tailscale zaczyna się od 100.</li>
+<li>Wejść mogą tylko osoby w twojej sieci prywatnej: to przy okazji sposób na serwer tylko dla twojej grupy.</li>
+<li>Inne wyjście to wynajęcie małego serwera, który ma własny adres publiczny: rozdział 7.</li>
+</ul>
+
+<h2 id="cifrado">14. Szyfrowanie i certyfikat</h2>
+<ul>
+<li>Domyślnie, przy <code>cifrado = auto</code>, połączenie jest szyfrowane. Serwer tworzy własny certyfikat przy pierwszym uruchomieniu. Nie trzeba niczego instalować, także na Windowsie.</li>
+<li>Certyfikat i jego klucz zostają w folderze danych, w <code>certificado.pem</code> i <code>llave.pem</code>.</li>
+<li>Serwer przy uruchomieniu podaje odcisk swojego certyfikatu, a panel pokazuje go na karcie Stan. To ciąg liter i cyfr, który go identyfikuje.</li>
+<li>Gra każdego gracza zapamiętuje certyfikat serwera przy pierwszym wejściu. Jeśli innego dnia serwer przedstawi inny certyfikat, gra ostrzega i nie wchodzi bez zgody: możliwe, że ktoś podszywa się pod twój serwer.</li>
+<li>Dlatego jeśli przenosisz serwer na inny komputer, zabierz <code>certificado.pem</code> i <code>llave.pem</code> razem z danymi: wtedy nikt nie zobaczy ostrzeżenia. Kopie zapasowe zawierają je w środku.</li>
+<li>Jeśli naprawdę zmieniasz certyfikat, uprzedź swoich ludzi, że gra ich zapyta i że muszą przyjąć nowy.</li>
+<li>Jeśli masz własny certyfikat, wpisz ścieżki do jego plików w opcjach <code>certificado</code> i <code>llave</code>. Nie jest to konieczne: gra nie sprawdza nazwy certyfikatu, tylko to, czy zawsze jest ten sam.</li>
+<li>Przy <code>cifrado = si</code> serwer nie uruchomi się, jeśli nie może szyfrować. Przy <code>cifrado = no</code> nigdy nie szyfruje: ma to sens tylko do prób we własnym domu.</li>
+<li>Klucz certyfikatu jest tajny. Nie udostępniaj <code>llave.pem</code> ani swoich kopii zapasowych.</li>
+</ul>
+
+<h2 id="entrada">15. Kto może wejść</h2>
+<ul>
+<li>Każdy gracz ma tożsamość, którą tworzy jego gra i która nie opuszcza jego komputera. Serwer rozpoznaje go po niej: nie ma haseł do kont, które trzeba pamiętać albo które można ukraść.</li>
+<li>Opcja <code>entrada</code> decyduje, kto może utworzyć nową postać. Kto już ma postać, zawsze wchodzi z powrotem.</li>
+<li><code>abierta</code>: każdy, kto ma adres.</li>
+<li><code>clave</code>: trzeba znać hasło wejścia, które ustawiasz w opcji <code>clave</code>. Gra pyta o nie za pierwszym razem.</li>
+<li><code>invitacion</code>: potrzebny jest jednorazowy kod. Tworzy się je w panelu klawiszami Control+I albo poleceniem <code>invitar</code>. Każdy kod jest ważny dla jednej postaci.</li>
+<li>Opcja <code>max_jugadores</code> mówi, ile osób mieści się naraz. Przy 0 nie ma limitu. Administratorzy wchodzą, nawet gdy jest pełno.</li>
+<li>Żeby kogoś nie wpuszczać: w panelu przycisk Nałóż zakaz; tekstowo polecenie <code>vetar</code> i jego nazwa. Zdejmuje się go przyciskiem Zdejmij zakaz albo poleceniem <code>perdonar</code>. W konfiguracji jest też lista zablokowanych nazw, w opcji <code>vetados</code>.</li>
+<li>Żeby zrobić miejsce na pełnych serwerach, opcja <code>inactividad_minutos</code> wyrzuca kogoś, kto przez ten czas nic nie robi. Jego postać zostaje zapisana.</li>
+</ul>
+
+<h2 id="administrar">16. Zarządzanie serwerem</h2>
+<h3>Kto zarządza</h3>
+<ul>
+<li>Pierwsze konto, które wchodzi na nowy serwer, jest kontem administratora. Zwykle to ty: wejdź pierwszy.</li>
+<li>Kolejnych mianuje się przyciskiem Nadaj uprawnienia administratora w panelu, poleceniem <code>admin</code> z nazwą albo wpisując ich nazwy w opcji <code>admins</code>, oddzielone przecinkami.</li>
+<li>Odbiera się je przyciskiem Odbierz uprawnienia administratora na karcie Konta albo poleceniem <code>quitaradmin</code>.</li>
+</ul>
+<h3>Skąd wydaje się polecenia</h3>
+<ul>
+<li>Z panelu: jego przyciskami i menu albo wpisując je w polu Polecenie dla serwera, na karcie Dziennik.</li>
+<li>Z konsoli: wpisując je w oknie serwera.</li>
+<li>Z gry, jeśli jesteś administratorem: na czacie ogólnym, który otwiera się klawiszem F10, z ukośnikiem na początku. Na przykład <code>/jugadores</code> albo <code>/aviso Esta noche hay guerra de bandas</code>. Odpowiedź gra mówi tylko tobie. Tak zarządza się serwerem, który nie ma konsoli: usługą, kontenerem albo serwerem NAS.</li>
+</ul>
+<h3>Polecenia</h3>
+<p>Od wersji 1.7.3 każde polecenie działa po hiszpańsku i po angielsku, jednocześnie i bez względu na język serwera: <code>ayuda</code> albo <code>help</code>, <code>jugadores</code> albo <code>players</code>, <code>expulsar</code> albo <code>kick</code>, <code>vetar</code> albo <code>ban</code>, <code>apagar</code> albo <code>shutdown</code>, i tak wszystkie. Pomoc podaje je w języku konsoli: po angielsku, z hiszpańskim w nawiasie. A poleceniem <code>renombrar nombre: nombre nuevo</code> zmieniasz nazwę gracza dla konta, bez żadnych strat; od 1.7.3 nikt nie wchodzi po raz pierwszy bez nazwy gracza, więc konta w rodzaju „Jugador 3” nie są już potrzebne.</p>
+<!-- ORDENES:INICIO -->
+<ul>
+<li><code>help (ayuda)</code>: wypisuje wszystkie polecenia.</li>
+<li><code>status (estado)</code>: stan serwera: port, szyfrowanie, świat, czas działania i liczba osób.</li>
+<li><code>players (jugadores)</code>: kto jest w grze i gdzie.</li>
+<li><code>accounts (cuentas)</code>: wszystkie konta serwera, także z zakazem wstępu i administratorów.</li>
+<li><code>announce (aviso) tekst</code>: mówi coś do wszystkich w grze.</li>
+<li><code>tell (decir) imię: tekst</code>: mówi coś tylko do jednego gracza.</li>
+<li><code>kick (expulsar) imię</code>: usuwa gracza z serwera; może wejść ponownie. Po dwukropku można podać powód.</li>
+<li><code>ban (vetar) imię</code>: usuwa gracza z serwera i nie pozwala mu wrócić.</li>
+<li><code>unban (perdonar) imię</code>: znosi zakaz wstępu.</li>
+<li><code>op (admin) imię</code>: nadaje graczowi uprawnienia administratora.</li>
+<li><code>deop (quitaradmin) imię</code>: odbiera uprawnienia administratora.</li>
+<li><code>rename (renombrar) nazwa: nowa nazwa</code>: zmienia nazwę gracza dla konta, bez żadnych strat; jeśli gracz jest w grze, wchodzi ponownie z nową.</li>
+<li><code>deleteaccount (borrarcuenta) imię</code>: usuwa konto razem z postacią, majątkiem i miejscem w bandzie; nie da się tego cofnąć.</li>
+<li><code>invite (invitar)</code>: tworzy jednorazowy kod zaproszenia; z liczbą na końcu tworzy kilka.</li>
+<li><code>invites (invitaciones)</code>: zaproszenia: wolne i użyte.</li>
+<li><code>revoke (anular) kod</code>: anuluje zaproszenie, którego nikt jeszcze nie użył.</li>
+<li><code>motd (mensaje) tekst</code>: zmienia wiadomość dnia; bez tekstu ją usuwa.</li>
+<li><code>time (hora) liczba</code>: ustawia godzinę w grze, od 0 do 23.</li>
+<li><code>gangs (bandas)</code>: bandy, z ludźmi i kasą.</li>
+<li><code>save (guardar)</code>: zapisuje wszystko teraz.</li>
+<li><code>backup (copia)</code>: robi kopię zapasową.</li>
+<li><code>backups (copias)</code>: dostępne kopie zapasowe.</li>
+<li><code>reload (recargar)</code>: ponownie wczytuje servidor.conf i stosuje to, co można zmienić bez ponownego uruchomienia.</li>
+<li><code>update (actualizar)</code>: ostrzega wszystkich, że serwer uruchamia się ponownie, żeby się zaktualizować, czeka na koniec odliczania, wszystko zapisuje i go zatrzymuje; gry czekają i same wchodzą ponownie, gdy go znów uruchomisz. Na końcu można podać sekundy ostrzeżenia.</li>
+<li><code>restart (reiniciar)</code>: to samo, ale z informacją, że chodzi o prace techniczne. Na końcu można podać sekundy ostrzeżenia.</li>
+<li><code>shutdown (apagar)</code>: ostrzega wszystkich, wszystko zapisuje i zatrzymuje serwer.</li>
+</ul>
+<!-- ORDENES:FIN -->
+<p>Nazwy graczy wpisuje się dokładnie tak, jak brzmią, ze spacjami. Na przykład <code>expulsar Ana la Rápida</code> albo <code>decir Ana la Rápida: baja la música</code>.</p>
+
+<h2 id="versiones">17. Gra na różnych wersjach gry</h2>
+<p>Na twoim serwerze mogą grać razem osoby z różnymi wersjami gry. Nikt nie jest wyrzucany za to, że ma starszą albo nowszą wersję: odrzuca się kogoś z powodu wersji tylko wtedy, gdy tego chcesz, ustawiając wersję minimalną. A poza tym wszyscy są możliwie równo traktowani.</p>
+<h3>Świat przynosi pierwsza osoba, która wejdzie</h3>
+<p>Serwer zarządza, ale zawartość daje gra. Świat, z miejscami, bronią, pojazdami i misjami, nie jest przywiązany do serwera: daje mu go gra osoby, która wchodzi.</p>
+<ul>
+<li>Serwer rozpowszechniany z grą ma już świat swojej wersji. Jeśli postawisz serwer bez niego albo go usuniesz, uruchamia się pusty i bierze świat od pierwszej osoby, która wejdzie.</li>
+<li>Jeśli pierwsza osoba ma starszą wersję, a potem przychodzi ktoś z nowszą, serwer przechodzi na świat nowszej wersji, bez ponownego uruchamiania i bez wyrzucania kogokolwiek. Ogłasza to osobom w środku. Robi to tylko wtedy, gdy ten świat jest podpisany przez wydawcę gry, więc nikt nie może mu podsunąć zmienionego świata.</li>
+<li>Jeśli jest odwrotnie i przychodzi ktoś ze starszą wersją niż serwer, serwer zachowuje swój świat, czyli nowszy, a ta osoba i tak wchodzi.</li>
+<li>Serwer zna fabrycznie świat już wydanych wersji i zapamiętuje te, które sprawdza: od kogoś, kto przychodzi z jednym z nich, niczego nie żąda.</li>
+<li>Jeśli serwer jest pusty, a pierwsza osoba ma mody albo gra na niepodpisanej kopii, jej świat jest przyjmowany tymczasowo, w dzienniku pojawia się ostrzeżenie, a potem zostaje zastąpiony pierwszym podpisanym, który przyjdzie.</li>
+</ul>
+<h3>Co się dzieje, gdy nie wszyscy mają to samo</h3>
+<ul>
+<li><strong>O obrażeniach, zasięgu, szybkostrzelności i pieniądzach decyduje serwer</strong>, według liczb swojego świata, tych samych dla strzelającego na jednej wersji i trafionego na innej. Nowa wersja nie daje przewagi.</li>
+<li><strong>Broń, której czyjaś gra nie ma</strong>, dociera do niego jako coś najbardziej podobnego z tego, co zna jego gra: słyszy strzał swojej broni tej samej klasy i dostaje obrażenia, które ustala serwer. Na przykład komuś, kto gra na wersji 1.7.0, strzelba pompowa z wersji 1.7.1 brzmi jak jedna z jego strzelb.</li>
+<li><strong>Pojazd, którego nie ma</strong>, słyszy przejeżdżający i widzi zaparkowany jako najbardziej podobny ze swoich, z nazwą nadaną przez właściciela. Na serwerze nadal jest tym, czym jest.</li>
+<li><strong>Dać broni</strong> komuś, kto nie ma jej w swojej wersji, się nie da: serwer zwraca ją dającemu i mu o tym mówi.</li>
+<li><strong>Kanały fabularne</strong> docierają do starszej gry przez zwykły czat, z kilkoma słowami na początku, które mówią, czym są.</li>
+<li><strong>Ostrzeżenia o ponownym uruchomieniu</strong> docierają jako zwykłe ostrzeżenie, a zamknięcie – z tekstem, który jego gra wypowiada bez zmian. Jego postać i tak zostaje zapisana.</li>
+<li><strong>Jeśli świat serwera pochodzi ze starszej wersji</strong> (bo nie chcesz nowych światów albo nikt jeszcze nie wszedł z nową), nowa broń tego, kto ją ma, liczy się wobec innych graczy jak gołe ręce, jego nowe pojazdy wyglądają jak auto osobowe, a w nowej miejscowości nikt go nie widzi. Ta osoba dostaje o tym informację.</li>
+<li><strong>Przy wejściu</strong> komuś, kto nie ma tych samych danych co serwer, podaje się z nazwy, jakie bronie i pojazdy się nie zgadzają i co zauważy. Jest to też w telefonie w grze, w Online, Dane i zasady tego serwera.</li>
+</ul>
+<h3>Postać między wersjami</h3>
+<p>Postać jest zapisywana na serwerze w całości, także z tym, czego serwer nie zna. Jeśli ktoś gra na nowej wersji, a pewnego dnia wejdzie ze starszą, niczego nie traci:</p>
+<ul>
+<li>Jego stara gra dostaje postać bez broni i pojazdów, których nie zna. Nadal są zapisane na serwerze, a gracz dostaje o tym informację.</li>
+<li>Gdy ta gra zapisuje, serwer przywraca wszystko, czego stara wersja nie umie zapisać. To, co gracz zarobił, wydał albo zdobył, grając na starej wersji, się liczy.</li>
+<li>Po ponownym wejściu z nową wersją znów ma wszystko.</li>
+</ul>
+<h3>Co decydujesz ty</h3>
+<ul>
+<li><code>version_minima</code>: najstarsza wersja, z którą można wejść. Puste, czyli domyślnie, dowolna. To jedyny sposób, żeby odrzucić kogoś z powodu wersji.</li>
+<li><code>mundo_distinto</code>: co zrobić z kimś, kto przynosi dane, których nie da się sprawdzić, czyli prawie zawsze z kimś z modami zmieniającymi świat. Przy <code>admitir</code>, domyślnie, wchodzi i gra w tym, co wspólne: dowiaduje się, co się nie zgadza, a to, co zmienia albo dodaje jego mod, nie liczy się wobec innych. Przy <code>rechazar</code> nie wchodzi.</li>
+<li><code>actualizar_mundo</code>: kto może przynieść nowy świat. Przy <code>firmado</code>, domyślnie, każdy, jeśli pochodzi z prawdziwej wersji. Przy <code>admin</code> dodatkowo administrator bez podpisu: tego trzeba, żeby cały serwer grał z modem. Przy <code>no</code> serwer zostaje przy świecie, który ma.</li>
+<li><code>versiones</code>: przy <code>compatibles</code>, domyślnie, wszystko z tego rozdziału. Przy <code>iguales</code> wchodzi tylko ktoś, kto ma dokładnie te same dane co serwer.</li>
+<li><code>comprobar_datos = no</code> wpuszcza każdego bez sprawdzania czegokolwiek, a serwer nie aktualizuje się do nowych światów. Nie jest to potrzebne do gry na różnych wersjach.</li>
+</ul>
+<h3>Co warto wiedzieć</h3>
+<ul>
+<li>W panelu lista graczy mówi, z jaką wersją wszedł każdy z nich.</li>
+<li>Serwera nie trzeba aktualizować przy każdej nowej wersji gry. Serwer z wersji 1.7.0 przyjmuje gry z wersji 1.7.1, ale nie umie dać każdej grze tego, co najbardziej podobne, ani przywrócić postaci: kto wejdzie na niego ze starszą wersją niż jego, nie usłyszy nowej broni innych. Aktualizuj go, kiedy możesz.</li>
+<li>Żeby cały serwer grał z modem, ustaw <code>actualizar_mundo = admin</code> i niech pierwszy wejdzie administrator z włączonym modem. Kto wejdzie bez moda, i tak zagra, z tym, co wspólne.</li>
+<li>To, co istnieje tylko w nowej wersji i nie przechodzi przez serwer (nowa misja, nowy sklep, nowy zawód), ma ten, kto ma tę wersję, jak każdą inną nowość w grze. To, co daje pieniądze, przechodzi przez limity serwera, niezależnie od wersji.</li>
+<li>Jeśli nowa wersja przesuwa ulice w istniejącej już miejscowości, kto zostanie przy starszej, będzie słyszał ruch z serwera tam, gdzie nie ma już ulicy, dopóki nie zaktualizuje.</li>
+</ul>
+
+<h3>Nowości na ulicy w wersji 1.7.1, na serwerze</h3>
+<p>Od wersji 1.7.1 gra ma, dla grających w pojedynkę, patrole robiące obchód bez szukania nikogo, opcjonalny helikopter policyjny i możliwość poddania się z rękami w górze. Przy wspólnej policji, czyli opcji <code>policia</code> ustawionej na <code>si</code>, nic z tego nie pojawia się w grze poszczególnych graczy: patrole są patrolami serwera, a helikoptera ani poddania się nie ma. Przy tej opcji ustawionej na <code>no</code> każdy gracz ma je według swoich własnych opcji i widzi je tylko on. Karetki przyjeżdżające po strzelaninie i tryb wojny o dzielnice na ulicy również nie działają na serwerze. Samoobrona działa: komuś, kto broni się przed członkiem bandy, który zaatakował go pierwszy, gra nie zapisuje przestępstwa.</p>
+<h2 id="dinero">18. Pieniądze graczy: limit na godzinę i zlecenia</h2>
+<p>Przy opcji <code>economia</code> ustawionej na <code>si</code>, czyli domyślnie, serwer prowadzi rachunek pieniędzy każdego gracza, żeby nikt ich nie wymyślił zmodyfikowaną grą. Wydawać można zawsze. Zarabianie zależy od tego, skąd pochodzą pieniądze.</p>
+<h3>Co serwer uznaje bez limitu</h3>
+<ul>
+<li>To, co daje sam serwer: łupy między graczami, sprzedaż domów i interesów, kasę bandy, zapłatę za pomoc w misji grupowej.</li>
+<li>To, co daje inny gracz.</li>
+<li>Nagrodę za każdą misję z historii, jeden raz.</li>
+</ul>
+<h3>Zlecenia powtarzalne</h3>
+<p>Kontrakty z tablicy, walki na siłowni, napady na banki i lokale oraz zlecenia z samochodami można wykonywać wielokrotnie. Serwer uznaje je bez zużywania zarobku na godzinę, z dwoma limitami:</p>
+<ul>
+<li><code>encargos_hora</code>: ile uznaje się na godzinę, z każdego rodzaju. Domyślnie 6.</li>
+<li><code>encargo_max</code>: najwyższa uznawana zapłata za jedno zlecenie. Domyślnie 15 000 euro. Poza tym serwer wie z danych gry, ile najwyżej może płacić każdy rodzaj zlecenia, i nie uznaje więcej.</li>
+</ul>
+<p>Gracz, który przekroczy tę liczbę w ciągu godziny, dostaje ostrzeżenie, a to zlecenie liczy mu się jak zwykły zarobek. Kto gra na wersji starszej niż 1.7.1, nie zgłasza serwerowi swoich zleceń: tej osobie wszystko liczy się do zarobku na godzinę, jak wcześniej, dopóki nie zaktualizuje.</p>
+<h3>Cała reszta: zarobek na godzinę</h3>
+<p>Wszystko inne, co zarabia się, grając na własny rachunek (prace, sprzedaż, hazard, łup z ulicy), ma limit na godzinę zegarową, opcję <code>ganancia_hora</code>, domyślnie 30 000 euro. To, co przekracza limit, jest odbierane, a gracz dostaje informację z liczbami: ile zarobił, ile mu uznano, jaki jest limit i w jakim tempie odzyskuje zapas.</p>
+<ul>
+<li>Niewykorzystany zapas się kumuluje, do tylu godzin, ile mówi <code>ganancia_acumula</code>, domyślnie 3. Dzięki temu ktoś, kto przez jakiś czas nic nie zarabiał, może mieć całą dobrą passę bez utraty pieniędzy. Kumuluje się też wtedy, gdy gracza nie ma.</li>
+<li>Kto wchodzi pierwszy raz, zaczyna z zapasem na kwadrans. Wyjście i ponowne wejście go nie uzupełnia.</li>
+<li>Gracz może sprawdzić, jak mu idzie, w telefonie: Online, Dane i zasady tego serwera.</li>
+</ul>
+<h3>Stałe umowy i ich pensje</h3>
+<p>Od wersji 1.7.1 gra ma stałe umowy: podpisuje się je w urzędzie pracy, wymagają określonej liczby zmian co siedem dni gry i płacą pensję na koniec każdego okresu. Na serwerze pensję płaci serwer, żeby nikt jej nie wymyślił:</p>
+<ul>
+<li>Serwer liczy zmiany, prowadzi kalendarz i ustala kwotę, która wynika z danych gry. To, co gra danej osoby mówi o tym, ile zarabia, się nie liczy.</li>
+<li>Pensja nie zużywa zarobku na godzinę. To, co zarabia się za każdą zmianę, już tak, jak każda praca.</li>
+<li><code>nominas</code>: przy <code>no</code> na twoim serwerze nie ma stałych umów. Domyślnie są.</li>
+<li><code>nomina_max</code>: najwięcej, ile płacisz za jedną pensję. Domyślnie 1500 euro, co nie obcina żadnej z gry; jest po to, żeby mod ich nie podbił.</li>
+<li><code>nomina_turnos_dia</code>: ile zmian liczysz każdemu graczowi w jednym dniu gry. Domyślnie 3.</li>
+<li>Żądanie wypłaty przed czasem, powtarzanie go albo wyjście i ponowne wejście nic nie dają: umowa i data wypłaty są zapisane na serwerze.</li>
+<li>Świat serwera musi pochodzić z wersji 1.7.1 lub nowszej. Kto gra na 1.7.0, nie ma stałych umów ani tutaj, ani grając w pojedynkę.</li>
+</ul>
+<p>Z reszty uczciwego życia w grze na serwerze istnieją dyplomy z akademii, które kosztują tylko pieniądze; kartoteka, która liczy się przy pracach wymagających zaufania; oraz, jeśli zostawisz <code>trato_prestigio</code> na <code>si</code>, mała zniżka w sklepach dla kogoś z dobrą opinią i dopłata dla kogoś z bardzo złą, jednakowa dla wszystkich. Nie ma kredytów, kredytów hipotecznych, podatków ani prowadzenia interesów: tworzą albo przesuwają pieniądze, których serwer nie może sprawdzić. Gra mówi o tym graczowi.</p>
+<h3>Co ustawić na swoim serwerze</h3>
+<ul>
+<li>Wśród zaufanych znajomych: śmiało podnieś <code>ganancia_hora</code>, do 100 000 albo więcej, albo wyłącz rachunek pieniędzy przez <code>economia = no</code>. Limit jest dla serwerów otwartych dla obcych, nie po to, żeby uprzykrzać życie twoim ludziom.</li>
+<li>Na otwartym serwerze: zostaw domyślny limit, a jeśli twoi ludzie żyją z kontraktów albo napadów i narzekają, podnieś najpierw <code>encargos_hora</code>, a nie <code>ganancia_hora</code>.</li>
+<li>Jeśli ktoś mówi ci, że serwer zabiera mu pieniądze, zapytaj, co powiedziała mu gra: od wersji 1.7.1 podaje liczby. W dzienniku serwera za każdym razem pojawia się wiersz z tym, co zostało odebrane, i limitem.</li>
+<li>Wszystkie te opcje zmienia się przy działającym serwerze.</li>
+</ul>
+<h3>Jeśli połączenie zerwie się zaraz po zakupie</h3>
+<p>Postać jest zapisywana na serwerze co trzy kwadranse minuty, a od wersji 1.7.1 także kilka sekund po zakupie: dwie, trzy sekundy po pierwszym, a jeśli gracz dalej wydaje, najwyżej co dwanaście. Jeśli mimo to komuś zerwie się połączenie, zanim jego gra zapisze, serwer zwraca na saldo to, co wydał od ostatniego zapisu: kupionych rzeczy nie ma w postaci, ale pieniądze też nie przepadły. W dzienniku pojawia się wiersz. Nie da się w ten sposób wytwarzać pieniędzy: to, co dano innemu graczowi, co pobrał serwer, i kupione domy nie wracają.</p>
+
+<h2 id="rol">19. Gra fabularna przez tekst, głos i radio w pojazdach</h2>
+<h3>Kanały fabularne</h3>
+<p>Przy opcji <code>rol</code> ustawionej na <code>si</code>, czyli domyślnie, gracze mają oprócz zwykłego czatu:</p>
+<ul>
+<li>Kanał do mówienia w roli. Słyszy go tylko ten, kto jest blisko: bliżej niż tyle metrów, ile mówi <code>rol_metros</code>, domyślnie 30.</li>
+<li>Polecenie do opisywania, co robi postać. Kto napisze „otwiera drzwi”, sprawia, że osoby w pobliżu słyszą jego imię i „otwiera drzwi”. Ma ten sam zasięg.</li>
+<li>Kanał do mówienia poza rolą, jako gracz. Słyszy go cały serwer.</li>
+<li>Zdanie z karty, do dwustu znaków, które mówi, kim jest postać. Inni czytają je, kiedy chcą.</li>
+</ul>
+<p>Każdy kanał ma w grze własny dźwięk, a wszystko, co powiedziano, można przejrzeć w telefonie, w Online, Odgrywanie ról. W grze używa się tego tak:</p>
+<ul>
+<li>Shift F10 mówi w roli, a Control F10 opisuje działanie. Samo F10 to zwykły czat ogólny. Kto gra padem, ma je w menu działań i może pisać kołem liter albo wybrać jedno z gotowych zdań.</li>
+<li>W każdej wiadomości można na początku wpisać polecenie: ukośnik yo i to, co robi postać; ukośnik ep i to, co mówi w roli; ukośnik fp i to, co mówi się poza rolą; oraz ukośnik ficha i zdanie z karty. Na przykład <code>/yo abre la puerta</code>.</li>
+<li>Kartę innego gracza czyta się w telefonie, w Online, Kto jest, wybierając go; albo klawiszami Shift J, gdy jest blisko.</li>
+</ul>
+<ul>
+<li>Kto gra na wersji starszej niż 1.7.1, nie ma tych kanałów w swojej grze, ale nie zostaje wykluczony: to, co powiedziano w roli, i działania docierają do niego przez czat osób w pobliżu, z kilkoma słowami na początku, które mówią, czym są, a polecenia z ukośnikiem może wpisywać na swoim czacie ogólnym.</li>
+<li>Przy <code>rol = no</code> nie ma kanałów fabularnych ani kart, zostaje zwykły czat. Zmienia się to przy działającym serwerze: kto już jest w środku, dowie się o tym, próbując ich użyć.</li>
+<li>Polecenia administracyjne nadal wpisuje się na czacie z ukośnikiem na początku. Cztery polecenia fabularne są dla wszystkich; pozostałe tylko dla administratorów.</li>
+<li>Serwer nie przechowuje tego, co mówi się na żadnym kanale. Zdanie z karty jest zapisywane, razem z kontem każdego gracza.</li>
+</ul>
+<h3>Głos</h3>
+<p>Gra nie ma czatu głosowego przez mikrofon. Jeśli na twoim serwerze chcecie rozmawiać na głos w czasie gry, co jest normalne na serwerach fabularnych, użyjcie osobnego programu do rozmów głosowych: nada się każdy z tych, które służą do rozmów grupowych przez internet, i nie trzeba niczego ustawiać ani na serwerze, ani w grze. Rada dla użytkowników czytników ekranu: puśćcie głosy innych przez inny głośnik albo słuchawkę niż czytnik albo je ściszcie, żeby się nie zagłuszały.</p>
+<h3>Radio w pojazdach innych graczy</h3>
+<p>Przy opcji <code>radio_coches</code> ustawionej na <code>si</code>, czyli domyślnie, kto jest blisko pojazdu innego gracza, słyszy, cicho i przytłumioną, stację, którą ten ma włączoną, i przestaje ją słyszeć po oddaleniu się.</p>
+<ul>
+<li>Dotyczy to tylko stacji dołączonych do gry. O „Mojej muzyce” i stacjach, które każdy tworzy z własnych plików, nic nie jest przekazywane: ani muzyka, ani nazwa nie wychodzą z jego komputera.</li>
+<li>Przez serwer przechodzi tylko krótka nazwa stacji, kilka liter. Dźwięk nie przechodzi: każda gra odtwarza własną kopię tej stacji, więc może to nie być ta sama piosenka, którą słyszy kierowca.</li>
+<li>Każdy gracz może to wyłączyć w swoich Opcjach, w Dźwięk i muzyka. Przy <code>radio_coches = no</code> nikt tego nie słyszy.</li>
+<li>Kto gra na starszej wersji, ani tego nie słyszy, ani nie daje usłyszeć.</li>
+</ul>
+
+<h2 id="copias">20. Kopie zapasowe, przenoszenie i aktualizacja serwera</h2>
+<h3>Kopie zapasowe</h3>
+<ul>
+<li>Domyślnie serwer robi kopię co 24 godziny i przechowuje 7 ostatnich. Zmienia się to opcjami <code>copia_auto_horas</code> i <code>copias_guardar</code>.</li>
+<li>Są w folderze <code>copias</code>, w folderze danych. Każda kopia to plik zip.</li>
+<li>Żeby zrobić ją od razu: w panelu Control+B; tekstowo polecenie <code>copia</code>. Kopie, które robisz sam, nie usuwają się same.</li>
+<li>Kopia zawiera bazę danych z kontami i postaciami, świat, z którym pracował serwer, certyfikat z kluczem i konfigurację.</li>
+<li>Ponieważ zawiera klucz certyfikatu i konfigurację, kopii nie należy rozdawać: przechowuj ją tam, gdzie widzisz ją tylko ty. Warto mieć którąś poza komputerem z serwerem.</li>
+</ul>
+<h3>Przywracanie kopii</h3>
+<ul>
+<li>W panelu: Control+R, wybierz kopię i naciśnij OK. Jeśli serwer działa, najpierw go zatrzymuje. To, co jest w tej chwili, zostaje zapisane w innej kopii, na wszelki wypadek, z nazwą zaczynającą się od <code>antes_de_restaurar</code>.</li>
+<li>Możesz zaznaczyć, żeby przywrócić też konfigurację z kopii. Jeśli tego nie zaznaczysz, zostaje obecna.</li>
+<li>Ręcznie, w dowolnym systemie: zatrzymaj serwer, rozpakuj zip w folderze danych, pozwalając zastąpić pliki, i uruchom. Plik <code>servidor.conf</code> z kopii trafia obok folderu danych, nie do środka.</li>
+</ul>
+<h3>Przenoszenie serwera na inny komputer</h3>
+<ol>
+<li>Zatrzymaj serwer.</li>
+<li>Skopiuj na nowy komputer <code>servidor.conf</code> i cały folder danych, <code>datos_servidor</code>. Albo zrób kopię zapasową i zabierz plik zip.</li>
+<li>Na nowym komputerze postaw serwer tak, jak mówi odpowiedni rozdział, i umieść te pliki na miejscu: na Windowsie w folderze <code>servidor</code> gry; na Linuksie obok folderu <code>servidor</code> z kodem; w Dockerze w folderze <code>datos</code>.</li>
+<li>Uruchom. Postacie, bandy i certyfikat są te same: nikt nie zauważy zmiany, poza nowym adresem.</li>
+</ol>
+<h3>Aktualizacja serwera</h3>
+<p>Od wersji 1.7.1 aktualizacja nie wyrzuca już nikogo do menu. Serwer ostrzega graczy odliczaniem, czeka, aż każda gra zapisze postać, zapisuje wszystko i zamyka się, mówiąc dlaczego. Gry zostają na ekranie oczekiwania, z rozgrywką bez zmian, a gdy serwer wróci, czekają i same wchodzą z powrotem: każdy kontynuuje tam, gdzie był.</p>
+<h4>Na Windowsie</h4>
+<ul>
+<li>Wystarczy zaktualizować grę, przy otwartym serwerze albo panelu. Nie trzeba go wcześniej zatrzymywać.</li>
+<li>Gra mówi, że masz otwarty serwer, wyjaśnia, co się stanie, i prosi o zgodę. Jeśli się zgodzisz: ostrzega graczy, serwer sam się zatrzymuje, gra zamyka się i aktualizuje, a po zakończeniu serwer sam uruchamia się ponownie, tak jak był: serwer w konsoli w swoim oknie, zminimalizowany, albo panel, z działającym serwerem, jeśli działał.</li>
+<li>Jeśli masz otwarty tylko panel, z zatrzymanym serwerem, nawet jeśli nigdy go nie uruchomiłeś, nie ma kogo ostrzegać: panel sam się zamyka i otwiera ponownie po zakończeniu, zatrzymany, tak jak był.</li>
+<li>Serwer w konsoli i panel wracają zminimalizowane i bez przejmowania fokusu: fokus zostaje w grze. Gdy przejdziesz do panelu, fokus jest na stanie serwera, jak zawsze.</li>
+<li>Jeśli aktualizacja się nie uda, zostaje wersja, którą miałeś, a serwer i tak uruchamia się ponownie. To, co serwer zapisał przy zamknięciu, nie przepada: aktualizacja zapisuje i przywraca tylko programy, nigdy twojej bazy danych.</li>
+<li>Po otwarciu gra mówi, czy serwer uruchomił się ponownie. Wszystko jest zapisane w pliku <code>actualizacion.log</code> w folderze <code>data\logs</code> gry.</li>
+<li>Jeśli serwer uruchamia się sam po zalogowaniu, przez Arrancar con Windows, też uruchamia się ponownie sam.</li>
+<li>Jeśli masz go postawionego jako usługę albo zaplanowane zadanie, które działa bez logowania, gra może poprosić go o zamknięcie, ale nie może uruchomić go tak, jak uruchamia go Windows: ostrzega cię o tym przed rozpoczęciem, a potem musisz go uruchomić tak, jak masz to ustawione, jeśli nie wróci sam.</li>
+<li>Twoja konfiguracja i dane nie są ruszane, ani gdy aktualizacja się uda, ani gdy się nie uda, czy są w domyślnym folderze danych, czy w innym, który ustawiłeś. Jedyne, co nie działa, to trzymanie folderu danych w folderze samego programu, na przykład <code>lib</code>: jeśli gra to zauważy, powie o tym i nie zaktualizuje, dopóki go nie przeniesiesz.</li>
+</ul>
+<h4>Na Linuksie, Macu, serwerze NAS, Raspberry Pi albo w Dockerze</h4>
+<p>Tam serwer nie aktualizuje się razem z grą: jego kod zmienia się ręcznie. Żeby gracze mieli to samo oczekiwanie i ten sam powrót, zatrzymaj go poleceniem ponownego uruchomienia, zamiast go przerywać:</p>
+<ol>
+<li>Zastąp folder <code>servidor</code> z kodem tym z folderu <code>otros_sistemas</code> nowej gry. Można to zrobić przy działającym serwerze: nie czyta nowego kodu, dopóki nie uruchomi się ponownie. Nie ruszaj <code>servidor.conf</code> ani folderu danych.</li>
+<li>Uruchom go ponownie z ostrzeżeniem. Zależnie od tego, jak go postawiłeś:
+<ul>
+<li>Ze skryptami: <code>sh reiniciar.sh</code>. Ostrzega, zatrzymuje i uruchamia ponownie.</li>
+<li>Z systemd albo z Dockerem: administrator wpisuje <code>/actualizar</code> na czacie gry. Serwer ostrzega, zamyka się z kodem 75, a systemd albo Docker uruchamiają go ponownie same. W Dockerze, jeśli dodatkowo zmieniłeś obraz, wpisz <code>docker compose up -d --build</code>: przy zatrzymaniu kontenera serwer i tak powie grom, że wraca.</li>
+<li>Ręcznie, z konsolą przed sobą: wpisz <code>actualizar</code>, poczekaj, aż skończy, i uruchom go ponownie.</li>
+<li>Bez konsoli: w folderze serwera <code>python3 -m servidor --actualizar</code>. Albo zostaw w folderze danych plik tekstowy o nazwie <code>parar.txt</code> ze słowem <code>actualizar</code> w środku: serwer sprawdza go co sekundę, usuwa i wykonuje. Przy <code>reiniciar</code> mówi, że chodzi o konserwację, a przy <code>parar</code> po prostu się zatrzymuje. Po słowie można podać liczbę sekund ostrzeżenia, na przykład <code>actualizar 60</code>.</li>
+</ul></li>
+</ol>
+<ul>
+<li>Odliczanie trwa tyle, ile mówi opcja <code>parada_aviso</code>, domyślnie 20 sekund. Czas oczekiwania na ostatni zapis każdej gry – opcja <code>parada_espera</code>.</li>
+<li>Gdy serwer zatrzymuje się, żeby wrócić (polecenia <code>actualizar</code> i <code>reiniciar</code>), jego program kończy się z kodem 75. Jeśli zatrzymuje go osoba, która go prowadzi (<code>apagar</code>, Control+C), kończy się z kodem 0, a gry wracają do menu, jak zawsze.</li>
+<li>Jeśli zatrzymuje go system (<code>systemctl stop</code>, <code>docker compose down</code>, <code>sh parar.sh</code>, wyłączenie komputera), nie ma czasu na odliczanie, ale serwer i tak mówi grom, że to ponowne uruchomienie: czekają i same wchodzą z powrotem, jeśli wróci, zanim się zniecierpliwią, czyli domyślnie w ciągu dziesięciu minut.</li>
+<li>Kto gra na wersji 1.7.0, słyszy ostrzeżenie jako zwykłe ostrzeżenie, a po zamknięciu serwera wraca do menu z tekstem, że serwer uruchamia się ponownie i żeby wejść znowu za kilka minut. Jego postać i tak zostaje zapisana.</li>
+</ul>
+<h4>We wszystkich przypadkach</h4>
+<ul>
+<li>Nowe opcje działają z wartością domyślną, nawet jeśli twój <code>servidor.conf</code> ich nie ma. Jeśli zapiszesz konfigurację z panelu, plik zostanie przepisany ze wszystkimi. Opcje, których serwer nie zna, przepuszcza i mówi o tym przy uruchomieniu.</li>
+</ul>
+
+<h2 id="grandes">21. Serwery z dużą liczbą ludzi</h2>
+<ul>
+<li>Nie ma stałego limitu graczy. Przy <code>max_jugadores = 0</code> wchodzi każdy, kto przyjdzie.</li>
+<li>Najbardziej obciąża procesor, a przede wszystkim sieć, informowanie każdego gracza, gdzie są inni. Dlatego o tych w pobliżu mówi mu dziesięć razy na sekundę; o pozostałych z jego miejscowości – gdzie mniej więcej są – raz na sekundę; a o tych z innych miejscowości – co dwie sekundy. Jeśli wokół jest tłum, mówi mu to rzadziej.</li>
+<li>Odległość, w której innych śledzi się dokładnie, ustala opcja <code>radio_detalle</code>, domyślnie 150 metrów. Jeśli połączenie ledwo daje radę, zmniejsz ją do 100. Nie ustawiaj jej na 0 przy wielu ludziach: przy 0 mówi się wszystko, wszystkim i zawsze.</li>
+<li>Dla orientacji: to, co serwer wysyła każdemu graczowi tylko o położeniu innych, przy dziesięciu graczach to około 3 KB na sekundę; przy stu rozrzuconych po miejscowości około 25; przy stu w jednym miejscu około 40. Pomnożone przez liczbę graczy, sto osób to od 2,5 do 4 megabajtów na sekundę wysyłania. Wspólny ruch uliczny, przechodnie i policja dodają trochę więcej.</li>
+<li>Ruch uliczny i przechodnie serwera pojawiają się strefami, tam, gdzie są gracze. Limity na miejscowość to <code>trafico_total</code> i <code>peatones_total</code>. Jeśli komputer ledwo daje radę, zmniejsz je albo wyłącz wspólny ruch, przechodniów albo policję: każda gra doda własne.</li>
+<li>Przy wielu ludziach jako pierwsze zaczyna brakować wysyłania domowego internetu, a nie komputera. Na duży serwer wynajmij komputer z dobrym łączem.</li>
+<li>Na Linuksie każdy gracz zajmuje jedno otwarte połączenie. Usługa systemd już podnosi limit. Jeśli uruchamiasz ręcznie dla więcej niż mniej więcej tysiąca osób, najpierw podnieś limit poleceniem <code>ulimit -n 65536</code>.</li>
+<li>Włącz <code>inactividad_minutos</code>, żeby miejsca nie zajmował ktoś, kto odszedł bez wychodzenia.</li>
+<li>Zapis co minutę przy tysiącach kont mało obciąża, ale możesz go rozrzedzić opcją <code>guardado_minutos</code>.</li>
+</ul>
+
+<h2 id="problemas">22. Rozwiązywanie problemów</h2>
+<h3>Serwer się nie uruchamia</h3>
+<ul>
+<li>„Nie udało się otworzyć portu”: serwer już działa w innym oknie albo w panelu i w konsoli naraz, albo inny program używa tego portu. Zamknij ten drugi albo zmień opcję <code>puerto</code>.</li>
+<li>„Szyfrowanie jest obowiązkowe, ale nie ma certyfikatu”: ustawiłeś <code>cifrado = si</code>, a certyfikatu nie udało się utworzyć. Ustaw <code>cifrado = auto</code> albo sprawdź, czy do folderu danych można zapisywać.</li>
+<li>Mówi, że są problemy z konfiguracją: każde ostrzeżenie mówi, która to opcja i dlaczego jest niepoprawna. Serwer i tak się uruchamia, z wartością domyślną tej opcji. Przez <code>--comprobar</code> sprawdza się to bez uruchamiania.</li>
+</ul>
+<h3>Nikt nie może wejść</h3>
+<ul>
+<li>Spróbuj najpierw sam, z tego samego komputera, adresem <code>puertobravo://127.0.0.1</code>. Jeśli wchodzisz, serwer jest w porządku, a problem leży w sieci.</li>
+<li>Jeśli nie może wejść ktoś z twojego domu: sprawdź, czy używa adresu z twojej sieci, a nie publicznego, i czy zapora na komputerze z serwerem przepuszcza port. Na Windowsie za pierwszym razem pojawia się pytanie; jeśli się nie zgodziłeś, trzeba na to pozwolić w Zabezpieczeniach Windows, Zapora, Zezwalaj aplikacji.</li>
+<li>Jeśli nie może wejść ktoś z zewnątrz: sprawdź regułę na routerze, czy wskazuje bieżący adres komputera z serwerem i czy dotyczy TCP. Sprawdź też, czy dałeś mu swój obecny adres publiczny i czy nie jesteś za CG-NAT, rozdział 13.</li>
+<li>Z wnętrza twojego domu wiele routerów nie pozwala wejść przez twój własny adres publiczny. To nie jest błąd: z domu używaj adresu ze swojej sieci.</li>
+</ul>
+<h3>Co mówi gra przy próbie wejścia</h3>
+<ul>
+<li>„Serwer jest pełny”: zwiększ <code>max_jugadores</code> albo ustaw na 0.</li>
+<li>„Hasło wejścia jest niepoprawne” albo „ten kod zaproszenia jest nieważny”: wejście jest na hasło albo przez zaproszenie. Daj tej osobie hasło albo nowy kod.</li>
+<li>„Nie możesz wejść na ten serwer”: to konto ma zakaz. Zdejmuje się go przyciskiem Zdejmij zakaz.</li>
+<li>„Dane twojej gry nie są danymi tego serwera”: ta osoba ma mody zmieniające świat albo niepodpisaną grę, a ty masz <code>mundo_distinto</code> ustawione na <code>rechazar</code> albo <code>versiones</code> na <code>iguales</code>. Domyślnie ta osoba wchodzi. Rozdział 17.</li>
+<li>„Ten serwer dopiero co wystartował i nie ma jeszcze danych gry”: serwer jest pusty i nie mógł wziąć świata od wchodzącego, prawie zawsze dlatego, że masz <code>actualizar_mundo</code> ustawione na <code>no</code>. Rozdział 17.</li>
+<li>„Ten serwer wymaga takiej a takiej wersji gry albo nowszej”: masz ustawioną opcję <code>version_minima</code>.</li>
+<li>„Serwer nie przedstawia tego samego certyfikatu co poprzednio”: zmieniłeś certyfikat, na przykład przy ponownej instalacji bez zabrania danych. Rozdział 14.</li>
+<li>„Za dużo połączeń z twojego adresu”: masz ustawioną opcję <code>conexiones_por_ip</code>, a kilku graczy dzieli adres. Zwiększ ją albo ustaw na 0.</li>
+</ul>
+<h3>Inne sprawy</h3>
+<ul>
+<li>Po aktualizacji gry serwer nie uruchomił się ponownie: gra mówi to po otwarciu, z powodem, i jest to zapisane w <code>actualizacion.log</code>, w folderze <code>data\logs</code> gry. Zwykle był postawiony jako usługa albo zadanie Windowsa: uruchom go tak, jak masz to ustawione. Jeśli nie, otwórz go sam z folderu <code>servidor</code>.</li>
+<li>Gracze czekają i nie wchodzą: czekają najwyżej tyle, ile każdy ma ustawione w swoich opcjach, domyślnie dziesięć minut, i próbują co kilka sekund. Jeśli serwer wraca, wymagając nowszej wersji gry (<code>version_minima</code>), ich gra im to mówi i proponuje aktualizację.</li>
+<li>Komuś zabierane są pieniądze: serwer prowadzi rachunek i nie uznaje tego, co zarabia się szybciej, niż pozwala <code>ganancia_hora</code>. Od wersji 1.7.1 gra podaje mu liczby. Co się liczy, co nie i co warto ustawić, jest w <a href="#dinero">rozdziale 18</a>.</li>
+<li>Straciłem uprawnienia administratora: zatrzymaj serwer, wpisz swoją nazwę gracza w opcji <code>admins</code> i uruchom.</li>
+<li>Chcę zacząć od zera: zatrzymaj serwer i usuń albo odłóż folder danych. Przy uruchomieniu powstanie nowy, z nowym certyfikatem.</li>
+<li>Żeby poprosić o pomoc, zapisz dziennik: w panelu Control+G. Nie zawiera niczego osobistego poza nazwami graczy i adresami, jeśli włączyłeś <code>registro_ip</code>.</li>
+</ul>
+
+<h2 id="privacidad">23. Co przechowuje serwer</h2>
+<ul>
+<li>O każdym graczu: jego klucz publiczny, czyli liczbę, która go identyfikuje; wybraną przez niego nazwę; jego postać; i wersję gry, z którą wszedł ostatnio.</li>
+<li>Nie przechowuje adresów e-mail, haseł do kont ani adresów sieciowych.</li>
+<li>Adres sieciowy łączącej się osoby jest zapisywany w dzienniku i widoczny w panelu tylko wtedy, gdy ustawisz <code>registro_ip = si</code>. Domyślnie nie.</li>
+<li>Wiadomości z czatu nie są przechowywane, także te z kanałów fabularnych. Zdanie z karty, które pisze każdy gracz, jest przechowywane, razem z jego kontem, i usuwane razem z nim.</li>
+<li>Z radia w pojazdach przez serwer przechodzi tylko krótka nazwa stacji z gry, i nie jest przechowywana.</li>
+<li>Hasło wejścia, jeśli go używasz, jest zapisane w <code>servidor.conf</code>: nie udostępniaj tego pliku.</li>
+<li>Jeśli prowadzisz serwer otwarty dla obcych, odpowiadasz za ich dane: powiedz o tym swoim ludziom i usuń konto każdego, kto o to poprosi. Robi się to przyciskiem Usuń konto, na karcie Konta w panelu, albo poleceniem <code>borrarcuenta</code> z nazwą.</li>
+</ul>
+
+<h2 id="opciones">24. Wszystkie opcje konfiguracji</h2>
+<p>Każda opcja jest w osobnym wierszu <code>servidor.conf</code>, w postaci <code>nombre = valor</code>. Wiersze zaczynające się od krzyżyka to komentarze. W panelu są w Konfiguracji, Control+P, każda grupa na swojej karcie.</p>
+<p>Większość działa przy włączonym serwerze: z panelu po zatwierdzeniu; tekstowo po poleceniu <code>recargar</code>. Niektóre zasady, na przykład ruch uliczny, policję, przechodniów, walkę, treści dla dorosłych i ceny, gra każdego gracza dostaje przy wejściu: kto już jest w środku, odczuje je w pełni po ponownym wejściu. Te, które wymagają ponownego uruchomienia serwera, mówią o tym.</p>
+<!-- OPCIONES:INICIO -->
+<h3>Ogólne</h3>
+<p>Jak nazywa się serwer, co słyszy osoba, która wchodzi, i ile osób się zmieści.</p>
+<h4>Nazwa serwera: <code>nombre</code></h4>
+<p>Nazwa, pod którą gracze widzą twój serwer na swojej liście.</p>
+<ul>
+<li>Tekst do 60 liter.</li>
+<li>Domyślnie: <code>Servidor de Puerto Bravo</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Powitanie: <code>bienvenida</code></h4>
+<p>Co słyszy każdy gracz zaraz po wejściu.</p>
+<ul>
+<li>Tekst do 300 liter.</li>
+<li>Domyślnie: <code>Bienvenido. Juega limpio.</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Wiadomość dnia: <code>mensaje_dia</code></h4>
+<p>Ostrzeżenie, które każdy gracz słyszy po wejściu, po powitaniu: spotkanie, nowa zasada. Puste: żadne. Można je zmienić przy działającym serwerze.</p>
+<ul>
+<li>Tekst do 300 liter.</li>
+<li>Domyślnie: puste.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Najwięcej graczy jednocześnie: <code>max_jugadores</code></h4>
+<p>Ilu graczy może być w grze jednocześnie. Przy 0 bez limitu. Administratorzy wchodzą, nawet gdy jest pełno. Postacie prowadzone przez serwer się nie liczą.</p>
+<ul>
+<li>Liczba całkowita od 0 do 100000.</li>
+<li>Domyślnie: <code>32</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Treści dla dorosłych: <code>adultos</code></h4>
+<p>Przy nie osoba, która wchodzi, gra bez treści dla dorosłych, nawet jeśli ma je włączone w swojej grze.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>no</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Sekundy ostrzeżenia przed ponownym uruchomieniem z powodu aktualizacji albo prac: <code>parada_aviso</code></h4>
+<p>Gdy serwer ma się zatrzymać na aktualizację albo prace techniczne (polecenia actualizar i reiniciar albo aktualizacja gry w Windows), ostrzega graczy tym odliczaniem, zanim się zamknie. Przy 0 zamyka się od razu. Gry czekają i same wchodzą ponownie, gdy serwer wróci.</p>
+<ul>
+<li>Liczba całkowita od 0 do 120.</li>
+<li>Domyślnie: <code>20</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Końcowy zapis: sekundy oczekiwania przy zatrzymaniu: <code>parada_espera</code></h4>
+<p>Przy zatrzymaniu serwer prosi każdą grę o zapisanie postaci i czeka na nią najwyżej tyle sekund. Jeśli wszyscy zapiszą wcześniej, nie czeka dłużej.</p>
+<ul>
+<li>Liczba całkowita od 0 do 30.</li>
+<li>Domyślnie: <code>6</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Język serwera: <code>idioma</code></h4>
+<p>W jakim języku serwer pisze to, co czyta administrator: konsolę, dziennik, pomoc do poleceń i komentarze w servidor.conf. To, co słyszą gracze, się nie zmienia: serwer wysyła to po hiszpańsku, a gra każdego mówi to w swoim języku, więc na jednym serwerze mogą grać osoby mówiące różnymi językami. Jeśli serwer działa wewnątrz panelu, mówi w języku gry.</p>
+<ul>
+<li>Wartości:<ul>
+<li><code>auto</code>: systemowy: jeśli system jest po hiszpańsku, hiszpański; jeśli nie, angielski albo język systemu, jeśli jest na niego tłumaczenie.</li>
+<li><code>es</code>: Español.</li>
+<li><code>en</code>: English.</li>
+<li><code>pl</code>: Polski.</li>
+<li><code>pt</code>: Português do Brasil.</li>
+<li><code>ru</code>: Русский.</li>
+<li><code>vi</code>: Tiếng Việt.</li>
+</ul></li>
+<li>Domyślnie: <code>auto</code>.</li>
+<li>Wymaga ponownego uruchomienia serwera.</li>
+</ul>
+<h3>Sieć i szyfrowanie</h3>
+<p>Gdzie serwer nasłuchuje i jak chroni połączenie.</p>
+<h4>Port: <code>puerto</code></h4>
+<p>Port, na którym nasłuchuje serwer. To ten port trzeba otworzyć w routerze, żeby wchodzić spoza domu. Przy 0 system za każdym razem wybiera wolny, co nadaje się tylko do testów.</p>
+<ul>
+<li>Liczba całkowita od 0 do 65535.</li>
+<li>Domyślnie: <code>47820</code>.</li>
+<li>Wymaga ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Adres, na którym nasłuchuje: <code>interfaz</code></h4>
+<p>Przy 0.0.0.0 serwer nasłuchuje na wszystkich połączeniach komputera, co jest normalne. Przy 127.0.0.1 można wejść tylko z tego samego komputera. Można też podać adres tylko jednego z połączeń sieciowych.</p>
+<ul>
+<li>Tekst do 60 liter.</li>
+<li>Domyślnie: <code>0.0.0.0</code>.</li>
+<li>Wymaga ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Szyfrowanie połączenia: <code>cifrado</code></h4>
+<p>Przy auto serwer przy pierwszym uruchomieniu sam tworzy swój certyfikat i szyfruje; nie trzeba niczego instalować.</p>
+<ul>
+<li>Wartości:<ul>
+<li><code>auto</code>: szyfruje, jeśli może, a prawie zawsze może.</li>
+<li><code>si</code>: obowiązkowe: jeśli nie może szyfrować, nie uruchamia się.</li>
+<li><code>no</code>: nigdy nie szyfruje.</li>
+</ul></li>
+<li>Domyślnie: <code>auto</code>.</li>
+<li>Wymaga ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Plik certyfikatu: <code>certificado</code></h4>
+<p>Tylko jeśli chcesz użyć własnego certyfikatu: ścieżka do jego pliku PEM. Puste: serwer używa tego, który sam tworzy w folderze danych.</p>
+<ul>
+<li>Tekst do 260 liter.</li>
+<li>Domyślnie: puste.</li>
+<li>Wymaga ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Plik klucza certyfikatu: <code>llave</code></h4>
+<p>Ścieżka do pliku PEM z kluczem prywatnym twojego certyfikatu. Puste, jeśli klucz jest w samym certyfikacie albo używasz tego, który tworzy serwer.</p>
+<ul>
+<li>Tekst do 260 liter.</li>
+<li>Domyślnie: puste.</li>
+<li>Wymaga ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Połączenia naraz z jednego adresu: <code>conexiones_por_ip</code></h4>
+<p>Ile połączeń naraz z jednego adresu sieciowego jest dozwolonych. Przy 0 bez limitu. Uwaga: osoby grające z jednego domu mają ten sam adres, a za Dockerem albo pośrednikiem wszyscy mogą wyglądać na ten sam.</p>
+<ul>
+<li>Liczba całkowita od 0 do 100000.</li>
+<li>Domyślnie: <code>0</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Zapisuj adres osoby, która się łączy: <code>registro_ip</code></h4>
+<p>Przy tak dziennik zapisuje adres sieciowy każdego połączenia, a panel go pokazuje. Domyślnie nie: serwer nie przechowuje żadnych danych osobowych.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>no</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h3>Dostęp i administracja</h3>
+<p>Kto może wejść, kto rządzi i kogo się nie wpuszcza.</p>
+<h4>Kto może utworzyć postać: <code>entrada</code></h4>
+<p>Dotyczy tylko osób wchodzących pierwszy raz: kto ma już postać, zawsze wchodzi ponownie.</p>
+<ul>
+<li>Wartości:<ul>
+<li><code>abierta</code>: każdy, kto ma adres.</li>
+<li><code>clave</code>: trzeba znać hasło wejścia.</li>
+<li><code>invitacion</code>: potrzebny jest jednorazowy kod.</li>
+</ul></li>
+<li>Domyślnie: <code>abierta</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Hasło wejścia: <code>clave</code></h4>
+<p>Hasło, które trzeba znać, żeby utworzyć postać, gdy wejście jest na hasło.</p>
+<ul>
+<li>Tekst do 60 liter. Zapisuje się w pliku dosłownie: nikomu go nie pokazuj.</li>
+<li>Domyślnie: puste.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Administratorzy: <code>admins</code></h4>
+<p>Imiona graczy, którzy administrują serwerem, oddzielone przecinkami. Dochodzą do tych mianowanych poleceniem admin.</p>
+<ul>
+<li>Tekst do 600 liter.</li>
+<li>Domyślnie: puste.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Pierwsze konto jest kontem administratora: <code>primer_admin</code></h4>
+<p>Przy tak pierwsze konto utworzone na serwerze jest kontem administratora: zwykle to ty.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>si</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Imiona z zakazem wstępu: <code>vetados</code></h4>
+<p>Imiona graczy, którzy nie mogą wejść, oddzielone przecinkami. Dochodzą do kont z zakazem nadanym poleceniem vetar.</p>
+<ul>
+<li>Tekst do 600 liter.</li>
+<li>Domyślnie: puste.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Wyrzucenie za bezczynność, w minutach: <code>inactividad_minutos</code></h4>
+<p>Po ilu minutach bez ruchu i bez działania gracz jest usuwany z serwera, żeby zrobić miejsce. Przy 0 nigdy. Administratorów to nie dotyczy.</p>
+<ul>
+<li>Liczba całkowita od 0 do 1440.</li>
+<li>Domyślnie: <code>0</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Pozwól na dwie sesje z tą samą tożsamością: <code>varias_sesiones</code></h4>
+<p>Tylko do testów. Domyślnie nie: jeśli ktoś wejdzie swoją postacią z innego miejsca, poprzednia sesja się zamyka.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>no</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h3>Wersje gry</h3>
+<p>Które wersje gry mogą grać razem na tym serwerze.</p>
+<h4>Sprawdzaj dane gry osoby, która wchodzi: <code>comprobar_datos</code></h4>
+<p>Przy tak serwer sprawdza, czy świat, który przynosi gra wchodzącej osoby, jest jego własnym, prawdziwym światem innej wersji czy zmienionym modami, i działa według kolejnych opcji. Przy nie nic nie sprawdza: wchodzi każdy z tym, co przyniesie, a serwer nie aktualizuje się do świata nowych wersji.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>si</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Co zrobić z kimś, kto przynosi dane, których nie da się sprawdzić: <code>mundo_distinto</code></h4>
+<p>Kto gra z modami zmieniającymi świat albo w wersji, której danych serwer nie może sprawdzić. Z naprawdę inną wersją niż serwer wchodzi się zawsze, cokolwiek tu ustawisz.</p>
+<ul>
+<li>Wartości:<ul>
+<li><code>admitir</code>: wchodzi i gra w tym, co ma wspólnego z serwerem; dostaje informację, co się nie zgadza, a o tym, co dotyczy innych, decyduje serwer swoim światem.</li>
+<li><code>rechazar</code>: nie wchodzi: gra się tylko na danych prawdziwej wersji.</li>
+</ul></li>
+<li>Domyślnie: <code>admitir</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Wersje, które mogą grać razem: <code>versiones</code></h4>
+<p>Serwer działa na świecie z najnowszej wersji, jaką widział, a z każdą grą rozmawia o tym, co zna jej wersja: broń albo pojazd, których nie ma, docierają do niej jako najbardziej podobne z jej własnych.</p>
+<ul>
+<li>Wartości:<ul>
+<li><code>compatibles</code>: mogą grać razem osoby z różnymi wersjami gry, każda z tym, co zna jej wersja.</li>
+<li><code>iguales</code>: wchodzi tylko ten, kto ma dokładnie te same dane co serwer.</li>
+</ul></li>
+<li>Domyślnie: <code>compatibles</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Najniższa wersja gry: <code>version_minima</code></h4>
+<p>Najstarsza wersja gry, z którą można wejść, na przykład 1.7.0. Puste: dowolna.</p>
+<ul>
+<li>Tekst do 20 liter.</li>
+<li>Domyślnie: puste.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Kto może przynieść nowy świat: <code>actualizar_mundo</code></h4>
+<p>Świat gry (miejsca, bronie, misje) nie jest przypisany do serwera: przynosi go gra osoby, która wchodzi. Serwer bez świata bierze świat pierwszej osoby; jeśli nie jest podpisany, zamienia go na pierwszy podpisany, który się pojawi.</p>
+<ul>
+<li>Wartości:<ul>
+<li><code>firmado</code>: świat z nowszej wersji przyjmuje się od każdego, jeśli podpisał go wydawca gry.</li>
+<li><code>admin</code>: dodatkowo, bez podpisu, od administratora: dla serwerów z modami.</li>
+<li><code>no</code>: nigdy: serwer zostaje przy swoim świecie.</li>
+</ul></li>
+<li>Domyślnie: <code>firmado</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h3>Dane i kopie zapasowe</h3>
+<p>Gdzie wszystko się zapisuje, jak często i ile kopii jest przechowywanych.</p>
+<h4>Folder danych: <code>datos</code></h4>
+<p>Folder, w którym wszystko się zapisuje: postacie, bandy, terytoria, pojazdy, certyfikat i kopie zapasowe.</p>
+<ul>
+<li>Tekst do 260 liter.</li>
+<li>Domyślnie: <code>datos_servidor</code>.</li>
+<li>Wymaga ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Zapis co tyle minut: <code>guardado_minutos</code></h4>
+<p>Co ile minut wszystko zapisuje się na dysku. Przy zatrzymaniu serwera zapis następuje zawsze.</p>
+<ul>
+<li>Liczba całkowita od 1 do 120.</li>
+<li>Domyślnie: <code>1</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Automatyczna kopia zapasowa, co tyle godzin: <code>copia_auto_horas</code></h4>
+<p>Co ile godzin serwer robi kopię zapasową w folderze copias, w folderze danych. Przy 0 nie robi żadnej.</p>
+<ul>
+<li>Liczba całkowita od 0 do 720.</li>
+<li>Domyślnie: <code>24</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Przechowywane kopie zapasowe: <code>copias_guardar</code></h4>
+<p>Ile automatycznych kopii jest przechowywanych: przy tworzeniu nowej usuwane są najstarsze. Kopii zrobionych ręcznie pod inną nazwą to nie dotyczy.</p>
+<ul>
+<li>Liczba całkowita od 1 do 365.</li>
+<li>Domyślnie: <code>7</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Zapisuj dziennik do pliku: <code>registro_archivo</code></h4>
+<p>Przy tak to, co mówi serwer, zapisuje się też w registro.txt, w folderze danych.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>no</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h3>Walka między graczami</h3>
+<p>Zasady bójek, napadów i nagród.</p>
+<h4>Walka między graczami: <code>pvp</code></h4>
+<p>Przy nie gracze nie mogą się nawzajem ranić, napadać ani okradać.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>si</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Strefy bezpieczne: <code>zonas_seguras</code></h4>
+<p>Przy tak w szpitalach, na komisariatach, w domach i wewnątrz lokali nikt nie może nikogo zranić.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>si</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Pozwól na tryb pasywny: <code>modo_pasivo</code></h4>
+<p>Przy tak każdy gracz może włączyć tryb pasywny: nie rani innych graczy, a oni nie ranią jego.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>si</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Sekundy ochrony po wejściu: <code>proteccion</code></h4>
+<p>Ile sekund po wejściu i po ponownym pojawieniu się nie można ranić ani zostać zranionym.</p>
+<ul>
+<li>Liczba całkowita od 0 do 600.</li>
+<li>Domyślnie: <code>20</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Łup po powaleniu innego gracza, w procentach: <code>botin</code></h4>
+<p>Procent pieniędzy w kieszeni, który traci ten, kto padnie z ręki innego gracza.</p>
+<ul>
+<li>Liczba całkowita od 0 do 100.</li>
+<li>Domyślnie: <code>10</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Najwyższy łup: <code>botin_max</code></h4>
+<p>Najwięcej, ile można stracić, padając z ręki innego gracza, w euro.</p>
+<ul>
+<li>Liczba całkowita od 0 do 100000000.</li>
+<li>Domyślnie: <code>5000</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Napad na innego gracza, w procentach: <code>atraco</code></h4>
+<p>Procent pieniędzy w kieszeni, który zabiera ten, kto napadnie innego gracza.</p>
+<ul>
+<li>Liczba całkowita od 0 do 100.</li>
+<li>Domyślnie: <code>15</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Najwyższy łup z napadu: <code>atraco_max</code></h4>
+<p>Najwięcej, ile można zabrać przy napadzie na innego gracza, w euro.</p>
+<ul>
+<li>Liczba całkowita od 0 do 100000000.</li>
+<li>Domyślnie: <code>1000</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Sekundy na obrabowanie interesu: <code>robo_segundos</code></h4>
+<p>Ile sekund trzeba wytrzymać przy drzwiach, żeby opróżnić kasę interesu innego gracza. Właściciel dostaje ostrzeżenie.</p>
+<ul>
+<li>Liczba całkowita od 1 do 600.</li>
+<li>Domyślnie: <code>20</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Nagroda za powalenie niewinnej osoby: <code>recompensa</code></h4>
+<p>O ile euro rośnie nagroda za głowę tego, kto powala bezbronną osobę.</p>
+<ul>
+<li>Liczba całkowita od 0 do 100000000.</li>
+<li>Domyślnie: <code>500</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h3>Żywy świat</h3>
+<p>Ruch uliczny, ludzie na ulicy, policja i postacie prowadzone przez serwer.</p>
+<h4>Wspólny ruch uliczny: <code>trafico</code></h4>
+<p>Przy tak jeżdżące samochody prowadzi serwer i są takie same dla wszystkich. Przy nie każdy gracz widzi własny ruch uliczny.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>si</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Samochody na strefę z graczami: <code>trafico_max</code></h4>
+<p>Ile najwyżej samochodów prowadzi serwer w każdej strefie miejscowości, w której są gracze. Dla paczki znajomych jeżdżących razem to łączna liczba samochodów w miejscowości.</p>
+<ul>
+<li>Liczba całkowita od 0 do 200.</li>
+<li>Domyślnie: <code>8</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Najwięcej samochodów na miejscowość: <code>trafico_total</code></h4>
+<p>Limit samochodów w jednej miejscowości, gdy gracze są rozproszeni po wielu strefach. Przy 0 bez limitu.</p>
+<ul>
+<li>Liczba całkowita od 0 do 5000.</li>
+<li>Domyślnie: <code>60</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Radiowozy na miejscowość: <code>patrullas</code></h4>
+<p>Radiowozy serwera krążące po każdej miejscowości, w której są gracze. Przy 0 żadnego.</p>
+<ul>
+<li>Liczba całkowita od 0 do 50.</li>
+<li>Domyślnie: <code>1</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Wspólna policja: <code>policia</code></h4>
+<p>Przy tak poszukiwania, pościg i zatrzymanie prowadzi serwer, a widzi je i słyszy każdy w pobliżu. Przy nie prowadzi je gra każdego gracza.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>si</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Zwykli ludzie na ulicy: <code>peatones</code></h4>
+<p>Przy tak przechodniów prowadzi serwer i są tacy sami dla wszystkich.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>si</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Przechodnie na strefę z graczami: <code>peatones_max</code></h4>
+<p>Ilu najwyżej przechodniów prowadzi serwer w każdej strefie miejscowości, w której są gracze.</p>
+<ul>
+<li>Liczba całkowita od 0 do 200.</li>
+<li>Domyślnie: <code>10</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Najwięcej przechodniów na miejscowość: <code>peatones_total</code></h4>
+<p>Limit przechodniów w jednej miejscowości, gdy gracze są rozproszeni po wielu strefach. Przy 0 bez limitu.</p>
+<ul>
+<li>Liczba całkowita od 0 do 5000.</li>
+<li>Domyślnie: <code>80</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Postacie prowadzone przez serwer: <code>personajes</code></h4>
+<p>Spacerowicze, kieszonkowcy, rewolwerowcy, złodzieje samochodów i napastnicy prowadzeni przez serwer, tacy sami dla wszystkich. Pojawiają się tylko tam, gdzie są gracze. Przy 0 żadnych.</p>
+<ul>
+<li>Liczba całkowita od 0 do 200.</li>
+<li>Domyślnie: <code>6</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Na ile metrów śledzi się innych dokładnie: <code>radio_detalle</code></h4>
+<p>Każdy gracz dostaje dziesięć razy na sekundę informację, gdzie są ci, którzy znajdują się bliżej niż ta odległość, a raz na sekundę – gdzie kręcą się pozostali w jego miejscowości. To najbardziej oszczędza sieć i procesor na serwerach z wieloma graczami. Przy 0 wszyscy dostają wszystko dokładnie i zawsze, co ma sens tylko przy małej liczbie graczy.</p>
+<ul>
+<li>Liczba całkowita od 0 do 100000.</li>
+<li>Domyślnie: <code>150</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h3>Gospodarka i pojazdy</h3>
+<p>Pieniądze uznawane przez serwer i pojazdy zostawiane na ulicy.</p>
+<h4>Serwer liczy pieniądze: <code>economia</code></h4>
+<p>Przy tak serwer liczy pieniądze każdego gracza i nie uznaje tego, czego nie da się uzasadnić.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>si</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Najwyższy zarobek na godzinę: <code>ganancia_hora</code></h4>
+<p>Najwięcej, ile można zarobić w ciągu godziny zegarowej na pracy, sprzedaży, hazardzie i łupach z ulicy, w euro. To, co daje sam serwer, się nie liczy.</p>
+<ul>
+<li>Liczba całkowita od 0 do 1000000000.</li>
+<li>Domyślnie: <code>30000</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Ile godzin zarobku można zgromadzić: <code>ganancia_acumula</code></h4>
+<p>Zarobek na godzinę, którego gracz nie wykorzysta, nie przepada: jest zachowywany do tej liczby godzin, także gdy gracza nie ma, żeby dobra passa zmieściła się w całości. Przy 1 margines nigdy nie przekracza jednej godziny.</p>
+<ul>
+<li>Liczba całkowita od 1 do 48.</li>
+<li>Domyślnie: <code>3</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Powtarzalne zlecenia uznawane na godzinę, z każdego rodzaju: <code>encargos_hora</code></h4>
+<p>Kontrakty, walki na siłowni, napady i zlecenia na samochody wykonane naprawdę nie zużywają zarobku na godzinę: serwer je uznaje, do tej liczby na godzinę z każdego rodzaju. Przy 0 żadnego nie uznaje i wszystkie liczą się do zarobku na godzinę.</p>
+<ul>
+<li>Liczba całkowita od 0 do 1000.</li>
+<li>Domyślnie: <code>6</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Najwyższa uznawana zapłata za powtarzalne zlecenie: <code>encargo_max</code></h4>
+<p>Najwyższa uznawana zapłata za jedno powtarzalne zlecenie, w euro. Nadwyżka liczy się do zarobku na godzinę.</p>
+<ul>
+<li>Liczba całkowita od 0 do 1000000000.</li>
+<li>Domyślnie: <code>15000</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Najwyższa kwota na start: <code>saldo_inicial</code></h4>
+<p>Najwyższa kwota, z jaką może zacząć nowa postać, w euro.</p>
+<ul>
+<li>Liczba całkowita od 0 do 1000000000.</li>
+<li>Domyślnie: <code>5000</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Ile godzin pojazd stoi na ulicy: <code>vehiculos_horas</code></h4>
+<p>Ile prawdziwych godzin pojazd zostawiony na ulicy dalej tam stoi.</p>
+<ul>
+<li>Liczba całkowita od 1 do 8760.</li>
+<li>Domyślnie: <code>12</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Pojazdy zaparkowane na gracza: <code>vehiculos_por_jugador</code></h4>
+<p>Ile pojazdów każdy gracz może mieć zaparkowanych na ulicy. Gdy zostawi kolejny, najstarszy znika.</p>
+<ul>
+<li>Liczba całkowita od 1 do 100.</li>
+<li>Domyślnie: <code>3</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h3>Domy i biznesy</h3>
+<p>Sprzedaż, utrata z powodu niewchodzenia do gry i to, żeby nikt nie zagarnął wszystkich biznesów.</p>
+<h4>Sprzedaż rynkowi, w procentach: <code>venta_mercado</code></h4>
+<p>Procent ceny, który odzyskuje ten, kto sprzedaje rynkowi swój dom albo interes.</p>
+<ul>
+<li>Liczba całkowita od 0 do 100.</li>
+<li>Domyślnie: <code>70</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Dni bez wchodzenia do utraty nieruchomości: <code>propiedad_dias</code></h4>
+<p>Ile prawdziwych dni bez wchodzenia, po których nieruchomości gracza wracają na rynek. Jego część zostaje zachowana.</p>
+<ul>
+<li>Liczba całkowita od 1 do 3650.</li>
+<li>Domyślnie: <code>30</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Biznesy na gracza: <code>negocios_max</code></h4>
+<p>Ile biznesów może mieć jednocześnie jeden gracz, żeby nikt nie zagarnął wszystkich. Przy 0 nie ma limitu. Jeśli ktoś ma ich więcej, niż pozwala limit, o północy wracają na rynek te kupione najpóźniej, a graczowi zwraca się to, co za nie zapłacił.</p>
+<ul>
+<li>Liczba całkowita od 0 do 1000.</li>
+<li>Domyślnie: <code>3</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Przymusowy wykup cudzego biznesu, w procentach jego ceny: <code>compra_forzosa</code></h4>
+<p>Każdy gracz może przejąć biznes innego, płacąc mu ten procent ceny, nawet jeśli go nie sprzedaje. Pieniądze dostaje właściciel. Nie dotyczy biznesów twojej bandy ani bandy sprzymierzonej. Przy 0 nie można.</p>
+<ul>
+<li>Liczba całkowita od 0 do 10000.</li>
+<li>Domyślnie: <code>200</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Dni ochrony świeżo kupionego biznesu: <code>forzosa_dias</code></h4>
+<p>Przez tyle prawdziwych dni po zakupie nikt nie może siłą przejąć tego biznesu.</p>
+<ul>
+<li>Liczba całkowita od 0 do 365.</li>
+<li>Domyślnie: <code>3</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h3>Bandy i terytoria</h3>
+<p>Ile kosztuje założenie bandy, przejęcie dzielnicy i wypowiedzenie wojny.</p>
+<h4>Cena założenia bandy: <code>precio_banda</code></h4>
+<p>W euro.</p>
+<ul>
+<li>Liczba całkowita od 0 do 1000000000.</li>
+<li>Domyślnie: <code>2000</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Cena przejęcia dzielnicy: <code>precio_barrio</code></h4>
+<p>W euro, z kasy bandy.</p>
+<ul>
+<li>Liczba całkowita od 0 do 1000000000.</li>
+<li>Domyślnie: <code>3000</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Dzienny dochód z każdej dzielnicy: <code>renta_barrio</code></h4>
+<p>Ile każda dzielnica wpłaca do kasy bandy o północy, w euro.</p>
+<ul>
+<li>Liczba całkowita od 0 do 1000000000.</li>
+<li>Domyślnie: <code>300</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Cena wypowiedzenia wojny: <code>precio_guerra</code></h4>
+<p>W euro, z kasy bandy.</p>
+<ul>
+<li>Liczba całkowita od 0 do 1000000000.</li>
+<li>Domyślnie: <code>1000</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Minuty do początku wojny: <code>guerra_espera</code></h4>
+<p>Ile prawdziwych minut mija od wypowiedzenia wojny do jej początku.</p>
+<ul>
+<li>Liczba całkowita od 1 do 10080.</li>
+<li>Domyślnie: <code>20</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Ile minut trwa wojna: <code>guerra_dura</code></h4>
+<p>Prawdziwe minuty.</p>
+<ul>
+<li>Liczba całkowita od 1 do 1440.</li>
+<li>Domyślnie: <code>10</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h3>Odgrywanie ról i współżycie</h3>
+<p>Kanały czatu do odgrywania postaci i to, co słychać od innych graczy.</p>
+<h4>Kanały odgrywania ról: <code>rol</code></h4>
+<p>Przy tak gracze mają kanał do mówienia w roli, słyszany tylko przez osoby w pobliżu, drugi do mówienia poza rolą, słyszany przez cały serwer, polecenie do opisywania, co robi ich postać, i zdanie na karcie postaci, które inni mogą przeczytać. Przy nie zostaje tylko zwykły czat.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>si</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Ile metrów sięga to, co powiedziane w roli: <code>rol_metros</code></h4>
+<p>Z jakiej odległości słychać to, co gracz mówi w roli, i opisywane przez niego działania. To, co powiedziane poza rolą, zawsze dociera do całego serwera.</p>
+<ul>
+<li>Liczba całkowita od 5 do 2000.</li>
+<li>Domyślnie: <code>30</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Radio w samochodach innych graczy: <code>radio_coches</code></h4>
+<p>Przy tak osoba w pobliżu pojazdu innego gracza słyszy cicho stację radiową z gry, którą ten ma włączoną. Przesyła się tylko, która to stacja z gry: nigdy nie wędruje muzyka ani nic osobistego. Przy nie niczyjego radia nie słychać.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>si</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h3>Uczciwe życie</h3>
+<p>Stałe umowy z pensją i traktowanie w sklepach zależne od prestiżu każdego gracza.</p>
+<h4>Pensje ze stałych umów: <code>nominas</code></h4>
+<p>Przy tak osoba, która podpisze stałą umowę w urzędzie pracy, dostaje pensję na koniec każdego okresu. Płaci serwer: liczy zmiany i ustala kwotę, która wynika z danych gry i nie zużywa zarobku na godzinę. Przy nie na tym serwerze nie ma stałych umów. Świat serwera musi być z wersji 1.7.1 lub nowszej.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>si</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Najwyższa pensja: <code>nomina_max</code></h4>
+<p>Najwięcej, ile serwer płaci za pensję z jednego okresu, w euro, cokolwiek mówi świat gry albo mod.</p>
+<ul>
+<li>Liczba całkowita od 0 do 1000000000.</li>
+<li>Domyślnie: <code>1500</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Zmiany z umowy zaliczane każdego dnia: <code>nomina_turnos_dia</code></h4>
+<p>Ile zmian stałej umowy serwer zalicza graczowi jednego dnia gry.</p>
+<ul>
+<li>Liczba całkowita od 1 do 50.</li>
+<li>Domyślnie: <code>3</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<h4>Obniżki w sklepach za prestiż: <code>trato_prestigio</code></h4>
+<p>Przy tak temu, kto ma dobrą opinię wśród sąsiadów, sklepy trochę obniżają ceny, a temu, kto ma bardzo złą, je podnoszą, jak przy grze bez połączenia na łagodnym poziomie. Odczuje to tylko ten, kto gra w wersji 1.7.1 lub nowszej. Przy nie wszyscy płacą tyle samo.</p>
+<ul>
+<li>Wartości: si albo no.</li>
+<li>Domyślnie: <code>si</code>.</li>
+<li>Działa bez ponownego uruchomienia serwera.</li>
+</ul>
+<!-- OPCIONES:FIN -->
+</body>
+</html>
