@@ -44,6 +44,10 @@
   {
    "carpeta": "voces/marisma_negra_en",
    "destino": "data/voces/marisma_negra_en"
+  },
+  {
+   "carpeta": "voces/marisma_negra_pl",
+   "destino": "data/voces/marisma_negra_pl"
   }
  ]
 }
