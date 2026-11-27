@@ -497,6 +497,7 @@ Gracias a todas las personas que han ayudado a mejorar Puerto Bravo desde GitHub
 - [ebram212131](https://github.com/ebram212131): la petición de que el juego funcione también en Linux y en Mac.
 - [matheus-raeski](https://github.com/matheus-raeski): el servidor de jugadores RP Brasil, de rol y en portugués.
 - [SeanTerry01](https://github.com/SeanTerry01): el aviso de que la ficha de Marisma Negra salía en español con el juego en inglés, y la propuesta de traducir el nombre del juego.
+- [Selak998](https://github.com/Selak998): la propuesta de la ficha técnica de los vehículos, para compararlos antes de comprar.
 
 ---
 

@@ -1236,6 +1236,11 @@ def menu_mis_vehiculos(p):
                         Opcion(tr('Mandarlo a un garaje: {precio} euros').format(precio=(p.precio('mandar_vehiculo', 100))), sv_al_garaje,
                                ayuda=tr("Tu mecánico se lo lleva al garaje de la casa que elijas, y deja de estar en la calle del servidor: ya no caduca ni se lo puede llevar nadie.") + viejo),
                         Opcion(tr("Cambiarle el nombre"), sv_renombrar, ayuda=tr("El nombre lo guarda el servidor, y lo ven también los demás jugadores.") + viejo)]
+            if modelo:                                           # issue 45: lo que corre, acelera, frena, aguanta y le cabe, con sus mejoras
+                from . import ficha_vehiculo
+                mejoras = d.get("mejoras") if d is not None else getattr(v, "mejoras", None)
+                ops.append(Opcion(tr("Ficha técnica: ") + ficha_vehiculo.ficha(modelo, mejoras),
+                                  ayuda=tr("Las cifras de este vehículo con las mejoras del taller que lleva. En el concesionario, F1 sobre cada modelo dice su ficha y cómo queda frente al tuyo.")))
             ops.append(Opcion(f["texto"], ayuda=tr("Su nombre, dónde está, cómo está de daños y las mejoras que lleva.")))
             mm = Menu(app, f["nombre"], ops)
             app.abrir(mm)

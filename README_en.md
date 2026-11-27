@@ -511,6 +511,7 @@ Thanks to everyone who has helped make Puerto Bravo better through GitHub. Whene
 - [ebram212131](https://github.com/ebram212131): the request for the game to run on Linux and Mac as well.
 - [matheus-raeski](https://github.com/matheus-raeski): the RP Brasil player server, a roleplay server in Portuguese.
 - [SeanTerry01](https://github.com/SeanTerry01): the report that the Marisma Negra card was in Spanish with the game in English, and the suggestion to translate the game's name.
+- [Selak998](https://github.com/Selak998): the suggestion of vehicle specifications, to compare them before buying.
 
 ---
 

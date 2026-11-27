@@ -3,7 +3,7 @@ from .i18n import tr
 import math
 import random
 
-from . import mundo as M
+from . import ficha_vehiculo, mundo as M
 from .extras import agua_de
 from .menus import Menu, Opcion
 
@@ -410,8 +410,8 @@ def nautica(p, l):
                 app.son("mision_ok")
                 app.decir(tr('¡{nombre} es tuyo! Te espera amarrado en {nombre2}.').format(nombre=(mo['nombre']), nombre2=(emb.nombre)), True)
         return f
-    ops = [Opcion(tr('{nombre}: {precio} euros').format(nombre=(mo['nombre']), precio=(mo['precio'])), comprar(mo), ayuda=mo.get("desc", "")) for mo in p.datos["vehiculos"] if mo.get("barco") and mo.get("precio")]
-    _menu(p, l, ops, tr("F1 describe cada embarcación"))
+    ops = [Opcion(tr('{nombre}: {precio} euros').format(nombre=(mo['nombre']), precio=(mo['precio'])), comprar(mo), ayuda=ficha_vehiculo.ayuda_compra(p, mo)) for mo in p.datos["vehiculos"] if mo.get("barco") and mo.get("precio")]
+    _menu(p, l, ops, tr("F1 dice cómo es cada embarcación, su ficha técnica y cómo queda frente a la tuya"))
 
 
 def concesionario(p, l):
@@ -451,7 +451,7 @@ def concesionario(p, l):
                 llevarse(mo, caros)
             return f
         sub = Menu(app, tr("¿De cuál pides las llaves? Cuanto más caro, con más ganas te busca la policía"),
-                   [Opcion(tr('{nombre}, que vale {precio} euros').format(nombre=(mo['nombre']), precio=(mo['precio'])), con(mo), ayuda=mo.get("desc", "")) for mo in caros] + [Opcion(tr("Dejarlo"), lambda: app.cerrar(sub))])
+                   [Opcion(tr('{nombre}, que vale {precio} euros').format(nombre=(mo['nombre']), precio=(mo['precio'])), con(mo), ayuda=ficha_vehiculo.ayuda_compra(p, mo)) for mo in caros] + [Opcion(tr("Dejarlo"), lambda: app.cerrar(sub))])
         app.abrir(sub)
 
     def llevarse(mo, caros):
@@ -467,13 +467,13 @@ def concesionario(p, l):
         p.cambiar_ciudadania(-2.0)
         app.decir(tr('{situar}. Sube con F y sal de aquí.').format(situar=(p.situar(v.x, v.y, tr('El coche está')))))
     marcas = l.get("modelos")
-    ops = [Opcion(tr('{nombre}: {precio} euros').format(nombre=(mo['nombre']), precio=(mo['precio'])), comprar(mo), ayuda=mo.get("desc", ""))
+    ops = [Opcion(tr('{nombre}: {precio} euros').format(nombre=(mo['nombre']), precio=(mo['precio'])), comprar(mo), ayuda=ficha_vehiculo.ayuda_compra(p, mo))
            for mo in p.datos["vehiculos"] if mo.get("precio") and not mo.get("barco") and (not marcas or mo["id"] in marcas)]
     ops.append(Opcion(lambda: tr('Trabajar aquí de vendedor[|a]: ocho horas, sueldo y comisión. Llevas {get} coches vendidos').format(get=(p.j.stats.get('coches_vendidos', 0))), vender,
                       ayuda=tr("Una jornada atendiendo clientes. Cobras un sueldo fijo y una comisión por cada coche que vendas: vendes más cuanto mejor sea tu labia y tu prestigio entre los vecinos. Una jornada al día.")))
     ops.append(Opcion(tr("Pedir las llaves para una prueba y no volver"), elegir_para_llevarse,
                       ayuda=tr("Te llevas un coche de exposición sin pagarlo: eliges cuál. Es un robo a la vista de todos: salta la alarma y la policía sale a por ti con fuerza, más cuanto más caro sea.")))
-    m = _menu(p, l, ops, tr("F1 describe cada vehículo"))
+    m = _menu(p, l, ops, tr("F1 dice cómo es cada vehículo, su ficha técnica y cómo queda frente al tuyo"))
 
 
 # ======================================================================= dinero

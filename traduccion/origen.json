@@ -3150,6 +3150,9 @@
 "Aceleración": [
 "editor/esquema.py"
 ],
+"Aceleración: de parado a {ref} kilómetros por hora en {seg} segundos.": [
+"juego/ficha_vehiculo.py"
+],
 "Acepta": [
 "editor/esquema.py"
 ],
@@ -9924,6 +9927,9 @@
 "servidor/nucleo.py",
 "servidor/nucleo.py"
 ],
+"Con las mejoras del taller que lleva.": [
+"juego/ficha_vehiculo.py"
+],
 "Con las rebajas, la gente compra lo que no necesita.": [
 "juego/respuestas_datos1.py"
 ],
@@ -12847,6 +12853,9 @@
 ],
 "Depósito: caben más litros de combustible": [
 "editor/esquema.py"
+],
+"Depósito: {litros} litros.": [
+"juego/ficha_vehiculo.py"
 ],
 "Derecha": [
 "editor/accesibilidad/revision_teclado.py",
@@ -20489,10 +20498,10 @@
 "F1 describe cada arma": [
 "juego/menus_juego.py"
 ],
-"F1 describe cada embarcación": [
+"F1 dice cómo es cada embarcación, su ficha técnica y cómo queda frente a la tuya": [
 "juego/menus_lugares.py"
 ],
-"F1 describe cada vehículo": [
+"F1 dice cómo es cada vehículo, su ficha técnica y cómo queda frente al tuyo": [
 "juego/menus_lugares.py"
 ],
 "F1 dice todas las teclas en cualquier momento, y en el menú principal está Aprender los sonidos del juego, para oír qué significa cada uno.": [
@@ -20850,6 +20859,9 @@
 ],
 "Ficha limpia": [
 "juego/extras2.py"
+],
+"Ficha técnica: ": [
+"juego/misvehiculos.py"
 ],
 "Fichas de animales y una mesa. Aquí te atienden.": [
 "juego/sistemas.py"
@@ -21415,6 +21427,12 @@
 "Frenada automática ante el tráfico": [
 "juego/menus_juego.py"
 ],
+"Frenada: de {ref} kilómetros por hora a parado en {m} metros, en seco.": [
+"juego/ficha_vehiculo.py"
+],
+"Frenada: de {ref} kilómetros por hora a parado en {m} metros.": [
+"juego/ficha_vehiculo.py"
+],
 "Frenazo": [
 "juego/catalogo_sonidos.py"
 ],
@@ -21427,6 +21445,12 @@
 ],
 "Frente a los demás: el maletín del juego tiene 2, y el atraco y los pandilleros, 1.": [
 "editor/esquema.py"
+],
+"Frente a tu {nombre}: va igual en todo.": [
+"juego/ficha_vehiculo.py"
+],
+"Frente a tu {nombre}: {cambios}.": [
+"juego/ficha_vehiculo.py"
 ],
 "Fresca y ligera. No lleva fuego, así que no se quema.": [
 "juego/compra.py",
@@ -26608,6 +26632,9 @@
 ],
 "Las cepas más viejas del valle, retorcidas como manos.": [
 "data/mods/valdeolmos.json"
+],
+"Las cifras de este vehículo con las mejoras del taller que lleva. En el concesionario, F1 sobre cada modelo dice su ficha y cómo queda frente al tuyo.": [
+"juego/misvehiculos.py"
 ],
 "Las cifras de tu partida: misiones, dinero, tiempo jugado, lugares visitados, distancias y más.": [
 "juego/menus_juego.py"
@@ -32599,6 +32626,9 @@
 ],
 "No gasta combustible": [
 "editor/esquema.py"
+],
+"No gasta combustible.": [
+"juego/ficha_vehiculo.py"
 ],
 "No ha contestado ningún servicio. ": [
 "juego/ia.py"
@@ -39464,6 +39494,9 @@
 ],
 "Resistencia del vehículo": [
 "editor/esquema.py"
+],
+"Resistencia: {salud} puntos.": [
+"juego/ficha_vehiculo.py"
 ],
 "Respecto a la radio. Cámbialo con las flechas izquierda y derecha.": [
 "juego/menus_juego.py"
@@ -49189,6 +49222,9 @@
 "Velocidad máxima, metros por segundo": [
 "editor/esquema.py"
 ],
+"Velocidad máxima: {kmh} kilómetros por hora.": [
+"juego/ficha_vehiculo.py"
+],
 "Ven con el vehículo, déjalo aparcado cerca o guárdalo en el garaje, y vuelve a entrar.": [
 "juego/menus_juego.py"
 ],
@@ -51244,6 +51280,12 @@
 "acción": [
 "juego/enlinea.py"
 ],
+"acelera {n} segundos más lento": [
+"juego/ficha_vehiculo.py"
+],
+"acelera {n} segundos más rápido": [
+"juego/ficha_vehiculo.py"
+],
 "acelerar": [
 "juego/ayuda.py"
 ],
@@ -53072,6 +53114,9 @@
 "francés": [
 "juego/i18n.py"
 ],
+"frena en {n} metros menos": [
+"juego/ficha_vehiculo.py"
+],
 "frenar y marcha atrás": [
 "juego/mando.py"
 ],
@@ -54235,6 +54280,9 @@
 ],
 "nadie te conoce": [
 "juego/adultos.py"
+],
+"necesita {n} metros más para frenar": [
+"juego/ficha_vehiculo.py"
 ],
 "neerlandés": [
 "juego/i18n.py"
@@ -58427,6 +58475,12 @@
 "{n} kilobytes": [
 "juego/menus_componentes.py"
 ],
+"{n} kilómetros por hora menos de punta": [
+"juego/ficha_vehiculo.py"
+],
+"{n} kilómetros por hora más de punta": [
+"juego/ficha_vehiculo.py"
+],
 "{n} lee lo escrito. {n2} acepta y {n3} cancela.": [
 "juego/menus.py"
 ],
@@ -58441,6 +58495,12 @@
 "{n} levanta la vista del móvil y sonríe al verte.": [
 "juego/convivencia.py",
 "data/datos/vida.json"
+],
+"{n} litros menos de depósito": [
+"juego/ficha_vehiculo.py"
+],
+"{n} litros más de depósito": [
+"juego/ficha_vehiculo.py"
 ],
 "{n} llega con dos maletas y una planta. {casa} ya no es solo tuya.": [
 "juego/convivencia.py",
@@ -58541,6 +58601,12 @@
 "{n} prueba un poco: «Oye, pues te ha quedado muy bien».": [
 "juego/compra.py",
 "data/datos/vida.json"
+],
+"{n} puntos menos de resistencia": [
+"juego/ficha_vehiculo.py"
+],
+"{n} puntos más de resistencia": [
+"juego/ficha_vehiculo.py"
 ],
 "{n} recoge sus cosas en silencio. Dice que lo entiende, pero no te mira al irse.": [
 "juego/convivencia.py",
