@@ -83,6 +83,26 @@ def test_sin_fuego_amigo_no_se_les_puede_apuntar_ni_herir(robot):
     assert '"fuego_amigo"' in inspect.getsource(menus_juego)
 
 
+def test_tu_explosivo_no_hiere_a_los_que_van_contigo_en_el_coche(robot):
+    """Un cóctel molotov contra un coche patrulla pegado al tuyo: el que va de copiloto está donde tú, y el vehículo le
+    protege como a ti. A pie, con el fuego amigo puesto, la explosión sí le llega."""
+    p, j, d = _con_perro(robot)
+    a = p.crear_aliado()
+    v = p.crear_vehiculo("deportivo", j.x + 3, j.y, 0, None)
+    v.cerrado = False
+    p._subir(v, False, callar=True)
+    robot.frames(2)                                                  # van de copilotos: donde estás tú
+    px, py = p.pos()
+    assert a.dist(px, py) < 0.5 and d.dist(px, py) < 0.5
+    salud = a.salud
+    p.cfg["fuego_amigo"] = True
+    p._estallar({"x": px + 3, "y": py, "radio": 6, "dano": 70, "arma": "molotov"})
+    assert a.salud == salud and j.perro_confianza == 100 and not a.hostil
+    a.puesto = (px, py)                                              # en un golpe preparado está en su sitio, no en tu coche
+    p._estallar({"x": px + 3, "y": py, "radio": 6, "dano": 20, "arma": "molotov"})
+    assert a.salud < salud
+
+
 def test_tu_gente_avisa_dos_veces_y_a_la_tercera_se_vuelve_contra_ti(robot):
     p = robot.nueva_partida()
     p.cfg["sucesos"] = False

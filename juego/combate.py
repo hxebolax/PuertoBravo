@@ -334,6 +334,10 @@ class Combate:
                                  "sigue": o if getattr(o, "volando", False) else None})
         self.decir(tr('Quedan {v}.').format(v=(m['cargador'] + m['reserva'])))
 
+    def _va_contigo(self, p):
+        """Tu perro o un guardaespaldas que viaja contigo en el vehículo: va donde tú (extras.py, extras3.py)."""
+        return bool(self.j.veh) and p.tipo in ("aliado", "perro") and getattr(p, "puesto", None) is None
+
     def _estallar(self, e):
         j = self.j
         x, y, r = e["x"], e["y"], e["radio"]
@@ -348,6 +352,8 @@ class Combate:
         self.sv_explosion(x, y, e.get("arma"))
         self.delito(3, tr("uso de explosivos"), siempre=self.mundo.policia and random.random() < 0.5)
         for p in list(self.personas):
+            if self._va_contigo(p):                              # va de copiloto: el vehículo le protege, como a ti
+                continue
             if not p.muerto and (p.tipo not in ("aliado", "perro") or self.cfg["fuego_amigo"]):
                 d = p.dist(x, y)
                 if d < r:
