@@ -193,6 +193,7 @@ class Misiones:
         self.app.son("notificacion")
         self.decir(tr('Misión: {titulo}.').format(titulo=(m['titulo'])) + (tr(" La repites: no cuenta ni da recompensa.") if repeticion else ""), True)
         self._llevar_al_tutorial(m)
+        self.entrar_arena(m)                                     # un combate del gimnasio: al pabellón (extras2.py)
         if m.get("golpe"):                                       # un golpe preparado con la banda: cada uno a su puesto (golpes.py)
             self.golpe_al_iniciar(m)
         self._siguiente_paso()
@@ -1367,12 +1368,14 @@ class Misiones:
             self.quitar_gps_auto(fin=True)
         self.objetivo = None
         self.mision = None
+        self.salir_arena(ms["def"])                              # del pabellón, a la puerta del gimnasio
 
     def _completar_mision(self):
         ms = self.mision
         m = ms["def"]
         antes = {x["id"] for x in self.misiones_disponibles()}
         self.mision = None
+        self.salir_arena(m)
         if self.gps and not self.trabajo:      # si sigues trabajando (el tutorial de los trabajos), el destino es el del trabajo
             self.quitar_gps_auto(fin=True)
         if ms.get("repeticion"):                               # repetir una misión ya hecha es por gusto: no cambia nada

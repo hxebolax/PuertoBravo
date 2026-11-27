@@ -1031,6 +1031,7 @@ class Combate:
         j.animo = max(0.0, j.animo - 12)
         j.efectos = []
         self.perder_mercancia(todo=False)
+        self.salir_arena()                                       # te sacan del pabellón: al hospital de la localidad del gimnasio
         h = self._reaparecer("hospital")
         j.salud = j.salud_max
         j.blindaje = 0.0

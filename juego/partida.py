@@ -482,6 +482,8 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         j = self.j.a_dict()
         j["x"], j["y"] = px, py
         j["mapa"] = self.mundo.id
+        if self.mundo.id == "arena":                             # en el pabellón no se queda nadie: la partida te deja en la puerta del gimnasio
+            j["mapa"], j["x"], j["y"] = self.vuelta_arena()
         j["guardaespaldas"] = sum(1 for p in self.personas if p.tipo == "aliado" and not p.muerto and not getattr(p, "de_banda", False))
         d = {"version": FORMATO, "jugador": j, "reloj": self.reloj, "dia": self.dia, "momento": time.time(),
              "fallos": dict(self.fallos), "decisiones": dict(self.decisiones), "saltadas": list(self.saltadas),
@@ -2389,6 +2391,8 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         tope = max(1, round((max(1, m.peatones // 3) if noche else m.peatones) * self.azar_factor("peatones")))
         if self.lluvia:
             tope = max(1, tope // 2)
+        if m.peatones <= 0:                                      # un mapa sin peatones (la plataforma, el pabellón): ni uno
+            tope = 0
         if n < tope and not self.sv_peatones_comunes():
             bi, bj = m.bloque(x, y)
             bi = max(0, min(m.NX - 2, bi + random.choice([-1, 0, 0, 1])))

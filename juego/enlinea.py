@@ -103,6 +103,8 @@ def huella_datos(datos):
     Solo entra lo que no cambia mientras se juega: identificadores y las cifras de las armas."""
     partes = [["formato", 2]]                    # cambia cuando el juego le cuenta al servidor más cosas del mismo mundo
     for m in sorted(datos.get("mapas", []), key=lambda m: str(m.get("id"))):
+        if m.get("tipo") == "recinto":           # el pabellón de los combates: solo para jugar sin conexión, y la huella no cambia
+            continue
         partes.append(["mapa", m.get("id"), sorted(str(l.get("id")) for l in m.get("lugares", [])), sorted(str(b.get("id")) for b in m.get("barrios", []))])
     for a in sorted(datos.get("armas", []), key=lambda a: str(a.get("id"))):
         partes.append(["arma", a.get("id"), a.get("dano"), a.get("alcance"), a.get("cadencia"), a.get("precision")])
@@ -122,6 +124,8 @@ def mundo_servidor():
     mapas = M.crear_mapas(datos)
     out = {"version": VERSION, "huella": huella_datos(datos), "mapas": {}, "armas": {}, "modelos": {}, "misiones": {}}
     for ident, m in mapas.items():
+        if m.tipo == "recinto":
+            continue
         c = next(x for x in datos["mapas"] if x.get("id") == ident)
         out["mapas"][ident] = {
             "nombre": m.nombre, "tipo": m.tipo, "ancho": round(float(m.ancho), 1), "alto": round(float(m.alto), 1),
