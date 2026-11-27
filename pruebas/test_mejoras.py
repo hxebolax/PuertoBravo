@@ -369,7 +369,9 @@ def test_seguir_a_alguien_de_oido(robot):
     robot.frames(60)
     assert "paso_npc" in sonidos                                   # se le oye andar
     p.son = original
-    # pegarte a él: te descubre
+    while o["espera"] > 0:                                         # mientras espera quieto todavía no mira (foro, 1.7.6)
+        robot.frames(10)
+    # pegarte a él cuando ya anda: te descubre
     p.teletransportar(o["x"] + 2, o["y"])
     robot.frames(70)
     assert p.mision is None and "se ha dado cuenta" in robot.app.pila[-1].titulo

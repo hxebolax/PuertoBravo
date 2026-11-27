@@ -179,8 +179,17 @@ class Convivencia:
         return texto
 
     def pareja_en_casa(self):
-        """¿Está ahora en casa quien vive contigo? De noche, siempre; de día, a ratos: tiene su vida."""
-        if not self.conviviente():
+        """¿Está ahora en casa quien vive contigo? De noche, siempre; de día, a ratos: tiene su vida.
+        Con los horarios de la gente, en sus horas de trabajo está en su sitio y no en casa, y si ha salido a veros
+        en otro sitio, tampoco (issue 44): así la casa, la ficha del móvil y la nota de la cocina dicen lo mismo."""
+        pers = self.conviviente()
+        if not pers:
+            return False
+        from . import encuentros
+        q = encuentros.quedada_en_curso(self, pers["id"])
+        if q is not None:
+            return q.get("lugar") == self.j.convive_casa
+        if encuentros.modo(self) != "apagado" and self.lug(pers.get("lugar")) is not None and encuentros.presente(self, pers):
             return False
         h = int(self.reloj // 60) % 24
         if h >= 19 or h < 9:
@@ -475,9 +484,15 @@ def opciones_casa(p, casa, Menu, Opcion):
     app = p.app
     n = pers["nombre"]
     if not p.pareja_en_casa():
+        from . import encuentros
         l = p.lug(pers.get("lugar"))
-        return [Opcion(tr('{n} no está en casa ahora: anda por {v}').format(n=(n), v=(p.nombre_lugar(l) if l else tr('sus cosas'))) + (". " + p.peticion_txt() if p.peticion_txt() else ""),
-                       ayuda=tr("Vive aquí contigo, pero tiene su vida. De noche está siempre; de día, a ratos."))]
+        if l is not None and encuentros.presente(p, pers):
+            donde = tr('{n} no está en casa ahora: anda por {v}').format(n=(n), v=(p.nombre_lugar(l)))
+        else:
+            donde = tr('{n} no está en casa ahora: ha salido a sus cosas').format(n=(n))
+        ayuda = (tr("Vive aquí contigo, pero tiene su vida. En sus horas de trabajo está en su sitio; fuera de ellas, de noche está siempre y de día, a ratos.")
+                 if encuentros.modo(p) != "apagado" else tr("Vive aquí contigo, pero tiene su vida. De noche está siempre; de día, a ratos."))
+        return [Opcion(donde + (". " + p.peticion_txt() if p.peticion_txt() else ""), ayuda=ayuda)]
 
     def abrir():
         def decir(f):

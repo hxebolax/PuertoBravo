@@ -156,10 +156,14 @@ def anadir_servidor(app, nombre, direccion):
     return True
 
 
-def _opcion_enlace(app, e, Opcion):
+def _opcion_enlace(app, e, Opcion, con_idioma=True):
     nombre = e.get("nombre", "")
     idioma = e.get("idioma", "")
-    texto = tr('{nombre}, en {idioma}').format(nombre=nombre, idioma=idioma) if idioma else nombre
+    if e.get("tipo"):                                                # tutorial en audio, vídeo, pódcast, manual...
+        nombre_tipo = tr('{nombre}: {tipo}').format(nombre=nombre, tipo=e["tipo"])
+    else:
+        nombre_tipo = nombre
+    texto = tr('{nombre}, en {idioma}').format(nombre=nombre_tipo, idioma=idioma) if idioma and con_idioma else nombre_tipo
     desc = e.get("desc", "")
     if e.get("servidor"):
         return Opcion(texto, lambda: anadir_servidor(app, nombre, e["servidor"]),
@@ -174,13 +178,34 @@ def menu(app):
     if not _estado["consultada"]:                                    # lo nuevo sale la próxima vez que se entre
         poner_al_dia(app)
 
+    def vacio():
+        return [Opcion(tr("Todavía no hay nada aquí"), ayuda=d.get("apuntar") or tr("Si creas algo para los jugadores, avisa al autor para que salga aquí."))]
+
     def seccion(s):
         def f():
-            ops = [_opcion_enlace(app, e, Opcion) for e in s.get("enlaces", [])]
-            if not ops:
-                ops = [Opcion(tr("Todavía no hay nada aquí"), ayuda=d.get("apuntar") or tr("Si creas algo para los jugadores, avisa al autor para que salga aquí."))]
+            enlaces = s.get("enlaces", [])
+            if s.get("por_idioma") and enlaces:
+                return por_idioma(s, enlaces)
+            ops = [_opcion_enlace(app, e, Opcion) for e in enlaces] or vacio()
             app.abrir(Menu(app, s.get("nombre", ""), ops, intro=s.get("ayuda") or None))
         return f
+
+    def por_idioma(s, enlaces):
+        """Primero el idioma, y dentro, lo que hay en él (issue 25). El del juego va el primero."""
+        grupos = {}
+        for e in enlaces:
+            grupos.setdefault(e.get("idioma") or tr("sin idioma indicado"), []).append(e)
+        mio = tr(i18n.NOMBRES_ES.get(i18n.actual(), "")) if i18n.NOMBRES_ES.get(i18n.actual()) else ""
+        orden = sorted(grupos, key=lambda n: (n.lower() != mio.lower(), n.lower()))
+
+        def abrir_idioma(idioma):
+            def g():
+                app.abrir(Menu(app, tr('{nombre}, en {idioma}').format(nombre=s.get("nombre", ""), idioma=idioma),
+                               [_opcion_enlace(app, e, Opcion, con_idioma=False) for e in grupos[idioma]]))
+            return g
+        ops = [Opcion(tr('En {idioma}: {n}').format(idioma=idioma, n=len(grupos[idioma])), abrir_idioma(idioma),
+                      ayuda=tr("Lo que hay en este idioma. Intro lo abre.")) for idioma in orden]
+        app.abrir(Menu(app, s.get("nombre", ""), ops, intro=s.get("ayuda") or None))
     ops = [Opcion(d["aviso"], ayuda=d["responsabilidad"] or None)]
     if d["responsabilidad"]:
         ops.append(Opcion(d["responsabilidad"], ayuda=tr("Cada sitio tiene sus propias normas, que ponen quienes lo llevan.")))

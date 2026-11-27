@@ -133,6 +133,58 @@ def restablecer(cfg):
     cfg["teclas"] = {}
 
 
+_TXT = {"intro": pygame.K_RETURN, "espacio": pygame.K_SPACE, "tabulador": pygame.K_TAB, "coma": pygame.K_COMMA,
+        "enter": pygame.K_RETURN, "space": pygame.K_SPACE, "tab": pygame.K_TAB, "comma": pygame.K_COMMA}
+
+
+def _codigo_txt(n):
+    n = n.lower()
+    if n in _TXT:
+        return _TXT[n]
+    if len(n) == 1 and ("a" <= n <= "z" or n == "ñ"):
+        return ord(n) if n != "ñ" else None
+    if n.startswith("f") and n[1:].isdigit() and 2 <= int(n[1:]) <= 11:
+        return pygame.K_F1 + int(n[1:]) - 1
+    return None
+
+
+def textos(cfg, texto):
+    """Las teclas que nombra una frase («pulsa Q», «la tecla M», «press F»), dichas con la que has puesto tú si la
+    cambiaste (foro, 1.7.6): el tutorial, las misiones y los avisos nombran tu tecla, no la de serie."""
+    import re
+    if not texto or not isinstance(texto, str) or not cfg["teclas"]:
+        return texto
+    m = _mapa(cfg)
+    if not m:
+        return texto
+    tecla = r"(?P<tecla>Intro|Espacio|Tabulador|coma|Enter|Space|Tab|comma|F(?:[2-9]|1[01])|[A-ZÑ])(?![\wáéíóúñ])"
+    puestas = []                       # lo ya cambiado queda apartado: con dos teclas intercambiadas no se deshace
+
+    def cambia(x):
+        k = _codigo_txt(x.group("tecla"))
+        nueva = m.get(k) if k is not None else None
+        if nueva is None:
+            return x.group(0)
+        n = nombre(nueva)
+        puestas.append(n[:1].upper() + n[1:])
+        return x.group(0)[:x.start("tecla") - x.start(0)] + f"\x00{len(puestas) - 1}\x00" + x.group(0)[x.end("tecla") - x.start(0):]
+    patrones = (
+        r"\b(?:[Pp]uls(?:a|ar|as|ando|es|ada)|[Cc]on|[Uu]sa|[Mm]antén(?: pulsad[ao])?|[Tt]oca) (?:(?:la|el) )?(?:tecla )?(?:Mayúsculas (?:más |\+ )?(?:la )?)?" + tecla,
+        r"\b(?:[Ll]a|[Ee]l) tecla " + tecla,
+        r"(?<![\wáéíóúñ])(?:y|o|ni) (?:la )?" + tecla.replace(r"(?![\wáéíóúñ])", "") + r" para(?![\wáéíóúñ])",
+        r"\b(?:[Pp]ress(?:ing|es|ed)?|[Ww]ith|[Uu]se|[Hh]old(?:ing)?(?: down)?|[Tt]ap) (?:the )?(?:Shift (?:\+ |plus )?)?" + tecla,
+        r"\b[Tt]he " + tecla.replace(r"(?![\wáéíóúñ])", "") + r" key\b",
+        r"(?<![\w])(?:and|or|nor) (?:the )?" + tecla.replace(r"(?![\wáéíóúñ])", "") + r"(?: key)? to(?![\w])",
+    )
+    original = texto
+    try:
+        for pat in patrones:
+            texto = re.sub(pat, cambia, texto)
+    except re.error:
+        return original
+    return re.sub("\x00(\\d+)\x00", lambda x: puestas[int(x.group(1))], texto)
+
+
 def cambios(cfg):
     """Frases con lo cambiado, para la ayuda: «La función de la C está ahora en la P»."""
     return [tr('Lo que hacía {nombre} se hace ahora con {nombre2}').format(nombre=(nombre(a)), nombre2=(nombre(b))) for a, b in sorted(_mapa(cfg).items())]

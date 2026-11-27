@@ -149,7 +149,13 @@ REQUISITOS_VIDA = {
     "prestigio": (lambda p, v: p.j.ciudadania >= v, lambda p, v: tr('más prestigio entre los vecinos: {int} de {int2}').format(int=(int(p.j.ciudadania)), int2=(int(v)))),
     "negocios": (lambda p, v: len(p.negocios_tuyos()) >= v, lambda p, v: tr("tener un negocio propio") if v <= 1 else tr('tener {int} negocios').format(int=(int(v)))),
     "sin_antecedentes": (lambda p, v: not p.hon_antecedentes(), lambda p, v: tr("no tener antecedentes penales en vigor")),
+    # contratos del tablón cumplidos (issue 33): en total o, con «tablon», solo los de ese sitio o ese tipo de sitio
+    "contratos": (lambda p, v, t=None: p.contratos_cumplidos(t) >= v,
+                  lambda p, v, t=None: (tr('cumplir {int} contratos del tablón de {sitio}; llevas {hechos}').format(int=(int(v)), sitio=(p.tablon_txt(t)), hechos=(p.contratos_cumplidos(t))) if t
+                                        else tr('cumplir {int} contratos del tablón; llevas {hechos}').format(int=(int(v)), hechos=(p.contratos_cumplidos(t))))),
 }
+# Lo que no se cuenta: matiza a otro requisito
+MATICES_VIDA = ("tablon",)
 
 
 def _n(d, k, defecto=0.0):
@@ -1686,14 +1692,36 @@ class Honrado:
             return []
         faltas = []
         for k, v in req.items():
+            if k in MATICES_VIDA:
+                continue
             cond = REQUISITOS_VIDA.get(k)
             try:
                 v = float(v)
             except (TypeError, ValueError):
                 v = 1.0
-            if cond and v and not cond[0](self, v):
-                faltas.append(cond[1](self, v))
+            extra = (str(req.get("tablon") or "").strip() or None,) if k == "contratos" else ()
+            if cond and v and not cond[0](self, v, *extra):
+                faltas.append(cond[1](self, v, *extra))
         return faltas
+
+    def contratos_cumplidos(self, tablon=None):
+        """Contratos del tablón cumplidos: todos o, con tablon, los colgados en ese sitio (por su identificador o su tipo)."""
+        if not tablon:
+            return int(self.j.stats.get("contratos", 0))
+        por = self.j.stats.get("contratos_tablon")
+        if not isinstance(por, dict):
+            return 0
+        total = 0
+        for lid, n in por.items():
+            l = self.lugares.get(lid)
+            if lid == tablon or (l is not None and l.tipo == tablon):
+                total += int(n or 0)
+        return total
+
+    def tablon_txt(self, tablon):
+        """El sitio de un tablón dicho para el jugador: su nombre, o el tipo de sitio si no es uno concreto."""
+        l = self.lugares.get(tablon)
+        return self.nombre_lugar(l) if l is not None else tablon
 
     def hon_trama(self):
         """Por dónde vas en el buen camino: (misión siguiente o None, lo que falta, hechas, total)."""

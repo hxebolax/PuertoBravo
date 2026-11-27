@@ -917,7 +917,11 @@ class Misiones:
             o["visto"] = True
             self.quitar_gps_auto()
             self.app.son("notificacion")
-            self.decir(tr('Ahí está {nombre}, a {int} metros, {direccion_txt}. Todavía no se ha movido: en unos segundos echa a andar. Síguele de oído, sin pegarte a él y sin perderle.').format(nombre=(o['nombre']), int=(int(d)), direccion_txt=(self.direccion_txt(o['x'], o['y']))))
+            pegado = d < (12.0 if j.veh else 6.0) + 4
+            if pegado:                                        # la misión empieza donde está él (el inspector del ayuntamiento): tiempo para apartarse
+                o["espera"] = max(o["espera"], 10.0)
+            self.decir(tr('Ahí está {nombre}, a {int} metros, {direccion_txt}. Todavía no se ha movido: en unos segundos echa a andar. Síguele de oído, sin pegarte a él y sin perderle.').format(nombre=(o['nombre']), int=(int(d)), direccion_txt=(self.direccion_txt(o['x'], o['y'])))
+                       + (tr(" Estás a su lado: apártate unos metros antes de que salga, o te verá.") if pegado else ""))
             return
         if o["espera"] > 0:                                   # al principio se queda quieto un momento: te da tiempo a localizarlo
             o["espera"] -= dt
@@ -936,7 +940,8 @@ class Misiones:
             o["t_paso"] = 0.55
             self.son("paso_npc", xy=(o["x"], o["y"]), ref=5, maxd=75, vol=1.0)
         limite_cerca = 12.0 if j.veh else 3.5 if j.agachado else 6.0
-        o["cerca"] = o["cerca"] + dt if d < limite_cerca else 0.0
+        # mientras espera quieto, todavía no mira a su alrededor: solo cuenta que te pegues a él cuando ya anda
+        o["cerca"] = o["cerca"] + dt if d < limite_cerca and o["espera"] <= 0 else 0.0
         tope = self.pers("seguir_lejos")
         o["lejos"] = o["lejos"] + dt if d > tope else 0.0
         o["t_aviso"] -= dt
@@ -1389,6 +1394,11 @@ class Misiones:
         if m.get("repetible"):
             if m.get("contador"):
                 self.j.stats[m["contador"]] = self.j.stats.get(m["contador"], 0) + 1
+                if m["contador"] == "contratos" and m.get("lugar"):       # y los de cada tablón, para las misiones que piden contratos de un sitio (issue 33)
+                    por_tablon = self.j.stats.get("contratos_tablon")
+                    if not isinstance(por_tablon, dict):
+                        por_tablon = self.j.stats["contratos_tablon"] = {}
+                    por_tablon[m["lugar"]] = int(por_tablon.get(m["lugar"], 0)) + 1
                 if m["contador"] in ("contratos", "atracos", "conquistas", "encargos"):
                     self.hon_negro(int((m.get("recompensa") or {}).get("dinero", 0)))      # dinero que no podrías justificar
         else:

@@ -194,7 +194,7 @@ def costa_dorada():
         "carreras": [{"id": "cd_c1", "nombre": "Vuelta a Costa Dorada", "mapa": "costa_dorada", "premio": 350, "tiempo": 80, "puntos": [[0, 1], [0, 3], [4, 3], [4, 1], [0, 1]]}],
         "comidas": [{"nombre": "Arroz a banda", "precio": 14, "salud": 45}, {"nombre": "Horchata con fartons", "precio": 5, "salud": 12}],
         "objetos": [{"id": "cd_amuleto", "nombre": "Amuleto de pescador", "precio": 25, "desc": "Una caracola con un cordel. No sirve para nada, pero da conversación."}],
-        "peces": [{"nombre": "una dorada de roca", "valor": 38, "peso": 12}, {"nombre": "un pulpo de Costa Dorada", "valor": 55, "peso": 6}],
+        "peces": [{"nombre": "una dorada de roca", "valor": 38, "peso": 12, "aguas": ["mar"], "mapas": ["costa_dorada"]}, {"nombre": "un pulpo de Costa Dorada", "valor": 55, "peso": 6, "aguas": ["mar"], "mapas": ["costa_dorada"]}],
         "personajes": [
             {"id": "cd_vicenta", "nombre": "Vicenta", "genero": "m", "apellido": "Ribera", "pesca": 5, "resistencia": 2, "dinero": 300, "ciudadania": 30, "arma": "cd_remo", "botiquines": 1,
              "desc": "Patrona de pesca de Costa Dorada. Empieza con la pesca al nivel cinco, buena resistencia, un remo, trescientos euros y el respeto de los vecinos."},
@@ -277,7 +277,7 @@ def valdeolmos():
             {"id": "vo_circuito", "nombre": "Salida de la carrera de tractores", "tipo": "carrera", "bloque": [0, 0], "lado": "O", "pos": 36, "desc": "En fiestas se corre con lo que tenga ruedas."},
             {"id": "vo_plaza", "nombre": "Plaza del Olmo", "tipo": "monumento", "bloque": [1, 0], "xy": [36, 40], "sonido": "lugar_fuente", "desc": "Un olmo centenario y un caño de agua helada."},
             {"id": "vo_ermita", "nombre": "Ermita de San Roque", "tipo": "monumento", "bloque": [2, 2], "xy": [45, 45], "sonido": "lugar_iglesia", "desc": "Una ermita blanca entre viñas, con una campana que avisa de las tormentas."},
-            {"id": "vo_rio", "nombre": "Poza del río Olmedilla", "tipo": "pesca", "bloque": [0, 2], "xy": [40, 40], "sonido": "lugar_rio", "desc": "Truchas y barbos en agua limpia."},
+            {"id": "vo_rio", "nombre": "Poza del río Olmedilla", "tipo": "pesca", "bloque": [0, 2], "xy": [40, 40], "sonido": "lugar_rio", "agua": "rio", "desc": "Truchas y barbos en agua limpia."},
             {"id": "vo_vina", "nombre": "Viña Vieja", "tipo": "monumento", "bloque": [1, 2], "xy": [36, 36], "desc": "Las cepas más viejas del valle, retorcidas como manos."},
         ],
         "casetes": [[60, 120], [200, 230]],
@@ -338,7 +338,7 @@ def valdeolmos():
                       clon(VEHICULOS, todo, id="vo_campero", nombre="Todoterreno campero", vel_max=26, salud=200, valor=1200, precio=7800, desc="Un todoterreno viejo de los que arrancan siempre.")],
         "carreras": [{"id": "vo_c1", "nombre": "Carrera de las viñas", "mapa": "valdeolmos", "premio": 300, "tiempo": 85, "puntos": [[0, 1], [3, 1], [3, 3], [0, 3], [0, 1]]}],
         "comidas": [{"nombre": "Cordero asado", "precio": 16, "salud": 50}, {"nombre": "Vaso de mosto", "precio": 2, "salud": 6}],
-        "peces": [{"nombre": "una trucha del Olmedilla", "valor": 30, "peso": 14}, {"nombre": "un barbo", "valor": 18, "peso": 20}],
+        "peces": [{"nombre": "una trucha del Olmedilla", "valor": 30, "peso": 14, "aguas": ["rio"], "mapas": ["valdeolmos"]}, {"nombre": "un barbo", "valor": 18, "peso": 20, "aguas": ["rio"]}],
         "personajes": [{"id": "vo_ines", "nombre": "Inés", "genero": "m", "apellido": "Olmedo", "conduccion": 2, "resistencia": 4, "salud_max": 110, "ciudadania": 35, "arma": "vo_hoz", "botiquines": 1,
                         "desc": "Hija de viñadores, acostumbrada a trabajar de sol a sol. Empieza con resistencia al nivel cuatro, algo más de salud, una hoz y buen nombre entre los vecinos."}],
     }
@@ -431,7 +431,7 @@ def penas_altas():
             {"id": "pa_helipuerto", "nombre": "Helipuerto de rescate", "tipo": "helipuerto", "bloque": [2, 2], "xy": [20, 20], "precio": 150, "desc": "Una losa de hormigón con una H pintada."},
             {"id": "pa_plaza", "nombre": "Plaza del Castillete", "tipo": "monumento", "bloque": [1, 0], "xy": [36, 40], "sonido": "lugar_fuente", "desc": "El castillete de la mina, oxidado, y una fuente de agua de deshielo."},
             {"id": "pa_bocamina", "nombre": "Bocamina de La Encantada", "tipo": "monumento", "bloque": [2, 2], "xy": [50, 50], "sonido": "lugar_mina", "desc": "La entrada de la mina vieja. Sale un aire frío que huele a hierro."},
-            {"id": "pa_lago_pesca", "nombre": "Orilla del Lago Negro", "tipo": "pesca", "bloque": [0, 2], "xy": [40, 40], "sonido": "lugar_rio", "desc": "Truchas de lago y, con suerte, un lucio."},
+            {"id": "pa_lago_pesca", "nombre": "Orilla del Lago Negro", "tipo": "pesca", "bloque": [0, 2], "xy": [40, 40], "sonido": "lugar_rio", "agua": "lago", "desc": "Truchas de lago y, con suerte, un lucio."},
             {"id": "pa_escombrera", "nombre": "Escombrera vieja", "tipo": "tesoro", "bloque": [1, 2], "xy": [36, 36], "desc": "Entre la escoria aún aparecen herramientas, monedas y alguna pepita."},
             {"id": "pa_lumbre", "nombre": "Bar de copas La Lumbre", "tipo": "club", "bloque": [0, 1], "lado": "O", "pos": 36, "adultos": True, "desc": "El único sitio abierto de noche en toda la sierra."},
             {"id": "pa_alambique", "nombre": "El Alambique", "tipo": "proveedor", "bloque": [2, 0], "lado": "S", "pos": 36, "adultos": True, "factor": {"hierba": 0.9, "polvo": 1.5, "pastillas": 1.2, "cristal": 1.5, "pa_endrinas": 0.7}, "desc": "Licor de endrinas casero y lo poco que sube de la ciudad."},
@@ -514,7 +514,7 @@ def penas_altas():
         "carreras": [{"id": "pa_c1", "nombre": "Subida al Collado", "mapa": "penas_altas", "premio": 380, "tiempo": 90, "puntos": [[3, 1], [3, 3], [0, 3], [0, 1], [3, 1]]}],
         "comidas": [{"nombre": "Potaje de la sierra", "precio": 11, "salud": 42}, {"nombre": "Vino caliente con miel", "precio": 4, "salud": 9}],
         "objetos": [{"id": "pa_lampara", "nombre": "Lámpara de minero", "precio": 35, "desc": "Una lámpara de carburo restaurada. De recuerdo."}],
-        "peces": [{"nombre": "una trucha del Lago Negro", "valor": 34, "peso": 14}, {"nombre": "un lucio", "valor": 70, "peso": 4}],
+        "peces": [{"nombre": "una trucha del Lago Negro", "valor": 34, "peso": 14, "aguas": ["lago"], "mapas": ["penas_altas"]}, {"nombre": "un lucio", "valor": 70, "peso": 4, "aguas": ["lago", "rio"]}],
         "personajes": [
             {"id": "pa_berta", "nombre": "Berta", "genero": "m", "apellido": "Lombao", "resistencia": 5, "salud_max": 115, "ciudadania": 25, "arma": "pa_pico", "botiquines": 1, "dinero": 120,
              "desc": "Barrenera, como su madre. Empieza con resistencia al nivel cinco, más salud de lo normal, un pico de minero y poco dinero."},
@@ -614,7 +614,7 @@ def isla_vientos():
                       clon(VEHICULOS, moto_agua, id="iv_moto", nombre="Moto de agua Levante", vel_max=31, salud=60, precio=6800, desc="Rápida, nerviosa y frágil.")],
         "comidas": [{"nombre": "Lubina a la sal", "precio": 15, "salud": 48}, {"nombre": "Ron de caña con limón", "precio": 4, "salud": 8}],
         "objetos": [{"id": "iv_sal", "nombre": "Saquito de flor de sal", "precio": 12, "desc": "Sal de la isla. De regalo queda muy bien."}],
-        "peces": [{"nombre": "una lubina de rompiente", "valor": 44, "peso": 10}, {"nombre": "una morena", "valor": 62, "peso": 4}, {"nombre": "un sargo", "valor": 20, "peso": 18}],
+        "peces": [{"nombre": "una lubina de rompiente", "valor": 44, "peso": 10, "aguas": ["mar"], "mapas": ["isla_vientos"]}, {"nombre": "una morena", "valor": 62, "peso": 4, "aguas": ["mar"]}, {"nombre": "un sargo", "valor": 20, "peso": 18, "aguas": ["mar"]}],
         "personajes": [{"id": "iv_telmo", "nombre": "Telmo", "genero": "h", "apellido": "Barlovento", "pesca": 4, "resistencia": 3, "arma": "iv_garfio", "dinero": 180, "botiquines": 2,
                         "desc": "Nacido en la isla y criado en una barca. Empieza con la pesca al nivel cuatro, resistencia al tres, un garfio y dos botiquines."}],
     }

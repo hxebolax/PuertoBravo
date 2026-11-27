@@ -1,6 +1,6 @@
 {
   "_nota": "La sección Comunidad de jugadores del menú principal: grupos, foros, servidores y otros recursos que crean y llevan los propios jugadores. No es oficial. Para apuntar uno, la issue 25 de GitHub. Cada cambio sube «revision» y se publica con herramientas/publicar_comunidad.py: así le llega al juego sin esperar a una versión nueva.",
-  "revision": 3,
+  "revision": 4,
   "titulo": "Comunidad de jugadores, sección no oficial",
   "aviso": "Esta sección no es oficial. Aquí están los grupos, foros, servidores y otros sitios que han creado los propios jugadores. Los crean, los llevan y los moderan ellos.",
   "responsabilidad": "El autor del juego no se hace responsable del contenido que se comparte en estos sitios ni de lo que pase en ellos. Todo lo que hay aquí lo gestionan los usuarios y no tiene que ver con el proyecto. El autor solo da visibilidad a los recursos que crean los jugadores.",
@@ -40,6 +40,16 @@
          "desc": "Un servidor que lleva un jugador. Sus normas las pone quien lo lleva."},
         {"nombre": "RP Brasil", "idioma": "portugués de Brasil", "servidor": "puertobravo://mrproductions.com.br:47820",
          "desc": "Un servidor brasileño de rol: se interpreta a un personaje y se crean historias con otros jugadores. Es público, sin contraseña ni invitación. Lo lleva MR Productions."}
+      ]
+    },
+    {
+      "id": "aprender",
+      "nombre": "Aprender a jugar: tutoriales, manuales, vídeos y pódcast",
+      "ayuda": "Guías para aprender a jugar que hacen los propios jugadores, por idiomas: primero eliges el idioma y luego lo que hay en él. Cada una dice si es un tutorial en audio, un vídeo, un pódcast o un manual.",
+      "por_idioma": true,
+      "enlaces": [
+        {"nombre": "Tutorial de iniciación a Puerto Bravo", "tipo": "tutorial en audio", "idioma": "español", "url": "https://lishi-lg.github.io/#tutorial/puerto-bravo",
+         "desc": "Nueve capítulos en audio para quien empieza: elegir entre la vida honrada, la delictiva o las dos, el prestigio y la fama, las misiones, la vida libre, la vida social, las opciones y los trucos. No sustituye al tutorial del juego: es una primera ayuda. Lo narra una voz de inteligencia artificial. Lo ha hecho alguien de la comunidad."}
       ]
     },
     {

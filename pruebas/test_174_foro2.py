@@ -281,7 +281,7 @@ def test_la_comunidad_de_jugadores_avisa_que_no_es_oficial_y_lista_sus_sitios(ro
         assert isinstance(m, Menu) and "no oficial" in m.titulo
         assert "no es oficial" in m.opciones[0].texto and "no se hace responsable" in m.opciones[1].texto
         d = comunidad.cargar()
-        assert [s["id"] for s in d["secciones"]] == ["comunicacion", "foros", "servidores", "otros"]
+        assert [s["id"] for s in d["secciones"]] == ["comunicacion", "foros", "servidores", "aprender", "otros"]
         tele = d["secciones"][0]["enlaces"]
         assert {e["idioma"] for e in tele} == {"inglés", "español"} and all(e["url"].startswith("https://t.me/") for e in tele)
         # cada sección, con cuántos sitios tiene; un enlace se abre en el navegador
@@ -340,5 +340,5 @@ def test_la_comunidad_se_lee_tambien_protegida_como_en_el_juego_compilado(tmp_pa
     monkeypatch.setattr(rutas, "DATOS", str(tmp_path))
     assert not (tmp_path / "comunidad.json").exists()
     d = comunidad.cargar()
-    assert [s["id"] for s in d["secciones"]] == ["comunicacion", "foros", "servidores", "otros"]
+    assert [s["id"] for s in d["secciones"]] == ["comunicacion", "foros", "servidores", "aprender", "otros"]
     assert d["responsabilidad"] and sum(len(s["enlaces"]) for s in d["secciones"]) >= 5

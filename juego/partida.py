@@ -337,7 +337,8 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
     # ----------------------------------------------------------------- básicos
     def decir(self, texto, interrumpir=False):
         self.voz.detalle = self.cfg["detalle_voz"]
-        self.voz.decir(self.app.mando.textos(texto), interrumpir)
+        from . import teclado
+        self.voz.decir(teclado.textos(self.cfg, self.app.mando.textos(texto)), interrumpir)      # con tus botones y tus teclas
 
     def son(self, nombre, xy=None, **kw):
         if nombre == "comer":
@@ -542,7 +543,13 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         self.dia = int(d.get("dia", 1))
         self.completadas = list(d.get("completadas", []))
         self.lluvia = bool(d.get("lluvia", False))
-        self.j.puntos_busqueda = 0.0
+        # si te buscaban al guardar, te siguen buscando al cargar (foro, 1.7.6): el nivel vuelve a subir y se dice, y las
+        # patrullas salen como siempre. Antes se perdía, y guardar y cargar era una forma de quitarse a la policía.
+        try:
+            puntos = max(0.0, float(self.j.puntos_busqueda or 0))
+        except (TypeError, ValueError):
+            puntos = 0.0
+        self.j.puntos_busqueda = 0.0 if self.cfg["sin_policia"] else puntos
         self.j.estrellas = 0
         self.j.x, self.j.y = self.mundo.punto_libre(self.j.x, self.j.y)
         if self.j.arma not in self.j.armas:

@@ -464,7 +464,7 @@ def crear(ARMAS, VEHICULOS, SUSTANCIAS, clon):
             {"id": "oc_c3", "nombre": "Del mirador al mar", "mapa": "bahia_ocaso", "premio": 1400, "tiempo": 120, "puntos": [[6, 7], [8, 7], [8, 1], [3, 1], [3, 4], [6, 4], [6, 7]]}],
         "comidas": [{"nombre": "Espeto de sardinas", "precio": 9, "salud": 30}, {"nombre": "Cocido del comedor", "precio": 6, "salud": 40}, {"nombre": "Limonada con hielo", "precio": 4, "salud": 10}],
         "objetos": [{"id": "oc_cantimplora", "nombre": "Cantimplora de Los Aljibes", "precio": 30, "desc": "Una cantimplora abollada con un aljibe grabado. En el Cauce, quien la lleva es de fiar."}],
-        "peces": [{"nombre": "una corvina del Ocaso", "valor": 46, "peso": 10}, {"nombre": "un pez limón", "valor": 90, "peso": 4}],
+        "peces": [{"nombre": "una corvina del Ocaso", "valor": 46, "peso": 10, "aguas": ["mar"], "mapas": ["bahia_ocaso"]}, {"nombre": "un pez limón", "valor": 90, "peso": 4, "aguas": ["mar"]}],
         "personajes": [
             {"id": "oc_tino", "nombre": "Tino", "genero": "h", "apellido": "Barral", "conduccion": 4, "resistencia": 2, "dinero": 250, "ciudadania": 40, "arma": "oc_llave", "botiquines": 1,
              "desc": "Sobrino de Custodia, criado entre cisternas. Empieza con conducción al nivel cuatro, buena resistencia, una llave de cisterna, doscientos cincuenta euros y buen nombre entre los vecinos."},

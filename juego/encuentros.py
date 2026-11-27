@@ -197,6 +197,17 @@ def horario_txt(p, l):
     return tr('Abre de {_hora} a {_hora2}').format(_hora=(_hora(abre * 60)), _hora2=(_hora((cierra % 24) * 60))) + (tr(', menos los {join}').format(join=(', '.join(tr(DIAS[x]) for x in cierra_dias))) if cierra_dias else tr(", todos los días")) + "."
 
 
+def horario_consulta(p, l):
+    """El horario de un local para consultarlo desde lejos (F2 en la lista de lugares, issue 44): cuándo abre y si
+    ahora está abierto. None si los horarios de los locales están apagados o el sitio abre siempre."""
+    if modo(p) != "todo" or l is None or horario_local(p, l) is None:
+        return None
+    if l.id in p.j.propiedades:
+        return tr("Es tuyo: entras cuando quieras.")
+    abierto, txt = local_abierto(p, l)
+    return horario_txt(p, l) + " " + (tr("Ahora está abierto.") if abierto else tr("Ahora está cerrado."))
+
+
 # ====================================================================== la gente
 def horario_persona(p, pers):
     """(desde, hasta, día libre) en que esta persona está en su sitio. Sale de los datos o, si no, de la semilla de la partida."""
@@ -231,6 +242,8 @@ def donde_txt(p, pers):
     base = tr('Suele estar en {nom} de {_hora} a {_hora2}, y libra los {v}.').format(nom=(nom), _hora=(_hora(desde * 60)), _hora2=(_hora((hasta % 24) * 60)), v=(tr(DIAS[libre])))
     if p.acompanante and p.acompanante.get("pid") == pers["id"]:
         return base + tr(" Ahora va contigo.")
+    if p.j.convive == pers["id"] and p.pareja_en_casa():
+        return base + tr(" Ahora está en vuestra casa.")
     if presente(p, pers):
         return base + tr(" Ahora está allí.")
     return base + tr(" Ahora no está allí: anda a lo suyo. Puedes llamarle o proponerle quedar.")

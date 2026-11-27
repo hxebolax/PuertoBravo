@@ -1,4 +1,7 @@
 {
  "_por_que": "Componentes que, con la compilación de con_la_version, se publican para versiones anteriores del juego. idioma-ru: en la 1.7.3, la 1.7.4 y la 1.7.5 el catálogo ruso traducía las órdenes del instalador de las actualizaciones y no dejaba actualizar. El componente lleva un catálogo que sirve en las tres (herramientas/catalogo_union.py) y sin esas órdenes.",
- "idioma-ru": {"requiere_juego": "1.7.3", "con_la_version": "1.7.5"}
+ "idioma-ru": {
+  "requiere_juego": "1.7.3",
+  "con_la_version": "1.7.6"
+ }
 }

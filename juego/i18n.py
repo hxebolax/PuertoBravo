@@ -448,6 +448,23 @@ def _inverso_de_todos():
     return mapa
 
 
+def identificador_perdido(texto, validos):
+    """El identificador que una partida guardada perdió al cargarse (hasta la 1.7.5, «taxi» se volvía «un taxi», porque
+    en un catálogo «un taxi» se traduce «taxi»): el de `validos` que sea la traducción de ese texto. None si no hay."""
+    for cod in disponibles():
+        if cod == ORIGEN:
+            continue
+        try:
+            with open(os.path.join(carpeta(cod), "textos.json"), encoding="utf-8") as f:
+                d = json.load(f)
+        except (OSError, ValueError):
+            continue
+        w = (d.get("textos", d) or {}).get(texto)
+        if isinstance(w, str) and w in validos:
+            return w
+    return None
+
+
 def al_idioma_de_ahora(obj, respetar=()):
     """Pone en el idioma del juego los textos de una partida guardada en cualquier idioma: lo que se guarda por nombre
     (la ropa, los objetos, la gente que conoces) se busca después en los datos, que están en el idioma de ahora. Cada texto
@@ -464,6 +481,8 @@ def al_idioma_de_ahora(obj, respetar=()):
         es = v if v in t or not inv else inv.get(v, v)
         if es_identificador(es, clave):                # un identificador, en español como en los datos (y el de una partida
             return es                                  # guardada antes de la 1.7.3, traducido entonces, vuelve a serlo)
+        if es_identificador(v, clave):                 # un identificador que en algún idioma es la traducción de una frase
+            return v                                   # («taxi», de «un taxi»): sigue siendo el identificador (foro, 1.7.6)
         return t.get(es, es)
 
     def rec(o, clave=None):

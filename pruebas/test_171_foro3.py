@@ -159,7 +159,7 @@ def test_la_secuencia_del_aviso_al_garaje_por_el_movil_guardar_mision_fallar_y_r
     p.j.x, p.j.y = p.mundo.punto_libre(o["x"] + 20, o["y"])
     robot.frames(10)
     assert o["visto"]
-    for _ in range(200):
+    for _ in range(450):                                          # mientras espera quieto no mira: te ve cuando ya anda (1.7.6)
         p.j.x, p.j.y = o["x"] + 1.0, o["y"]
         robot.frames(1)
         if p.mision is None:

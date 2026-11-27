@@ -1304,6 +1304,9 @@ class Conduccion:
         return lim, self._decidir_policia
 
     def crear_vehiculo(self, modelo_id, x, y, d, ia="aparcado", nombre=None, tag=None):
+        if modelo_id not in self.modelos and isinstance(modelo_id, str):         # de una partida que lo perdió al cargarse (el taxi)
+            from . import i18n
+            modelo_id = i18n.identificador_perdido(modelo_id, self.modelos) or modelo_id
         v = Vehiculo(self.modelos.get(modelo_id, self.modelos["utilitario"]), x, y, d, ia)
         if nombre:
             v.nombre = nombre

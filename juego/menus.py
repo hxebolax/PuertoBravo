@@ -207,6 +207,8 @@ class Dialogo:
         original = frase
         if md is not None:
             frase = md.textos(frase)                 # con mando: «pulsa Q» se dice con el botón que hace lo mismo
+        from . import teclado
+        frase = teclado.textos(self.app.cfg, frase)  # y con tus teclas, si has cambiado alguna
         grabada = self.voces[self.i] if self.voces and self.i < len(self.voces) else None
         if frase != original:
             grabada = None                           # la grabación nombra la tecla: esta frase la lee el lector, con el botón

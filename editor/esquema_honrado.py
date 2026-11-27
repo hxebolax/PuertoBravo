@@ -296,7 +296,9 @@ ESQUEMAS = {
         c("titulos", tr("Títulos conseguidos"), "entero", minimo=0),
         c("prestigio", tr("Prestigio entre los vecinos"), "entero", minimo=0, maximo=100),
         c("negocios", tr("Negocios propios"), "entero", minimo=0),
-        c("sin_antecedentes", tr("No tener antecedentes en vigor"), "entero", tr("Uno, si hace falta."), minimo=0, maximo=1)]},
+        c("sin_antecedentes", tr("No tener antecedentes en vigor"), "entero", tr("Uno, si hace falta."), minimo=0, maximo=1),
+        c("contratos", tr("Contratos del tablón cumplidos"), "entero", tr("Cuántos encargos del tablón hay que haber cumplido. Con el sitio de debajo, solo cuentan los de su tablón."), minimo=0),
+        c("tablon", tr("Solo los contratos del tablón de este sitio"), "ref", tr("Vacío, cuentan los de todos los tablones. Por ejemplo, para una misión que abre tras dos encargos de una agencia."), ref="lugar")]},
     "epilogo": {"titulo": tr("Epílogo del buen camino"), "resumen": lambda d: d.get("titulo", "")[:70], "campos": [
         c("titulo", tr("Nombre de este final"), req=True),
         c("clase", tr("Clase de final"), ayuda=tr("Una palabra: honrado, prudente, doble, redimido. El logro del buen camino pide la clase honrado.")),
@@ -317,8 +319,8 @@ CAMPOS_MISION = [
       "y no empieza sola al llegar a su lugar: aparece como la última opción del menú de ese sitio, o se pregunta si el sitio no tiene menú.")),
     c("orden", tr("Capítulo del buen camino"), "entero", tr("Para contar por dónde va el jugador. Dos misiones de ramas distintas pueden llevar el mismo número."), minimo=1, si=lambda d: d.get("honrada")),
     c("prestigio", tr("Prestigio que da al completarla"), "entero", tr("Vacío, dos."), minimo=0, maximo=100, si=lambda d: d.get("honrada")),
-    c("requiere_vida", tr("Lo que pide de la vida del jugador"), "objeto", tr("Además de las misiones anteriores: un contrato, turnos trabajados, títulos, prestigio, negocios o la ficha limpia. "
-      "Mientras falte algo, la misión no aparece, y el móvil dice qué falta."), sub="requisitos_vida"),
+    c("requiere_vida", tr("Lo que pide de la vida del jugador"), "objeto", tr("Además de las misiones anteriores: un contrato, turnos trabajados, títulos, prestigio, negocios, la ficha limpia o contratos del tablón cumplidos. "
+      "Mientras falte algo, la misión no aparece. Al cumplir una misión o un contrato, el juego avisa de las que se abren con eso. En las del buen camino, el móvil dice qué falta."), sub="requisitos_vida"),
     c("epilogos", tr("Epílogos: los finales del buen camino"), "lista", tr("Si esta misión cierra el buen camino. Se dice el primero cuya condición se cumpla."), sub="epilogo", si=lambda d: d.get("honrada")),
 ]
 CAMPO_DECISION = c("prestigio", tr("Prestigio que da o quita"), "entero", tr("Entre los vecinos. Es independiente de la fama."), minimo=-100, maximo=100)

@@ -25,7 +25,8 @@ TECLAS = {
         ("B", tr("pone el GPS y la baliza hacia lo último que dijo el radar. Si ya ibas a algún sitio, es un desvío: al subir a ese vehículo, llegar junto a esa persona, llegar a ese objeto o recogerlo, o llegar a ese lugar, "
               "el GPS vuelve solo a lo que llevabas, y lo dice")),
         ("F6", tr("cambia el filtro del radar: todo, lugares, vehículos, personas u objetos")),
-        ("L", tr("lista de lugares de la ciudad para marcar un destino. Dentro de un grupo, Tabulador cambia el orden: alfabético, o de más cerca a más lejos")),
+        ("L", tr("lista de lugares de la ciudad para marcar un destino. Dentro de un grupo, Tabulador cambia el orden: alfabético, o de más cerca a más lejos. "
+              "Con los horarios de los locales, F2 dice el horario del lugar y si ahora está abierto; F1 lo dice también, tras la descripción")),
         ("G", tr("repite la indicación del GPS. En una misión, sin destino marcado, vuelve a marcar lo que pide la misión; sin misión, recupera el último destino que quitaste")),
         (tr("Mayúsculas G"), tr("quita el destino del GPS. Si estabas en un desvío, el GPS vuelve a lo que llevabas; otra pulsación quita también eso")),
         (tr("Control G"), tr("recupera el último destino o desvío que quitaste con Mayúsculas G, sin tener que buscarlo otra vez. Si ahora vas a otro sitio, entra como desvío")),

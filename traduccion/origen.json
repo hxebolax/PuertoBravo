@@ -63,6 +63,9 @@
 " Ahora está allí.": [
 "juego/encuentros.py"
 ],
+" Ahora está en vuestra casa.": [
+"juego/encuentros.py"
+],
 " Ahora mismo no hay ningún sitio que marcar en el GPS.": [
 "juego/destinos.py"
 ],
@@ -345,6 +348,9 @@
 ],
 " Este servidor va con una versión anterior y todavía no sabe hacerlo: al pulsar, el juego te dice qué puedes hacer en su lugar.": [
 "juego/misvehiculos.py"
+],
+" Estás a su lado: apártate unos metros antes de que salga, o te verá.": [
+"juego/misiones.py"
 ],
 " Estás aquí.": [
 "juego/pantallas.py"
@@ -3274,7 +3280,7 @@
 "Además de la salida de arriba, el mismo sonido del juego por otra a la vez: por ejemplo un cable de audio virtual que recoja un programa de grabación o de retransmisión, o unos segundos auriculares. Para grabar o emitir sin cambiar por dónde lo oyes tú. Solo con el motor clásico: con el envolvente, los programas como OBS pueden recoger el sonido del juego directamente, con la captura de audio de una aplicación.": [
 "juego/menus_juego.py"
 ],
-"Además de las misiones anteriores: un contrato, turnos trabajados, títulos, prestigio, negocios o la ficha limpia. Mientras falte algo, la misión no aparece, y el móvil dice qué falta.": [
+"Además de las misiones anteriores: un contrato, turnos trabajados, títulos, prestigio, negocios, la ficha limpia o contratos del tablón cumplidos. Mientras falte algo, la misión no aparece. Al cumplir una misión o un contrato, el juego avisa de las que se abren con eso. En las del buen camino, el móvil dice qué falta.": [
 "editor/esquema_honrado.py"
 ],
 "Además de llegar, exige": [
@@ -3492,6 +3498,12 @@
 ],
 "Ahora es tuyo: {nombre}. Está amarrado en {nombre_lugar}.": [
 "juego/misiones.py"
+],
+"Ahora está abierto.": [
+"juego/encuentros.py"
+],
+"Ahora está cerrado.": [
+"juego/encuentros.py"
 ],
 "Ahora está parado": [
 "juego/menus_charla.py"
@@ -4554,6 +4566,9 @@
 ],
 "Aprender a jugar": [
 "data/datos/misiones.json"
+],
+"Aprender a jugar: tutoriales, manuales, vídeos y pódcast": [
+"data/datos/comunidad.json"
 ],
 "Aprender los sonidos": [
 "juego/menus_juego.py",
@@ -10686,6 +10701,9 @@
 "Contratos del tablón": [
 "editor/esquema.py"
 ],
+"Contratos del tablón cumplidos": [
+"editor/esquema_honrado.py"
+],
 "Contratos fijos": [
 "juego/menus_honrado.py"
 ],
@@ -11491,6 +11509,9 @@
 ],
 "Cuántos de los tuyos no cuentan": [
 "editor/esquema.py"
+],
+"Cuántos encargos del tablón hay que haber cumplido. Con el sitio de debajo, solo cuentan los de su tablón.": [
+"editor/esquema_honrado.py"
 ],
 "Cuántos enemigos, de cuántos a cuántos": [
 "editor/esquema.py"
@@ -18278,6 +18299,9 @@
 "juego/honrado.py",
 "data/datos/vida.json"
 ],
+"En {idioma}: {n}": [
+"juego/comunidad.py"
+],
 "En {lugar} han decidido que lo que te llevaste lo vas a pagar tú, poco a poco: precios más altos durante {dias}.": [
 "juego/atracos.py",
 "data/datos/vida.json"
@@ -18891,6 +18915,9 @@
 ],
 "Es tuyo. Da {ingreso_negocio} euros cada día, a medianoche": [
 "juego/menus_juego.py"
+],
+"Es tuyo: entras cuando quieras.": [
+"juego/encuentros.py"
 ],
 "Es tuyo: te lo pones gratis. Se lleva uno de cada clase: si ya llevabas otro de la misma, lo cambia.": [
 "juego/vestuario.py"
@@ -19808,6 +19835,9 @@
 ],
 "Este servidor va con una versión anterior y no tiene canales de rol: usa el chat de siempre.": [
 "juego/enlinea.py"
+],
+"Este sitio no tiene horario: abre siempre.": [
+"juego/menus_juego.py"
 ],
 "Este tiempo me mata las rodillas.": [
 "juego/respuestas_datos1.py"
@@ -22337,6 +22367,9 @@
 ],
 "Guárdatelo.": [
 "juego/respuestas_datos2.py"
+],
+"Guías para aprender a jugar que hacen los propios jugadores, por idiomas: primero eliges el idioma y luego lo que hay en él. Cada una dice si es un tutorial en audio, un vídeo, un pódcast o un manual.": [
+"data/datos/comunidad.json"
 ],
 "Guías, packs de sonidos, mods, vídeos y cualquier otra cosa que hagan los jugadores.": [
 "data/datos/comunidad.json"
@@ -28231,6 +28264,9 @@
 "Lo que hay en esa dirección no es una partida de Puerto Bravo.": [
 "juego/red.py"
 ],
+"Lo que hay en este idioma. Intro lo abre.": [
+"juego/comunidad.py"
+],
 "Lo que hay en la caja vale para todos los locales de ese tipo.": [
 "editor/esquema.py"
 ],
@@ -34089,6 +34125,9 @@
 ],
 "Nueva partida conservando lo ganado. Elige de qué partida guardada": [
 "juego/menus_juego.py"
+],
+"Nueve capítulos en audio para quien empieza: elegir entre la vida honrada, la delictiva o las dos, el prestigio y la fama, las misiones, la vida libre, la vida social, las opciones y los trucos. No sustituye al tutorial del juego: es una primera ayuda. Lo narra una voz de inteligencia artificial. Lo ha hecho alguien de la comunidad.": [
+"data/datos/comunidad.json"
 ],
 "Nuevo: ": [
 "editor/formulario.py"
@@ -42033,6 +42072,9 @@
 "Sin fuego: solo picar": [
 "editor/esquema.py"
 ],
+"Sin horario: con los horarios de los locales apagados, todo abre siempre.": [
+"juego/menus_juego.py"
+],
 "Sin informantes: de cada cien asaltos, de cuántos llega un rumor el mismo día": [
 "editor/esquema.py"
 ],
@@ -42344,6 +42386,9 @@
 ],
 "Solo lo oirá ese jugador.": [
 "panel_servidor/ventana.py"
+],
+"Solo los contratos del tablón de este sitio": [
+"editor/esquema_honrado.py"
 ],
 "Solo munición para el arma": [
 "editor/esquema.py"
@@ -46093,6 +46138,9 @@
 "Tutorial de combate. Estás en el club de tiro: aquí nadie te ataca y la policía no viene. Vas a practicar con muñecos.": [
 "data/datos/misiones.json"
 ],
+"Tutorial de iniciación a Puerto Bravo": [
+"data/datos/comunidad.json"
+],
 "Tutorial de trabajos. En Puerto Bravo hay muchas maneras de ganar dinero sin seguir la historia.": [
 "data/datos/misiones.json"
 ],
@@ -48556,6 +48604,9 @@
 "Vacío, cualquiera. Por ejemplo 27 para un estudiante, o 66 para un trabajo del que uno se jubila.": [
 "editor/esquema.py"
 ],
+"Vacío, cuentan los de todos los tablones. Por ejemplo, para una misión que abre tras dos encargos de una agencia.": [
+"editor/esquema_honrado.py"
+],
 "Vacío, dos.": [
 "editor/esquema_honrado.py"
 ],
@@ -49579,6 +49630,9 @@
 "juego/respuestas_datos1.py"
 ],
 "Vive aquí contigo, pero tiene su vida. De noche está siempre; de día, a ratos.": [
+"juego/convivencia.py"
+],
+"Vive aquí contigo, pero tiene su vida. En sus horas de trabajo está en su sitio; fuera de ellas, de noche está siempre y de día, a ratos.": [
 "juego/convivencia.py"
 ],
 "Vive aquí contigo. Hablar, comer juntos, hacer planes o pedirle que se vaya.": [
@@ -51897,6 +51951,12 @@
 "cuerpo a cuerpo": [
 "juego/combate.py"
 ],
+"cumplir {int} contratos del tablón de {sitio}; llevas {hechos}": [
+"juego/honrado.py"
+],
+"cumplir {int} contratos del tablón; llevas {hechos}": [
+"juego/honrado.py"
+],
 "césped": [
 "juego/mundo.py"
 ],
@@ -53857,7 +53917,7 @@
 "lista de lugares": [
 "juego/mando.py"
 ],
-"lista de lugares de la ciudad para marcar un destino. Dentro de un grupo, Tabulador cambia el orden: alfabético, o de más cerca a más lejos": [
+"lista de lugares de la ciudad para marcar un destino. Dentro de un grupo, Tabulador cambia el orden: alfabético, o de más cerca a más lejos. Con los horarios de los locales, F2 dice el horario del lugar y si ahora está abierto; F1 lo dice también, tras la descripción": [
 "juego/ayuda.py"
 ],
 "lleva demasiado sin comer y ya no tiene fuerzas para buscar. Dale de comer.": [
@@ -55042,6 +55102,9 @@
 "sin hambre": [
 "juego/necesidades.py"
 ],
+"sin idioma indicado": [
+"juego/comunidad.py"
+],
 "sin modelo": [
 "juego/ia.py"
 ],
@@ -55157,9 +55220,6 @@
 ],
 "suroeste": [
 "juego/mundo.py"
-],
-"sus cosas": [
-"juego/convivencia.py"
 ],
 "sábado": [
 "juego/partida.py"
@@ -55499,6 +55559,9 @@
 ],
 "tus {n} guardaespaldas": [
 "juego/menus_extra.py"
+],
+"tutorial en audio": [
+"data/datos/comunidad.json"
 ],
 "tuya": [
 "juego/honrado.py",
@@ -57719,6 +57782,7 @@
 "juego/menus_honrado.py"
 ],
 "{nombre}, en {idioma}": [
+"juego/comunidad.py",
 "juego/comunidad.py"
 ],
 "{nombre}, en {nombre2}": [
@@ -58181,6 +58245,9 @@
 "{nombre}: {precio} euros{marca}. Llevas {get}": [
 "juego/menus_adultos.py"
 ],
+"{nombre}: {tipo}": [
+"juego/comunidad.py"
+],
 "{nombre}: {v} {abs} euros, {motivo}": [
 "juego/menus_enlinea.py"
 ],
@@ -58421,6 +58488,9 @@
 "data/datos/vida.json"
 ],
 "{n} no está en casa ahora: anda por {v}": [
+"juego/convivencia.py"
+],
+"{n} no está en casa ahora: ha salido a sus cosas": [
 "juego/convivencia.py"
 ],
 "{n} no está, y en su sitio de siempre tampoco: anda a lo suyo.": [

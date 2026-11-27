@@ -1227,6 +1227,7 @@ def _cambiar_salida(app, clave, d):
 
 
 def lista_lugares(p, al_elegir=None, titulo=None, mapa=None, otras=True):
+    from . import encuentros
     app = p.app
     mundo = mapa or p.mundo
     titulo = titulo or tr('Lugares de {nombre}').format(nombre=(mundo.nombre))
@@ -1256,6 +1257,16 @@ def lista_lugares(p, al_elegir=None, titulo=None, mapa=None, otras=True):
 
         def tecla(self, ev):
             import pygame
+            if ev.key == pygame.K_F2:                                # el horario del local, sin ir hasta allí (issue 44)
+                l = getattr(self.opciones[self.i], "lugar", None) if self.opciones else None
+                horario = encuentros.horario_consulta(p, l)
+                if horario is None:
+                    app.son("error")
+                    _dice_menu_l(tr("Sin horario: con los horarios de los locales apagados, todo abre siempre.") if encuentros.modo(p) != "todo"
+                                 else tr("Este sitio no tiene horario: abre siempre."))
+                else:
+                    _dice_menu_l(horario)
+                return
             if ev.key != pygame.K_TAB:
                 return super().tecla(ev)
             if not aqui:
@@ -1295,7 +1306,10 @@ def lista_lugares(p, al_elegir=None, titulo=None, mapa=None, otras=True):
                     else:
                         p.gps_a_lugar(l)
                 texto = p.situar(l.x, l.y, l.nombre) if l.mapa == p.mundo.id else l.nombre
-                lista.append(Opcion(texto + marca, ir, ayuda=l.desc))
+                horario = encuentros.horario_consulta(p, l)
+                op = Opcion(texto + marca, ir, ayuda=(f"{l.desc} {horario}" if horario else l.desc))
+                op.lugar = l
+                lista.append(op)
             return lista or [Opcion(tr("No hay ningún lugar en esta lista"), ayuda=tr("En este grupo no hay nada ahora mismo. Prueba con otro grupo o con Todos los lugares."))]
         mg = MenuLugares(app, nombre, ops, intro=orden_txt() + tr(". Pulsa una letra para saltar, Intro para elegir, F1 para la descripción y Tabulador para cambiar el orden"))
         app.abrir(mg)
