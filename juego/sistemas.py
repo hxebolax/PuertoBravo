@@ -1144,6 +1144,15 @@ def visita_con_acompanante(p, lugar):
         act = next((x for x in p.dato_adulto("actividades") if x["id"] == a["plan"]), None)
         pers = p.persona_social(a["pid"])
         if act is not None and pers is not None and lugar.tipo in encuentros.sitios_de(act):
+            if p.cfg["citas_interactivas"] and not p.en_servidor:
+                # la cita interactiva: el plan solo se da por hecho al pagar; con Escape os vais y sigue pendiente
+                def confirmar():
+                    a["plan"] = None
+                    a["sitios"].append(lugar.id)
+                    a["hasta"] += int(act.get("horas", 0)) * 60
+                    a["puntos"] += 2
+                encuentros.iniciar_cita(p, pers, act, lugar, al_confirmar=confirmar)
+                return
             a["plan"] = None
             a["sitios"].append(lugar.id)
             a["hasta"] += int(act.get("horas", 0)) * 60               # el plan no se come el paseo

@@ -21,7 +21,12 @@ class Adultos:
         return bool(self.cfg["adultos"])
 
     def dato_adulto(self, clave):
-        return self.datos.get("adultos", {}).get(clave, [])
+        datos = self.datos.get("adultos", {}).get(clave, [])
+        if clave == "personas":                                 # y la gente de la calle con la que te has dado el número (1.7.7)
+            contactos = [r["contacto"] for r in self.j.relaciones.values() if isinstance(r.get("contacto"), dict) and r["contacto"].get("id")]
+            if contactos:
+                return list(datos) + contactos
+        return datos
 
     def sustancia(self, ident):
         return next((s for s in self.dato_adulto("sustancias") if s["id"] == ident), None)
@@ -208,6 +213,8 @@ class Adultos:
             elif dias >= 4 and r["estado"] != "ex":
                 r["afinidad"] = max(0, r["afinidad"] - 1)
         j.animo = max(0.0, min(100.0, j.animo))
+        from .encuentros import invitacion_diaria
+        invitacion_diaria(self)                                  # a lo mejor, hoy alguien te invita a salir (1.7.7)
 
     # -------------------------------------------------------------- relaciones
     def marcar_ruptura(self, r):

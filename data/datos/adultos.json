@@ -21,11 +21,11 @@
      "despedida": "Sole se aparta el pelo de la nuca para que quepa tu brazo. «Ven, que al taller ya voy yo sola.» Acomoda la cabeza en el hueco y por fin deja descansar los hombros."}
   ],
   "actividades": [
-    {"id": "paseo", "nombre": "Dar un paseo", "precio": 0, "horas": 2},
-    {"id": "cine", "nombre": "Ir al cine", "precio": 30, "horas": 3, "lugares": ["cine"]},
-    {"id": "copas", "nombre": "Salir de copas", "precio": 25, "horas": 3, "lugares": ["bar", "taberna", "club"]},
-    {"id": "baile", "nombre": "Ir a bailar", "precio": 40, "horas": 4, "lugares": ["club", "feria"]},
-    {"id": "cena", "nombre": "Cenar en un restaurante", "precio": 60, "horas": 3, "lugares": ["comida", "pizzeria", "hotel"]}
+    {"id": "paseo", "nombre": "Dar un paseo", "precio": 0, "horas": 2, "cita_accion": "Pasear sin prisa", "cita_escenas": ["Os paráis un momento a escuchar el barrio.", "Camináis al mismo paso, sin mirar el reloj.", "{n} te coge del brazo para cruzar y ya no te suelta."]},
+    {"id": "cine", "nombre": "Ir al cine", "precio": 30, "horas": 3, "lugares": ["cine"], "cita_accion": "Elegir las butacas juntos", "cita_escenas": ["Buscáis los dos asientos del centro hasta que empieza la película.", "Compartís unas palomitas y os reís en el mismo sitio.", "{n} te susurra lo que cree que va a pasar, y casi siempre acierta."]},
+    {"id": "copas", "nombre": "Salir de copas", "precio": 25, "horas": 3, "lugares": ["bar", "taberna", "club"], "cita_accion": "Buscar una mesa tranquila", "cita_escenas": ["Desde la mesa del fondo podéis hablar sin alzar la voz.", "Brindáis por nada en particular y os sale una buena tarde.", "{n} te cuenta una historia de su trabajo que no te esperabas."]},
+    {"id": "baile", "nombre": "Ir a bailar", "precio": 40, "horas": 4, "lugares": ["club", "feria"], "cita_accion": "Salir a la pista", "cita_escenas": ["Encontráis sitio en la pista y seguís el ritmo juntos.", "{n} te enseña un paso y lo repetís hasta que sale.", "Suena una canción que os gusta a los dos y ya no paráis."]},
+    {"id": "cena", "nombre": "Cenar en un restaurante", "precio": 60, "horas": 3, "lugares": ["comida", "pizzeria", "hotel"], "cita_accion": "Pedir un plato para compartir", "cita_escenas": ["Elegís un plato entre los dos y os lo traen a la mesa.", "Probáis lo del otro y acabáis cambiando los platos.", "{n} te recomienda el postre de la casa, y tiene razón."]}
   ],
   "regalos": [
     {"id": "flores", "nombre": "Un ramo de flores", "precio": 20, "afinidad": 5},

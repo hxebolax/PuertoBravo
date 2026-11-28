@@ -522,8 +522,15 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         from . import i18n
         jug = d.get("jugador", {})
         if isinstance(jug, dict):              # guardada en otro idioma: lo que se guarda por nombre, al de ahora
-            d["jugador"] = i18n.al_idioma_de_ahora(jug, respetar=("nombre", "apellido", "dicho", "semilla"))
+            d["jugador"] = i18n.al_idioma_de_ahora(jug, respetar=("nombre", "apellido", "dicho", "semilla", "invitacion", "ultimo_plan_propuesto", "contacto"))
         self.j.de_dict(d.get("jugador", {}))
+        for r in (self.j.relaciones.values() if isinstance(self.j.relaciones, dict) else ()):
+            if isinstance(r, dict):                              # una partida de antes de la 1.7.7: sin invitaciones ni contactos
+                r.setdefault("dia_invitacion", -999)
+                if r.get("invitacion") is not None and not isinstance(r["invitacion"], dict):
+                    r.pop("invitacion")
+                if r.get("contacto") is not None and not (isinstance(r["contacto"], dict) and r["contacto"].get("id")):
+                    r.pop("contacto")
         genero.poner(self.j.genero)
         if self.j.personaje == "propio":
             registro.ocultar(self.j.nombre)
@@ -2065,6 +2072,7 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         self.mez.altura = 0.0 if alt <= 0 else (35.0 if not self.vuelo_real() else min(110.0, 20.0 + alt * 0.15))
 
     def _tiempo(self, dt):
+        minuto_antes = int(self.reloj)
         antes = int(self.reloj // 60)
         self.reloj += dt / 2.0
         self.pasar_necesidades(dt / 2.0)
@@ -2078,6 +2086,9 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
             self.plazas_usadas.clear()
             self._cobrar_negocios()
             self.sortear_dia()
+        if self.j.relaciones and int(self.reloj) != minuto_antes and not self.en_servidor:
+            from . import encuentros                             # una invitación a salir: el móvil suena si no molesta (1.7.7)
+            encuentros.avisar_llamada(self)
         hora = int(self.reloj // 60)
         if hora != antes:
             r = 1.0 if self.en_servidor else random.random()     # y también si llueve

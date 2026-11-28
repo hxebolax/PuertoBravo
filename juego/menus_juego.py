@@ -1033,6 +1033,9 @@ def opciones(app):
                   tr("Con sí, las personas de tu vida social se tratan cara a cara: una cita, un regalo en mano, un beso, la noche o pedir salir, donde está esa persona, "
                   "en vuestra casa si vivís juntos, o mientras va contigo. Desde el móvil se llama, se escribe, se queda en un sitio a una hora, se manda un regalo a domicilio, "
                   "se da dinero y se rompe. Una cita se vive yendo juntos al sitio. Con no, todo se hace desde el móvil, como antes.")),
+            si_no("citas_interactivas", tr("Citas interactivas"),
+                  tr("Con sí, al llegar a una cita eliges cómo pasar el rato y, si el plan cuesta algo, si pagas tú o a medias. Hasta que pagas no pasa nada: "
+                  "con Escape te vas sin gastar y el plan sigue en pie. Con no, que es lo de serie, la cita se cuenta sola, como antes. Solo jugando en solitario.")),
             Opcion(lambda: tr("Horarios: ") + {"apagado": tr("no, todo abre siempre y cada persona está siempre en su sitio, como antes"),
                                            "gente": tr("la gente: cada persona de tu vida social está en su sitio en sus horas, y libra un día a la semana"),
                                            "todo": tr("la gente y los locales: además, cada local abre y cierra a sus horas y cierra algún día")}[cfg["horarios"]],
@@ -1568,7 +1571,17 @@ def movil(p):
                   Opcion(tr("Barrios"), barrios, ayuda=tr("Todos los barrios y localidades del juego, con cómo es cada uno y cuáles te faltan por visitar.")),
                   Opcion(tr("Estadísticas"), estadisticas, ayuda=tr("Las cifras de tu partida: misiones, dinero, tiempo jugado, lugares visitados, distancias y más."))]
         return lista
-    menu = Menu(app, lambda: tr('Móvil. {hora_txt}. {dinero} euros').format(hora_txt=(p.hora_txt()), dinero=(j.dinero)), ops)
+    def ops_y_llamada():
+        lista = ops()
+        from . import encuentros                                  # te han llamado para invitarte a salir (1.7.7)
+        llamada = encuentros.llamada_social(p)
+        if llamada and "suena_hasta" in llamada[1]:
+            pers, plan = llamada
+            texto = tr("Contestar a {n}") if encuentros.ahora(p) < plan["suena_hasta"] else tr("Devolver la llamada a {n}")
+            lista.insert(0, Opcion(texto.format(n=pers["nombre"]), lambda: encuentros.atender_invitacion(p, pers, llamada=True),
+                                   ayuda=tr("Te invita a salir: te dice el plan y puedes aceptarlo o decirle que mejor otro día.")))
+        return lista
+    menu = Menu(app, lambda: tr('Móvil. {hora_txt}. {dinero} euros').format(hora_txt=(p.hora_txt()), dinero=(j.dinero)), ops_y_llamada)
     app.abrir(menu)
 
 
@@ -1693,14 +1706,16 @@ def lugar(p, l):
                                          Opcion(tr("Beber agua de la fuente"), lambda: app.decir(p.beber_en_fuente(), True), ayuda=tr("Gratis. Quita la sed, con la vida realista.")))
         from . import menus_capo
         menus_capo.opciones_lugar(p, l, app.pila[-1])            # cajero, fichas del casino y gestor (capo.py)
+    # el menú del local: lo de abajo se le añade solo si sigue arriba (una cita interactiva abre el suyo encima)
+    menu_local = app.pila[-1] if not en_coche and app.pila and isinstance(app.pila[-1], Menu) and app.pila[-1] is not p else None
     if p.acompanante:
         from . import sistemas
         sistemas.visita_con_acompanante(p, l)
-        if p.acompanante and not en_coche and app.pila and isinstance(app.pila[-1], Menu) and app.pila[-1] is not p:
-            sistemas.con_acompanante_en_local(p, l, app.pila[-1], Opcion)       # invitarle a algo o regalarle un décimo
-    if l.tipo in ("bar", "taberna") and not en_coche and app.pila and isinstance(app.pila[-1], Menu) and app.pila[-1] is not p:
+        if p.acompanante and menu_local is not None and app.pila[-1] is menu_local:
+            sistemas.con_acompanante_en_local(p, l, menu_local, Opcion)       # invitarle a algo o regalarle un décimo
+    if l.tipo in ("bar", "taberna") and menu_local is not None and app.pila[-1] is menu_local:
         from . import sistemas
-        sistemas.con_cartas(p, app.pila[-1], Menu, Opcion)
+        sistemas.con_cartas(p, menu_local, Menu, Opcion)
 
 
 def _menu_lugar(p, l, ops, intro=None):

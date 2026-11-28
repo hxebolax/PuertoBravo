@@ -326,3 +326,50 @@ def test_misiones_para_adultos(robot):
         robot.saltar_dialogos()
         p._fin_persecucion()
     assert p.j.sustancias.get("hierba") == 10 and p.j.relaciones["lucia"]["afinidad"] >= 25
+
+
+def test_contacto_de_calle_e_invitacion_sobreviven_al_guardado(robot, monkeypatch):
+    import json
+    import random
+    from juego import encuentros
+    from juego.charla import ficha
+    from juego.entidades import Persona
+
+    p = robot.nueva_partida()
+    p.cfg["adultos"] = False
+    p.cfg["pareja_familiar"] = True
+    p.cfg["atraccion"] = "todos"
+    p.cfg["mi_genero"] = "x"
+    monkeypatch.setitem(encuentros.AJ.n, "invitacion_pct", 100)
+    persona = Persona("civil", *p.pos())
+    f = ficha(persona)
+    f.update(confianza=45, disponible=True, le_atraen="hm", interes=True, calabazas=True)
+    assert not p.intercambiar_numero(persona)                     # te dijo que no: no hay número
+    f["calabazas"] = False
+    assert p.intercambiar_numero(persona) and p.intercambiar_numero(persona)
+    pid = f["contacto_id"]
+    assert sum(x["id"] == pid for x in p.dato_adulto("personas")) == 1
+    perfil = p.persona_social(pid).copy()
+    assert perfil["edad"] >= 18 and not p.lug(perfil["lugar"]).d.get("adultos")
+    r = p.relacion(pid)
+    r.update(afinidad=48, ultimo=p.dia)
+    p.dia += 2
+    p.reloj = 8 * 60
+    encuentros.invitacion_diaria(p, random.Random(1))
+    plan = r["invitacion"].copy()
+    encuentros.invitacion_diaria(p, random.Random(1))
+    assert not p.j.quedadas and r["invitacion"] == plan            # una sola invitación a la vez
+
+    p.cargar_dict(json.loads(json.dumps(p.a_dict())))
+    assert p.persona_social(pid) == perfil and p.relacion(pid)["invitacion"] == plan
+    encuentros.responder_invitacion(p, perfil, True)
+    encuentros.responder_invitacion(p, perfil, True)
+    assert len(p.j.quedadas) == 1 and p.j.quedadas[0]["con"] == pid
+    assert p.j.quedadas[0]["min"] == plan["min"] and p.j.quedadas[0]["act"] in perfil["gustos"]
+    p.en_servidor = True
+    try:
+        otra = Persona("civil", *p.pos())
+        ficha(otra).update(confianza=45, disponible=True, le_atraen="hm", interes=True)
+        assert not p.intercambiar_numero(otra)                    # en un servidor, no
+    finally:
+        p.en_servidor = False

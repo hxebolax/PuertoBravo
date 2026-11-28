@@ -124,6 +124,7 @@ POR_DEFECTO = {
     "idioma": "auto",              # idioma del juego: auto (el del sistema) o un código, es, en... (i18n.py); vale al reiniciar
     "horarios": "apagado",         # horarios: apagado, solo de la gente, o de la gente y de los locales
     "pareja_familiar": True,       # relaciones sentimentales aptas para todos: conocerse, citas, compromiso, convivir y boda
+    "citas_interactivas": False,   # al llegar a una cita, elegir cómo pasar el rato y si pagáis a medias; con Escape, irte sin gastar
     "oficio_policia": False,       # modo: poder ingresar en la policía y trabajar de agente
     "radio_coches": True,          # en un servidor, oír floja la emisora del juego que lleva el vehículo de otro jugador que está cerca
     "reconectar": True,            # en un servidor: si se corta o se reinicia, esperar y volver a entrar solo, con la partida tal cual

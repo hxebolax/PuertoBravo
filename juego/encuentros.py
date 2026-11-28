@@ -33,6 +33,12 @@ AJ = Ajustes("encuentros", {
     "llamada_afinidad": 2, "aviso_minutos": 30, "espera_minutos": 30, "persona_abre": 10, "persona_cierra": 20, "variacion_horas": 1,
     "conocido_precio": 8, "conocido_animo": 5, "conocido_amistad": 10, "planton_dias": 3, "planton_amistad": 15,
     "hielo_ex_dias": 7,
+    # invitaciones y llamadas (1.7.7): cada cuántos días como poco, la probabilidad de cada día, con cuánta afinidad,
+    # cuántos días después de la última vez que os visteis, a qué horas puede sonar el móvil y cuántos minutos suena
+    "invitacion_cada_dias": 3, "invitacion_pct": 60, "invitacion_afinidad": 35, "invitacion_dias_min": 1, "invitacion_dias_max": 5,
+    "llamada_desde": 9, "llamada_hasta": 21, "llamada_minutos": 10, "invitacion_margen": 120,
+    # intercambiar números con gente de la calle: la confianza que hace falta y la afinidad, como mucho, con la que empezáis
+    "numero_confianza": 25, "numero_afinidad": 34,
 }, {
     "frases_planton": [tr("{n} te escribe: «Te he estado esperando en {lugar}. Ya me voy.» No le ha sentado nada bien."),
                        tr("{n} se ha cansado de esperarte en {lugar}. No contesta a tus mensajes.")],
@@ -60,8 +66,21 @@ AJ = Ajustes("encuentros", {
     "frases_hielo_gesto": [tr("{n} se aparta en seco: «Ni se te ocurra.»"), tr("«¿En serio?», dice {n}, y da un paso atrás.")],
     "frases_hielo_cita": [tr("«¿Quedar? No, gracias. Todavía no», te contesta {n}."), tr("{n} ni se lo piensa: «No voy a ir a ningún sitio contigo.»")],
     "frases_hielo_pedir": [tr("{n} se ríe sin ganas: «¿Volver? Hace nada que lo dejamos. Ni lo sueñes.»"), tr("«Dame tiempo. Mucho tiempo», te dice {n}.")],
+    "frases_invitacion_llamada": [tr("Te llama {n}. Abre el móvil para contestar."), tr("Suena el móvil: es {n}. Ábrelo para contestar.")],
+    "frases_invitacion_perdida": [tr("Tienes una llamada perdida de {n}. Puedes devolverla desde el móvil o contestar en Vida social."),
+                                  tr("{n} te ha llamado y no lo has cogido. Desde el móvil puedes devolverle la llamada.")],
+    "frases_invitacion_titulo": [tr("{n} al teléfono: «¿Te apetece este plan?»"), tr("{n} al teléfono: «Oye, ¿hacemos algo?»")],
+    "frases_invitacion_no": [tr("Le dices a {n} que mejor otro día. Lo entiende."), tr("«Otro día, entonces», te dice {n}. Sin problema.")],
+    "frases_cita_otro_dia": [tr("{n} te propone un plan para otro día: {plan}."), tr("«La próxima vez, {plan}», te dice {n}.")],
+    "cita_accion_generica": [tr("Disfrutar del plan")],
+    "cita_escenas_generica": [tr("Os acomodáis y dejáis que el plan vaya solo."), tr("Habláis sin prisa de lo primero que se os ocurre.")],
+    "frases_numero_si": [tr("{n} te da su número. Ya podéis quedar desde Vida social."), tr("{n} apunta tu número y te da el suyo. Ya está en tu Vida social.")],
+    "frases_numero_no": [tr("{n}: Prefiero que lo dejemos aquí."), tr("{n}: Mejor no. Pero ha sido un gusto charlar.")],
+    "frases_interes_si": [tr("{n}: Me encantaría quedar contigo algún día."), tr("{n} sonríe: «¿Una cita? Me apetece. Pídeme el número.»")],
+    "frases_interes_pronto": [tr("{n}: Primero conozcámonos un poco más, ¿vale?"), tr("{n}: Me caes bien, pero acabamos de conocernos.")],
+    "frases_interes_no": [tr("{n}: Eres muy amable, pero no, gracias."), tr("{n}: Gracias, pero tengo pareja."), tr("{n}: No, lo siento. Sin malos rollos.")],
     "frases_conocido": [tr("{n} llega puntual. Te cuenta cosas del barrio mientras os tomáis algo."), tr("Con {n} se te pasa la hora volando. Al despedirse, te cuenta un chisme.")],
-}, cero=("hielo_ex_dias", "planton_afinidad", "variacion_horas", "regalo_envio", "conocido_precio", "planton_dias", "planton_amistad"))
+}, cero=("invitacion_pct", "invitacion_dias_min", "invitacion_margen", "hielo_ex_dias", "planton_afinidad", "variacion_horas", "regalo_envio", "conocido_precio", "planton_dias", "planton_amistad"))
 
 # Horarios de los locales de serie: el tipo de lugar abre y cierra a esas horas, y cierra esos días. Lo que no está aquí,
 # abre siempre (hospitales, comisarías, hoteles, estaciones, casas...). Una hora de cierre menor que la de apertura es de madrugada.
@@ -290,21 +309,101 @@ def sitio_para(p, act, cerca_de):
     return min(cand, key=lambda l: math.hypot(l.x - cerca_de.x, l.y - cerca_de.y))
 
 
-def escenas(p, pers, act, gusta):
-    lista = AJ.lista("escenas_" + act["id"]) if ("escenas_" + act["id"]) in AJ.l else AJ.lista("escenas_generica")
+def escenas(p, pers, act, gusta, solo_despedida=False):
+    lista = []
+    if not solo_despedida:                                       # en una cita interactiva el rato ya se ha contado al elegirlo
+        lista = AJ.lista("escenas_" + act["id"]) if ("escenas_" + act["id"]) in AJ.l else AJ.lista("escenas_generica")
     lineas = [(tr("Narrador"), t.replace("{n}", pers["nombre"])) for t in lista]
     lineas.append((tr("Narrador"), (tr("Lo pasáis en grande: es justo lo que le gusta a ") + pers["nombre"] + "." if gusta
                                 else tr("Pasáis un rato agradable, aunque no es su plan favorito.")) + tr(' Ahora {afinidad_txt}. Son las {hora_txt}.').format(afinidad_txt=(p.afinidad_txt(p.relacion(pers['id']))), hora_txt=(p.hora_txt()))))
     return lineas
 
 
-def vivir_cita(p, pers, act, lugar=None, cobrar=True):
-    """El plan pasa de verdad: se paga, pasa el tiempo, os acerca y se cuenta en escenas. False si no se pudo pagar."""
+# Las citas interactivas (opción citas_interactivas, 1.7.7): al llegar eliges cómo pasar el rato y, si el plan cuesta
+# algo, si pagas tú o a medias. Hasta que no pagas no pasa nada: Escape te deja irte sin gastar ni perder el plan.
+# Lo que se puede hacer en cada plan está en los datos (adultos.json, en cada actividad: cita_accion y cita_escenas);
+# esto es lo de serie, por si falta.
+_PLANES = {
+    "cena": (tr("Pedir un plato para compartir"), [tr("Elegís un plato entre los dos y os lo traen a la mesa.")]),
+    "cine": (tr("Elegir las butacas juntos"), [tr("Buscáis los dos asientos del centro hasta que empieza la película.")]),
+    "baile": (tr("Salir a la pista"), [tr("Encontráis sitio en la pista y seguís el ritmo juntos.")]),
+    "copas": (tr("Buscar una mesa tranquila"), [tr("Desde la mesa del fondo podéis hablar sin alzar la voz.")]),
+    "paseo": (tr("Pasear sin prisa"), [tr("Os paráis un momento a escuchar el barrio.")]),
+}
+
+
+def plan_interactivo(act):
+    """(lo que eliges hacer, lo que pasa) para la cita interactiva de este plan, con variación."""
+    accion, escenas_serie = _PLANES.get(act["id"], (None, None))
+    accion = str(act.get("cita_accion") or accion or AJ.frase("cita_accion_generica"))
+    lista = [str(x) for x in (act.get("cita_escenas") or []) if str(x).strip()] or escenas_serie or AJ.lista("cita_escenas_generica")
+    return accion, random.choice(lista) if lista else act["nombre"]
+
+
+def iniciar_cita(p, pers, act, lugar=None, al_confirmar=None):
+    """Empieza una cita. Con la opción de las citas interactivas quitada (lo de serie) o en un servidor, es la de siempre:
+    vivir_cita. Con ella, primero eliges qué hacer y luego cómo pagáis; lo que pasa se aplica al pagar."""
+    if not p.cfg["citas_interactivas"] or p.en_servidor:
+        if p.cfg["citas_interactivas"]:
+            p.decir(tr("En un servidor en línea las citas son las de siempre, sin elegir."))
+        if al_confirmar is None:
+            return vivir_cita(p, pers, act, lugar)
+        return vivir_cita(p, pers, act, lugar, al_confirmar=al_confirmar)
+    from .menus import Menu, Opcion
+    app = p.app
+    nombre = pers["nombre"]
+    precio = int(act.get("precio", 0) or 0)
+    accion, escena = plan_interactivo(act)
+    escena = escena.replace("{n}", nombre)
+    titulo = act["nombre"] + ", " + nombre + (", " + lugar.nombre if lugar is not None else "")
+    menus_abiertos = []
+
+    def pasar_a_la_cuenta(texto):
+        def f():
+            for m in list(menus_abiertos):
+                app.cerrar(m)
+            menus_abiertos.clear()
+
+            def terminar(importe):
+                def g():
+                    def confirmar():
+                        app.cerrar(cuenta)
+                        if al_confirmar:
+                            al_confirmar()
+                    vivir_cita(p, pers, dict(act, precio=importe), lugar, al_confirmar=confirmar, solo_despedida=True)
+                return g
+            if precio:
+                mitad = (precio + 1) // 2
+                ops = [Opcion(tr("Pagar la cuenta: {n} euros").format(n=precio), terminar(precio), ayuda=texto),
+                       Opcion(tr("Pagar a medias: tu parte son {n} euros").format(n=mitad), terminar(mitad), ayuda=texto)]
+            else:
+                ops = [Opcion(tr("Terminar la cita"), terminar(0), ayuda=texto)]
+            cuenta = Menu(app, texto, ops)
+            app.abrir(cuenta)
+        return f
+
+    ops = [Opcion(accion, pasar_a_la_cuenta(escena), ayuda=tr("Después decides cómo pagáis. Hasta entonces, con Escape te vas sin gastar nada y el plan sigue en pie."))]
+    gustos = [a["nombre"] for a in p.dato_adulto("actividades") if a["id"] in pers.get("gustos", ()) and a["id"] != act["id"]]
+    if gustos:
+        respuesta = AJ.frase("frases_cita_otro_dia", n=nombre, plan=random.choice(gustos).lower())
+        ops.append(Opcion(tr("Preguntar qué le gustaría hacer otro día"), pasar_a_la_cuenta(respuesta),
+                          ayuda=tr("Te dice uno de sus planes favoritos. Después decides cómo pagáis.")))
+    llegada = Menu(app, titulo, ops, intro=tr("¿Cómo pasáis el rato?"))
+    menus_abiertos.append(llegada)
+    app.abrir(llegada)
+    return True
+
+
+def vivir_cita(p, pers, act, lugar=None, cobrar=True, al_confirmar=None, solo_despedida=False):
+    """El plan pasa de verdad: se paga, pasa el tiempo, os acerca y se cuenta en escenas. False si no se pudo pagar.
+    `al_confirmar`, si lo hay, se llama justo después de pagar, antes de que pase nada (las citas interactivas)."""
     from .menus import Dialogo
     pid = pers["id"]
     r = p.relacion(pid)
     if cobrar and act.get("precio") and not p.pagar(int(act["precio"])):
         return False
+    if al_confirmar:
+        al_confirmar()
     gusta = act["id"] in pers.get("gustos", [])
     r.setdefault("hoy", {})["cita"] = p.dia
     from . import vestuario
@@ -322,7 +421,7 @@ def vivir_cita(p, pers, act, lugar=None, cobrar=True):
     lineas = [(tr("Narrador"), tr('{nombre} con {nombre2}').format(nombre=(act['nombre']), nombre2=(pers['nombre'])) + (tr(', en {nombre}').format(nombre=(lugar.nombre)) if lugar is not None else "") + ".")]
     if frase_ropa:
         lineas.append((tr("Narrador"), frase_ropa))
-    p.app.abrir(Dialogo(p.app, lineas + escenas(p, pers, act, gusta)))
+    p.app.abrir(Dialogo(p.app, lineas + escenas(p, pers, act, gusta, solo_despedida)))
     p.celos(pid)
     return True
 
@@ -368,6 +467,197 @@ def huecos(p, pers=None):
             txt = tr('Dentro de un rato, a las {_hora}').format(_hora=(_hora(m)))
         lista.append((txt, m))
     return lista
+
+
+# ====================================================================== invitaciones y llamadas (1.7.7)
+# Alguien de tu vida social te propone un plan: un día de cada pocos, con algo de azar, si os lleváis bien y hace poco
+# que no os veis. La invitación queda pendiente hasta que contestas (en el móvil, al sonar o devolviendo la llamada, o en
+# Vida social) o hasta que pasa la hora; no apunta ninguna quedada hasta que dices que sí. El móvil solo suena cuando no
+# molesta: nunca en una misión, un trabajo, un combate, una persecución, en el pabellón de los combates, de noche o con
+# un menú abierto, ni en un servidor en línea (allí no hay invitaciones). Los números y las frases, en vida.json.
+def invitacion_valida(p, r):
+    """La invitación pendiente de esta relación, si sigue en pie; si caducó o venía mal (partida antigua), la quita."""
+    plan = r.get("invitacion")
+    if plan is None:
+        return None
+    if (not isinstance(plan, dict) or not isinstance(plan.get("min"), (int, float)) or plan["min"] <= ahora(p)
+            or r.get("estado") == "ex" or not plan.get("act") or p.lug(plan.get("lugar")) is None):
+        r.pop("invitacion", None)
+        return None
+    return plan
+
+
+def invitacion_diaria(p, rng=random):
+    """Cada día, a lo mejor, alguien te invita a salir. Solo una invitación a la vez y ninguna si ya has quedado."""
+    if p.en_servidor or not p.vida_sentimental():
+        return None
+    relaciones = p.j.relaciones
+    pendientes = [r for r in relaciones.values() if invitacion_valida(p, r)]
+    if pendientes or quedadas(p):
+        return None
+    cada = AJ.entero("invitacion_cada_dias")
+    if any(p.dia - _dia_invitacion(r) < cada for r in relaciones.values()):
+        return None
+    if rng.random() * 100 >= AJ("invitacion_pct"):
+        return None
+    t = ahora(p)
+    primero = max(t, p.dia * 1440 + AJ.entero("llamada_desde") * 60) + AJ.entero("invitacion_margen")
+    ultimo = (p.dia + 1) * 1440 + AJ.entero("llamada_hasta") * 60
+    cand = list(relaciones.items())
+    rng.shuffle(cand)
+    cand.sort(key=lambda par: _dia_invitacion(par[1]))         # a quien hace más que no te invita, antes
+    for pid, r in cand:
+        if (pid in p.j.ocultos_social or r.get("estado") == "ex" or dias_de_planton(p, r) or p.hielo_ex(r)
+                or r.get("afinidad", 0) < AJ.entero("invitacion_afinidad")):
+            continue
+        try:
+            dias = p.dia - int(r.get("ultimo", p.dia))
+        except (TypeError, ValueError):
+            continue
+        if not AJ.entero("invitacion_dias_min") <= dias <= AJ.entero("invitacion_dias_max"):
+            continue
+        pers = p.persona_social(pid)
+        base = p.lug(pers.get("lugar")) if pers else None
+        if base is None:
+            continue
+        planes = [a for a in p.dato_adulto("actividades") if a["id"] in pers.get("gustos", ())]
+        libres = [m for _, m in huecos(p, pers) if primero <= m <= ultimo]
+        if not planes or not libres:
+            continue
+        otros = [a for a in planes if a["id"] != r.get("ultimo_plan_propuesto")] or planes
+        act = rng.choice(otros)
+        sitio = sitio_para(p, act, base)
+        if sitio is None:
+            continue
+        r["invitacion"] = {"act": act["id"], "min": int(rng.choice(libres)), "lugar": sitio.id}
+        r["dia_invitacion"], r["ultimo_plan_propuesto"] = p.dia, act["id"]
+        return pid
+    return None
+
+
+def _dia_invitacion(r):
+    """El día de la última invitación de esta persona; una partida de antes de la 1.7.7 no lo tiene: hace mucho."""
+    try:
+        return int(r.get("dia_invitacion", -999))
+    except (TypeError, ValueError):
+        return -999
+
+
+def llamada_social(p):
+    """(persona, invitación) de la invitación que se puede contestar ahora, o None."""
+    if p.en_servidor or not p.vida_sentimental():
+        return None
+    for pid, r in p.j.relaciones.items():
+        if pid in p.j.ocultos_social:
+            continue
+        plan = invitacion_valida(p, r)
+        if plan is None:
+            continue
+        pers = p.persona_social(pid)
+        if pers is not None:
+            return pers, plan
+    return None
+
+
+def puede_sonar(p):
+    """¿Puede sonar ahora el móvil sin estorbar? Como los demás avisos que no deben interrumpir."""
+    if p.en_servidor or p.mision or getattr(p, "trabajo", None) or p.j.estrellas:
+        return False
+    if getattr(p.mundo, "tipo", "") == "recinto":               # el pabellón de los combates
+        return False
+    if not AJ.entero("llamada_desde") * 60 <= p.reloj < AJ.entero("llamada_hasta") * 60:
+        return False                                             # de noche, ni mientras duermes
+    if p.estado_musica() == "tension":                          # un combate cerca
+        return False
+    pila = getattr(p.app, "pila", None)
+    return not pila or pila[-1] is p                             # nada de interrumpir un menú ni una escena
+
+
+def avisar_llamada(p):
+    """Cada minuto del juego: si hay una invitación sin contestar, el móvil suena una vez; si no lo coges, llamada perdida."""
+    if not p.j.relaciones or not puede_sonar(p):
+        return
+    llamada = llamada_social(p)
+    if not llamada:
+        return
+    pers, plan = llamada
+    if (p.acompanante and p.acompanante.get("pid") == pers["id"]) or quedada_en_curso(p, pers["id"]) is not None:
+        return
+    t = ahora(p)
+    if "suena_hasta" not in plan:
+        plan["suena_hasta"] = t + AJ.entero("llamada_minutos")
+        p.son("movil", cat="interfaz", vol=0.6)
+        p.decir(AJ.frase("frases_invitacion_llamada", n=pers["nombre"]))
+    elif t >= plan["suena_hasta"] and not plan.get("perdida"):
+        plan["perdida"] = True
+        p.decir(AJ.frase("frases_invitacion_perdida", n=pers["nombre"]))
+
+
+def texto_invitacion(p, plan):
+    """El plan dicho en una frase: qué, dónde y cuándo. Vacío si ya no vale."""
+    if not isinstance(plan, dict):
+        return ""
+    act = next((a for a in p.dato_adulto("actividades") if a["id"] == plan.get("act")), None)
+    sitio = p.lug(plan.get("lugar"))
+    if not act or sitio is None:
+        return ""
+    cuando = tr("Hoy") if plan["min"] // 1440 == p.dia else tr("Mañana")
+    return tr("{plan}, en {sitio}. {cuando} a las {hora}.").format(plan=act["nombre"], sitio=p.nombre_lugar(sitio), cuando=cuando, hora=_hora(plan["min"]))
+
+
+def atender_invitacion(p, pers, llamada=False):
+    """Contestar a una invitación: al teléfono (llamada) o desde Vida social. Escape la deja pendiente."""
+    from .menus import Menu, Opcion
+    if p.en_servidor:
+        p.decir(tr("En un servidor en línea no hay invitaciones."), True)
+        return
+    r = p.relacion(pers["id"])
+    plan = invitacion_valida(p, r)
+    detalle = texto_invitacion(p, plan) if plan else ""
+    if not detalle:
+        p.decir(tr("Ese plan ya no está disponible."), True)
+        return
+    if llamada:
+        plan["suena_hasta"] = min(plan.get("suena_hasta", ahora(p)), ahora(p))
+        plan["perdida"] = True                                   # ya la has cogido: no hay llamada perdida
+        p.son("murmullo", cat="interfaz", vol=0.25)               # la voz al otro lado
+        titulo = AJ.frase("frases_invitacion_titulo", n=pers["nombre"])
+    else:
+        titulo = tr("Invitación de {n}").format(n=pers["nombre"])
+    titulo += " " + detalle
+
+    def contestar(si):
+        def f():
+            p.app.cerrar(menu)
+            responder_invitacion(p, pers, si)
+            debajo = p.app.pila[-1] if p.app.pila else None
+            if debajo is not p and hasattr(debajo, "refrescar"):
+                debajo.refrescar(False)                          # el móvil o Vida social, ya sin la invitación
+        return f
+    menu = Menu(p.app, titulo, [Opcion(tr("Aceptar"), contestar(True), ayuda=tr("Quedáis a esa hora en ese sitio. Media hora antes te lo recuerdo; si no apareces, se lo tomará mal.")),
+                                Opcion(tr("Mejor otro día"), contestar(False), ayuda=tr("Le dices que no. No pasa nada: otro día te volverá a proponer algo.")),
+                                Opcion(tr("Colgar") if llamada else tr("Volver"), lambda: p.app.cerrar(menu),
+                                       ayuda=tr("Sin contestar: la invitación sigue en pie hasta la hora del plan, en el móvil y en Vida social."))])
+    p.app.abrir(menu)
+
+
+def responder_invitacion(p, pers, aceptar):
+    """Sí: se apunta la quedada. No: se dice y en paz, sin perder afinidad. En los dos casos la invitación se acaba."""
+    r = p.relacion(pers["id"])
+    plan = invitacion_valida(p, r)
+    r.pop("invitacion", None)
+    if plan is None:
+        if aceptar:
+            p.decir(tr("Ese plan ya no está disponible."), True)
+        return False
+    if not aceptar:
+        p.decir(AJ.frase("frases_invitacion_no", n=pers["nombre"]), True)
+        return False
+    if any(q["con"] != pers["id"] and abs(q["min"] - plan["min"]) < 60 for q in quedadas(p)):
+        p.decir(tr("A esa hora ya has quedado con otra persona."), True)
+        return False
+    quedar(p, pers["id"], pers["nombre"], p.lug(plan["lugar"]), plan["min"], plan["act"])
+    return True
 
 
 def quedar(p, con, nombre, lugar, minuto, act_id=None):
@@ -460,7 +750,7 @@ def _encuentro(p, q, l):
     if p.j.estrellas:
         p.decir(tr('Con la policía detrás, {nombre} prefiere dejarlo para otro día.').format(nombre=(pers['nombre'])))
         return
-    vivir_cita(p, pers, act, l)
+    iniciar_cita(p, pers, act, l)
 
 
 def _con_conocido(p, q, l):

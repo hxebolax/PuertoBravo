@@ -55,6 +55,13 @@ def conversar(p, q):
     def ligar():
         app.decir(p.ligar(q), True)
 
+    def interes():
+        app.decir(p.mostrar_interes(q), True)
+
+    def numero():
+        if p.intercambiar_numero(q):
+            menu.refrescar(False)
+
     def proponer(hotel):
         def hacer():
             if not p.proponer_aventura(q, en_hotel=hotel):
@@ -85,6 +92,13 @@ def conversar(p, q):
                                     lista=(", ".join(p.nunca_reclutan()) or tr("nadie")))))
         if p.modo_adulto():
             lista.append(Opcion(tr("Coquetear"), ligar, ayuda=tr("Puede salir bien o mal, según la confianza, tu ánimo y lo que busque la otra persona. Un no es un no.")))
+        elif p.vida_sentimental() and not p.en_servidor and f["edad"] >= 18:     # la vida sentimental apta para todos
+            lista.append(Opcion(tr("Mostrar interés en una cita"), interes,
+                                ayuda=tr("Le dices que te gustaría quedar algún día. Puede salir bien o mal, según la confianza, tu ánimo y lo que busque la otra persona. Un no es un no.")))
+        if p.vida_sentimental() and not p.en_servidor and f["edad"] >= 18 and f.get("interes") and not f.get("calabazas") and f.get("contacto_id") not in p.j.relaciones:
+            lista.append(Opcion(tr("Intercambiar números para una cita"), numero,
+                                ayuda=tr("Si le interesas y te tiene algo de confianza, pasa a tu Vida social: desde ahí podéis quedar, y a veces te llamará para proponerte un plan.")))
+        if p.modo_adulto():
             if p.puede_proponer(q):
                 lista.append(Opcion(tr("Proponerle ir a tu casa"), proponer(False), ayuda=tr('Si no tienes casa en esta localidad, vais a un hotel por {precio} euros.').format(precio=(p.precio('hotel_cita', 70)))))
                 lista.append(Opcion(tr('Proponerle ir a un hotel: {precio} euros').format(precio=(p.precio('hotel_cita', 70))), proponer(True),

@@ -2572,6 +2572,9 @@
 "A cubierto tras {que}. Te alcanzan mucho menos, pero apuntas algo peor. Si te mueves, sales.": [
 "juego/partida.py"
 ],
+"A esa hora ya has quedado con otra persona.": [
+"juego/encuentros.py"
+],
 "A esa orden le falta algo. Se escribe así: %s. Sirve para esto: %s.": [
 "servidor/nucleo.py"
 ],
@@ -3186,6 +3189,9 @@
 "Aceptado. Empezará cuando lo diga quien lo ha propuesto.": [
 "juego/online.py"
 ],
+"Aceptar": [
+"juego/encuentros.py"
+],
 "Aceptar 200 euros del patrón por callar parte": [
 "data/mods/costa_dorada.json"
 ],
@@ -3423,10 +3429,16 @@
 "Afinidad que ganas si lo haces": [
 "editor/esquema.py"
 ],
+"Afinidad que hace falta para que te invite": [
+"editor/esquema.py"
+],
 "Afinidad que pierdes si no": [
 "editor/esquema.py"
 ],
 "Afinidad que se pierde por un plantón": [
+"editor/esquema.py"
+],
+"Afinidad, como mucho, con la que empezáis": [
 "editor/esquema.py"
 ],
 "Aflojas, pero no preguntas.": [
@@ -3700,6 +3712,9 @@
 ],
 "Al consultar {nombre}, respondió con el error {code}.": [
 "juego/actualizador.py"
+],
+"Al contestar": [
+"editor/esquema.py"
 ],
 "Al dejar la cesta y salir": [
 "editor/esquema.py"
@@ -3983,6 +3998,9 @@
 ],
 "Alguien de tu banda viene a recogerte con un vehículo de tu garaje o con uno de la banda, y conduce él hasta el destino que marques en el GPS. Tú vas de pasajero y puedes disparar. Hace falta tener a alguien reclutado. Desde aquí también lo despides.": [
 "juego/menus_extra.py"
+],
+"Alguien de tu vida social te propone un plan por el móvil. Solo una invitación a la vez, y ninguna si ya has quedado con alguien.": [
+"editor/esquema.py"
 ],
 "Alguien deja la banda tras un fracaso": [
 "editor/esquema_golpes.py"
@@ -6812,6 +6830,9 @@
 "Brilla con las luces de la pista.": [
 "data/datos/vida.json"
 ],
+"Brindáis por nada en particular y os sale una buena tarde.": [
+"data/datos/adultos.json"
+],
 "Brisa Cabrio descapotable": [
 "data/datos/vehiculos.json"
 ],
@@ -6952,6 +6973,10 @@
 "Buscar un sonido. Escribe parte de su nombre o de lo que significa": [
 "juego/menus_juego.py"
 ],
+"Buscar una mesa tranquila": [
+"juego/encuentros.py",
+"data/datos/adultos.json"
+],
 "Buscar una versión nueva del juego e instalarla, y elegir de dónde se actualiza: el servidor del juego, GitHub, los dos o una dirección tuya.": [
 "juego/menus_juego.py"
 ],
@@ -6960,6 +6985,10 @@
 ],
 "Busco coches. Hay un sedán aparcado junto a la iglesia de San Telmo. Su dueño me debe dinero. Tráemelo entero.": [
 "data/datos/misiones.json"
+],
+"Buscáis los dos asientos del centro hasta que empieza la película.": [
+"juego/encuentros.py",
+"data/datos/adultos.json"
 ],
 "Buscáis otra fecha para volver al sitio de la entrada.": [
 "data/datos/escenas_privadas.json"
@@ -7792,6 +7821,9 @@
 ],
 "Camino del Río": [
 "data/mods/valdeolmos.json"
+],
+"Camináis al mismo paso, sin mirar el reloj.": [
+"data/datos/adultos.json"
 ],
 "Camináis despacio, del brazo. {n} saluda a medio barrio.": [
 "juego/convivencia.py",
@@ -8802,6 +8834,27 @@
 "Cita con {nombre}. Tienes {dinero} euros": [
 "juego/menus_adultos.py"
 ],
+"Cita interactiva: lo que pasa": [
+"editor/esquema.py"
+],
+"Cita interactiva: lo que pasa en un plan sin escenas propias": [
+"editor/esquema.py"
+],
+"Cita interactiva: qué se elige hacer": [
+"editor/esquema.py"
+],
+"Cita interactiva: qué se elige hacer en un plan sin el suyo": [
+"editor/esquema.py"
+],
+"Cita interactiva: te propone un plan para otro día": [
+"editor/esquema.py"
+],
+"Citas interactivas": [
+"juego/menus_juego.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py"
+],
 "Citas para prometerse": [
 "editor/esquema_honrado.py"
 ],
@@ -9188,6 +9241,7 @@
 "juego/extras2.py"
 ],
 "Colgar": [
+"juego/encuentros.py",
 "juego/menus.py"
 ],
 "Colmado Anselma": [
@@ -9460,6 +9514,9 @@
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
+"Compartís unas palomitas y os reís en el mismo sitio.": [
+"data/datos/adultos.json"
+],
 "Complemento": [
 "editor/esquema.py"
 ],
@@ -9723,6 +9780,9 @@
 "Con algo de fama en la calle o con escolta, se lo piensan y te dejan en paz.": [
 "juego/honrado.py"
 ],
+"Con alguien de la calle a quien le gustas. Pasa a tu Vida social.": [
+"editor/esquema.py"
+],
 "Con alguien que valga 100 es un cuarto más; con alguien que valga 0, la mitad.": [
 "editor/esquema_golpes.py"
 ],
@@ -9755,6 +9815,9 @@
 "editor/esquema.py"
 ],
 "Con cero, la denuncia se dice pero no cuenta.": [
+"editor/esquema.py"
+],
+"Con cero, nadie te invita.": [
 "editor/esquema.py"
 ],
 "Con cero, ninguno.": [
@@ -9962,6 +10025,9 @@
 "editor/esquema.py"
 ],
 "Con la opción de combustible activada, aquí se reposta sin bajarse del vehículo y se compran bidones. Pon al menos una en cada localidad con coches.": [
+"editor/esquema.py"
+],
+"Con la opción de las citas interactivas, lo que eliges al llegar, por ejemplo Salir a la pista. Vacío, lo de serie.": [
 "editor/esquema.py"
 ],
 "Con la opción de soltar armas, de cada cien, cuántos la sueltan": [
@@ -10279,6 +10345,9 @@
 "editor/esquema_honrado.py"
 ],
 "Con sí, al llegar a la puerta de un lugar se dice cuál es y, si allí empieza una misión, que puedes empezarla con Intro. Con no, no se dice nada al llegar.": [
+"juego/menus_juego.py"
+],
+"Con sí, al llegar a una cita eliges cómo pasar el rato y, si el plan cuesta algo, si pagas tú o a medias. Hasta que pagas no pasa nada: con Escape te vas sin gastar y el plan sigue en pie. Con no, que es lo de serie, la cita se cuenta sola, como antes. Solo jugando en solitario.": [
 "juego/menus_juego.py"
 ],
 "Con sí, al llegar al nivel 5 acude un helicóptero: se le oye llegar y dar vueltas por encima de ti, y te habla por el altavoz. Mientras te tenga localizado no puedes despistar a la policía. Te pierde si te pegas a una fachada unos segundos o entras en un edificio, y no te reconoce si cambias de vehículo sin que te vea. Se le puede derribar con un rifle o un explosivo, pero entonces la policía tarda el doble en olvidarte y el helicóptero se paga al ser detenido. Hace el nivel 5 bastante más difícil: por eso viene apagado. En un servidor con policía común no sale.": [
@@ -10655,6 +10724,9 @@
 "Confianza que gana con un saludo": [
 "editor/esquema.py"
 ],
+"Confianza que hace falta para intercambiar números para una cita": [
+"editor/esquema.py"
+],
 "Confianza que pierde con un insulto": [
 "editor/esquema.py"
 ],
@@ -10785,6 +10857,9 @@
 "data/datos/adultos.json"
 ],
 "Contenido para mayores de 18 años: {v}": [
+"juego/menus_juego.py"
+],
+"Contestar a {n}": [
 "juego/menus_juego.py"
 ],
 "Contestar y quedar para devolverlo": [
@@ -13244,6 +13319,10 @@
 "Desde la calle suben tres notas de una salsa y después el pitido de un camión que da marcha atrás. Lucía ya ha encontrado la forma de bailarlo. Te enseña el paso que usa para atravesar una terraza llena sin tirar una cerveza. A la tercera vuelta te tiene entre sus brazos y ninguno recuerda quién llevaba la bandeja.": [
 "data/datos/relatos_privados.json"
 ],
+"Desde la mesa del fondo podéis hablar sin alzar la voz.": [
+"juego/encuentros.py",
+"data/datos/adultos.json"
+],
 "Desde lo alto de la Torre Belmonte se ven el puerto, Villaseca y San Lucero. En los tres sitios se paga, y en los tres se paga a la misma persona. La tía Encarna ha dejado de preguntar, y en el Barrio Viejo bajan la voz cuando entras. Tienes todo lo que tenía Belmonte. También lo que le quitaba el sueño.": [
 "data/datos/misiones_extra2.json"
 ],
@@ -13432,6 +13511,9 @@
 "juego/reconquista.py",
 "data/datos/vida.json"
 ],
+"Después decides cómo pagáis. Hasta entonces, con Escape te vas sin gastar nada y el plan sigue en pie.": [
+"juego/encuentros.py"
+],
 "Después del último golpe, {banda} se ha escondido bien. Tus fuentes tardarán {_dias} en dar con ellos.": [
 "juego/reconquista.py"
 ],
@@ -13536,6 +13618,9 @@
 "editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py"
+],
+"Devolver la llamada a {n}": [
+"juego/menus_juego.py"
 ],
 "Devolver un barrio por dinero, comprar uno o cobrar un tributo. F1 explica cada trato": [
 "juego/pactos.py"
@@ -13909,6 +13994,10 @@
 ],
 "Disculpas aceptadas.": [
 "juego/respuestas_datos2.py"
+],
+"Disfrutar del plan": [
+"juego/encuentros.py",
+"data/datos/vida.json"
 ],
 "Disfrútalo, que estas cosas no pasan todos los días.": [
 "juego/respuestas_datos2.py"
@@ -14446,6 +14535,9 @@
 "editor/esquema.py"
 ],
 "Días que pasa fuera un camello detenido": [
+"editor/esquema.py"
+],
+"Días que pasan como poco entre una invitación y la siguiente": [
 "editor/esquema.py"
 ],
 "Días que quita pedir perdón si te escucha": [
@@ -17250,6 +17342,10 @@
 "Elegir &otro archivo...": [
 "panel_servidor/ventana.py"
 ],
+"Elegir las butacas juntos": [
+"juego/encuentros.py",
+"data/datos/adultos.json"
+],
 "Elegir una copia de seguridad": [
 "panel_servidor/ventana.py"
 ],
@@ -17260,6 +17356,10 @@
 "Elegís la película en la cola, entre risas, por descarte.": [
 "juego/encuentros.py",
 "data/datos/vida.json"
+],
+"Elegís un plato entre los dos y os lo traen a la mesa.": [
+"juego/encuentros.py",
+"data/datos/adultos.json"
 ],
 "Elementos de la sección": [
 "editor/ventana.py"
@@ -18409,6 +18509,9 @@
 "En un servidor en línea la banda es de jugadores: no se recluta a la gente de la calle.": [
 "juego/reacciones.py"
 ],
+"En un servidor en línea las citas son las de siempre, sin elegir.": [
+"juego/encuentros.py"
+],
 "En un servidor en línea los golpes no se preparan con la banda: allí tu gente son los demás jugadores, y el botín y la policía los lleva el servidor. El atraco de siempre sigue funcionando.": [
 "juego/golpes.py"
 ],
@@ -18420,6 +18523,9 @@
 ],
 "En un servidor en línea no hay impuestos ni facturas.": [
 "juego/honrado.py"
+],
+"En un servidor en línea no hay invitaciones.": [
+"juego/encuentros.py"
 ],
 "En un servidor en línea no se alquilan casas: el dinero lo arbitra el servidor.": [
 "juego/alquiler.py"
@@ -18435,6 +18541,9 @@
 ],
 "En un servidor en línea no se puede: allí las peleas son con los demás jugadores y sus bandas.": [
 "juego/guerra.py"
+],
+"En un servidor en línea no se pueden intercambiar números para una cita.": [
+"juego/intimidad.py"
 ],
 "En un servidor en línea se vuela igual y los hangares funcionan, pero no hay secuestros ni vuelos comerciales.": [
 "juego/vuelo_pantalla.py"
@@ -18699,6 +18808,10 @@
 ],
 "Enciendes el detector de metales": [
 "juego/pantallas.py"
+],
+"Encontráis sitio en la pista y seguís el ritmo juntos.": [
+"juego/encuentros.py",
+"data/datos/adultos.json"
 ],
 "Encrucijadas": [
 "data/datos/misiones_extra2.json"
@@ -19634,6 +19747,10 @@
 ],
 "Ese número ya lo llevas para ese sorteo: {cifras}.": [
 "juego/loteria.py"
+],
+"Ese plan ya no está disponible.": [
+"juego/encuentros.py",
+"juego/encuentros.py"
 ],
 "Ese vehículo es alquilado: no es tuyo para venderlo. Devuélvelo o déjalo donde te digan.": [
 "juego/desguace.py",
@@ -22132,6 +22249,13 @@
 ],
 "Gente de la calle": [
 "editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
 "editor/esquema.py"
 ],
 "Gente de la calle común": [
@@ -22873,6 +22997,10 @@
 ],
 "Habláis de vuestros límites y de protección. Podéis cambiar de idea.": [
 "juego/escenas_privadas.py"
+],
+"Habláis sin prisa de lo primero que se os ocurre.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
 ],
 "Habláis un rato de nada en particular.": [
 "juego/menus_adultos.py"
@@ -23896,6 +24024,12 @@
 "Hora de irse a casa, eso seguro.": [
 "juego/respuestas_datos1.py"
 ],
+"Hora desde la que puede sonar el móvil": [
+"editor/esquema.py"
+],
+"Hora hasta la que puede sonar": [
+"editor/esquema.py"
+],
 "Hora más tardía": [
 "editor/esquema.py"
 ],
@@ -24033,6 +24167,7 @@
 "data/datos/vida.json"
 ],
 "Hoy": [
+"juego/encuentros.py",
 "juego/encuentros.py"
 ],
 "Hoy bien. Mañana ya veremos.": [
@@ -24621,6 +24756,9 @@
 "Intento de soborno a un inspector y blanqueo": [
 "juego/honrado.py"
 ],
+"Intercambiar números para una cita": [
+"juego/menus_charla.py"
+],
 "Interior de manzana": [
 "juego/mundo.py"
 ],
@@ -24799,6 +24937,9 @@
 "Intro para cambiarlo. Solo cuenta en los servidores en los que entres por primera vez.": [
 "juego/menus_enlinea.py"
 ],
+"Intro para contestar: aceptar el plan o decirle que mejor otro día.": [
+"juego/menus_adultos.py"
+],
 "Intro para decidir qué haces.": [
 "juego/menus_honrado.py"
 ],
@@ -24874,6 +25015,19 @@
 "juego/reconquista.py"
 ],
 "Invitaciones": [
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
 "panel_servidor/ventana.py"
 ],
 "Invitación anulada.": [
@@ -24881,6 +25035,10 @@
 ],
 "Invitación creada": [
 "panel_servidor/ventana.py"
+],
+"Invitación de {n}": [
+"juego/encuentros.py",
+"juego/menus_adultos.py"
 ],
 "Invitación enviada a %s.": [
 "servidor/nucleo.py",
@@ -27253,6 +27411,10 @@
 "Le dices a {nombre} que no puedes. Lo entiende, pero no le hace gracia.": [
 "juego/encuentros.py"
 ],
+"Le dices a {n} que mejor otro día. Lo entiende.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
 "Le dices al capataz que no está en venta.": [
 "data/mods/penas_altas.json"
 ],
@@ -27261,6 +27423,15 @@
 ],
 "Le dices que esa es la primera foto suya que habrías reconocido sin verle la cara. Sigues el balanceo con el pie y él se acurruca contra ti, los dos un poco mecidos por la misma mujer.": [
 "data/datos/relatos_privados.json"
+],
+"Le dices que mejor otro día": [
+"editor/esquema.py"
+],
+"Le dices que no. No pasa nada: otro día te volverá a proponer algo.": [
+"juego/encuentros.py"
+],
+"Le dices que te gustaría quedar algún día. Puede salir bien o mal, según la confianza, tu ánimo y lo que busque la otra persona. Un no es un no.": [
+"juego/menus_charla.py"
 ],
 "Le dices que tienes mala memoria para las caras, pero buena para los hoteles.": [
 "data/mods/noches_de_neon.json"
@@ -27661,6 +27832,9 @@
 "editor/esquema.py"
 ],
 "Litros que trae la asistencia": [
+"editor/esquema.py"
+],
+"Llamada perdida": [
 "editor/esquema.py"
 ],
 "Llaman al timbre de tu casa: llega la comida que has pedido a domicilio. Dos notas, din, don.": [
@@ -30497,6 +30671,7 @@
 "juego/ayuda.py"
 ],
 "Mañana": [
+"juego/encuentros.py",
 "juego/encuentros.py"
 ],
 "Mañana esto es chatarra y aquí no ha pasado nada.": [
@@ -30741,6 +30916,7 @@
 "juego/respuestas_datos1.py"
 ],
 "Mejor otro día": [
+"juego/encuentros.py",
 "juego/menus_adultos.py"
 ],
 "Mejor pregúntale a otra persona.": [
@@ -31401,8 +31577,14 @@
 "Minutos que espera antes y después de la hora": [
 "editor/esquema.py"
 ],
+"Minutos que hay como poco entre la llamada y la hora del plan": [
+"editor/esquema.py"
+],
 "Minutos que se espera como mucho a que vuelva el servidor": [
 "juego/menus_juego.py"
+],
+"Minutos que suena antes de ser una llamada perdida": [
+"editor/esquema.py"
 ],
 "Minutos sin moverse ni hacer nada tras los que se saca a un jugador, para dejar sitio. Con 0, nunca. A los administradores no se les saca.": [
 "servidor/opciones.py"
@@ -31785,6 +31967,18 @@
 ],
 "Mosto": [
 "data/datos/vida.json"
+],
+"Mostrar interés en una cita": [
+"juego/menus_charla.py"
+],
+"Mostrar interés en una cita, apto para todos: le gustas": [
+"editor/esquema.py"
+],
+"Mostrar interés: te dice que no": [
+"editor/esquema.py"
+],
+"Mostrar interés: todavía es pronto": [
+"editor/esquema.py"
 ],
 "Moto Avispa": [
 "data/datos/vehiculos.json"
@@ -33589,6 +33783,9 @@
 "No queda ninguna ranura libre: el guardado automático y el rápido de esta partida van a sus archivos de siempre hasta que la guardes en una ranura.": [
 "juego/menus_juego.py"
 ],
+"No quiere darte el número": [
+"editor/esquema.py"
+],
 "No quiere quedar todavía, tras un plantón": [
 "editor/esquema.py"
 ],
@@ -34618,6 +34815,9 @@
 "Nunca sobra.": [
 "juego/respuestas_datos1.py"
 ],
+"Nunca suena en una misión, un trabajo, un combate, una persecución, en el pabellón de los combates, con un menú abierto ni en un servidor en línea.": [
+"editor/esquema.py"
+],
 "Nunca: no deja su casa por nadie": [
 "editor/esquema.py"
 ],
@@ -34946,6 +35146,10 @@
 "Os acerca un poco. Una vez al día.": [
 "juego/convivencia.py"
 ],
+"Os acomodáis y dejáis que el plan vaya solo.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
 "Os apartáis un momento. Podéis volver cuando estéis listos o dejarlo aquí, sin que pase nada.": [
 "juego/escenas_privadas.py",
 "juego/laboratorio.py"
@@ -34963,6 +35167,9 @@
 ],
 "Os da la risa a la vez. «Me gusta que podamos reírnos de esto», dice {n}.": [
 "data/datos/escenas_privadas.json"
+],
+"Os dais el número": [
+"editor/esquema.py"
 ],
 "Os dais la mano. {banda} entra en {barrio} sin un tiro, y tú cuentas {euros} euros.": [
 "juego/pactos.py",
@@ -34985,6 +35192,10 @@
 ],
 "Os mudáis a otra casa tuya": [
 "editor/esquema.py"
+],
+"Os paráis un momento a escuchar el barrio.": [
+"juego/encuentros.py",
+"data/datos/adultos.json"
 ],
 "Os prometéis": [
 "editor/esquema_honrado.py"
@@ -35174,8 +35385,14 @@
 "Paga por resolverlo": [
 "editor/esquema.py"
 ],
+"Pagar a medias: tu parte son {n} euros": [
+"juego/encuentros.py"
+],
 "Pagar al periodista para que lo guarde en un cajón: {euros} euros": [
 "juego/honrado.py"
+],
+"Pagar la cuenta: {n} euros": [
+"juego/encuentros.py"
 ],
 "Pagar la multa en el acto: {multa} euros": [
 "juego/combate.py"
@@ -36255,6 +36472,10 @@
 "Paseantes, rateros, pistoleros, ladrones de coches y atracadores que lleva el servidor y son los mismos para todos. Salen solo donde hay jugadores. Con 0, ninguno.": [
 "servidor/opciones.py"
 ],
+"Pasear sin prisa": [
+"juego/encuentros.py",
+"data/datos/adultos.json"
+],
 "Paseo Marítimo": [
 "data/datos/ciudad.json",
 "data/mods/bahia_del_ocaso.json"
@@ -36475,6 +36696,10 @@
 ],
 "Pedir un encargo de coche": [
 "juego/menus_juego.py"
+],
+"Pedir un plato para compartir": [
+"juego/encuentros.py",
+"data/datos/adultos.json"
 ],
 "Pedir un taxi: viaje rápido": [
 "juego/menus_extra.py"
@@ -37694,6 +37919,9 @@
 "Preguntar qué le apetece": [
 "editor/esquema.py"
 ],
+"Preguntar qué le gustaría hacer otro día": [
+"juego/encuentros.py"
+],
 "Preguntar qué se cuenta": [
 "juego/menus_charla.py"
 ],
@@ -37955,6 +38183,9 @@
 "Probabilidad de que salga mal, por ciento": [
 "editor/esquema_honrado.py"
 ],
+"Probabilidad de que un día te inviten, en por ciento": [
+"editor/esquema.py"
+],
 "Probabilidad de que uno de una banda deje pasar a la buena gente, por ciento": [
 "editor/esquema_honrado.py"
 ],
@@ -37978,6 +38209,9 @@
 ],
 "Probáis de ambos lados para resolverlo de una vez. Cuando le limpias una gota de zumo de la barbilla, se le olvida dictar sentencia. Dejáis el asunto pendiente para la próxima manzana.": [
 "data/datos/relatos_privados.json"
+],
+"Probáis lo del otro y acabáis cambiando los platos.": [
+"data/datos/adultos.json"
 ],
 "Procesador": [
 "juego/registro.py"
@@ -38673,6 +38907,9 @@
 ],
 "Quedarte tú con el negocio": [
 "data/datos/misiones_extra2.json"
+],
+"Quedáis a esa hora en ese sitio. Media hora antes te lo recuerdo; si no apareces, se lo tomará mal.": [
+"juego/encuentros.py"
 ],
 "Quedáis a esa hora en un bar o un sitio de comidas de su localidad. Media hora antes te lo recuerdan. Si no apareces, tardará en querer quedar contigo.": [
 "juego/encuentros.py"
@@ -40899,6 +41136,10 @@
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
+"Salir a la pista": [
+"juego/encuentros.py",
+"data/datos/adultos.json"
+],
 "Salir al menú principal": [
 "juego/menus_juego.py"
 ],
@@ -42301,6 +42542,9 @@
 "Si le has cambiado el identificador a la localidad, o la has borrado y vuelto a crear, vuelve a elegirla en ese campo. Una localidad nueva cuenta en cuanto la aceptas en su ventana y guardas el mod.": [
 "editor/modelo.py"
 ],
+"Si le interesas y te tiene algo de confianza, pasa a tu Vida social: desde ahí podéis quedar, y a veces te llamará para proponerte un plan.": [
+"juego/menus_charla.py"
+],
 "Si llamo a la policía, lo queman. Hay tres hombres de guardia. Entra sin que te oigan y tráemelo.": [
 "data/datos/misiones_extra3.json"
 ],
@@ -42673,6 +42917,9 @@
 ],
 "Sin comisario y sin dinero, a Belmonte solo le queda su libro de cuentas: los nombres de todos los políticos que tiene comprados. Lo guarda en la mansión.": [
 "data/datos/misiones.json"
+],
+"Sin contestar: la invitación sigue en pie hasta la hora del plan, en el móvil y en Vida social.": [
+"juego/encuentros.py"
 ],
 "Sin contraseña: entrará cualquiera que tenga la dirección.": [
 "juego/menus_online.py"
@@ -43568,6 +43815,10 @@
 "Suena desde una de las cintas de casete escondidas por la ciudad, o desde otro objeto de colección.": [
 "juego/catalogo_sonidos.py"
 ],
+"Suena el móvil: es {n}. Ábrelo para contestar.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
 "Suena el móvil: {nombre}, de {local}, ha llamado al timbre de {casa} y no abre nadie. Te espera {minutos} minutos.": [
 "juego/domicilio.py",
 "data/datos/vida.json"
@@ -43587,6 +43838,9 @@
 ],
 "Suena música bajita. Bailáis en el salón, muy cerca, y lo demás llega solo.": [
 "juego/intimidad.py"
+],
+"Suena una canción que os gusta a los dos y ya no paráis.": [
+"data/datos/adultos.json"
 ],
 "Suenan como un tintineo que sube y baja. Si oyes algo así, acércate y pulsa Intro. Y si te aburres, en la bodega La Cepa se contratan guardaespaldas.": [
 "data/datos/misiones_extra.json"
@@ -44251,6 +44505,9 @@
 "Te dice si ha tocado. Los premios se cobran donde venden boletos; los de más de {precio} euros, en una administración de lotería.": [
 "juego/loteria.py"
 ],
+"Te dice uno de sus planes favoritos. Después decides cómo pagáis.": [
+"juego/encuentros.py"
+],
 "Te dicen qué ha salido y te pagan cualquier premio, también el bote.": [
 "juego/loteria.py"
 ],
@@ -44455,6 +44712,12 @@
 "Te he visto por {barrio} más de una vez.": [
 "juego/respuestas_datos2.py"
 ],
+"Te invita a salir: te dice el plan y puedes aceptarlo o decirle que mejor otro día.": [
+"juego/menus_juego.py"
+],
+"Te invita si hace por lo menos estos días que no os veis": [
+"editor/esquema.py"
+],
 "Te juegas mucho. Si sale bien, el barrio no lo olvida nunca.": [
 "data/datos/misiones_honrada.json"
 ],
@@ -44485,8 +44748,15 @@
 "Te levantas. Hace no tanto, la única vez que un juez dijo tu nombre fue para leer una condena.": [
 "data/datos/misiones_honrada.json"
 ],
+"Te llama para invitarte": [
+"editor/esquema.py"
+],
 "Te llama {nombre}, de {local}: está en la puerta de {casa} con tu pedido y dice que te espera {minutos} minutos.": [
 "juego/domicilio.py",
+"data/datos/vida.json"
+],
+"Te llama {n}. Abre el móvil para contestar.": [
+"juego/encuentros.py",
 "data/datos/vida.json"
 ],
 "Te llaman al despacho: eso no era necesario, y queda apuntado.": [
@@ -44832,6 +45102,9 @@
 "Te vendría bien una ducha.": [
 "juego/necesidades.py"
 ],
+"Te vibra el bolsillo: {n} te está llamando. Abre el móvil para contestar.": [
+"data/datos/vida.json"
+],
 "Te vistes con lo que ya tienes, sin pagar. Lo que compras en las tiendas de ropa queda aquí": [
 "juego/vestuario.py"
 ],
@@ -45058,6 +45331,9 @@
 ],
 "Terminar el turno": [
 "juego/agente.py"
+],
+"Terminar la cita": [
+"juego/encuentros.py"
 ],
 "Territorio conquistado": [
 "juego/catalogo_sonidos.py"
@@ -45310,6 +45586,10 @@
 ],
 "Tienes una cita, o un momento de complicidad con tu pareja.": [
 "juego/catalogo_sonidos.py"
+],
+"Tienes una llamada perdida de {n}. Puedes devolverla desde el móvil o contestar en Vida social.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
 ],
 "Tienes una tregua con {nombre}. Si das el golpe, la rompes": [
 "juego/reconquista.py"
@@ -48661,7 +48941,13 @@
 "editor/esquema.py",
 "editor/esquema.py"
 ],
+"Una por línea, con {n} y {plan}.": [
+"editor/esquema.py"
+],
 "Una por línea, con {n}, su nombre.": [
+"editor/esquema.py"
+],
+"Una por línea, con {n}, su nombre; se cuenta una al azar. Vacío, lo de serie.": [
 "editor/esquema.py"
 ],
 "Una por línea, con {n}, {casa} y {antes}, la casa que dejáis.": [
@@ -48702,12 +48988,28 @@
 "editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py"
+],
+"Una por línea, con {n}. Detrás se dice el plan.": [
 "editor/esquema.py"
 ],
 "Una por línea, con {n}. Escríbelas de forma que valgan para un hombre y para una mujer.": [
 "editor/esquema.py"
 ],
 "Una por línea, con {n}. Se cumple dándole al menos lo que diga «Lo menos que cuenta si te pidió dinero».": [
+"editor/esquema.py"
+],
+"Una por línea, con {n}. Sin nada de contenido para adultos.": [
+"editor/esquema.py"
+],
+"Una por línea, con {n}; se cuenta una al azar.": [
 "editor/esquema.py"
 ],
 "Una por línea, con {objeto}.": [
@@ -48875,6 +49177,9 @@
 "editor/esquema_golpes.py",
 "editor/esquema_honrado.py",
 "editor/esquema_vuelo.py"
+],
+"Una por línea; se usa una al azar. Lo de cada plan va en el propio plan, en Planes para citas.": [
+"editor/esquema.py"
 ],
 "Una puerta cerrada. Mejor no preguntar.": [
 "juego/sistemas.py"
@@ -50479,6 +50784,7 @@
 "juego/encuentros.py",
 "juego/encuentros.py",
 "juego/encuentros.py",
+"juego/encuentros.py",
 "juego/gestor_mods.py",
 "juego/golpes.py",
 "juego/golpes.py",
@@ -50976,6 +51282,9 @@
 "editor/esquema_honrado.py",
 "editor/esquema_vuelo.py",
 "editor/esquema_vuelo.py"
+],
+"Y como mucho estos": [
+"editor/esquema.py"
 ],
 "Y con cuidado, que si llega abollada el Sento no te paga.": [
 "data/mods/costa_dorada.json"
@@ -59251,11 +59560,26 @@
 "{n} abre un libro por donde dejó un billete de autobús como marcador y te lee dos líneas.": [
 "data/datos/escenas_privadas.json"
 ],
+"{n} al teléfono: «Oye, ¿hacemos algo?»": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
+"{n} al teléfono: «Tenía ganas de verte. ¿Te viene bien?»": [
+"data/datos/vida.json"
+],
+"{n} al teléfono: «¿Te apetece este plan?»": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
 "{n} apaga el móvil en mitad de una frase. «Esto prefiero decírtelo mirándote».": [
 "data/datos/escenas_privadas.json"
 ],
 "{n} apaga la lámpara y te guía por la mano hasta que os acomodáis. En la oscuridad te llega una frase dicha con una sonrisa. «Menudo día para acabar tan bien.»": [
 "data/datos/escenas_privadas.json"
+],
+"{n} apunta tu número y te da el suyo. Ya está en tu Vida social.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
 ],
 "{n} arruga la nariz: «Mejor después de una ducha, ¿vale?»": [
 "juego/necesidades.py",
@@ -59480,6 +59804,9 @@
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
+"{n} no es tu tipo.": [
+"juego/intimidad.py"
+],
 "{n} no es tu tipo. Lo puedes cambiar en Opciones, Contenido para adultos.": [
 "juego/intimidad.py"
 ],
@@ -59618,6 +59945,9 @@
 "juego/capo.py",
 "data/datos/vida.json"
 ],
+"{n} se lo piensa un momento: «¿Y si otro día toca {plan}?»": [
+"data/datos/vida.json"
+],
 "{n} se muda contigo a {nombre_lugar}.": [
 "juego/convivencia.py"
 ],
@@ -59643,6 +59973,9 @@
 "juego/encuentros.py",
 "data/datos/vida.json"
 ],
+"{n} se ríe: «Vale, vale. Pero la próxima la eliges tú.»": [
+"data/datos/vida.json"
+],
 "{n} se sienta contigo a la mesa y no deja ni las migas.": [
 "juego/compra.py",
 "data/datos/vida.json"
@@ -59655,6 +59988,10 @@
 ],
 "{n} sonríe y toma la iniciativa.": [
 "juego/laboratorio.py"
+],
+"{n} sonríe: «¿Una cita? Me apetece. Pídeme el número.»": [
+"juego/encuentros.py",
+"data/datos/vida.json"
 ],
 "{n} suspira: Antes me traías cosas.": [
 "juego/convivencia.py",
@@ -59683,6 +60020,9 @@
 "{n} te busca la boca con hambre.": [
 "juego/laboratorio.py"
 ],
+"{n} te coge del brazo para cruzar y ya no te suelta.": [
+"data/datos/adultos.json"
+],
 "{n} te coge la mano: Aún no estamos ahí. Pregúntamelo más adelante.": [
 "juego/convivencia.py",
 "data/datos/vida.json"
@@ -59698,8 +60038,15 @@
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
+"{n} te cuenta una historia de su trabajo que no te esperabas.": [
+"data/datos/adultos.json"
+],
 "{n} te da menos de lo que debería. Se está quedando con una parte.": [
 "juego/capo.py",
+"data/datos/vida.json"
+],
+"{n} te da su número. Ya podéis quedar desde Vida social.": [
+"juego/encuentros.py",
 "data/datos/vida.json"
 ],
 "{n} te da un beso por la cara de pena que pones al soltar los billetes. Dice que se va a comprar {cosa}.": [
@@ -59715,6 +60062,9 @@
 "{n} te enseña el portal donde se crió. No se lo había contado a nadie.": [
 "juego/convivencia.py",
 "data/datos/vida.json"
+],
+"{n} te enseña un paso y lo repetís hasta que sale.": [
+"data/datos/adultos.json"
 ],
 "{n} te enseña un rincón que no conocías.": [
 "juego/encuentros.py",
@@ -59744,6 +60094,10 @@
 ],
 "{n} te gana en la caseta de tiro y no deja de recordártelo.": [
 "juego/convivencia.py",
+"data/datos/vida.json"
+],
+"{n} te ha llamado y no lo has cogido. Desde el móvil puedes devolverle la llamada.": [
+"juego/encuentros.py",
 "data/datos/vida.json"
 ],
 "{n} te lo dice al oído: {v} ": [
@@ -59788,11 +60142,21 @@
 "{n} te propone pasar la noche juntos. «Si mañana alguien pregunta, prefiero que esto quede entre nosotros.»": [
 "data/datos/escenas_privadas.json"
 ],
+"{n} te propone un plan para otro día: {plan}.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
+"{n} te recomienda el postre de la casa, y tiene razón.": [
+"data/datos/adultos.json"
+],
 "{n} te reta a reconocer tres cosas por su sonido con los ojos cerrados.": [
 "data/datos/escenas_privadas.json"
 ],
 "{n} te sigue sin soltarte.": [
 "juego/laboratorio.py"
+],
+"{n} te susurra lo que cree que va a pasar, y casi siempre acierta.": [
+"data/datos/adultos.json"
 ],
 "{n} te tiende la sartén: Sorpréndeme. Lo consigues, a medias.": [
 "juego/convivencia.py",
@@ -59823,6 +60187,7 @@
 "juego/convivencia.py"
 ],
 "{n} ya te dijo que no. Déjalo estar.": [
+"juego/intimidad.py",
 "juego/intimidad.py"
 ],
 "{n} ya vive contigo.": [
@@ -59845,12 +60210,20 @@
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
+"{n}: Eres muy amable, pero no, gracias.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
 "{n}: Esta casa necesita un arreglo. ¿Por qué no compramos algún mueble?": [
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
 "{n}: Este mes voy justo de dinero. ¿Me echas una mano?": [
 "juego/convivencia.py",
+"data/datos/vida.json"
+],
+"{n}: Gracias, pero tengo pareja.": [
+"juego/encuentros.py",
 "data/datos/vida.json"
 ],
 "{n}: Gracias. Estas cosas son las que cuentan.": [
@@ -59876,6 +60249,14 @@
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
+"{n}: Me caes bien, pero acabamos de conocernos.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
+"{n}: Me encantaría quedar contigo algún día.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
 "{n}: Me gustaría despertarme contigo mañana, para variar.": [
 "juego/convivencia.py",
 "data/datos/vida.json"
@@ -59884,12 +60265,31 @@
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
+"{n}: Mejor no. Pero ha sido un gusto charlar.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
 "{n}: Necesito que me dé el aire. Hagamos algo juntos estos días.": [
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
 "{n}: No te pido mucho, pero un detalle de vez en cuando...": [
 "juego/convivencia.py",
+"data/datos/vida.json"
+],
+"{n}: No, lo siento. Sin malos rollos.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
+"{n}: Prefiero que lo dejemos aquí.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
+"{n}: Primero conozcámonos un poco más, ¿vale?": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
+"{n}: Pues mira, sí. Podríamos tomar algo un día de estos.": [
 "data/datos/vida.json"
 ],
 "{n}: Si es lo que quieres... Mañana no quedará nada mío aquí.": [
@@ -59997,6 +60397,9 @@
 ],
 "{perro}: {donde}, {h}, y {c}.": [
 "juego/extras3.py"
+],
+"{plan}, en {sitio}. {cuando} a las {hora}.": [
+"juego/encuentros.py"
 ],
 "{pre}: {nombre}, en {nombre2}.": [
 "juego/destinos.py"
@@ -61077,6 +61480,10 @@
 "«Hoy», contesta al cabo de un rato. Gira el papel hacia ti. Debajo del título ha dibujado cómo os cogíais de la mano al llegar. Tiene una mancha de tomate en lugar de firma.": [
 "data/datos/relatos_privados.json"
 ],
+"«La próxima vez, {plan}», te dice {n}.": [
+"juego/encuentros.py",
+"data/datos/vida.json"
+],
 "«La venganza del boquerón»: cine de terror marinero. Sales con hambre.": [
 "juego/menus_lugares.py"
 ],
@@ -61115,6 +61522,10 @@
 ],
 "«Nunca hemos hablado». El reportaje no saldrá.": [
 "juego/honrado.py",
+"data/datos/vida.json"
+],
+"«Otro día, entonces», te dice {n}. Sin problema.": [
+"juego/encuentros.py",
 "data/datos/vida.json"
 ],
 "«Por esta vez». El acta desaparece en su maletín, y el sobre también.": [
@@ -61248,6 +61659,9 @@
 ],
 "¿Cuántos son?": [
 "data/datos/misiones_extra2.json"
+],
+"¿Cómo pasáis el rato?": [
+"juego/encuentros.py"
 ],
 "¿Cómo quieres que te hablen{v}?": [
 "juego/menus_vida.py"

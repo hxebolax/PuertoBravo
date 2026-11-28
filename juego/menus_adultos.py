@@ -150,7 +150,7 @@ def vida_social(p, directo=None):
                     app.decir(tr("Ya habéis quedado hoy. Mejor otro día."), True)
                     return
                 r["hoy"].pop("cita", None)
-                encuentros.vivir_cita(p, pers, act)
+                encuentros.iniciar_cita(p, pers, act)
             return f
 
         def menu_cita():
@@ -471,6 +471,13 @@ def vida_social(p, directo=None):
                 marca = tr(", tu pareja") if j.pareja == pers["id"] else tr(", ex") if r["estado"] == "ex" else ""
                 lista.append(Opcion(f"{pers['nombre']}{marca}: {p.afinidad_txt(r)}", (lambda pers=pers: ficha(pers)),
                                     ayuda=tr("Abre su ficha: cómo va lo vuestro y lo que podéis hacer, en persona o por teléfono.")))
+                from . import encuentros
+                plan = encuentros.invitacion_valida(p, r)       # te ha invitado a salir y no has contestado (1.7.7)
+                detalle = encuentros.texto_invitacion(p, plan) if plan else ""
+                if detalle and not p.en_servidor:
+                    lista.append(Opcion(tr("Invitación de {n}").format(n=pers["nombre"]) + ": " + detalle,
+                                        (lambda pers=pers: encuentros.atender_invitacion(p, pers)),
+                                        ayuda=tr("Intro para contestar: aceptar el plan o decirle que mejor otro día.")))
         from . import encuentros
         if encuentros.quedadas(p):
             lista.append(Opcion(tr('Tus quedadas: {len}').format(len=(len(encuentros.quedadas(p)))), lambda: encuentros.menu_quedadas(p),

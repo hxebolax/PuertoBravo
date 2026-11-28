@@ -88,6 +88,80 @@ class Intimidad:
         f["interes"] = True
         return f"{n}: " + random.choice([tr("Pues tú tampoco estás nada mal."), tr("Me gusta cómo me miras. Sigue hablando."), tr("¿Siempre eres así, o es que hoy te has levantado con suerte?")]) + tr(" Le gustas.")
 
+    def mostrar_interes(self, q):
+        """Sin el contenido para adultos, con la vida sentimental apta para todos: decirle a alguien de la calle que te
+        gustaría tener una cita. Lo mismo que coquetear en cuanto a quién puede decir que sí, pero contado sin nada de
+        coqueteo, con las frases de los datos (vida.json, encuentros). Un no es un no."""
+        from .encuentros import AJ
+        j = self.j
+        f = ficha(q)
+        n = f["nombre"]
+        if not self.me_atrae(f["genero"]):
+            return tr('{n} no es tu tipo.').format(n=n)
+        if f.get("calabazas"):
+            return tr('{n} ya te dijo que no. Déjalo estar.').format(n=(n))
+        mi_genero = self.cfg["mi_genero"]
+        compatible = f["disponible"] and (mi_genero == "x" or mi_genero in f["le_atraen"])
+        encanto = f["confianza"] + (j.animo - 50) * 0.3 + min(20, j.reputacion * 0.15) + j.ciudadania * 0.1 + random.uniform(-15, 15)
+        self.son("murmullo", xy=(q.x, q.y), vol=0.5)
+        f["coqueteos"] = f.get("coqueteos", 0) + 1
+        if not compatible or (f["coqueteos"] > 4 and f["confianza"] < 30):
+            f["calabazas"] = True
+            self._trato(f, -3)
+            self.cambiar_animo(-2)
+            return AJ.frase("frases_interes_no", n=n)
+        if encanto < 12:
+            self._trato(f, 2)
+            return AJ.frase("frases_interes_pronto", n=n)
+        self._trato(f, 6)
+        self.cambiar_animo(2)
+        f["interes"] = True
+        return AJ.frase("frases_interes_si", n=n)
+
+    def _interes_mutuo(self, f):
+        genero = self.cfg["mi_genero"]
+        return (f["edad"] >= 18 and f["disponible"] and self.me_atrae(f["genero"])
+                and (genero == "x" or genero in f["le_atraen"])
+                and bool(f.get("interes")) and not f.get("calabazas") and not f.get("ofendido"))
+
+    def intercambiar_numero(self, q):
+        """Daros el número para una cita: esa persona pasa a tu Vida social, con una ficha hecha de lo que sabes de ella
+        (nunca lo que habéis hablado), y desde ahí podéis quedar y te puede llamar para invitarte. True si ya lo tenéis."""
+        from uuid import uuid4
+        from .encuentros import AJ
+        f = ficha(q)
+        if not self.vida_sentimental() or f["edad"] < 18:
+            return False
+        if self.en_servidor:
+            self.decir(tr("En un servidor en línea no se pueden intercambiar números para una cita."), True)
+            return False
+        if f.get("contacto_id") in self.j.relaciones:
+            return True
+        if not self._interes_mutuo(f) or f["confianza"] < AJ.entero("numero_confianza"):
+            self.decir(AJ.frase("frases_numero_no", n=f["nombre"]), True)
+            return False
+        lugares = [l for l in self.mundo.lugares.values() if not l.d.get("adultos") and l.id not in self.j.propiedades]
+        publicos = [l for l in lugares if l.tipo in ("bar", "taberna", "comida", "pizzeria", "tienda", "ropa", "cine", "gimnasio", "farmacia", "feria", "loteria", "plaza")]
+        lugares = publicos or lugares
+        if not lugares:
+            return False
+        lugar = min(lugares, key=lambda l: (l.x - q.x) ** 2 + (l.y - q.y) ** 2)
+        acts = [a["id"] for a in self.dato_adulto("actividades")]
+        regalos = [g["id"] for g in self.dato_adulto("regalos")]
+        from .laboratorio import RITMOS
+        pid = "contacto_" + uuid4().hex
+        pers = {"id": pid, "nombre": f["nombre"] + " " + f["apellido"], "edad": f["edad"], "genero": f["genero"], "oficio": f["oficio"],
+                "caracter": f["caracter"], "lugar": lugar.id, "desc": f["oficio"],
+                "gustos": random.sample(acts, min(2, len(acts))), "ritmo": random.choice(RITMOS)}
+        if regalos:
+            pers["regalo"] = random.choice(regalos)
+        r = self.relacion(pid)
+        r.update(contacto=pers, afinidad=min(AJ.entero("numero_afinidad"), max(5, int(f["confianza"]))))
+        f["contacto_id"] = pid
+        self.son("movil", cat="interfaz", vol=0.5)
+        self.decir(AJ.frase("frases_numero_si", n=pers["nombre"]), True)
+        return True
+
     def puede_proponer(self, q):
         f = ficha(q)
         return bool(f.get("interes")) and f["confianza"] >= 35 and not f.get("calabazas")
