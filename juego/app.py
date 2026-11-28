@@ -128,6 +128,11 @@ class App:
         for k in ("maestro", "efectos", "ambiente", "musica", "interfaz", "senales"):
             self.mez.vols[k] = self.cfg["vol_" + k]
         self.voz.ajustar_sapi(self.cfg["voz_velocidad"], self.cfg["voz_tono"], self.cfg["voz_volumen"])
+        self.mez.tinnitus = self.cfg["tinnitus"]
+        if not self.mez.tinnitus:
+            self.mez.oido_hasta = 0.
+        for grupo in ("vehiculos", "combate", "dialogo"):
+            self.mez.vol_grupos[grupo] = self.cfg["vol_" + grupo]
         self.mez.mono = bool(self.cfg["sonido_mono"])
         self.mez.atenuar = bool(self.cfg["atenuar_al_hablar"])
         self.mez.eco_activo = bool(self.cfg["eco_lugares"])
@@ -142,7 +147,12 @@ class App:
         # En segundo plano, con la opción de serie, no habla: no interrumpe a tu lector en otra ventana. Lo dicho va igual
         # al historial, así que al volver lo repasas con Re Pág.
         hablar = getattr(self, "con_foco", True) or not self.cfg["callar_sin_foco"]
-        self.voz.decir(texto, interrumpir, guardar, hablar=hablar)
+        if self.pila and getattr(self.pila[-1], "escena_privada", False):
+            self.pila[-1].subtitulo = texto
+            with registro.privado():
+                self.voz.decir(texto, interrumpir, False, hablar=hablar)
+        else:
+            self.voz.decir(texto, interrumpir, guardar, hablar=hablar)
 
     def decir_menu(self, texto):
         """Lo que se lee al abrir un menú o al moverse por él: se vuelve a oír volviendo, así que no llena el historial."""
@@ -155,6 +165,13 @@ class App:
 
     def aplicar_adultos(self):
         """Muestra u oculta en todos los mapas los lugares del contenido para adultos."""
+        if not self.cfg["adultos"]:
+            self.cfg["escenas_directas"] = False
+        if not self.cfg["escenas_directas"]:
+            for pantalla in reversed(self.pila[:]):
+                if getattr(pantalla, "escena_privada", False):
+                    self.voz.callar()
+                    self.cerrar(pantalla)
         for m in self.mapas.values():
             m.filtrar(self.cfg["adultos"])
         p = getattr(self, "partida", None)
@@ -347,12 +364,17 @@ class App:
                 from . import teclado
                 self.teclas.discard(teclado.traducir(self.cfg, key))
 
+    def _subtitulo(self):
+        if self.pila and getattr(self.pila[-1], "escena_privada", False):
+            return getattr(self.pila[-1], "subtitulo", "")
+        return self.voz.ultimo()
+
     def _dibujar(self, forzar=None):
         if not self.pantalla:
             return
         self.pantalla.fill((0, 0, 0))
         self.pantalla.blit(self.fuente_g.render(NOMBRE, True, (255, 220, 0)), (20, 14))
-        texto = forzar or self.voz.ultimo()
+        texto = forzar or self._subtitulo()
         y = 80
         palabras = texto.split(" ")
         linea = ""
@@ -394,8 +416,8 @@ class App:
                     elif ev.type in (pygame.WINDOWFOCUSGAINED,):
                         self.con_foco = True
                 self.paso(dt)
-                if self.voz.ultimo() != ultimo:
-                    ultimo = self.voz.ultimo()
+                if self._subtitulo() != ultimo:
+                    ultimo = self._subtitulo()
                     self._dibujar()
         except Exception:
             self._registrar_error()

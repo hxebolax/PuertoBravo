@@ -372,6 +372,7 @@ class Conduccion:
         if v.modelo.get("motor") != "motor_bici" and not getattr(v, "en_marcha", False):      # en un golpe, el conductor lo tenía arrancado
             self.son("arranque", vol=0.6)
         v.en_marcha = False
+        v.marcha_audio = 1
         self._motor(v, True)
         self.rodadura = self.son("rodadura", bucle=True, vol=0.0)
         self.preparar_conduccion()
@@ -711,6 +712,7 @@ class Conduccion:
         if self.chofer_conduce():                       # conduce tu chófer: los pedales y el volante son suyos
             t = frozenset()
         mo = v.modelo
+        velocidad_anterior, rumbo_anterior = abs(v.vel), v.rumbo
         if mo.get("vuela") and self.vuelo_real():       # volar de verdad: despegue, altura, combustible y aterrizaje (vuelo.py)
             t = self.vuelo_controles(v, dt, t)
         from . import sistemas                          # las mejoras del taller cambian cómo va el vehículo
@@ -764,13 +766,36 @@ class Conduccion:
             self._aviso_semaforo(v)
         j.stats["metros_coche"] += math.hypot(v.x - x0, v.y - y0)
         self.ganar_xp("conduccion", math.hypot(v.x - x0, v.y - y0) / 60.0)
+        ruedas = not (mo.get("vuela") or mo.get("barco") or mo["motor"] == "motor_bici")
+        velocidad = abs(v.vel)
+        carga = min(1., max(0., (velocidad - velocidad_anterior) / max(.01, dt * mo["acel"])))
+        relacion = velocidad / max(1., mo["vel_max"])
+        rpm = .6 + 1.3 * relacion
+        if ruedas:
+            marcha = getattr(v, "marcha_audio", 1)
+            nueva = marcha
+            if relacion > marcha * .2 + .03:
+                nueva = min(5, marcha + 1)
+            elif relacion < (marcha - 1) * .2 - .035:
+                nueva = max(1, marcha - 1)
+            if nueva != marcha:
+                self.son(self.mez.capa("marcha", "intermitente"), vol=.24)
+            v.marcha_audio = nueva
+            rpm = .66 + .55 * relacion + .65 * min(1., max(0., (relacion - (nueva - 1) * .2) * 5))
+            antes = self.mundo.superficie(x0, y0)
+            ahora = self.mundo.superficie(v.x, v.y)
+            if antes != ahora and velocidad > 3 and self.t > getattr(v, "t_suspension", 0.):
+                self.son(self.mez.capa("suspension", "bordillo"), vol=min(.56, velocidad / 40))
+                v.t_suspension = self.t + .35
         if v.canal:
-            carga = 0.12 if pygame.K_UP in t else 0.0
-            v.canal.tono(mo["tono"] * sistemas.factor_tono(v) * (0.6 + carga + 1.3 * abs(v.vel) / mo["vel_max"]))
+            v.canal.tono(mo["tono"] * sistemas.factor_tono(v) * (rpm + .18 * carga))
         if getattr(self, "rodadura", None):
             rv, rt = sistemas.factor_rodadura(v)                 # unos neumáticos mejores ruedan más bajo y más graves
-            self.rodadura.volumen(min(0.5, abs(v.vel) / 50.0) * rv)
-            self.rodadura.tono((0.7 + abs(v.vel) / 40.0) * rt)
+            giro = min(.3, abs(M.norm180(v.rumbo - rumbo_anterior)) / max(.01, dt) / 250) if ruedas else 0.
+            self.rodadura.volumen(min(.72, velocidad / 50 * (1 + giro + .22 * self.lluvia)) * rv)
+            superficie = self.mundo.superficie(v.x, v.y)
+            friccion = .76 if superficie in ("arena", "hierba") else 1.12 if superficie in ("via", "muelle") else 1.
+            self.rodadura.tono((.7 + velocidad / 40.) * rt * friccion)
         self._choques_jugador(v)
         self._sonar(v, dt)
         if (pygame.K_LCTRL in t or pygame.K_RCTRL in t) and self.arma().get("automatica"):

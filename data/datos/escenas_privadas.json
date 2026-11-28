@@ -1,0 +1,106 @@
+{
+  "romantico": [
+    [
+      "{n} dobla la carta del restaurante hasta hacer un barco. Dentro ha escrito una pregunta para ti.",
+      "Guardáis el barquito con la fecha escrita en la vela."
+    ],
+    [
+      "{n} te presta un auricular. Es la canción que sonaba el día que os conocisteis.",
+      "De camino a la puerta seguís tarareando el mismo estribillo."
+    ],
+    [
+      "{n} trae dos mandarinas y se apuesta algo a que puede pelar una de un tirón.",
+      "La cáscara sigue de una pieza. Reconoces que has perdido la apuesta."
+    ],
+    [
+      "Al sacar las llaves, {n} encuentra una entrada vieja. Te cuenta por qué la conserva.",
+      "Buscáis otra fecha para volver al sitio de la entrada."
+    ],
+    [
+      "{n} dibuja un mapa de memoria y marca el banco donde se sentaba de adolescente.",
+      "Guardas el mapa. La próxima vez te toca enseñar un rincón de tu barrio."
+    ],
+    [
+      "{n} te enseña a decir buenas noches como se decía en su casa.",
+      "Al despedirte pruebas la frase. Esta vez te sale a la primera."
+    ]
+  ],
+  "apasionado": [
+    [
+      "{n} apaga el móvil en mitad de una frase. «Esto prefiero decírtelo mirándote».",
+      "El móvil sigue apagado mientras desayunáis."
+    ],
+    [
+      "Tardáis un rato en abrir la puerta. Os habéis intercambiado las llaves sin daros cuenta.",
+      "Ponéis un lazo en uno de los llaveros para distinguirlos."
+    ],
+    [
+      "{n} te esperaba con un discurso preparado. Al verte, se salta el discurso y te pregunta qué quieres.",
+      "Al final te enseña el discurso en una servilleta llena de tachones."
+    ],
+    [
+      "Se oye el último autobús. {n} comprueba que ambos tenéis cómo volver antes de proponerte que te quedes.",
+      "Pedís dos cafés mientras miráis los horarios de la mañana."
+    ],
+    [
+      "Al entrar os interrumpe el despertador de {n}. Sigue puesto a la hora del turno de ayer.",
+      "Corregís la alarma antes de que os vuelva a dar un susto."
+    ],
+    [
+      "{n} abre la ventana para oír los últimos compases de un concierto callejero.",
+      "Cuando volvéis a la ventana, abajo solo queda alguien recogiendo cables."
+    ]
+  ],
+  "jugueton": [
+    [
+      "{n} inventa un concurso de anuncios de radio. Tu premio es elegir la siguiente canción.",
+      "Os despedís con el ridículo eslogan que acabáis de inventar."
+    ],
+    [
+      "Solo hay una galleta. {n} propone echar a suertes quién se la lleva.",
+      "Partís la galleta. La moneda queda de propina para otra apuesta."
+    ],
+    [
+      "{n} golpea un ritmo en la mesa y espera a que adivines la canción.",
+      "Resulta que habíais pensado en dos canciones distintas con el mismo ritmo."
+    ],
+    [
+      "Dais nombres de grandes restaurantes a las sobras que hay para cenar.",
+      "Anotáis el menú inventado en el dorso del recibo."
+    ],
+    [
+      "{n} encuentra una baraja a la que le falta un rey. Os inventáis una regla para sustituirlo.",
+      "Dejáis la regla escrita en la caja para quien vuelva a jugar."
+    ],
+    [
+      "{n} te reta a reconocer tres cosas por su sonido con los ojos cerrados.",
+      "El ruido imposible era una cuchara dentro de una taza vacía."
+    ]
+  ],
+  "tranquilo": [
+    [
+      "{n} pone agua a hervir y te pregunta si hoy prefieres compañía o conversación.",
+      "Antes de salir dejáis las tazas secándose boca abajo."
+    ],
+    [
+      "A {n} le cuesta desconectar del trabajo. Os sentáis hasta que deja de mirar la hora.",
+      "Por primera vez en toda la noche, tenéis que buscar un reloj para saber la hora."
+    ],
+    [
+      "{n} abre un libro por donde dejó un billete de autobús como marcador y te lee dos líneas.",
+      "Devuelves el billete a la página para que mañana siga ahí."
+    ],
+    [
+      "Os quitáis los zapatos y comparáis las ampollas de una semana larga.",
+      "Antes de levantaros os repartís las últimas dos tiritas."
+    ],
+    [
+      "{n} pela una manzana mientras te cuenta algo que le daba vergüenza preguntar en público.",
+      "Queda media manzana. La repartís antes de dar por terminada la noche."
+    ],
+    [
+      "{n} baja la persiana hasta que deja de vibrar. Por fin podéis oíros sin levantar la voz.",
+      "Al subir la persiana descubrís que la calle ya está despierta."
+    ]
+  ]
+}

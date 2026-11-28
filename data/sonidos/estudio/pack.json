@@ -1,0 +1,7 @@
+{
+  "nombre": "Estudio",
+  "descripcion": "Grabaciones de campo, motores y pasos por superficie con tomas alternas.",
+  "sonidos": 282,
+  "fuentes": "fuentes.csv",
+  "licencia": "Bibliotecas comerciales. Consultar las licencias de origen."
+}

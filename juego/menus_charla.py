@@ -83,8 +83,11 @@ def conversar(p, q):
                                 ayuda=tr("Necesitas un territorio y hueco en la banda. Además, que te tenga confianza, que tu nombre suene en la calle y que tenga carácter para ello: "
                                       "la gente mayor no se une nunca, ni quien te habla así: {lista}. El carácter se nota en cómo te habla al saludar. Si acepta, cobra la prima, se queda contigo con su nombre y pelea a tu lado como los demás de tu banda.").format(
                                     lista=(", ".join(p.nunca_reclutan()) or tr("nadie")))))
+        if p.vida_sentimental() and f["edad"] >= 18:
+            lista.append(Opcion(tr("Coquetear") if p.modo_adulto() else tr("Mostrar interés en una cita"), ligar, ayuda=tr("Puede salir bien o mal, según la confianza, tu ánimo y lo que busque la otra persona. Un no es un no.")))
+            if f.get("interes") and not f.get("contacto_id"):
+                lista.append(Opcion(tr("Intercambiar números para una cita"), lambda: p.intercambiar_numero(q)))
         if p.modo_adulto():
-            lista.append(Opcion(tr("Coquetear"), ligar, ayuda=tr("Puede salir bien o mal, según la confianza, tu ánimo y lo que busque la otra persona. Un no es un no.")))
             if p.puede_proponer(q):
                 lista.append(Opcion(tr("Proponerle ir a tu casa"), proponer(False), ayuda=tr('Si no tienes casa en esta localidad, vais a un hotel por {precio} euros.').format(precio=(p.precio('hotel_cita', 70)))))
                 lista.append(Opcion(tr('Proponerle ir a un hotel: {precio} euros').format(precio=(p.precio('hotel_cita', 70))), proponer(True),

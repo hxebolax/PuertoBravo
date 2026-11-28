@@ -62,6 +62,7 @@ POR_DEFECTO = {
     "mod_policia": False,          # modificador: los delitos cuentan la mitad más
     "mod_dinero": False,           # modificador: las misiones pagan la mitad
     "noche_por_pasos": True,       # contenido para adultos: la noche con alguien se juega paso a paso
+    "escenas_directas": False,
     "minijuego_laboratorio": True,  # contenido para adultos: cada tanda del laboratorio se juega con el minijuego de oído; con no, sale al momento
     "multas": True,                # con poca búsqueda, al cogerte puedes pagar la multa o intentar un soborno
     "fuego_amigo": True,           # tus balas y tus explosivos hieren también a tu perro, a tus guardaespaldas y a tu banda
@@ -84,6 +85,10 @@ POR_DEFECTO = {
     "salida_sonido": "",           # por dónde suena el juego: vacío = la salida de Windows, siguiéndola si cambia; o el nombre de una
     "salida_extra": "",            # una segunda salida con lo mismo, para grabar o retransmitir (solo con el motor clásico)
     "eco_lugares": True,           # con el motor envolvente, cada sitio tiene su eco: calle, nave, interior, campo     # clasico | envolvente (binaural con OpenAL Soft; se aplica al abrir el juego)
+    "tinnitus": False,
+    "vol_vehiculos": 1.0,
+    "vol_combate": 1.0,
+    "vol_dialogo": 1.0,
     "sonido_mono": False,          # los dos oídos oyen lo mismo
     "sonido_holgado": False,       # con el motor clásico, un búfer de sonido más grande: quita chasquidos y cortes en equipos justos
     "atenuar_al_hablar": True,     # bajar ambiente y música mientras habla la voz
@@ -123,6 +128,7 @@ POR_DEFECTO = {
     "idioma": "auto",              # idioma del juego: auto (el del sistema) o un código, es, en... (i18n.py); vale al reiniciar
     "horarios": "apagado",         # horarios: apagado, solo de la gente, o de la gente y de los locales
     "pareja_familiar": True,       # relaciones sentimentales aptas para todos: conocerse, citas, compromiso, convivir y boda
+    "citas_interactivas": False,
     "oficio_policia": False,       # modo: poder ingresar en la policía y trabajar de agente
     "radio_coches": True,          # en un servidor, oír floja la emisora del juego que lleva el vehículo de otro jugador que está cerca
     "reconectar": True,            # en un servidor: si se corta o se reinicia, esperar y volver a entrar solo, con la partida tal cual

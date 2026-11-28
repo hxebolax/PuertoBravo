@@ -163,12 +163,14 @@ def cargar(mez, cfg):
                     S[nombre] = igualar(d, ref)
                     info["igualados"] += 1
     pack = cfg["pack_sonidos"]
+    archivos_pack = {}
     ruta = os.path.join(carpeta_packs(), pack) if pack else ""
     if pack and pack != rutas.POR_DEFECTO and os.path.isdir(ruta):
         sintesis.limpiar_formato_anterior(ruta)               # los WAV de una versión anterior que ya están en FLAC
         m = _meta(ruta)
         vol = m.get("volumenes") if isinstance(m.get("volumenes"), dict) else {}
-        for nombre, archivo in _archivos(ruta).items():
+        archivos_pack = _archivos(ruta)
+        for nombre, archivo in archivos_pack.items():
             fondo = sintesis.es_fondo(nombre)
             if fondo and nombre in S and os.path.getsize(archivo) > 200000:
                 # Un ambiente largo: no se carga hasta que suene. Once a la vez son unos doscientos megas de memoria.
@@ -209,6 +211,39 @@ def cargar(mez, cfg):
             S[nombre] = S[nombre] * max(AJUSTE_MIN, min(AJUSTE_MAX, float(f)))
     for k, v in S.items():
         mez.registrar(k, v)
+    for key in [key for key in mez._var if key[0] in mez.datos_tomas]:
+        mez._var.pop(key)
+    mez.datos_tomas.clear()
+    mez.capas.clear()
+    if info["pack"]:
+        for nombre, archivo in _archivos(os.path.join(ruta, "capas")).items():
+            try:
+                capa = sintesis.leer_audio(archivo, mono=True, maximo=sintesis.MAX_EFECTO)
+            except Exception:
+                continue
+            if len(capa) > 8:
+                clave = ("capas", nombre)
+                mez.registrar(clave, capa)
+                mez.capas[nombre] = clave
+    mez.tomas.clear()
+    mez.ultima_toma.clear()
+    for nombre in S:
+        origen = ruta if nombre in archivos_pack else carpeta
+        directorio = os.path.join(origen, "tomas", nombre)
+        if not os.path.isdir(directorio):
+            continue
+        opciones = [nombre]
+        for toma, archivo in sorted(_archivos(directorio).items()):
+            try:
+                d = sintesis.leer_audio(archivo, mono=True, maximo=sintesis.MAX_EFECTO)
+            except Exception:
+                continue
+            if len(d) > 8:
+                clave = (nombre, toma)
+                mez.registrar(clave, igualar(d, [nivel(S[nombre])]))
+                opciones.append(clave)
+        if len(opciones) > 1:
+            mez.tomas[nombre] = opciones
     mez.diferidos.clear()
     mez._dif_estado.clear()
     for k, leer in diferidos.items():
@@ -223,6 +258,8 @@ def ajustar(mez, cfg, nombre, delta):
     nuevo = round(max(AJUSTE_MIN, min(AJUSTE_MAX, viejo + 0.1 * delta)), 1)
     if nuevo != viejo and nombre in mez.sonidos:
         mez.registrar(nombre, mez.sonidos[nombre] * (nuevo / viejo))
+        for clave in mez.tomas.get(nombre, [])[1:]:
+            mez.registrar(clave, mez.datos_tomas[clave] * (nuevo / viejo))
         if abs(nuevo - 1.0) < 0.01:
             cfg["vol_sonidos"].pop(nombre, None)
         else:
@@ -255,4 +292,6 @@ def restablecer(mez, cfg, nombres):
             recargar = True
         else:
             mez.registrar(nombre, mez.sonidos[nombre] / f)
+            for clave in mez.tomas.get(nombre, [])[1:]:
+                mez.registrar(clave, mez.datos_tomas[clave] / f)
     return n, recargar

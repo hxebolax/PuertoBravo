@@ -180,8 +180,9 @@ class Dialogo:
     """Escena de texto: Intro avanza, flecha arriba repite, Escape la salta entera."""
     pausa_mundo = True
 
-    def __init__(self, app, lineas, al_terminar=None, voces=None):
+    def __init__(self, app, lineas, al_terminar=None, voces=None, cancelar_con_escape=False):
         self.app = app
+        self.cancelar_con_escape = cancelar_con_escape
         self.lineas = [tuple(l) for l in lineas]
         self.i = 0
         self.al_terminar = al_terminar
@@ -251,6 +252,8 @@ class Dialogo:
             self.i = max(0, self.i - 1)
             self._decir()
         elif k == pygame.K_ESCAPE:
+            if self.cancelar_con_escape:
+                self.al_terminar = None
             self.app.voz.callar()
             self._fin()
         elif k in (pygame.K_PAGEUP, pygame.K_PAGEDOWN) and getattr(ev, "mod", 0) & pygame.KMOD_CTRL:

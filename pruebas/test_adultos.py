@@ -176,13 +176,14 @@ def test_relaciones(robot):
     assert j.pareja == "lucia" and j.relaciones["lucia"]["estado"] == "pareja"
     p.dia += 1
     j.animo = animo = 50.0
+    j.salud = 35
     robot.app.pila[-1].refrescar(False)
     _elegir(robot, "Pasar la noche juntos")
     assert "La noche con Lucía" in robot.app.pila[-1].titulo            # se elige cómo
     _elegir(robot, "noche romántica")
     assert isinstance(robot.app.pila[-1], Dialogo) and "noche romántica con Lucía" in robot.dicho()
     robot.saltar_dialogos()
-    assert j.animo > animo and j.salud == j.salud_max and j.stats["noches"] == 1
+    assert j.animo > animo and j.salud == 35 and j.stats["noches"] == 1
     # descuidar la relación la rompe
     for _ in range(40):
         p.dia += 1
@@ -326,3 +327,37 @@ def test_misiones_para_adultos(robot):
         robot.saltar_dialogos()
         p._fin_persecucion()
     assert p.j.sustancias.get("hierba") == 10 and p.j.relaciones["lucia"]["afinidad"] >= 25
+
+def test_contacto_de_calle_e_invitacion_sobreviven_al_guardado(robot):
+    import json
+    from juego import encuentros
+    from juego.charla import ficha
+    from juego.entidades import Persona
+
+    p = robot.nueva_partida()
+    p.cfg["adultos"] = False
+    p.cfg["pareja_familiar"] = True
+    p.cfg["atraccion"] = "todos"
+    persona = Persona("civil", *p.pos())
+    f = ficha(persona)
+    f.update(confianza=45, disponible=True, le_atraen="hm", interes=True, calabazas=True)
+    assert not p.intercambiar_numero(persona)
+    f["calabazas"] = False
+    assert p.intercambiar_numero(persona) and p.intercambiar_numero(persona)
+    pid = f["contacto_id"]
+    assert sum(x["id"] == pid for x in p.dato_adulto("personas")) == 1
+    perfil = p.persona_social(pid).copy()
+    r = p.relacion(pid)
+    r.update(afinidad=48, ultimo=p.dia)
+    p.dia += 2
+    encuentros.invitacion_diaria(p)
+    plan = r["invitacion"].copy()
+    encuentros.invitacion_diaria(p)
+    assert not p.j.quedadas and r["invitacion"] == plan
+
+    p.cargar_dict(json.loads(json.dumps(p.a_dict())))
+    assert p.persona_social(pid) == perfil and p.relacion(pid)["invitacion"] == plan
+    encuentros.responder_invitacion(p, perfil, True)
+    encuentros.responder_invitacion(p, perfil, True)
+    assert len(p.j.quedadas) == 1 and p.j.quedadas[0]["con"] == pid
+    assert p.j.quedadas[0]["min"] == plan["min"] and p.j.quedadas[0]["act"] in perfil["gustos"]

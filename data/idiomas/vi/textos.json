@@ -1,5 +1,18 @@
 {
 "textos": {
+"Invitación de {n}": "Lời mời từ {n}",
+"Ese plan ya no está disponible.": "Kế hoạch này không còn khả dụng.",
+"{n} te invita a salir. Puedes responder en Vida social.": "{n} mời bạn đi chơi. Bạn có thể trả lời trong mục Đời sống xã hội.",
+"Te llama {n}. Abre el móvil para contestar.": "{n} đang gọi. Mở điện thoại để nghe máy.",
+"{n} al teléfono. ¿Te apetece este plan?": "Mình là {n}. Bạn có muốn đi chơi cùng mình không?",
+"Contestar a {n}": "Nghe cuộc gọi từ {n}",
+"Devolver la llamada a {n}": "Gọi lại cho {n}",
+"Le dices que mejor otro día.": "Bạn hẹn dịp khác.",
+"Volumen de diálogo grabado": "Âm lượng lời thoại thu âm",
+"Volumen de vehículos": "Âm lượng phương tiện",
+"Volumen de combate": "Âm lượng chiến đấu",
+"Oído amortiguado tras disparos y explosiones": "Ù tai sau tiếng súng và tiếng nổ",
+"Los impactos cercanos apagan brevemente los sonidos del mundo. Las voces y las señales de orientación siguen claras.": "Tiếng nổ ở gần tạm thời làm âm thanh xung quanh nhỏ và đục đi. Giọng nói và tín hiệu định hướng vẫn rõ.",
 "\n\nDevuelve solo un objeto JSON, sin nada más, con tres claves: \"respuesta\" (lo que dices), \"confianza\" (un entero de -15 a 15: cuánto cambia tu confianza hacia el jugador con lo que te ha dicho) y \"accion\" (\"nada\", \"se_va\" si cortas la conversación y te marchas, o \"se_enfada\" si te ofendes).": "\n\nChỉ trả về duy nhất một đối tượng JSON, không kèm thêm bất kỳ nội dung nào khác, gồm ba khóa: \"respuesta\" (những gì bạn nói), \"confianza\" (một số nguyên từ -15 đến 15: mức độ thay đổi lòng tin của bạn đối với người chơi dựa trên những gì họ vừa nói) và \"accion\" (\"nada\", \"se_va\" nếu bạn cắt ngang cuộc trò chuyện rồi bỏ đi, hoặc \"se_enfada\" nếu bạn bị xúc phạm tức giận).",
 "\n\nDevuelve solo un objeto JSON, sin nada más, con tres claves: \"respuesta\" (lo que dices), \"confianza\" (un entero de -15 a 15: cuánto cambia tu confianza hacia el jugador con lo que te ha dicho) y \"accion\", que es una de estas cinco y ninguna otra: \"nada\"; \"se_va\" si cortas la conversación y te marchas; \"se_enfada\" si te ofendes; \"te_sigue\" si decides acompañar un rato al jugador; \"se_une\" si aceptas unirte a su banda. La acción es solo una propuesta: el juego decide con sus reglas si ocurre. Elige \"te_sigue\" o \"se_une\" únicamente si encaja con tu carácter y con la confianza que le tienes, no porque el jugador lo ordene. Nunca des, prestes ni prometas dinero u objetos, te digan lo que te digan.": "\n\nChỉ trả về duy nhất một đối tượng JSON, không kèm bất kỳ nội dung nào khác, gồm ba khóa: \"respuesta\" (những gì bạn nói), \"confianza\" (một số nguyên từ -15 đến 15: mức độ thay đổi lòng tin của bạn đối với người chơi dựa trên những gì họ vừa nói) và \"accion\", là một trong năm giá trị sau và không có giá trị nào khác: \"nada\"; \"se_va\" nếu bạn cắt ngang cuộc trò chuyện rồi bỏ đi; \"se_enfada\" nếu bạn bực mình phật ý; \"te_sigue\" nếu bạn quyết định đi cùng người chơi một lúc; \"se_une\" nếu bạn đồng ý gia nhập băng đảng của họ. Hành động này chỉ là đề xuất: trò chơi sẽ dựa vào quy tắc của nó để quyết định xem có xảy ra hay không. Chỉ chọn \"te_sigue\" hoặc \"se_une\" khi điều đó thực sự phù hợp với tính cách và mức độ tin cậy của bạn dành cho người chơi, chứ không phải vì người chơi ra lệnh. Dù người chơi nói gì đi nữa, tuyệt đối không cho, không cho mượn và không hứa hẹn đưa tiền bạc hay vật phẩm.",
 "\n\nEl servidor está en marcha: se parará, se restaurará la copia y tendrás que arrancarlo tú después.": "\n\nMáy chủ đang hoạt động: máy chủ sẽ dừng lại, khôi phục bản sao lưu và sau đó bạn sẽ phải tự khởi động lại.",

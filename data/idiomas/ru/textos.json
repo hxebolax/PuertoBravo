@@ -1,5 +1,18 @@
 {
 "textos": {
+"Invitación de {n}": "Приглашение от {n}",
+"Ese plan ya no está disponible.": "Это предложение больше не действует.",
+"{n} te invita a salir. Puedes responder en Vida social.": "{n} приглашает вас на встречу. Ответить можно в разделе «Социальная жизнь».",
+"Te llama {n}. Abre el móvil para contestar.": "Вам звонит {n}. Откройте телефон, чтобы ответить.",
+"{n} al teléfono. ¿Te apetece este plan?": "Это {n}. Хочешь куда-нибудь сходить?",
+"Contestar a {n}": "Ответить на звонок от {n}",
+"Devolver la llamada a {n}": "Перезвонить {n}",
+"Le dices que mejor otro día.": "Вы предлагаете встретиться в другой день.",
+"Volumen de diálogo grabado": "Громкость записанных диалогов",
+"Volumen de vehículos": "Громкость транспорта",
+"Volumen de combate": "Громкость боя",
+"Oído amortiguado tras disparos y explosiones": "Приглушение звука после выстрелов и взрывов",
+"Los impactos cercanos apagan brevemente los sonidos del mundo. Las voces y las señales de orientación siguen claras.": "Близкие выстрелы и взрывы ненадолго приглушают окружающие звуки. Голоса и сигналы навигации остаются отчётливыми.",
 "\n\nDevuelve solo un objeto JSON, sin nada más, con tres claves: \"respuesta\" (lo que dices), \"confianza\" (un entero de -15 a 15: cuánto cambia tu confianza hacia el jugador con lo que te ha dicho) y \"accion\" (\"nada\", \"se_va\" si cortas la conversación y te marchas, o \"se_enfada\" si te ofendes).": "\n\nВозвращает просто объект JSON, без ничего другого, с тремя ключами: \"respuesta\" (то, что вы говорите), \"confianza\" (целое число от -15 до 15: насколько меняется ваше доверие к игроку в зависимости от того, что он вам сказал) и \"accion\" (\"nada\", \"se_va\", если вы прекратите разговор и уходи, или \"se_enfada\", если обидишься).",
 "\n\nDevuelve solo un objeto JSON, sin nada más, con tres claves: \"respuesta\" (lo que dices), \"confianza\" (un entero de -15 a 15: cuánto cambia tu confianza hacia el jugador con lo que te ha dicho) y \"accion\", que es una de estas cinco y ninguna otra: \"nada\"; \"se_va\" si cortas la conversación y te marchas; \"se_enfada\" si te ofendes; \"te_sigue\" si decides acompañar un rato al jugador; \"se_une\" si aceptas unirte a su banda. La acción es solo una propuesta: el juego decide con sus reglas si ocurre. Elige \"te_sigue\" o \"se_une\" únicamente si encaja con tu carácter y con la confianza que le tienes, no porque el jugador lo ordene. Nunca des, prestes ni prometas dinero u objetos, te digan lo que te digan.": "\n\nВозвращает просто объект JSON, без чего-либо еще, с тремя ключами: \"respuesta\" (то, что вы говорите), \"confianza\" (целое число от -15 до 15: насколько меняется ваше доверие к игроку в зависимости от того, что он вам сказал) и \"accion\", который является одним из этих пяти и никаким другим: \"nada\";  \"se_va\", если вы прервете разговор и уйдете;  \"se_enfada\", если вы обиделись;  \"te_sigue\", если вы решите какое-то время сопровождать игрока;  \"se_une\", если вы согласитесь присоединиться к его банде. Действие — это всего лишь предложение: игра решает по своим правилам, произойдет ли оно. Выбирайте \"te_sigue\" или \"se_une\" только в том случае, если он соответствует вашему персонажу и вашему доверию к нему, а не потому, что это приказывает игрок. Никогда не давайте, не одалживайте и не обещайте деньги или предметы, что бы вам ни говорили.",
 "\n\nEl servidor está en marcha: se parará, se restaurará la copia y tendrás que arrancarlo tú después.": "\n\nСервер работает: он остановится, копия восстановится и вам придется запустить ее позже.",

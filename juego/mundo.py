@@ -114,6 +114,14 @@ def cargar_datos(con_mods=True, traducir=True):
     except (OSError, ValueError):
         d["adultos"] = {"personas": [], "actividades": [], "regalos": [], "sustancias": []}
     try:
+        d["escenas_privadas"] = _leer_json(os.path.join(rutas.DATOS, "escenas_privadas.json"))
+    except (OSError, ValueError):
+        d["escenas_privadas"] = {}
+    try:
+        d["relatos_privados"] = _leer_json(os.path.join(rutas.DATOS, "relatos_privados.json"))
+    except (OSError, ValueError):
+        d["relatos_privados"] = {}
+    try:
         vida = _leer_json(os.path.join(rutas.DATOS, "vida.json"))
     except (OSError, ValueError):
         vida = {}
@@ -202,6 +210,10 @@ def cargar_datos(con_mods=True, traducir=True):
                 lista[pos] = nuevo
     if traducir:
         from . import i18n
+        if i18n.actual() != i18n.ORIGEN:
+            catalogo = i18n.catalogo(i18n.actual())
+            for clave, relatos in d["relatos_privados"].items():
+                d["relatos_privados"][clave] = [r for r in relatos if all(frase in catalogo for frase in r)]
         i18n.traducir_datos(d)
     from . import calle, combustible, golpes, guerra, misvehiculos, realismo, sistemas, vuelo
     combustible.configurar(d)

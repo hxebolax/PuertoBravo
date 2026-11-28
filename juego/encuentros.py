@@ -290,21 +290,75 @@ def sitio_para(p, act, cerca_de):
     return min(cand, key=lambda l: math.hypot(l.x - cerca_de.x, l.y - cerca_de.y))
 
 
-def escenas(p, pers, act, gusta):
-    lista = AJ.lista("escenas_" + act["id"]) if ("escenas_" + act["id"]) in AJ.l else AJ.lista("escenas_generica")
+def escenas(p, pers, act, gusta, solo_despedida=False):
+    lista = []
+    if not solo_despedida:
+        clave = "escenas_" + act["id"]
+        lista = AJ.lista(clave if clave in AJ.l else "escenas_generica")
     lineas = [(tr("Narrador"), t.replace("{n}", pers["nombre"])) for t in lista]
     lineas.append((tr("Narrador"), (tr("Lo pasáis en grande: es justo lo que le gusta a ") + pers["nombre"] + "." if gusta
                                 else tr("Pasáis un rato agradable, aunque no es su plan favorito.")) + tr(' Ahora {afinidad_txt}. Son las {hora_txt}.').format(afinidad_txt=(p.afinidad_txt(p.relacion(pers['id']))), hora_txt=(p.hora_txt()))))
     return lineas
 
 
-def vivir_cita(p, pers, act, lugar=None, cobrar=True):
+def iniciar_cita(p, pers, act, lugar=None, al_confirmar=None):
+    if not p.cfg["citas_interactivas"]:
+        return vivir_cita(p, pers, act, lugar, al_confirmar=al_confirmar)
+    from .menus import Menu, Opcion
+    app = p.app
+    nombre = pers["nombre"]
+    precio = int(act.get("precio", 0))
+    planes = {
+        "cena": (tr("Pedir un plato para compartir"), tr("Elegís un plato entre los dos y os lo traen a la mesa.")),
+        "cine": (tr("Elegir las butacas juntos"), tr("Buscáis los dos asientos del centro hasta que empieza la película.")),
+        "baile": (tr("Salir a la pista"), tr("Encontráis sitio en la pista y seguís el ritmo juntos.")),
+        "copas": (tr("Buscar una mesa tranquila"), tr("Desde la mesa del fondo podéis hablar sin alzar la voz.")),
+        "paseo": (tr("Pasear sin prisa"), tr("Os paráis un momento a escuchar el barrio.")),
+    }
+    accion, escena = planes.get(act["id"], (tr("Disfrutar del plan"), act["nombre"]))
+    titulo = act["nombre"] + " · " + nombre
+    if lugar:
+        titulo += " · " + lugar.nombre
+
+    def pasar_a_la_cuenta(texto):
+        app.cerrar(llegada)
+
+        def terminar(importe):
+            def confirmar():
+                app.cerrar(cuenta)
+                if al_confirmar:
+                    al_confirmar()
+
+            vivir_cita(p, pers, dict(act, precio=importe), lugar, al_confirmar=confirmar, solo_despedida=True)
+
+        opciones = []
+        if precio:
+            mitad = (precio + 1) // 2
+            opciones.append(Opcion(tr("Pagar la cuenta · {n} €").format(n=precio), lambda: terminar(precio), ayuda=texto))
+            opciones.append(Opcion(tr("Pagar a medias · tu parte son {n} €").format(n=mitad), lambda: terminar(mitad), ayuda=texto))
+        else:
+            opciones.append(Opcion(tr("Terminar la cita"), lambda: terminar(0), ayuda=texto))
+        cuenta = Menu(app, texto, opciones)
+        app.abrir(cuenta)
+
+    gustos = [a["nombre"] for a in p.dato_adulto("actividades") if a["id"] in pers.get("gustos", ())]
+    opciones = [Opcion(accion, lambda: pasar_a_la_cuenta(escena), ayuda=titulo)]
+    if gustos:
+        respuesta = tr("{n} te propone un plan para otro día: {plan}.").format(n=nombre, plan=gustos[0])
+        opciones.append(Opcion(tr("Preguntar qué le gustaría hacer otro día"), lambda: pasar_a_la_cuenta(respuesta), ayuda=titulo))
+    llegada = Menu(app, titulo, opciones)
+    app.abrir(llegada)
+
+
+def vivir_cita(p, pers, act, lugar=None, cobrar=True, al_confirmar=None, solo_despedida=False):
     """El plan pasa de verdad: se paga, pasa el tiempo, os acerca y se cuenta en escenas. False si no se pudo pagar."""
     from .menus import Dialogo
     pid = pers["id"]
     r = p.relacion(pid)
     if cobrar and act.get("precio") and not p.pagar(int(act["precio"])):
         return False
+    if al_confirmar:
+        al_confirmar()
     gusta = act["id"] in pers.get("gustos", [])
     r.setdefault("hoy", {})["cita"] = p.dia
     from . import vestuario
@@ -322,7 +376,7 @@ def vivir_cita(p, pers, act, lugar=None, cobrar=True):
     lineas = [(tr("Narrador"), tr('{nombre} con {nombre2}').format(nombre=(act['nombre']), nombre2=(pers['nombre'])) + (tr(', en {nombre}').format(nombre=(lugar.nombre)) if lugar is not None else "") + ".")]
     if frase_ropa:
         lineas.append((tr("Narrador"), frase_ropa))
-    p.app.abrir(Dialogo(p.app, lineas + escenas(p, pers, act, gusta)))
+    p.app.abrir(Dialogo(p.app, lineas + escenas(p, pers, act, gusta, solo_despedida)))
     p.celos(pid)
     return True
 
@@ -368,6 +422,129 @@ def huecos(p, pers=None):
             txt = tr('Dentro de un rato, a las {_hora}').format(_hora=(_hora(m)))
         lista.append((txt, m))
     return lista
+
+
+def invitacion_diaria(p):
+    """Un solo plan pendiente. No reserva la cita hasta que el jugador contesta."""
+    if p.en_servidor or not p.vida_sentimental():
+        return
+    relaciones = p.j.relaciones
+    for r in relaciones.values():
+        if r.get("invitacion", {}).get("min", 0) <= ahora(p) or r.get("estado") == "ex":
+            r.pop("invitacion", None)
+    if quedadas(p) or any(r.get("invitacion") or p.dia - r.get("dia_invitacion", -10) < 3 for r in relaciones.values()):
+        return
+    for pid, r in sorted(relaciones.items(), key=lambda par: par[1].get("dia_invitacion", -10)):
+        if (pid in p.j.ocultos_social or r.get("estado") == "ex" or dias_de_planton(p, r) or r["afinidad"] < 35
+                or not 1 <= p.dia - r.get("ultimo", p.dia) <= 5):
+            continue
+        pers = p.persona_social(pid)
+        if not pers or not p.lug(pers.get("lugar")):
+            continue
+        planes = [a for a in p.dato_adulto("actividades") if a["id"] in pers.get("gustos", ())]
+        primer_aviso = p.dia * 1440 + 9 * 60
+        if p.reloj >= 21 * 60:
+            primer_aviso += 1440
+        libres = huecos(p, pers)
+        if not planes or not libres:
+            continue
+        act = next((a for a in planes if a["id"] != r.get("ultimo_plan_propuesto")), planes[0])
+        sitio = sitio_para(p, act, p.lug(pers["lugar"]))
+        minuto = libres[-1][1]
+        llamar = minuto >= max(ahora(p), primer_aviso) + 60
+        r["invitacion"] = {"act": act["id"], "min": minuto, "lugar": sitio.id, "llamar": llamar}
+        r["dia_invitacion"], r["ultimo_plan_propuesto"] = p.dia, act["id"]
+        if not llamar:
+            p.decir(tr("{n} te invita a salir. Puedes responder en Vida social.").format(n=pers["nombre"]))
+        return
+
+
+def llamada_social(p):
+    """Localiza la invitación que aún se puede atender o devolver desde el móvil."""
+    if p.en_servidor or not p.vida_sentimental():
+        return None
+    for pid, r in p.j.relaciones.items():
+        plan = r.get("invitacion")
+        if (plan and plan.get("llamar") and plan["min"] > ahora(p)
+                and r.get("estado") != "ex" and pid not in p.j.ocultos_social):
+            pers = p.persona_social(pid)
+            if pers and p.lug(plan["lugar"]):
+                return pers, plan
+    return None
+
+
+def avisar_llamada(p):
+    if not 9 * 60 <= p.reloj < 21 * 60 or p.mision or p.j.estrellas or p.trabajo:
+        return
+    llamada = llamada_social(p)
+    if not llamada:
+        return
+    pers, plan = llamada
+    if "suena_hasta" in plan or (p.acompanante and p.acompanante["pid"] == pers["id"]):
+        return
+    if modo(p) != "apagado" and presente(p, pers):
+        if p.reloj >= 20 * 60 or plan["min"] - ahora(p) <= 120:
+            plan["llamar"] = False
+            p.son("movil", cat="interfaz", vol=.6)
+            p.decir(tr("{n} te invita a salir. Puedes responder en Vida social.").format(n=pers["nombre"]))
+        return
+    plan["suena_hasta"] = ahora(p) + 10
+    p.son("movil", cat="interfaz", vol=.6)
+    p.decir(tr("Te llama {n}. Abre el móvil para contestar.").format(n=pers["nombre"]))
+
+
+def texto_invitacion(p, plan):
+    act = next((a for a in p.dato_adulto("actividades") if a["id"] == plan["act"]), None)
+    sitio = p.lug(plan["lugar"])
+    if not act or not sitio:
+        return ""
+    cuando = tr("Hoy") if plan["min"] // 1440 == p.dia else tr("Mañana")
+    return f"{act['nombre']}, {sitio.nombre}. {cuando}, {_hora(plan['min'])}."
+
+
+def atender_invitacion(p, pers, llamada=False):
+    from .menus import Menu, Opcion
+    plan = p.relacion(pers["id"]).get("invitacion")
+    detalle = texto_invitacion(p, plan) if plan and plan["min"] > ahora(p) else ""
+    if not detalle:
+        p.decir(tr("Ese plan ya no está disponible."), True)
+        return
+    fondo = None
+    if llamada:
+        plan["suena_hasta"] = ahora(p)
+        titulo = tr("{n} al teléfono. ¿Te apetece este plan?").format(n=pers["nombre"])
+        fondo = p.son(p.mez.capa("charla", "murmullo"), cat="interfaz", vol=.09)
+        fondo.grupo = "ambiente"
+        fondo.velo = .8
+    else:
+        titulo = tr("Invitación de {n}").format(n=pers["nombre"])
+    titulo += " " + detalle
+
+    def contestar(si):
+        responder_invitacion(p, pers, si, al_responder=lambda: p.app.cerrar(menu))
+        if not si:
+            p.decir(tr("Le dices que mejor otro día."), True)
+
+    menu = Menu(p.app, titulo, [Opcion(tr("Aceptar"), lambda: contestar(True), ayuda=titulo),
+                                Opcion(tr("Mejor otro día"), lambda: contestar(False), ayuda=titulo),
+                                Opcion(tr("Colgar") if llamada else tr("Volver"), lambda: p.app.cerrar(menu))],
+                al_cerrar=fondo.parar if fondo else None)
+    p.app.abrir(menu)
+
+
+def responder_invitacion(p, pers, aceptar, al_responder=None):
+    r = p.relacion(pers["id"])
+    plan = r.pop("invitacion", None)
+    if al_responder:
+        al_responder()
+    if not plan or not aceptar:
+        return
+    sitio = p.lug(plan["lugar"])
+    if (not sitio or plan["min"] <= ahora(p) or r.get("estado") == "ex"
+            or any(q["con"] == pers["id"] or abs(q["min"] - plan["min"]) < 60 for q in quedadas(p))):
+        p.decir(tr("Ese plan ya no está disponible."), True)
+        return
+    quedar(p, pers["id"], pers["nombre"], sitio, plan["min"], plan["act"])
 
 
 def quedar(p, con, nombre, lugar, minuto, act_id=None):
@@ -460,7 +637,7 @@ def _encuentro(p, q, l):
     if p.j.estrellas:
         p.decir(tr('Con la policía detrás, {nombre} prefiere dejarlo para otro día.').format(nombre=(pers['nombre'])))
         return
-    vivir_cita(p, pers, act, l)
+    iniciar_cita(p, pers, act, l)
 
 
 def _con_conocido(p, q, l):

@@ -451,7 +451,7 @@ def sonido_falta(nombre):
 def pantalla(que, pantalla_):
     if _sesion is None:
         return
-    titulo = getattr(pantalla_, "titulo", "")
+    titulo = "" if getattr(pantalla_, "escena_privada", False) else getattr(pantalla_, "titulo", "")
     if callable(titulo):
         try:
             titulo = titulo()

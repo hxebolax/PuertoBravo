@@ -1,0 +1,166 @@
+[
+ {
+  "es": "Estudio",
+  "donde": "data/sonidos/estudio/pack.json"
+ },
+ {
+  "es": "Grabaciones de campo, motores y pasos por superficie con tomas alternas.",
+  "donde": "data/sonidos/estudio/pack.json"
+ },
+ {
+  "es": "Aceptar",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Buscar una mesa tranquila",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Buscáis los dos asientos del centro hasta que empieza la película.",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Desde la mesa del fondo podéis hablar sin alzar la voz.",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Disfrutar del plan",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Elegir las butacas juntos",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Elegís un plato entre los dos y os lo traen a la mesa.",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Encontráis sitio en la pista y seguís el ritmo juntos.",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Ese plan ya no está disponible.",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Invitación de {n}",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Le dices que mejor otro día.",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Os paráis un momento a escuchar el barrio.",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Pagar a medias · tu parte son {n} €",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Pagar la cuenta · {n} €",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Pasear sin prisa",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Pedir un plato para compartir",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Preguntar qué le gustaría hacer otro día",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Salir a la pista",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Te llama {n}. Abre el móvil para contestar.",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Terminar la cita",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "{n} al teléfono. ¿Te apetece este plan?",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "{n} te invita a salir. Puedes responder en Vida social.",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "{n} te propone un plan para otro día: {plan}.",
+  "donde": "juego/encuentros.py"
+ },
+ {
+  "es": "Prefiero que lo dejemos aquí.",
+  "donde": "juego/intimidad.py"
+ },
+ {
+  "es": "{n} te da su número. Ya podéis quedar desde Vida social.",
+  "donde": "juego/intimidad.py"
+ },
+ {
+  "es": "He tenido un día largo. ¿Me cuentas algo que me haga reír?",
+  "donde": "juego/laboratorio.py"
+ },
+ {
+  "es": "Hoy me apetece estar contigo sin prisas.",
+  "donde": "juego/laboratorio.py"
+ },
+ {
+  "es": "Tenía ganas de verte. ¿Qué te apetece hacer?",
+  "donde": "juego/laboratorio.py"
+ },
+ {
+  "es": "Intercambiar números para una cita",
+  "donde": "juego/menus_charla.py"
+ },
+ {
+  "es": "Mostrar interés en una cita",
+  "donde": "juego/menus_charla.py"
+ },
+ {
+  "es": "Citas interactivas",
+  "donde": "juego/menus_juego.py"
+ },
+ {
+  "es": "Contestar a {n}",
+  "donde": "juego/menus_juego.py"
+ },
+ {
+  "es": "Devolver la llamada a {n}",
+  "donde": "juego/menus_juego.py"
+ },
+ {
+  "es": "Elige cómo pasar el rato y si pagáis a medias. Escape permite marcharte antes de confirmar la cita.",
+  "donde": "juego/menus_juego.py"
+ },
+ {
+  "es": "Los impactos cercanos apagan brevemente los sonidos del mundo. Las voces y las señales de orientación siguen claras.",
+  "donde": "juego/menus_juego.py"
+ },
+ {
+  "es": "Oído amortiguado tras disparos y explosiones",
+  "donde": "juego/menus_juego.py"
+ },
+ {
+  "es": "Volumen de combate",
+  "donde": "juego/menus_juego.py"
+ },
+ {
+  "es": "Volumen de diálogo grabado",
+  "donde": "juego/menus_juego.py"
+ },
+ {
+  "es": "Volumen de vehículos",
+  "donde": "juego/menus_juego.py"
+ }
+]

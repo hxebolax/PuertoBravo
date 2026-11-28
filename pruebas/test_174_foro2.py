@@ -57,6 +57,29 @@ def test_varias_misiones_en_un_sitio_se_elige_cual_y_la_marcada_empieza_sola(rob
 
 
 # ============================================================ el paseo con tu acompañante (issue 29)
+def test_pasos_del_acompanante_siguen_su_posicion_y_su_ritmo(robot, monkeypatch):
+    p, _, a = _paseo(robot)
+    x, y = p.pos()
+    pasos = []
+    monkeypatch.setattr(p, "son", lambda sonido, **kw: pasos.append((sonido, kw["xy"])))
+    monkeypatch.setattr(p.mundo, "superficie", lambda x, y: "arena")
+    monkeypatch.setattr(p.mundo, "sobre_vias", lambda x, y: False)
+    for pie in (0, 1):
+        monkeypatch.setitem(p.mez.sonidos, f"paso_arena{pie}", True)
+    a["x"] = x + 20
+    sistemas.paso_acompanante(p, .03)
+    rapido = a["t_paso"]
+    assert pasos[0] == ("paso_arena1", (a["x"], a["y"]))
+    assert pasos[1][1] == pasos[0][1]
+    a.update(x=x + 5, t_paso=0)
+    sistemas.paso_acompanante(p, .03)
+    assert pasos[2] == ("paso_arena0", (a["x"], a["y"]))
+    assert a["t_paso"] > rapido
+    a.update(x=x, y=y, t_paso=0)
+    sistemas.paso_acompanante(p, .03)
+    assert len(pasos) == 4
+
+
 def test_el_acompanante_no_se_baja_del_coche_en_marcha(robot):
     p, pers, a = _paseo(robot)
     x, y = p.pos()

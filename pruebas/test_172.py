@@ -800,6 +800,78 @@ def test_quedar_avisa_y_si_llegas_el_plan_se_vive_alli(robot):
     _cerrar_todo(robot)
 
 
+@pytest.mark.parametrize("aceptar", [True, False])
+def test_llamada_social_puede_devolverse_sin_repetirse(robot, aceptar):
+    import json
+    from juego import encuentros as EN, menus_juego
+    p, pers, _ = _social(robot)
+    p.cfg["adultos"] = False
+    p.cfg["pareja_familiar"] = True
+    p.cfg["horarios"] = "apagado"
+    r = p.relacion(pers["id"])
+    r.update(afinidad=40, ultimo=p.dia - 1)
+    p.reloj = 8 * 60
+    EN.invitacion_diaria(p)
+    plan = r["invitacion"]
+    p._tiempo(2)
+    assert "suena_hasta" not in plan
+    p.reloj = 10 * 60
+    p.j.estrellas = 1
+    p._tiempo(2)
+    assert "suena_hasta" not in plan
+    p.j.estrellas = 0
+    p._tiempo(2)
+    hasta = plan["suena_hasta"]
+    p._tiempo(2)
+    assert plan["suena_hasta"] == hasta and not EN.quedadas(p)
+    menus_juego.movil(p)
+    assert p.app.pila[-1].opciones[0].texto == "Contestar a " + pers["nombre"]
+    robot.tecla(pygame.K_ESCAPE)
+    p.reloj += 11
+    p.cargar_dict(json.loads(json.dumps(p.a_dict())))
+    menus_juego.movil(p)
+    telefono = p.app.pila[-1]
+    assert telefono.opciones[0].texto == "Devolver la llamada a " + pers["nombre"]
+    robot.tecla(pygame.K_RETURN)
+    assert p.lug(plan["lugar"]).nombre in p.app.pila[-1].titulo
+    robot.tecla(pygame.K_ESCAPE)
+    assert p.app.pila[-1] is telefono and not EN.quedadas(p)
+    robot.tecla(pygame.K_RETURN)
+    if not aceptar:
+        robot.tecla(pygame.K_DOWN)
+    robot.tecla(pygame.K_RETURN)
+    assert p.app.pila[-1] is telefono and "llamada" not in telefono.opciones[0].texto
+    assert "invitacion" not in p.relacion(pers["id"])
+    assert len(EN.quedadas(p)) == int(aceptar)
+    assert p.relacion(pers["id"])["afinidad"] == 40
+
+
+def test_llamada_respeta_turno_privacidad_y_caducidad(robot, monkeypatch):
+    from juego import encuentros as EN
+    p, pers, _ = _social(robot)
+    r = p.relacion(pers["id"])
+    r.update(afinidad=40, ultimo=p.dia - 1)
+    p.cfg["horarios"] = "gente"
+    p.reloj = 10 * 60
+    EN.invitacion_diaria(p)
+    plan = r["invitacion"]
+    plan["min"] = (p.dia + 1) * 1440 + 18 * 60
+    monkeypatch.setattr(EN, "presente", lambda p, pers: True)
+    EN.avisar_llamada(p)
+    assert "suena_hasta" not in plan
+    p.j.ocultos_social.append(pers["id"])
+    assert EN.llamada_social(p) is None
+    p.j.ocultos_social.remove(pers["id"])
+    p.reloj = 20 * 60
+    EN.avisar_llamada(p)
+    assert not plan["llamar"] and not EN.llamada_social(p)
+    assert EN.texto_invitacion(p, plan) and not EN.quedadas(p)
+    plan.pop("llamar")  # las invitaciones de partidas anteriores se contestan por escrito
+    assert not EN.llamada_social(p)
+    plan.update(llamar=True, min=EN.ahora(p))
+    assert not EN.llamada_social(p)
+
+
 def test_el_planton_sienta_mal(robot):
     from juego import encuentros as EN
     p, pers, l = _social(robot)
@@ -825,6 +897,70 @@ def test_la_cita_en_persona_se_viene_contigo_y_pasa_al_llegar_al_sitio(robot):
     sistemas.visita_con_acompanante(p, cine)
     assert r["citas"] == citas + 1 and p.acompanante and p.acompanante["plan"] is None
     _cerrar_todo(robot)
+
+
+def test_cita_interactiva_cancelar_reintentar_y_pagar_a_medias(robot):
+    from juego import encuentros as EN, sistemas
+    p, pers, base = _social(robot)
+    p.cfg["citas_interactivas"] = True
+    act = next(a for a in p.dato_adulto("actividades") if a["id"] == "cine")
+    r = p.relacion(pers["id"])
+    assert sistemas.empezar_paseo(p, pers, plan=act)
+    cine = EN.sitio_para(p, act, base)
+    a = p.acompanante
+    hasta, hora, citas = a["hasta"], EN.ahora(p), r.get("citas", 0)
+    for avanzar in (False, True):
+        sistemas.visita_con_acompanante(p, cine)
+        if avanzar:
+            robot.tecla(pygame.K_RETURN)
+        robot.tecla(pygame.K_ESCAPE)
+        assert (a["plan"], a["hasta"], EN.ahora(p), r.get("citas", 0)) == ("cine", hasta, hora, citas)
+        assert cine.id not in a["sitios"]
+    sistemas.visita_con_acompanante(p, cine)
+    robot.tecla(pygame.K_DOWN)
+    robot.tecla(pygame.K_RETURN)
+    cuenta = p.app.pila[-1]
+    assert pers["nombre"] in cuenta.titulo
+    mitad = (act["precio"] + 1) // 2
+    p.j.dinero = mitad
+    robot.tecla(pygame.K_RETURN)
+    assert p.app.pila[-1] is cuenta and p.j.dinero == mitad and r.get("citas", 0) == citas
+    robot.tecla(pygame.K_DOWN)
+    robot.tecla(pygame.K_RETURN)
+    assert p.j.dinero == 0 and r["citas"] == citas + 1 and a["plan"] is None
+    assert a["sitios"].count(cine.id) == 1 and a["hasta"] == hasta + 60 * act["horas"]
+
+
+def test_cita_interactiva_desde_el_movil_y_al_llegar_a_una_quedada(robot):
+    from juego import encuentros as EN
+    p, pers, base = _social(robot)
+    p.cfg["citas_interactivas"] = True
+    p.cfg["vida_en_persona"] = False
+    p.cfg["adultos"] = False
+    p.cfg["pareja_familiar"] = True
+    r = p.relacion(pers["id"])
+    r["afinidad"] = 30
+    ficha = _ficha(robot, p, pers["id"])
+    next(o for o in ficha.opciones if o.texto == "Proponer una cita").accion()
+    planes = p.app.pila[-1]
+    next(o for o in planes.opciones if "paseo" in o.texto.lower()).accion()
+    robot.tecla(pygame.K_RETURN)
+    assert p.app.pila[-1].opciones[0].texto == "Terminar la cita"
+    robot.tecla(pygame.K_ESCAPE)
+    assert p.app.pila[-1] is planes and not r.get("citas")
+    _cerrar_todo(robot)
+    act = next(a for a in p.dato_adulto("actividades") if a["id"] == "copas")
+    sitio = EN.sitio_para(p, act, base)
+    EN.quedar(p, pers["id"], pers["nombre"], sitio, EN.ahora(p) + 60, act["id"])
+    p.reloj += 60
+    p.j.x, p.j.y = sitio.x, sitio.y
+    dinero = p.j.dinero
+    EN.actualizar(p, 2.)
+    assert sitio.nombre in p.app.pila[-1].titulo and not EN.quedadas(p)
+    robot.tecla(pygame.K_RETURN)
+    robot.tecla(pygame.K_DOWN)
+    robot.tecla(pygame.K_RETURN)
+    assert p.j.dinero == dinero - (act["precio"] + 1) // 2 and r["citas"] == 1
 
 
 def test_horarios_de_la_gente_y_de_los_locales(robot):

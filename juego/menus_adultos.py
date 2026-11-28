@@ -150,7 +150,7 @@ def vida_social(p, directo=None):
                     app.decir(tr("Ya habéis quedado hoy. Mejor otro día."), True)
                     return
                 r["hoy"].pop("cita", None)
-                encuentros.vivir_cita(p, pers, act)
+                encuentros.iniciar_cita(p, pers, act)
             return f
 
         def menu_cita():
@@ -242,12 +242,10 @@ def vida_social(p, directo=None):
                 return
             casa = next((l for l in p.mundo.lugares.values() if l.tipo == "casa" and l.id in j.propiedades), None)
             if casa is None:
-                if not p.pagar(p.precio("hotel_cita", 70)):
-                    return
                 donde = tr("un hotel")
             else:
                 donde = casa.nombre
-            if p._hecho_hoy(r, "noche"):
+            if r.get("hoy", {}).get("noche") == p.dia:
                 app.decir(tr("Hoy ya habéis estado juntos."), True)
                 return
             from .intimidad import ENCUENTROS
@@ -255,17 +253,19 @@ def vida_social(p, directo=None):
             def elegir(tipo):
                 def f():
                     gusta = tipo == pers.get("noche", "romantico")
-                    p.sumar_afinidad(pid, 9 if gusta else 5)
-                    p.encuentro(pers["nombre"], tipo, donde, pid=pid)
-                    if gusta:
-                        p.decir(tr('Era justo lo que le apetecía a {nombre}.').format(nombre=(pers['nombre'])))
-                    p.celos(pid)
+                    def confirmar():
+                        if casa is None and not p.pagar(p.precio("hotel_cita", 70)):
+                            return False
+                        p._hecho_hoy(r, "noche")
+                        p.sumar_afinidad(pid, 9 if gusta else 5)
+                        p.celos(pid)
+                        return True
+                    p.encuentro(pers["nombre"], tipo, donde, pid=pid, confirmar=confirmar)
                 return f
             mm = Menu(app, tr('La noche con {nombre}').format(nombre=(pers['nombre'])),
                       [Opcion(ENCUENTROS[t][0], elegir(t), ayuda=tr("Pasáis la noche y pasan unas horas. Si es la manera que prefiere, os acerca más. Lo que compraste para la ocasión se gasta y se nota."))
                        for t in ENCUENTROS]
-                      + [Opcion(tr("Mejor otro día"), lambda: (r["hoy"].pop("noche", None), app.cerrar(mm)),
-                                ayuda=tr("Esta noche no pasa nada y no cuenta como hecho hoy. El hotel, si lo has pagado, no se devuelve."))],
+                      + [Opcion(tr("Mejor otro día"), lambda: app.cerrar(mm))],
                       intro=tr("Cada persona tiene su manera preferida. Lo que hayas comprado para la ocasión se nota"))
             app.abrir(mm)
 
@@ -298,7 +298,7 @@ def vida_social(p, directo=None):
                                    "caracter": "hablador", "confianza": 0, "frases": 0, "disponible": True, "le_atraen": "hm", "invitado": True,
                                    "limosna": False, "presentado": True, "ofendido": False}
             f["confianza"] = int(min(60, r["afinidad"] * 0.6)) + (15 if j.pareja == pid else 0)
-            f["caracter"] = "amable" if r["afinidad"] >= 40 or j.pareja == pid else "hablador"
+            f["caracter"] = pers.get("caracter") or ("amable" if r["afinidad"] >= 40 or j.pareja == pid else "hablador")
             x, y = p.pos()
             q = Persona("civil", x, y, pers["nombre"])
             q.ficha = f
@@ -471,6 +471,13 @@ def vida_social(p, directo=None):
                 marca = tr(", tu pareja") if j.pareja == pers["id"] else tr(", ex") if r["estado"] == "ex" else ""
                 lista.append(Opcion(f"{pers['nombre']}{marca}: {p.afinidad_txt(r)}", (lambda pers=pers: ficha(pers)),
                                     ayuda=tr("Abre su ficha: cómo va lo vuestro y lo que podéis hacer, en persona o por teléfono.")))
+                from . import encuentros
+                plan = r.get("invitacion")
+                if plan and plan["min"] > encuentros.ahora(p) and r.get("estado") != "ex":
+                    detalle = encuentros.texto_invitacion(p, plan)
+                    if detalle:
+                        titulo = tr("Invitación de {n}").format(n=pers["nombre"]) + ": " + detalle
+                        lista.append(Opcion(titulo, lambda pers=pers: encuentros.atender_invitacion(p, pers)))
         from . import encuentros
         if encuentros.quedadas(p):
             lista.append(Opcion(tr('Tus quedadas: {len}').format(len=(len(encuentros.quedadas(p)))), lambda: encuentros.menu_quedadas(p),

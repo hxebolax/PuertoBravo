@@ -1072,8 +1072,20 @@ def paso_acompanante(p, dt):
         a["y"] += (y - a["y"]) / d * paso
         a["t_paso"] -= dt
         if a["t_paso"] <= 0:
-            a["t_paso"] = 0.45
-            p.son("paso_npc", xy=(a["x"], a["y"]), ref=4, maxd=40, vol=0.8)
+            if "andar" not in a:
+                a["andar"] = sum(map(ord, a["pid"])) % 9
+            andar = a["andar"]
+            a["t_paso"] = (.31 if d > 12 else .42) + .008 * andar
+            a["pie"] = 1 - a.get("pie", 0)
+            xy = (a["x"], a["y"])
+            suelo = "via" if p.mundo.tipo != "mar" and p.mundo.sobre_vias(*xy) else p.mundo.superficie(*xy)
+            sonido = f"paso_{suelo}{a['pie']}"
+            if sonido not in p.mez.sonidos:
+                sonido = "paso_npc"
+            tono = .94 + .015 * andar
+            p.son(sonido, xy=xy, ref=4, maxd=40, vol=.56, tono=tono)
+            suela = ("suela_bota", "suela_dura", "suela_blanda")[andar % 3]
+            p.son(p.mez.capa(suela, "paso_npc"), xy=xy, ref=4, maxd=25, vol=.17, tono=tono)
     a["metros"] += math.hypot(x - a["px"], y - a["py"]) if math.hypot(x - a["px"], y - a["py"]) < 30 else 0.0
     a["px"], a["py"] = x, y
     if a["metros"] >= 400 and a["puntos"] < 8:                       # el paseo en sí también cuenta
@@ -1144,11 +1156,12 @@ def visita_con_acompanante(p, lugar):
         act = next((x for x in p.dato_adulto("actividades") if x["id"] == a["plan"]), None)
         pers = p.persona_social(a["pid"])
         if act is not None and pers is not None and lugar.tipo in encuentros.sitios_de(act):
-            a["plan"] = None
-            a["sitios"].append(lugar.id)
-            a["hasta"] += int(act.get("horas", 0)) * 60               # el plan no se come el paseo
-            if encuentros.vivir_cita(p, pers, act, lugar):
+            def confirmar():
+                a["plan"] = None
+                a["sitios"].append(lugar.id)
+                a["hasta"] += int(act.get("horas", 0)) * 60
                 a["puntos"] += 2
+            encuentros.iniciar_cita(p, pers, act, lugar, al_confirmar=confirmar)
             return
     if lugar.tipo == "casa" and lugar.id in p.j.propiedades and (a["puntos"] or a["metros"] > 60):
         # a casa juntos: si vivís aquí, el paseo termina dentro; si no, se despide en la puerta (issue 29)

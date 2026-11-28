@@ -122,6 +122,8 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         self.dia = 1
         self.vehiculos = []
         self.personas = []
+        self.t_acustica = self.t_multitud = 0.
+        self.reflejos = []
         self.objetos = []
         self.mision = None
         self.completadas = []
@@ -345,7 +347,36 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
             self.ha_comido()             # comer en cualquier sitio quita el hambre (vida realista)
         elif nombre in ("beber", "trago"):
             self.ha_bebido()
-        return self.mez.sonar(nombre, xy=xy, **kw)
+        canal = self.mez.sonar(nombre, xy=xy, **kw)
+        if not canal.fin and nombre.startswith(("disparo_", "explosion", "lanzagranadas")):
+            import time
+            oyente = self.pos()
+            distancia = math.dist(oyente, xy or oyente)
+            alcance = 22. if nombre == "explosion" else 8.
+            fuerza = min(1., canal.vol) * max(0., 1. - distancia / alcance) * canal.transmision
+            fuerza *= self.mez.vols["efectos"] * self.mez.vol_grupos["combate"] * self.mez.vols["maestro"]
+            if nombre == "disparo_silenciado":
+                fuerza *= .18
+            ahora = time.monotonic()
+            if self.mez.tinnitus and fuerza > .18:
+                self.mez.oido_hasta = max(self.mez.oido_hasta, ahora + fuerza * 2.4)
+            if distancia < 50 and self.mez.vol_grupos["combate"] * self.mez.vols["efectos"] > .01:
+                self.mez.combate_hasta = ahora + 1.2
+            if self.cfg["eco_lugares"] and len(self.reflejos) < 8:
+                sala = self.mez.entorno
+                cola = {"callejon": (.080, .29), "nave": (.125, .34), "industrial": (.105, .22),
+                        "interior": (.042, .16), "calle": (.075, .11), "montana": (.24, .15)}.get(sala)
+                if cola:
+                    demora, nivel = cola
+                    origen = xy or oyente
+                    imagen = origen
+                    if sala in ("callejon", "calle", "industrial"):
+                        from .acustica import imagen_fachada
+                        imagen = imagen_fachada(self.mundo, origen)
+                        extra = math.dist(oyente, imagen) - distancia
+                        demora = max(.025, min(.16, extra / 343.)) if extra > 0 else demora
+                    self.reflejos.append((self.t + demora, nombre, imagen, canal.vol * nivel, canal.maxd, canal.ref, canal.muestra))
+        return canal
 
     def pos(self):
         v = self.j.veh
@@ -518,7 +549,7 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         from . import i18n
         jug = d.get("jugador", {})
         if isinstance(jug, dict):              # guardada en otro idioma: lo que se guarda por nombre, al de ahora
-            d["jugador"] = i18n.al_idioma_de_ahora(jug, respetar=("nombre", "apellido", "dicho", "semilla"))
+            d["jugador"] = i18n.al_idioma_de_ahora(jug, respetar=("nombre", "apellido", "dicho", "semilla", "ritmo", "ultimo_plan_propuesto", "invitacion", "contacto"))
         self.j.de_dict(d.get("jugador", {}))
         genero.poner(self.j.genero)
         if self.j.personaje == "propio":
@@ -738,6 +769,8 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         self.guerra_retirada(callar=True)                       # una guerra de barrio no sigue desde otra localidad
         self._fin_persecucion()
         self.calle_cambio_mapa()
+        self.reflejos.clear()
+        self.mez.mapa_acustico = None
         self.mundo = self.mapas[mapa_id]
         j.mapa = mapa_id
         if v:
@@ -1822,6 +1855,15 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
             nombre = f"paso_{s}{self.pie}"
             if nombre not in self.mez.sonidos:
                 nombre = f"paso_acera{self.pie}"
+            from .vestuario import calzado
+            zapato = (calzado(self, j.calzado) or {}).get("id", "")
+            bota = zapato.startswith("botas_")
+            dura = zapato in ("zuecos", "tacones", "zapatos_vestir", "botines")
+            capa = "suela_bota" if bota else "suela_dura" if dura else "suela_blanda"
+            pan = (-.15 if self.pie else .15) if self.cfg["pasos_alternos"] else 0.
+            peso = .12 if j.agachado else .32 if correr else .22
+            self.son(self.mez.capa(capa, "paso_npc"), vol=peso, pan=pan,
+                     tono=(.91 if bota else 1.08 if dura else 1.) * (1.08 if correr else 1.))
             self.son(nombre, vol=0.35 if j.agachado else 0.6, tono=random.uniform(0.93, 1.07), pan=(-0.15 if self.pie else 0.15) if self.cfg["pasos_alternos"] else 0.0)
 
     def interactuar(self):
@@ -1987,6 +2029,12 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         dt = min(dt, 0.05)
         j = self.j
         self.t += dt
+        for reflejo in self.reflejos[:]:
+            cuando, sonido, pos, ganancia, maxd, ref, toma = reflejo
+            if self.t >= cuando:
+                self.reflejos.remove(reflejo)
+                c = self.mez.sonar(sonido, xy=pos, vol=ganancia, maxd=maxd, ref=ref, tono=.94, toma=toma, reflejo=True)
+                c.velo = .55
         self.mayus_soltada()
         if self.resumen_pendiente and self.t > 2.0 and not self.mision:
             self.resumen_pendiente = False
@@ -2051,13 +2099,28 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         if j.veh:
             self.oy_rumbo += M.norm180(j.veh.rumbo - self.oy_rumbo) * min(1.0, dt * 4)
         self.mez.situar_oyente(x, y, self.frente())
+        if self.t >= self.t_acustica or self.mez.mapa_acustico is not self.mundo:
+            self.t_acustica = self.t + .14
+            self.mez.instante = self.t
+            self.mez.mapa_acustico = self.mundo
+            self.mez.obstaculos = [v for v in self.vehiculos if v is not j.veh and not v.muerto
+                                   and abs(v.x - x) < 120 and abs(v.y - y) < 120
+                                   and not v.modelo.get("vuela") and not v.modelo.get("barco")
+                                   and v.modelo.get("motor") not in ("motor_bici", "motor_moto")]
         # dónde suena todo: el eco del barrio, y la altura si vas volando (solo lo usa el motor envolvente)
         from .audio_al import entorno_de
         self.mez.entorno = entorno_de(self.mundo.barrio(x, y).get("ambiente", ""))
+        if self.mez.entorno == "calle" and self.mundo.tipo != "mar":
+            # Dos fachadas enfrentadas a ambos lados de la vía.
+            for dx, dy in ((14, 0), (0, 14)):
+                if all(self.mundo.superficie(x + lado * dx, y + lado * dy) == "pared" for lado in (-1, 1)):
+                    self.mez.entorno = "callejon"
+                    break
         alt = self.vuelo_alt()
         self.mez.altura = 0.0 if alt <= 0 else (35.0 if not self.vuelo_real() else min(110.0, 20.0 + alt * 0.15))
 
     def _tiempo(self, dt):
+        minuto_antes = int(self.reloj)
         antes = int(self.reloj // 60)
         self.reloj += dt / 2.0
         self.pasar_necesidades(dt / 2.0)
@@ -2071,6 +2134,9 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
             self.plazas_usadas.clear()
             self._cobrar_negocios()
             self.sortear_dia()
+        if self.j.relaciones and int(self.reloj) != minuto_antes and not self.en_servidor:
+            from . import encuentros
+            encuentros.avisar_llamada(self)
         hora = int(self.reloj // 60)
         if hora != antes:
             r = 1.0 if self.en_servidor else random.random()     # y también si llueve
@@ -2211,6 +2277,18 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
                 activos.add(l.id)
                 if l.id not in self.canales_lugar:
                     self.canales_lugar[l.id] = self.son(l.sonido, xy=(l.x, l.y), bucle=True, ref=3 if alc < 100 else 12, maxd=alc, vol=0.7, cat="ambiente")
+            local_musical = l.tipo == "club" or l.id == "club_neon" or l.get("musica")
+            if d < 24 and (local_musical or l.tipo in ("bar", "comida", "casino", "pizzeria")) and self.lugar_abierto(l):
+                from .encuentros import local_abierto
+                if local_abierto(self, l)[0]:
+                    clave = "puerta:" + l.id
+                    activos.add(clave)
+                    if clave not in self.canales_lugar:
+                        musica = local_musical and not l.get("sin_musica")
+                        sonido = self.mez.capa("musica_local", "lugar_club") if musica else self.mez.capa("charla", "multitud")
+                        self.canales_lugar[clave] = self.son(sonido, xy=(l.x, l.y), bucle=True, cat="ambiente",
+                                                            ref=3., maxd=24., vol=.32)
+                    self.canales_lugar[clave].velo = min(.82, .22 + d / 32.)
             if l.id in marcas and d < 80:
                 clave = "m:" + l.id
                 activos.add(clave)
@@ -2269,11 +2347,37 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         elif not noche and self.noche_canal is not None:
             self.noche_canal.parar()
             self.noche_canal = None
-        if self.lluvia and self.lluvia_canal is None and self.mez.pedir("lluvia"):
-            self.lluvia_canal = self.son("lluvia", bucle=True, cat="ambiente", vol=0.6)
+        veh = self.j.veh
+        cabina = veh and veh.modelo["motor"] not in ("motor_bici", "motor_moto") and not veh.modelo.get("barco") and veh.modelo["id"] != "descapotable"
+        suelo = self.mundo.superficie(x, y)
+        material = "lluvia_charco"
+        if cabina:
+            material = "lluvia_cabina"
+        elif suelo in ("calzada", "acera", "plaza"):
+            material = "lluvia_suelo"
+        lluvia = self.mez.capa(material, "lluvia")
+        if self.lluvia_canal and self.lluvia_canal.nombre != lluvia:
+            self.lluvia_canal.parar()
+            self.lluvia_canal = None
+        if self.lluvia and self.lluvia_canal is None and (lluvia != "lluvia" or self.mez.pedir("lluvia")):
+            self.lluvia_canal = self.son(lluvia, bucle=True, cat="ambiente", vol=.38 if cabina else .55)
+            self.lluvia_canal.velo = .4 if cabina else 0.
         elif not self.lluvia and self.lluvia_canal is not None:
             self.lluvia_canal.parar()
             self.lluvia_canal = None
+        self.t_multitud -= dt
+        if self.t_multitud <= 0:
+            gente = [p for p in self.personas if p.tipo == "civil" and not p.muerto and p.dist(x, y) < 36]
+            azar = self.mez._azar_tomas
+            self.t_multitud = azar.uniform(6., 10.) / max(1., min(3., len(gente) / 2.))
+            if len(gente) >= 2:
+                p = azar.choice(gente)
+                ruido = "murmullo"
+                if p.estado == "huye":
+                    ruido = "grito"
+                elif azar.random() < .2:
+                    ruido = self.mez.capa("risa", "murmullo")
+                self.son(ruido, xy=(p.x, p.y), cat="ambiente", ref=3., maxd=38., vol=.34, tono=p.tono)
         self.t_azar -= dt
         if self.t_azar <= 0:
             self.t_azar = random.uniform(4, 11)
@@ -2444,6 +2548,11 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
 
     def silenciar(self):
         """Detiene todos los sonidos del mundo (al salir de la partida)."""
+        self.mez.mapa_acustico = None
+        self.mez.obstaculos = ()
+        self.salir_interior(silencio=True)
+        self.mez.oido_hasta = self.mez.combate_hasta = self.mez.aviso_hasta = 0.
+        self.reflejos.clear()
         self.desconectar_online()
         from . import transporte
         transporte.callar(self)

@@ -711,6 +711,10 @@ def opciones(app):
         def aj(d):
             cfg[clave] = round(max(0.0, min(1.0, cfg[clave] + 0.1 * d)), 1)
             app.aplicar_volumenes()
+            muestras = {"vol_vehiculos": "claxon", "vol_dialogo": "dialogo", "vol_combate": "disparo_pistola"}
+            if clave in muestras:
+                app.mez.sonar(muestras[clave], vol=.45)
+                return
             app.mez.sonar("baliza" if clave not in ("vol_musica", "vol_ambiente_musical") else "menu_ok", cat=canal.get(clave, "interfaz"))
         return Opcion(lambda: tr('{nombre}: {int} por ciento').format(nombre=(nombre), int=(int(cfg[clave] * 100))), ajuste=aj, ayuda=ayuda_)
 
@@ -782,6 +786,13 @@ def opciones(app):
     def adultos(d):
         from . import menus_adultos
         menus_adultos.alternar_modo(app)
+
+    def escenas_directas(d):
+        if not cfg["adultos"]:
+            app.decir(tr("Activa primero el contenido para adultos."), True)
+            return
+        cfg["escenas_directas"] = not cfg["escenas_directas"]
+        app.aplicar_adultos()
 
     def mando():
         from . import menus_extra
@@ -859,6 +870,12 @@ def opciones(app):
             si_no("pasos_alternos", tr("Tus pasos, uno a cada lado"),
                   tr("Con sí, que es como viene, tus pasos suenan uno un poco a la izquierda y el siguiente un poco a la derecha, como los dos pies. "
                   "Con no, todos suenan al centro, delante de ti. Vale con los dos motores de sonido.")),
+            vol("vol_dialogo", tr("Volumen de diálogo grabado")),
+            vol("vol_vehiculos", tr("Volumen de vehículos")),
+            vol("vol_combate", tr("Volumen de combate")),
+            si_no("tinnitus", tr("Oído amortiguado tras disparos y explosiones"),
+                  tr("Los impactos cercanos apagan brevemente los sonidos del mundo. Las voces y las señales de orientación siguen claras."),
+                  al_cambiar=app.aplicar_volumenes),
             si_no("sonido_mono", tr("Sonido mono, lo mismo por los dos oídos"),
                   tr("Para quien oye por un solo oído o usa un solo auricular. Se pierde la sensación de izquierda y derecha: oriéntate con el radar, el escáner y el GPS hablado."),
                   al_cambiar=app.aplicar_volumenes),
@@ -1026,6 +1043,8 @@ def opciones(app):
                   tr('Con sí, cada {entero} días te cobran la luz y el agua de tus casas, su contribución y un impuesto sobre lo que han dado tus negocios, y de vez en cuando pasa una inspección por alguno. Son cantidades pequeñas, se avisan {entero2} días antes, se cobran solas y se pueden consultar en el móvil. Si no llega el dinero, queda a deber con recargo; a los {entero3} impagos te embargan parte de lo que ganes hasta saldarlo, pero nunca te quitan nada de golpe. Una partida ya empezada tiene {entero4} días de gracia. Con no, no hay facturas, impuestos ni inspecciones, como antes.').format(entero=(HON.entero('cobro_dias')), entero2=(HON.entero('aviso_dias')), entero3=(HON.entero('impagos_embargo')), entero4=(HON.entero('gracia_dias')))),
             si_no("antecedentes", tr("Antecedentes penales"),
                   tr('Con sí, cada detención y cada multa que pagas a un agente queda en tu ficha, más grave cuanto más te buscaban. Los antecedentes cierran los empleos de confianza, el ingreso en la policía y, si son graves, los créditos; y cada delito cuenta algo más mientras estés fichado. Caducan solos: a los {entero} días los leves, a los {entero2} los medios y a los {entero3} los graves, y se atenúan con servicios a la comunidad o con un abogado. Lo que hiciste antes de esta versión no cuenta. Con no, no se apunta nada, como antes.').format(entero=(HON.entero('caduca_leve')), entero2=(HON.entero('caduca_media')), entero3=(HON.entero('caduca_grave')))),
+            si_no("citas_interactivas", tr("Citas interactivas"),
+                  tr("Elige cómo pasar el rato y si pagáis a medias. Escape permite marcharte antes de confirmar la cita.")),
             si_no("pareja_familiar", tr("Vida sentimental apta para todos"),
                   tr("Con sí, aunque el contenido para adultos esté desactivado, en el móvil aparece Vida sentimental: personas a las que conocer, citas, regalos, ser pareja, prometeros, "
                   "vivir juntos y una boda sencilla. Sin nada de contenido para adultos. Con no, las relaciones solo existen con el contenido para adultos activado, como antes.")),
@@ -1095,6 +1114,8 @@ def opciones(app):
         seccion(tr("Contenido para adultos"), [
             Opcion(lambda: tr('Contenido para mayores de 18 años: {v}').format(v=(tr('activado') if cfg['adultos'] else tr('desactivado'))), ajuste=adultos,
                    ayuda=tr("Añade relaciones sentimentales y sexuales, ligar con cualquiera, aventuras, compañía de pago, drogas y trapicheo, contado de forma sensual pero sin escenas explícitas. Todo tiene consecuencias en el ánimo, la salud, la reputación y las relaciones. Desactivado, nada de eso aparece en el juego.")),
+            Opcion(lambda: tr("Escenas privadas con lenguaje directo") + ": " + tr("sí" if cfg["adultos"] and cfg["escenas_directas"] else "no"),
+                   ajuste=escenas_directas, ayuda=tr("Relatos de encuentros sexuales consensuados, sin descripción gráfica. Solo en solitario.")),
             lista("atraccion", tr("Me atraen"), tr("Con quién puedes coquetear.")),
             lista("mi_genero", tr("Soy"), tr("Sirve para saber a quién le puedes gustar. Si prefieres no decirlo, le puedes gustar a cualquiera.")),
             si_no("noche_por_pasos", tr("La noche con alguien, paso a paso"),
@@ -1564,7 +1585,17 @@ def movil(p):
                   Opcion(tr("Barrios"), barrios, ayuda=tr("Todos los barrios y localidades del juego, con cómo es cada uno y cuáles te faltan por visitar.")),
                   Opcion(tr("Estadísticas"), estadisticas, ayuda=tr("Las cifras de tu partida: misiones, dinero, tiempo jugado, lugares visitados, distancias y más."))]
         return lista
-    menu = Menu(app, lambda: tr('Móvil. {hora_txt}. {dinero} euros').format(hora_txt=(p.hora_txt()), dinero=(j.dinero)), ops)
+    def opciones_movil():
+        from . import encuentros
+        lista = ops()
+        llamada = encuentros.llamada_social(p)
+        if llamada:
+            pers, plan = llamada
+            if "suena_hasta" in plan:
+                texto = tr("Contestar a {n}") if encuentros.ahora(p) < plan["suena_hasta"] else tr("Devolver la llamada a {n}")
+                lista.insert(0, Opcion(texto.format(n=pers["nombre"]), lambda: encuentros.atender_invitacion(p, pers, llamada=True)))
+        return lista
+    menu = Menu(app, lambda: tr('Móvil. {hora_txt}. {dinero} euros').format(hora_txt=(p.hora_txt()), dinero=(j.dinero)), opciones_movil)
     app.abrir(menu)
 
 
@@ -1689,14 +1720,15 @@ def lugar(p, l):
                                          Opcion(tr("Beber agua de la fuente"), lambda: app.decir(p.beber_en_fuente(), True), ayuda=tr("Gratis. Quita la sed, con la vida realista.")))
         from . import menus_capo
         menus_capo.opciones_lugar(p, l, app.pila[-1])            # cajero, fichas del casino y gestor (capo.py)
+    menu_local = app.pila[-1] if not en_coche and app.pila and isinstance(app.pila[-1], Menu) else None
     if p.acompanante:
         from . import sistemas
         sistemas.visita_con_acompanante(p, l)
-        if p.acompanante and not en_coche and app.pila and isinstance(app.pila[-1], Menu) and app.pila[-1] is not p:
-            sistemas.con_acompanante_en_local(p, l, app.pila[-1], Opcion)       # invitarle a algo o regalarle un décimo
-    if l.tipo in ("bar", "taberna") and not en_coche and app.pila and isinstance(app.pila[-1], Menu) and app.pila[-1] is not p:
+        if p.acompanante and menu_local:
+            sistemas.con_acompanante_en_local(p, l, menu_local, Opcion)
+    if l.tipo in ("bar", "taberna") and menu_local:
         from . import sistemas
-        sistemas.con_cartas(p, app.pila[-1], Menu, Opcion)
+        sistemas.con_cartas(p, menu_local, Menu, Opcion)
 
 
 def _menu_lugar(p, l, ops, intro=None):

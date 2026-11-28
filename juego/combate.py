@@ -871,8 +871,13 @@ class Combate:
                 if d < 24:
                     p.t_paso -= dt
                     if p.t_paso <= 0:
-                        p.t_paso = 0.3 if p.estado == "huye" else 0.55
-                        self.son("paso_npc", xy=(p.x, p.y), ref=3, maxd=28, vol=0.7, tono=random.uniform(0.9, 1.1))
+                        p.t_paso = (.3 if p.estado == "huye" else .55) * (.9 + (p.id % 9) * .025)
+                        p.pie_audio = 1 - getattr(p, "pie_audio", 0)
+                        superficie = self.mundo.superficie(p.x, p.y)
+                        paso = f"paso_{superficie}{p.pie_audio}"
+                        if paso in self.mez.sonidos:
+                            self.son(paso, xy=(p.x, p.y), ref=3, maxd=28, vol=.27)
+                        self.son("paso_npc", xy=(p.x, p.y), ref=3, maxd=28, vol=.54, tono=.88 + .035 * (p.id % 8))
                 continue
             # ------------------------------------------------------ hostiles
             if getattr(p, "inofensivo", False):

@@ -275,10 +275,24 @@ class Vida:
         self._local = l                                          # el comercio donde estás: si te aprecian, te fían
         self.son("puerta_entrar", cat="interfaz", vol=0.7)
         self.interior = self.mez.sonar(l.sonido, bucle=True, cat="interfaz", vol=0.22)
+        # Al recorrer un local el oyente está dentro; la calle entra por la puerta.
+        (ax, ay), _ = self.mundo.ancla(l.x, l.y)
+        dx, dy = ax - l.x, ay - l.y
+        norma = max(1., math.hypot(dx, dy))
+        self.mez.puerta_interior = (l.x + 2 * dx / norma, l.y + 2 * dy / norma)
+        self.mez.entorno = "nave" if l.tipo in ("taller", "desguace", "gimnasio") else "interior"
+        if self.lluvia:
+            self.lluvia_interior = self.mez.sonar(self.mez.capa("lluvia_chapa", "lluvia"), bucle=True, cat="interfaz", vol=.23)
+            self.lluvia_interior.grupo = "ambiente"
+            self.lluvia_interior.velo = .65
         self.hilo_musical(l)
 
     def salir_interior(self, silencio=False):
         self._local = None
+        self.mez.puerta_interior = None
+        if getattr(self, "lluvia_interior", None):
+            self.lluvia_interior.parar()
+            self.lluvia_interior = None
         c = getattr(self, "interior", None)
         if c is not None:
             c.parar()

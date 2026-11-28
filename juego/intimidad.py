@@ -88,15 +88,50 @@ class Intimidad:
         f["interes"] = True
         return f"{n}: " + random.choice([tr("Pues tú tampoco estás nada mal."), tr("Me gusta cómo me miras. Sigue hablando."), tr("¿Siempre eres así, o es que hoy te has levantado con suerte?")]) + tr(" Le gustas.")
 
+    def intercambiar_numero(self, q):
+        """El contacto guarda datos de juego, nunca el texto de la conversación."""
+        from uuid import uuid4
+        f = ficha(q)
+        if not self.vida_sentimental() or f["edad"] < 18:
+            return False
+        if f.get("contacto_id") in self.j.relaciones:
+            return True
+        if not self._interes_mutuo(f) or f["confianza"] < 25:
+            self.decir(tr("Prefiero que lo dejemos aquí."), True)
+            return False
+        lugares = [l for l in self.mundo.lugares.values() if not l.get("adultos")]
+        if not lugares:
+            return False
+        lugar = min(lugares, key=lambda l: (l.x - q.x) ** 2 + (l.y - q.y) ** 2)
+        pid = "contacto_" + uuid4().hex
+        pers = {k: f[k] for k in ("nombre", "edad", "genero", "oficio", "caracter")}
+        pers.update(id=pid, nombre=f["nombre"] + " " + f["apellido"], lugar=lugar.id,
+                    desc=f["oficio"], gustos=random.sample(["cine", "cena", "baile", "paseo", "copas"], 2),
+                    regalo=random.choice(["flores", "bombones", "libro"]), ritmo=random.choice(("lento", "intenso", "jugando")))
+        r = self.relacion(pid)
+        r.update(contacto=pers, afinidad=min(34, f["confianza"]), ritmo=pers["ritmo"])
+        f["contacto_id"] = pid
+        self.son("movil", cat="interfaz", vol=.5)
+        self.decir(tr("{n} te da su número. Ya podéis quedar desde Vida social.").format(n=pers["nombre"]), True)
+        return True
+
+    def _interes_mutuo(self, f):
+        genero = self.cfg["mi_genero"]
+        return (f["edad"] >= 18 and f["disponible"] and self.me_atrae(f["genero"])
+                and (genero == "x" or genero in f["le_atraen"])
+                and bool(f.get("interes")) and not f.get("calabazas") and not f.get("ofendido"))
+
     def puede_proponer(self, q):
         f = ficha(q)
-        return bool(f.get("interes")) and f["confianza"] >= 35 and not f.get("calabazas")
+        return self.modo_adulto() and self._interes_mutuo(f) and f["confianza"] >= 35
 
     def proponer_aventura(self, q, en_hotel=False):
         """Proponerle a alguien que acaba de conocer pasar la noche juntos. Devuelve True si acepta."""
         j = self.j
         f = ficha(q)
         n = f["nombre"]
+        if not self.modo_adulto() or f["edad"] < 18:
+            return False
         if j.estrellas:
             self.app.son("error")
             self.decir(tr("Con la policía detrás no es momento."), True)
@@ -109,21 +144,25 @@ class Intimidad:
             self.decir(tr('{n}: Hoy no. Pero quédate con mi número.').format(n=(n)), True)
             return False
         casa = next((l for l in self.mundo.lugares.values() if l.tipo == "casa" and l.id in j.propiedades), None)
-        if casa is None or en_hotel:
-            if not self.pagar(self.precio("hotel_cita", 70)):
-                return False
+        hotel = casa is None or en_hotel
+        if hotel:
             donde = tr("un hotel")
         else:
             donde = casa.nombre
             if self.aventura_en_casa(casa):                      # tu pareja vive ahí, y estaba en casa
                 return False
-        j.stats["aventuras"] = j.stats.get("aventuras", 0) + 1
-        self.personas = [x for x in self.personas if x is not q]
-        self.encuentro(n, random.choice(["apasionado", "jugueton", "romantico"]), donde, desconocido=True)
-        self.cambiar_reputacion(1)
-        if j.pareja:
-            self.celos()
-        return True
+        def confirmar():
+            if hotel and not self.pagar(self.precio("hotel_cita", 70)):
+                return False
+            j.stats["aventuras"] = j.stats.get("aventuras", 0) + 1
+            self.personas = [x for x in self.personas if x is not q]
+            self.cambiar_reputacion(1)
+            if j.pareja:
+                self.celos()
+            return True
+
+        return self.encuentro(n, random.choice(["apasionado", "jugueton", "romantico"]), donde,
+                              desconocido=True, confirmar=confirmar, perfil=f)
 
     # --------------------------------------------------------- encuentros
     def _proteccion(self, desconocido):
@@ -137,7 +176,7 @@ class Intimidad:
             return tr(" No habéis usado protección.")
         return tr(" No lleváis protección.") if desconocido else ""
 
-    def encuentro(self, nombre, tipo, donde, desconocido=False, pid=None, sintonia=None):
+    def encuentro(self, nombre, tipo, donde, desconocido=False, pid=None, sintonia=None, confirmar=None, perfil=None, escena=None):
         """Una noche con alguien. Se cuenta sin detalles explícitos y tiene efectos en el ánimo, la salud y la relación.
 
         Con la opción «la noche, paso a paso», antes se juega: decides tú qué haces y la otra persona responde. Lo bien
@@ -145,14 +184,35 @@ class Intimidad:
         """
         from .menus import Dialogo
         j = self.j
-        if self.cfg["noche_por_pasos"] and sintonia is None:
+        if not self.modo_adulto():
+            return False
+        directo = self.cfg["escenas_directas"] and not self.en_servidor
+        participante = self.persona_social(pid) if pid else perfil
+        if participante is not None and participante.get("edad", 18) < 18:
+            return False
+        if escena is not None and not directo:
+            return False
+        if directo and escena is None and participante and participante.get("edad", 0) >= 18:
+            from .escenas_privadas import ofrecer
+            if ofrecer(self, nombre, tipo, donde, lambda final, sintonia: self.encuentro(
+                    nombre, tipo, donde, desconocido, pid, sintonia=sintonia, confirmar=confirmar, perfil=perfil, escena=final),
+                    participante=participante, pid=pid):
+                return True
+        if escena is None and self.cfg["noche_por_pasos"] and sintonia is None:
             from .laboratorio import Noche
             while len(self.app.pila) > 1 and self.app.pila[-1] is not self:
                 self.app.pila.pop()
             self.app.teclas.clear()
             self.son("puerta_entrar", cat="interfaz", vol=0.6)
-            Noche(self, nombre, donde, lambda s: self.encuentro(nombre, tipo, donde, desconocido, pid, sintonia=s)).empezar()
-            return
+            habitual = None
+            if pid:
+                perfil = self.relacion(pid)
+                habitual = (self.persona_social(pid) or {}).get("ritmo")
+            Noche(self, nombre, donde, lambda s: self.encuentro(nombre, tipo, donde, desconocido, pid,
+                  sintonia=s, confirmar=confirmar), perfil=perfil, habitual=habitual).empezar()
+            return True
+        if confirmar and not confirmar():
+            return False
         titulo, frases, animo, horas = ENCUENTROS[tipo]
         if sintonia is not None:
             animo = int(animo * (0.6 + 0.6 * sintonia))
@@ -169,7 +229,6 @@ class Intimidad:
                 self.sumar_afinidad(pid, 4)
         proteccion = self._proteccion(desconocido)
         self.pasar_horas(horas, dormir=True)
-        j.salud = j.salud_max
         self.cambiar_animo(animo)
         j.stats["noches"] = j.stats.get("noches", 0) + 1
         self.son("puerta_entrar", cat="interfaz", vol=0.6)
@@ -177,9 +236,17 @@ class Intimidad:
         while len(self.app.pila) > 1 and self.app.pila[-1] is not self:
             self.app.pila.pop()
         self.app.teclas.clear()
+        if escena is not None:
+            respuesta, *resto = escena
+            dialogo = Dialogo(self.app, [(tr("Narrador"), linea) for linea in (respuesta + proteccion + extra, *resto)])
+            dialogo.escena_privada = True
+            self.app.abrir(dialogo)
+            return True
         self.app.abrir(Dialogo(self.app, [
             (tr("Narrador"), tr('{titulo} con {nombre}, en {donde}. {choice}{extra}').format(titulo=(titulo), nombre=(nombre), donde=(donde), choice=(random.choice(frases)), extra=(extra))),
             (tr("Narrador"), tr('Lo que pasa después es solo vuestro.{proteccion} Por la mañana, son las {hora_txt} y te sientes {animo_txt}.').format(proteccion=(proteccion), hora_txt=(self.hora_txt()), animo_txt=(self.animo_txt())))]))
+
+        return True
 
     def gesto(self, pid, pers, clave):
         """Un gesto de cariño con alguien con quien tienes una relación: beso, baile, masaje o un susurro."""

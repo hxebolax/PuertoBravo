@@ -14,6 +14,7 @@ import ctypes
 import math
 import os
 import sys
+import weakref
 
 import numpy as np
 
@@ -33,6 +34,7 @@ AL_REVERB_GAIN, AL_REVERB_GAINHF, AL_REVERB_DECAY_TIME, AL_REVERB_REFLECTIONS_GA
 # entorno: (cuánto eco se oye, segundos de cola, brillo, primeras reflexiones, cola)
 ENTORNOS = {
     "abierto": (0.06, 0.7, 0.5, 0.02, 0.6),       # campo, playa, mar: casi nada devuelve el sonido
+    "callejon": (.34, 1.45, .72, .34, 1.1),
     "parque": (0.10, 0.9, 0.5, 0.03, 0.8),
     "calle": (0.20, 1.1, 0.7, 0.08, 1.0),         # fachadas a los lados
     "industrial": (0.30, 1.9, 0.75, 0.10, 1.2),   # naves, muelles, chapa
@@ -84,6 +86,9 @@ def _cargar(ruta):
            "alEffectf": (None, [cu, ci, cf]), "alGenAuxiliaryEffectSlots": (None, [ci, ctypes.POINTER(cu)]),
            "alDeleteAuxiliaryEffectSlots": (None, [ci, ctypes.POINTER(cu)]), "alAuxiliaryEffectSloti": (None, [cu, ci, ci]),
            "alAuxiliaryEffectSlotf": (None, [cu, ci, cf]), "alSource3i": (None, [cu, ci, ci, ci, ci])}
+    efx.update({"alGenFilters": (None, [ci, ctypes.POINTER(cu)]),
+                "alDeleteFilters": (None, [ci, ctypes.POINTER(cu)]),
+                "alFilteri": (None, [cu, ci, ci]), "alFilterf": (None, [cu, ci, cf])})
     al.con_efx = True
     for nombre, (res, args) in efx.items():
         try:
@@ -117,12 +122,17 @@ class MezcladorAL(Mezclador):
         self.al.alcGetIntegerv(self.dev, ALC_FREQUENCY, 1, ctypes.byref(v))
         self.frecuencia = v.value
         self.al.alDistanceModel(AL_NONE)                 # la distancia la calcula el juego, igual que en el motor clásico
-        self._buffers = {}                               # nombre -> (id de buffer, id del array con el que se hizo)
-        self._pausados = False
+        self._buffers = {}                               # toma -> búfer y referencia débil a sus muestras
         self._eco_slot = self._eco_efecto = 0
         self._eco_puesto = None                          # el entorno que tiene ahora el eco
         self._eco_g = 0.0
         self.eco_activo = True                           # el jugador puede quitar el eco en las opciones
+        self._filtro_paso_bajo = ctypes.c_uint()
+        if self.al.con_efx:
+            self.al.alGenFilters(1, ctypes.byref(self._filtro_paso_bajo))
+            if self._filtro_paso_bajo.value:
+                self.al.alFilteri(self._filtro_paso_bajo.value, 0x8001, 1)  # AL_FILTER_LOWPASS
+            self.al.alGetError()
         self._preparar_eco()
         self.nombre_salida = self._salida_actual()
         from . import salidas
@@ -231,12 +241,9 @@ class MezcladorAL(Mezclador):
         al.alAuxiliaryEffectSlotf(self._eco_slot, AL_EFFECTSLOT_GAIN, float(max(0.0, min(1.0, self._eco_g))))
 
     # ------------------------------------------------------------------ buffers y fuentes
-    def _buffer(self, nombre):
-        datos = self.sonidos.get(nombre)
-        if datos is None:
-            return 0
+    def _buffer(self, nombre, datos):
         hecho = self._buffers.get(nombre)
-        if hecho and hecho[1] == id(datos):
+        if hecho and hecho[1]() is datos:
             return hecho[0]
         b = ctypes.c_uint(0)
         self.al.alGenBuffers(1, ctypes.byref(b))
@@ -247,11 +254,11 @@ class MezcladorAL(Mezclador):
             viejo = ctypes.c_uint(hecho[0])
             self.al.alDeleteBuffers(1, ctypes.byref(viejo))
             self.al.alGetError()                         # si aún lo usa alguna fuente no se borra; no pasa nada
-        self._buffers[nombre] = (b.value, id(datos))
+        self._buffers[nombre] = (b.value, weakref.ref(datos))
         return b.value
 
     def _crear_fuente(self, c):
-        b = self._buffer(c.nombre)
+        b = self._buffer(c.muestra, c.datos)
         if not b:
             c.fin = True
             return
@@ -268,7 +275,7 @@ class MezcladorAL(Mezclador):
             self.al.alSourcei(c._src, AL_SAMPLE_OFFSET, int(c.pos))
             self.al.alGetError()
         self.al.alSourcef(c._src, AL_ROLLOFF_FACTOR, 0.0)
-        if self._eco_slot and (c.cat == "efectos" or c.eco):          # lo que suena en el mundo lleva el eco del lugar
+        if self._eco_slot and not c.senal and (c.cat == "efectos" or c.eco):
             self.al.alSource3i(c._src, AL_AUXILIARY_SEND_FILTER, self._eco_slot, 0, 0)
             self.al.alGetError()
         self._poner(c)
@@ -285,18 +292,28 @@ class MezcladorAL(Mezclador):
 
     def _poner(self, c):
         """Lleva a la fuente de OpenAL el volumen, el tono y la posición que el juego quiere para este sonido."""
-        g = c.vol * self.vols.get(c.cat, 1.0)
+        factor, aparente = self.mezcla_escena(c)
+        g = factor * c.vol * self.vols.get(c.cat, 1.0)
         if c.senal:
             g *= self.vols["senales"]
         if c.cat in ("ambiente", "musica"):
             g *= self.duck
+        filtro = self._filtro_paso_bajo.value
+        cantidad = round(c.filtro, 3)
+        if filtro and cantidad != getattr(c, "_filtro", 0.):
+            if cantidad:
+                # EFX copia los parámetros al asociar el filtro a cada fuente.
+                self.al.alFilterf(filtro, 2, .035 ** cantidad)
+            self.al.alSourcei(c._src, 0x20005, filtro if cantidad else 0)
+            c._filtro = cantidad
         ox, oy, _ = self.oyente
         if c.xy is None:
             self.al.alSourcei(c._src, AL_SOURCE_RELATIVE, 1)
             self.al.alSource3f(c._src, AL_POSITION, float(max(-1.0, min(1.0, c.pan))), 0.0, -0.4 if c.pan else 0.0)
         else:
-            dx, dy = c.xy[0] - ox, c.xy[1] - oy
-            d = math.hypot(dx, dy)
+            dx, dy = aparente[0] - ox, aparente[1] - oy
+            dz = c.alto - self.altura
+            d = math.hypot(math.dist(c.xy, (ox, oy)), dz)
             if d >= c.maxd:
                 g = 0.0
             else:
@@ -307,9 +324,7 @@ class MezcladorAL(Mezclador):
                     g *= (c.maxd - d) / borde
             self.al.alSourcei(c._src, AL_SOURCE_RELATIVE, 0)
             # el volumen por distancia ya está aplicado: a OpenAL solo le interesa la dirección, así que se le da a un metro
-            dz = c.alto - self.altura                    # por encima o por debajo del oyente
-            d3 = math.hypot(d, dz)
-            k = 1.0 / d3 if d3 > 1.0 else 1.0
+            k = 1.0 / max(1.0, math.hypot(dx, dy, dz))
             self.al.alSource3f(c._src, AL_POSITION, float(ox + dx * k), float(dz * k), float(-(oy + dy * k)))
         if c.parando:
             g = 0.0
@@ -318,7 +333,7 @@ class MezcladorAL(Mezclador):
         else:
             c._g += (g - c._g) * (0.5 if g < c._g else 0.3)
         self.al.alSourcef(c._src, AL_GAIN, float(max(0.0, min(4.0, c._g))))
-        c.rate += (c.rate_obj - c.rate) * 0.4
+        c.rate += (c.rate_obj * c.doppler - c.rate) * 0.4
         tono = c.rate * self.tono_mundo if c.cat in _CATS_MUNDO else c.rate
         self.al.alSourcef(c._src, AL_PITCH, float(max(0.05, min(8.0, tono))))
 
@@ -342,7 +357,8 @@ class MezcladorAL(Mezclador):
         with self._lock:
             lista = list(self.canales)
         import time
-        objetivo = 0.45 if self.atenuar and time.time() < self.duck_hasta else 1.0
+        voz_grabada = any(c.nombre == "_voz_escena" and c.activo for c in lista)
+        objetivo = .45 if self.atenuar and (voz_grabada or time.time() < self.duck_hasta) else 1.
         self.duck += (objetivo - self.duck) * (0.35 if objetivo < self.duck else 0.08)
         ox, oy, rumbo = self.oyente
         r = math.radians(rumbo)
@@ -351,7 +367,6 @@ class MezcladorAL(Mezclador):
         self.al.alListenerf(AL_GAIN, float(self.vols["maestro"]))
         self._actualizar_eco()
         estado = ctypes.c_int(0)
-        pausar = bool(self.mundo_pausado)
         for c in lista:
             if c.fin:
                 if getattr(c, "_src", 0):
@@ -365,13 +380,14 @@ class MezcladorAL(Mezclador):
             if c.parando and c._g < 0.01:
                 self._soltar(c)
                 continue
-            if c.cat in _CATS_MUNDO and pausar != self._pausados:
+            pausar = self.pausar_canal(c)
+            if pausar != getattr(c, "_pausado", False):
                 (self.al.alSourcePause if pausar else self.al.alSourcePlay)(c._src)
-            elif not c.bucle and not (pausar and c.cat in _CATS_MUNDO):
+                c._pausado = pausar
+            elif not c.bucle and not pausar:
                 self.al.alGetSourcei(c._src, AL_SOURCE_STATE, ctypes.byref(estado))
                 if estado.value not in (AL_PLAYING, AL_PAUSED):
                     self._soltar(c)
-        self._pausados = pausar
         with self._lock:
             self.canales = [c for c in self.canales if not c.fin]
 
@@ -388,6 +404,8 @@ class MezcladorAL(Mezclador):
                 u = ctypes.c_uint(b)
                 self.al.alDeleteBuffers(1, ctypes.byref(u))
             self._buffers.clear()
+            if self._filtro_paso_bajo.value:
+                self.al.alDeleteFilters(1, ctypes.byref(self._filtro_paso_bajo))
             if self._eco_slot:
                 s, e = ctypes.c_uint(self._eco_slot), ctypes.c_uint(self._eco_efecto)
                 self.al.alDeleteAuxiliaryEffectSlots(1, ctypes.byref(s))

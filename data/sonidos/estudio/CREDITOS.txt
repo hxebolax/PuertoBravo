@@ -1,0 +1,4 @@
+Estudio
+
+BOOM Library, Gamemaster Audio, Adobe Audition Sound Effects and Articulated Sounds.
+The source file and edit for every cue and alternate take are listed in fuentes.csv.

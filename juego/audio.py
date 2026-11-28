@@ -10,6 +10,7 @@ vuelve a abrir sola donde toque (salidas.py). Y, si se pide, una segunda salida 
 """
 import collections
 import math
+import random
 import threading
 import time
 
@@ -36,6 +37,16 @@ def apagar(x, corte=900.0):
 
 # Los sonidos que son señales de ayuda para orientarse: llevan su propio volumen, aparte del de su categoría.
 SENALES = ("baliza", "radar", "tono_", "loc_", "sonar", "lugar_", "semaforo", "cruce", "norte")
+
+
+def grupo_sonoro(nombre, categoria):
+    if nombre.startswith(("disparo_", "bala_", "explosion", "cohete", "golpe", "lanzagranadas")):
+        return "combate"
+    if nombre.startswith(("motor_", "sirena", "tren", "tranvia", "rodadura", "claxon", "helicoptero", "avion", "frenazo", "marcha", "suspension")):
+        return "vehiculos"
+    if nombre.startswith(("_voz_", "voz", "dialogo", "conversacion", "megafono")):
+        return "dialogo"
+    return categoria
 
 
 class Canal:
@@ -66,7 +77,21 @@ class Canal:
         self.estereo = False
         self.nuevo = True
         self.senal = False      # es una señal de ayuda (baliza, radar, tono de puntería): tiene su propio volumen
-        self.alto = 0.0         # altura sobre el suelo, en metros (solo la usa el motor envolvente)
+        self.alto = 0.0         # altura sobre el suelo, en metros
+        self.aparente = None
+        self.transmision = 1.
+        self.sombra = self.filtro = self.velo = 0.
+        self.doppler = 1.
+        self.ultima_distancia = None
+        self.destino_acustico = None
+        self.ganancia_obj = 1.
+        self.sombra_obj = 0.
+        self.desvio = (0., 0.)
+        self.t_oclusion = None
+        self.reflejo = False
+        self.revision = -1
+        self.grupo = ""
+        self.historial_filtro = None
         self.eco = False        # que le afecte el eco del lugar aunque no sea un efecto del mundo
 
     def mover(self, x, y):
@@ -92,6 +117,8 @@ CORTE = 1.5              # sin que la salida pida sonido en este tiempo, se ha c
 
 
 class Mezclador:
+    envolvente = False
+
     def __init__(self, dispositivo=True, bloque=1024, holgado=False, salida="", extra=""):
         self.holgado = bool(holgado or HOLGADO)     # búfer grande y sin prisas: algo más de retardo a cambio de no dar chasquidos
         self.con_dispositivo = bool(dispositivo)     # sin él (las pruebas, o el motor envolvente) no se vigila ninguna salida
@@ -107,6 +134,13 @@ class Mezclador:
         self._cola_extra = collections.deque()
         self._lock_extra = threading.Lock()
         self.sonidos = {}
+        self.vol_grupos = {"vehiculos": 1., "combate": 1., "dialogo": 1.}
+        self.puerta_interior = None
+        self.capas = {}
+        self.tomas = {}
+        self.datos_tomas = {}
+        self.ultima_toma = {}
+        self._azar_tomas = random.Random()
         self._var = {}
         self.canales = []
         self._lock = threading.Lock()
@@ -118,6 +152,11 @@ class Mezclador:
         self._provisional = {}      # lo que suena mientras tanto: el sonido de serie
         self._dif_estado = {}       # nombre -> "cargando" o "listo"
         self.sincrono = False       # en las pruebas se carga al momento, sin hilo
+        self.mapa_acustico = None
+        self.obstaculos = ()
+        self.instante = 0.
+        self.tinnitus = False
+        self.oido_hasta = self.combate_hasta = self.aviso_hasta = 0.
         self.mundo_pausado = False
         self.entorno = "calle"      # dónde está el oyente: decide el eco en el motor envolvente
         self.altura = 0.0           # altura del oyente sobre el suelo: en helicóptero, lo demás suena por debajo
@@ -190,7 +229,8 @@ class Mezclador:
 
     # ---------------------------------------------------------------- sonidos
     def registrar(self, nombre, datos):
-        self.sonidos[nombre] = np.ascontiguousarray(datos, dtype=np.float32)
+        banco = self.datos_tomas if isinstance(nombre, tuple) else self.sonidos
+        banco[nombre] = np.ascontiguousarray(datos, dtype=np.float32)
         for k in [k for k in list(self._var) if k[0] == nombre]:
             self._var.pop(k, None)
 
@@ -240,7 +280,7 @@ class Mezclador:
         clave = (nombre, bucle, apagado)
         v = self._var.get(clave)
         if v is None:
-            d = self.sonidos[nombre]
+            d = self.datos_tomas[nombre] if isinstance(nombre, tuple) else self.sonidos[nombre]
             if apagado:
                 d = apagar(d)
             if bucle:
@@ -249,6 +289,9 @@ class Mezclador:
                 v = np.concatenate([d, np.zeros((2,) + d.shape[1:], np.float32)])
             self._var[clave] = v
         return v
+
+    def capa(self, nombre, alternativa):
+        return nombre if nombre in self.capas else alternativa
 
     def duracion(self, nombre):
         d = self.sonidos.get(nombre)
@@ -270,25 +313,49 @@ class Mezclador:
         return c
 
     def sonar(self, nombre, vol=1.0, tono=1.0, bucle=False, xy=None, pan=0.0,
-              ref=5.0, maxd=70.0, cat="efectos"):
+              ref=5.0, maxd=70.0, cat="efectos", toma=None, reflejo=False):
         c = Canal()
-        d = self.sonidos.get(nombre)
+        # Los bucles conservan la misma toma al reanudarse.
+        muestra = self.capas.get(nombre, nombre)
+        if toma is not None and toma in self.tomas.get(nombre, ()):
+            muestra = toma
+        elif not bucle and nombre in self.tomas:
+            opciones = self.tomas[nombre]
+            muestra = self._azar_tomas.choice([k for k in opciones if k != self.ultima_toma.get(nombre)])
+            self.ultima_toma[nombre] = muestra
+        c.muestra = muestra
+        d = self.datos_tomas[muestra] if isinstance(muestra, tuple) else self.sonidos.get(muestra)
         if d is None:
             registro.sonido_falta(nombre)
             c.fin = True
             return c
         registro.sonido(nombre)
-        with self._lock:
-            if len(self.canales) >= 56 and not bucle and cat != "interfaz":
-                c.fin = True
-                return c
-        c.nombre = nombre
         c.senal = nombre.startswith(SENALES)
+        c.reflejo = reflejo
+        with self._lock:
+            importante = nombre.startswith(("sirena", "explosion", "disparo_", "latido"))
+            limite = 60 if c.senal else 56 if importante else 52
+            ocupados = sum(not v.fin for v in self.canales)
+            if ocupados >= limite and not bucle and cat != "interfaz":
+                candidatos = (v for v in self.canales if not v.fin and not v.bucle and not v.senal
+                              and v.cat != "interfaz" and (c.senal or v.cat == "ambiente"))
+                menor = min(candidatos, key=lambda v: max(v.gl_obj, v.gr_obj), default=None)
+                if menor is None or not (c.senal or importante):
+                    c.fin = True
+                    return c
+                menor.fin = True
+            if c.senal and not bucle and ocupados > 20:
+                self.aviso_hasta = time.monotonic() + .35
+        c.nombre = nombre
+        c.grupo = grupo_sonoro(nombre, cat)
         c.estereo = d.ndim == 2
         c.largo = len(d)
-        c.datos = self._variante(nombre, bucle, False)
-        if xy is not None and not c.estereo:
-            c.apag = self._variante(nombre, bucle, True)
+        if self.envolvente:
+            c.datos = d  # OpenAL sube esta toma en la siguiente actualización.
+        else:
+            c.datos = self._variante(muestra, bucle, False)
+            if xy is not None and not c.estereo:
+                c.apag = self._variante(muestra, bucle, True)
         c.rate = c.rate_obj = max(0.05, float(tono))
         c.bucle = bucle
         c.vol = vol
@@ -312,8 +379,75 @@ class Mezclador:
         """La voz va a decir algo: durante lo que tarde, el ambiente y la música bajan para que se entienda."""
         self.duck_hasta = max(self.duck_hasta, time.time() + min(9.0, 0.7 + len(str(texto)) / 15.0))
 
+    def mezcla_escena(self, c):
+        from .acustica import trayectoria
+        xy = c.xy
+        espacial = self.mapa_acustico and xy is not None and not (c.senal or c.reflejo)
+        if espacial and c.revision != self.instante:
+            oyente = self.oyente[:2]
+            d = math.dist(oyente, xy)
+            c.destino_acustico, c.ganancia_obj, c.sombra_obj = None, 1., 0.
+            if d < min(180., c.maxd) and max(self.altura, c.alto) < 10:
+                coches = ((v.x, v.y) for v in self.obstaculos if not v.muerto
+                          and c not in (v.canal, v.sirena, v.alarma, v.fuego))
+                aparente, c.ganancia_obj, c.sombra_obj = trayectoria(
+                    self.mapa_acustico, oyente, xy, coches, self.altura, c.alto)
+                if aparente != xy:
+                    c.destino_acustico = aparente
+            if c.grupo == "vehiculos" and c.ultima_distancia is not None:
+                dt = self.instante - c.revision
+                delta = d - c.ultima_distancia
+                velocidad = delta / dt if 0 < dt < .5 and abs(delta) < 15 else 0.
+                c.doppler = 343. / (343. + max(-65., min(65., velocidad)))
+            c.ultima_distancia, c.revision = d, self.instante
+        if espacial:
+            ahora = time.monotonic()
+            # Los disparos nacen con la acústica del sitio. Los motores ya en marcha
+            # cruzan el borde de la sombra gradualmente, incluso entre dos sondeos.
+            tau = .23 if c.ganancia_obj < c.transmision else .16
+            paso = 1. if c.t_oclusion is None else -math.expm1(-(ahora - c.t_oclusion) / tau)
+            c.t_oclusion = ahora
+            c.transmision += paso * (c.ganancia_obj - c.transmision)
+            c.sombra += paso * (c.sombra_obj - c.sombra)
+            punto = c.destino_acustico or xy
+            ox, oy = c.desvio
+            ox += paso * (punto[0] - xy[0] - ox)
+            oy += paso * (punto[1] - xy[1] - oy)
+            c.desvio = ox, oy
+            c.aparente = xy[0] + ox, xy[1] + oy
+        else:
+            c.aparente, c.transmision, c.sombra = None, 1., 0.
+            c.desvio, c.t_oclusion = (0., 0.), None
+            c.revision = -1
+        g = c.transmision
+        g *= self.vol_grupos.get(c.grupo, 1.)
+        if c.grupo == "ambiente" and c.cat == "interfaz":
+            g *= self.vols["ambiente"] * self.duck
+        c.filtro = max(c.sombra, c.velo)
+        if not c.senal and c.cat != "interfaz" and c.grupo != "dialogo":
+            ahora = time.monotonic()
+            oido = min(1., max(0., self.oido_hasta - ahora) / 2.) if self.tinnitus else 0.
+            c.filtro = max(c.filtro, oido * .88)
+            g *= 1. - .28 * oido
+            if c.grupo in ("ambiente", "vehiculos", "musica"):
+                g *= 1. - min(1., max(0., self.combate_hasta - ahora)) * (.45 if c.grupo == "ambiente" else .23)
+            if c.grupo in ("vehiculos", "combate", "ambiente"):
+                g *= 1. - .3 * min(1., max(0., self.aviso_hasta - ahora) / .25)
+            if c.grupo == "vehiculos":
+                g *= .7 + .3 * self.duck
+        if self.puerta_interior and xy and c.grupo == "vehiculos":
+            c.filtro = max(.7, c.filtro)
+            return g * .3, self.puerta_interior
+        return g, c.aparente or xy
+
+    def pausar_canal(self, c):
+        if self.puerta_interior and c.xy and c.grupo == "vehiculos":
+            return False
+        return self.mundo_pausado and c.cat in ("efectos", "ambiente")
+
     def _calcular(self, c):
-        g = c.vol * self.vols.get(c.cat, 1.0)
+        factor, aparente = self.mezcla_escena(c)
+        g = factor * c.vol * self.vols.get(c.cat, 1.0)
         if c.senal:
             g *= self.vols["senales"]
         if c.cat in ("ambiente", "musica"):
@@ -331,9 +465,10 @@ class Mezclador:
             c.muf_obj = 0.0
             return
         ox, oy, rumbo = self.oyente
-        dx = c.xy[0] - ox
-        dy = c.xy[1] - oy
-        d = math.hypot(dx, dy)
+        dx = aparente[0] - ox
+        dy = aparente[1] - oy
+        horizontal = math.hypot(dx, dy)
+        d = math.hypot(math.dist(c.xy, (ox, oy)), c.alto - self.altura)
         if d >= c.maxd:
             c.gl_obj = c.gr_obj = 0.0
             return
@@ -342,14 +477,14 @@ class Mezclador:
         borde = c.maxd * 0.25
         if d > c.maxd - borde:
             g *= (c.maxd - d) / borde
-        if d < 0.5:
+        if horizontal < 0.5:
             p = 0.0
             detras = 0.0
         else:
             rel = math.radians(math.degrees(math.atan2(dx, dy)) - rumbo)
             p = math.sin(rel)
             detras = max(0.0, -math.cos(rel))
-            cerca = min(1.0, d / 2.0)
+            cerca = min(1.0, horizontal / 2.0) * horizontal / max(horizontal, d)
             p *= cerca
             detras *= cerca
         a = (p + 1.0) * math.pi / 4.0
@@ -358,7 +493,7 @@ class Mezclador:
         c.gr_obj = g * math.sin(a) * 1.3
         c.dl_obj = ITD_MAX * p if p > 0 else 0.0
         c.dr_obj = -ITD_MAX * p if p < 0 else 0.0
-        c.muf_obj = min(0.95, 0.7 * detras + 0.45 * min(1.0, d / c.maxd))
+        c.muf_obj = min(0.95, max(c.filtro, 0.7 * detras + 0.45 * min(1.0, d / c.maxd)))
 
     def actualizar(self):
         """Recalcula la posición relativa de todos los sonidos. Una vez por fotograma."""
@@ -366,7 +501,8 @@ class Mezclador:
         with self._lock:
             self.canales = [c for c in self.canales if not c.fin]
             lista = list(self.canales)
-        objetivo = 0.45 if self.atenuar and time.time() < self.duck_hasta else 1.0
+        voz_grabada = any(c.nombre == "_voz_escena" and c.activo for c in lista)
+        objetivo = .45 if self.atenuar and (voz_grabada or time.time() < self.duck_hasta) else 1.
         self.duck += (objetivo - self.duck) * (0.35 if objetivo < self.duck else 0.08)      # baja rápido y vuelve despacio
         for c in lista:
             self._calcular(c)
@@ -398,9 +534,9 @@ class Mezclador:
         for c in lista:
             if c.fin:
                 continue
-            if self.mundo_pausado and c.cat in ("efectos", "ambiente"):
+            if self.pausar_canal(c) and not c.parando:
                 continue
-            c.rate += (c.rate_obj - c.rate) * 0.4
+            c.rate += (c.rate_obj * c.doppler - c.rate) * 0.4
             r = c.rate * self.tono_mundo if c.cat in ("efectos", "ambiente") else c.rate
             L = c.largo
             gl1, gr1 = (0.0, 0.0) if c.parando else (c.gl_obj, c.gr_obj)
@@ -416,6 +552,16 @@ class Mezclador:
             if c.estereo or c.xy is None:
                 idx = c.pos + self._ar[:n] * r
                 s = self._leer(c.datos, idx, L, c.bucle)
+                if c.filtro > .01:
+                    # Media móvil causal; conserva las últimas muestras entre bloques.
+                    if c.historial_filtro is None:
+                        c.historial_filtro = np.zeros((15,) + s.shape[1:], dtype=np.float32)
+                    tramo = np.concatenate((c.historial_filtro, s))
+                    suma = np.cumsum(np.concatenate((np.zeros_like(tramo[:1]), tramo)), axis=0)
+                    s = s + c.filtro * ((suma[16:] - suma[:-16]) / 16. - s)
+                    c.historial_filtro = tramo[-15:].copy()
+                else:
+                    c.historial_filtro = None
                 if c.estereo:
                     mix[:, 0] += s[:, 0] * (c.gl + (gl1 - c.gl) * rampa)
                     mix[:, 1] += s[:, 1] * (c.gr + (gr1 - c.gr) * rampa)

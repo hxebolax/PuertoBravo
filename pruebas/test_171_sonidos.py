@@ -1,9 +1,11 @@
 """Vigilantes de los sonidos: todos los packs traen exactamente los mismos sonidos que los de serie, sus cuentas y sus
 créditos cuadran con sus archivos, y todos los sonidos salen en Aprender los sonidos y en el volumen de cada sonido, con una
 sola clasificación, un buscador y la forma de devolver cada sonido a su volumen de serie."""
+import csv
 import json
 import os
 import re
+from pathlib import Path
 
 import numpy as np
 import pygame
@@ -74,6 +76,16 @@ def test_las_cuentas_y_los_creditos_de_cada_pack_cuadran_con_sus_archivos():
         with open(os.path.join(rutas.PACKS, carpeta, "pack.json"), encoding="utf-8") as f:
             meta = json.load(f)
         texto = _creditos(carpeta)
+        if carpeta == "estudio":  # Muestras de biblioteca con un manifiesto de origen por toma.
+            raiz = Path(rutas.PACKS, carpeta)
+            with (raiz / meta["fuentes"]).open(encoding="utf-8", newline="") as f:
+                filas = list(csv.DictReader(f))
+            assert meta["sonidos"] == len(serie)
+            assert len(filas) == len(list(raiz.rglob("*.flac")))
+            assert {raiz / fila["archivo"] for fila in filas} == set(raiz.rglob("*.flac"))
+            assert all(fila["fuente"] and fila["edicion"] for fila in filas)
+            assert meta["licencia"] and meta["fuentes"] in texto
+            continue
         assert meta.get("nombre") and meta.get("descripcion") and "CC0" in meta.get("licencia", "")
         if "grabaciones" not in meta:                       # el envolvente: cuenta sonidos y ambientes en estéreo
             assert meta["sonidos"] == len(serie)

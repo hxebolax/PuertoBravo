@@ -34,22 +34,29 @@ MOMENTOS = [
         (tr("Con prisa, sin pensar"), "intenso", tr("{n} te ayuda, con las manos torpes de ganas.")),
         (tr("Entre risas, enredándoos"), "jugando", tr("Acabáis los dos riéndoos, hechos un lío."))]),
 ]
-ESPERA = [tr("{n} te pone una mano en el pecho. «Espera. Más despacio.»"), tr("{n} se aparta un poco. «Un momento. Así no.»")]
-QUIERE = {"lento": tr("«Despacio. Hoy quiero que dure.»"), "intenso": tr("«No pienses tanto. Ven aquí.»"), "jugando": tr("«Sorpréndeme. Hazme reír.»")}
+ESPERA = ["{n} te pone una mano en el pecho. «Espera. Más despacio.»", "{n} se aparta un poco. «Un momento. Así no.»"]
+QUIERE = {"lento": "«Despacio. Hoy quiero que dure.»", "intenso": "«No pienses tanto. Ven aquí.»", "jugando": "«Sorpréndeme. Hazme reír.»"}
 
 
-def ritmo_de(nombre, dia):
-    """El ritmo que le apetece hoy a esta persona. Cambia de un día a otro, y no es el mismo para todos."""
-    return RITMOS[(sum(ord(c) for c in nombre) + int(dia)) % 3]
+def ritmo_preferido(perfil, habitual, azar):
+    """Migra el perfil la primera vez que se usa, sin tocar la afinidad ni el historial."""
+    if perfil.get("ritmo") not in RITMOS:
+        perfil["ritmo"] = habitual if habitual in RITMOS else azar.choice(RITMOS)
+    return perfil["ritmo"]
 
 
 class Noche:
     """Una noche con alguien, decidida paso a paso. Al terminar llama a al_acabar(sintonia), de 0 a 1."""
 
-    def __init__(self, p, nombre, donde, al_acabar, azar=None):
+    momentos = MOMENTOS
+    privada = False
+
+    def __init__(self, p, nombre, donde, al_acabar, azar=None, perfil=None, habitual=None):
         self.p, self.app, self.nombre, self.donde, self.al_acabar = p, p.app, nombre, donde, al_acabar
         self.azar = azar or random
-        self.ritmo = ritmo_de(nombre, p.dia)
+        self.ritmo = ritmo_preferido(perfil if perfil is not None else {}, habitual, self.azar)
+        if p.reloj < 5 * 60:
+            self.ritmo = "lento"
         self.paso = 0
         self.puntos = 0.0
         self.maximo = 0.0
@@ -57,25 +64,33 @@ class Noche:
         self.menu = None
 
     def empezar(self):
-        self._mostrar(f"{self.donde.capitalize()}. ")
+        saludo = {"lento": tr("Hoy me apetece estar contigo sin prisas."),
+                  "intenso": tr("Tenía ganas de verte. ¿Qué te apetece hacer?"),
+                  "jugando": tr("He tenido un día largo. ¿Me cuentas algo que me haga reír?")}
+        self._mostrar(f"{self.donde.capitalize()}. {self.nombre}: {saludo[self.ritmo]} ")
 
     def _mostrar(self, antes=""):
         from .menus import Menu, Opcion
         n = self.nombre
         if self.menu is not None:
             self.app.cerrar(self.menu)
+            self.menu = None
         if self.espera:
-            titulo = antes + self.azar.choice(ESPERA).format(n=n)
-            ops = [Opcion(tr("Parar, y preguntarle si está bien"), lambda: self._responde_espera(True), ayuda=tr("Un espera se respeta. Parar y escuchar es lo que más os acerca.")),
-                   Opcion(tr("Bajar el ritmo sin decir nada"), lambda: self._responde_espera(False), ayuda=tr("Aflojas, pero no preguntas."))]
-        elif self.paso >= len(MOMENTOS):
+            titulo = antes + tr(self.azar.choice(ESPERA)).format(n=n)
+            ops = [Opcion(tr("Parar, y preguntarle si está bien"), self._responde_espera, ayuda=tr("Un espera se respeta. Parar y escuchar es lo que más os acerca.")),
+                   Opcion(tr("Mejor otro día"), lambda: self.app.cerrar(self.menu))]
+        elif self.paso >= len(self.momentos):
             self._fin(antes)
             return
         else:
-            texto, opciones = MOMENTOS[self.paso]
+            texto, opciones = self.momentos[self.paso]
             titulo = antes + texto.format(n=n)
-            ops = [Opcion(t, (lambda r=r, d=d: self._elegir(r, d)), ayuda=tr("No hay una respuesta correcta para todo el mundo: fíjate en cómo responde.")) for t, r, d in opciones]
-        self.menu = Menu(self.app, titulo, ops, escapable=False)
+            ayuda = titulo if self.privada else tr("No hay una respuesta correcta para todo el mundo: fíjate en cómo responde.")
+            ops = [Opcion(t, (lambda r=r, d=d: self._elegir(r, d)), ayuda=ayuda) for t, r, d in opciones]
+        if self.privada and not self.espera:
+            ops.append(Opcion(tr("Pedir una pausa"), self._pausa, ayuda=titulo))
+        self.menu = Menu(self.app, titulo, ops)
+        self.menu.escena_privada = self.privada
         self.app.abrir(self.menu)
 
     def _elegir(self, ritmo, dice):
@@ -84,7 +99,7 @@ class Noche:
         self.maximo += 1.0
         if ritmo == "pregunta":                              # preguntar siempre acierta, y además te dice lo que quiere
             self.puntos += 1.0
-            self._mostrar(tr('{n} te lo dice al oído: {v} ').format(n=(n), v=(QUIERE[self.ritmo])))
+            self._mostrar(tr('{n} te lo dice al oído: {v} ').format(n=n, v=tr(QUIERE[self.ritmo])))
             return
         if ritmo == "cede":
             self.puntos += 0.7
@@ -101,16 +116,9 @@ class Noche:
             self.puntos += 0.4
             self._mostrar(dice.format(n=n) + tr(" Aunque notas que hoy le apetecía otra cosa. "))
 
-    def _responde_espera(self, pregunta):
-        n = self.nombre
+    def _responde_espera(self):
         self.espera = False
-        if pregunta:
-            self.puntos += 1.0
-            self.app.son("afinidad_sube", vol=0.5)
-            self._mostrar(tr('Paras. {n} respira, te sonríe y te lo dice: {v} ').format(n=(n), v=(QUIERE[self.ritmo])))
-        else:
-            self.puntos += 0.2
-            self._mostrar(tr('Aflojas. {n} no dice nada, pero tarda en volver a acercarse. ').format(n=(n)))
+        self._mostrar(tr('Paras. {n} respira, te sonríe y te lo dice: {v} ').format(n=self.nombre, v=tr(QUIERE[self.ritmo])))
 
     def _fin(self, antes):
         from .menus import Dialogo
@@ -119,7 +127,7 @@ class Noche:
                 tr("Ha estado bien. Os vais conociendo.") if s >= 0.5 else tr("No habéis acabado de encontraros. Otra vez será mejor si le escuchas."))
         self.menu = None
         self.app.abrir(Dialogo(self.app, [(tr("Narrador"), antes + tr("Se apaga la luz. Lo que pasa después es solo vuestro.")), (tr("Narrador"), como)],
-                               lambda: self.al_acabar(s)))
+                               lambda: self.al_acabar(s), cancelar_con_escape=True))
 
 
 # ============================================================================ el laboratorio
@@ -281,3 +289,4 @@ class Coccion:
 
     def cerrado(self):
         pass
+
