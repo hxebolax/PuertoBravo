@@ -60,7 +60,7 @@ def test_no_hay_voces_sin_frase(serie):
     sobran = sorted(set(serie) - esperadas)
     assert not sobran, f"voces sin frase ({len(sobran)}): {sobran[:30]}"
     raiz = os.path.join(rutas.DATA, "voces")                     # y ninguna carpeta que no sea de una historia del juego o la del jugador
-    assert {n for n in os.listdir(raiz) if os.path.isdir(os.path.join(raiz, n))} - {voces.PROPIAS} <= {f"{h}_{c}" for h in SERIE for c in ("es", "en")}
+    assert {n for n in os.listdir(raiz) if os.path.isdir(os.path.join(raiz, n))} - {voces.PROPIAS} <= {f"{h}_{c}" for h in SERIE for c in ("es", "en", "pl")}
 
 
 def test_las_voces_tienen_todas_el_mismo_formato_y_una_duracion_creible(serie):

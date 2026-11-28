@@ -115,7 +115,7 @@ def test_se_guardan_con_su_sitio_y_sobreviven_al_cambio_de_localidad(robot):
     b = _comprar(p, "moto" if "moto" in p.modelos else "utilitario", 14)
     xa, ya = a.x, a.y
     origen = p.mundo.id
-    destino = next(m for m in p.mapas.values() if m.id != origen and m.tipo != "mar")
+    destino = next(m for m in p.mapas.values() if m.id != origen and m.tipo not in ("mar", "recinto"))
     l = next(iter(destino.lugares.values()))
     p._subir(b, False, callar=True)
     p.salir_vehiculo(forzado=True)
@@ -195,7 +195,7 @@ def test_si_el_juego_te_lleva_a_otra_localidad_el_tuyo_se_queda_aparcado(robot):
     p._subir(ajeno, True, callar=True)
     p.dejar_o_quitar(ajeno)
     assert ajeno not in p.vehiculos                         # el que no es tuyo desaparece, como siempre
-    otro = next(m for m in p.mapas.values() if m.id != p.mundo.id and m.tipo != "mar")
+    otro = next(m for m in p.mapas.values() if m.id != p.mundo.id and m.tipo not in ("mar", "recinto"))
     l = next(iter(otro.lugares.values()))
     p.cambiar_mapa(otro.id, l.x, l.y)
     assert [d["nombre"] for d in p.mis_lejos] == ["Rayo"]
@@ -254,7 +254,7 @@ def test_mis_vehiculos_en_el_movil(robot):
     sistemas.poner(a, {"motor": 1})
     b = _comprar(p, "utilitario", 60)
     p.j.garajes.setdefault(casa.id, []).append({"modelo": "furgoneta", "salud": 100, "nombre": "La Gorda", "mejoras": {}})
-    p.mis_lejos.append({"modelo": "sedan", "salud": 90, "nombre": "Sedán", "rumbo": 0, "x": 50, "y": 50, "mapa": next(m.id for m in p.mapas.values() if m.id != p.mundo.id and m.tipo != "mar"),
+    p.mis_lejos.append({"modelo": "sedan", "salud": 90, "nombre": "Sedán", "rumbo": 0, "x": 50, "y": 50, "mapa": next(m.id for m in p.mapas.values() if m.id != p.mundo.id and m.tipo not in ("mar", "recinto")),
                         "mejoras": {}, "donde": "junto a la plaza", "n": 9})
     fichas = MV.lista_mis_vehiculos(p)
     assert [f["tipo"] for f in fichas] == ["calle", "calle", "lejos", "garaje"]
@@ -552,7 +552,7 @@ def test_chofer_con_un_vehiculo_de_tu_garaje(robot):
     p.chofer["t"] = 0.1
     robot.frames(10)
     assert p.chofer["estado"] == "viene"
-    otro = next(m for m in p.mapas.values() if m.id != p.mundo.id and m.tipo != "mar")
+    otro = next(m for m in p.mapas.values() if m.id != p.mundo.id and m.tipo not in ("mar", "recinto"))
     l = next(iter(otro.lugares.values()))
     p.cambiar_mapa(otro.id, l.x, l.y)
     assert p.chofer is None and len(p.mis_lejos) == 1 and p.mis_lejos[0]["nombre"] == "El Tanque"

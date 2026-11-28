@@ -128,7 +128,7 @@ def test_sesion_completa_sin_nada_personal(con_registro):
     os.makedirs(rutas.carpeta_data("radio", "mi_musica"), exist_ok=True)
     registro.escribir_sistema(registro.datos_del_juego(app))
     sistema = _leer(carpeta, "sistema.txt")
-    for dato in ("versión: ", "sistema: Windows", "memoria: ", "sonidos cargados: 282", "mods: ", "costa_dorada", "packs de sonidos: ", "realista", "conduccion: asistida",
+    for dato in ("versión: ", "sistema: Windows", "memoria: ", "sonidos cargados: 284", "mods: ", "costa_dorada", "packs de sonidos: ", "realista", "conduccion: asistida",
                  "act_fuente: servidor", "adultos: False", "archivos de radio: ", "nombre propio en la red: sí"):
         assert dato in sistema, dato
     for no in ("red_nombre", "red_ultima", "act_url", "MiNombreReal", "83.45", "mi.servidor", ".mp3"):
@@ -146,7 +146,7 @@ def test_sesion_completa_sin_nada_personal(con_registro):
     assert isinstance(app.pila[-1], Menu)
     robot.tecla(pygame.K_ESCAPE)
     log = _leer(carpeta)
-    for dato in ("[sesion] Empieza la sesión de juego", "[arranque] Sonidos cargados | cuantos=282", "[arranque] Datos y mapas cargados", "[partida] Empieza una partida",
+    for dato in ("[sesion] Empieza la sesión de juego", "[arranque] Sonidos cargados | cuantos=284", "[arranque] Datos y mapas cargados", "[partida] Empieza una partida",
                  "[pantalla] abre: Menu «Móvil", "[pantalla] cierra: Menu", "TECLA [tecla] c", "TECLA [tecla] mayús+tab", "TECLA [tecla] m", "VOZ   [voz] ",
                  "ESTAD [estado] ", "mapa=puerto_bravo", "vehiculo=a pie", "mision=ninguna", "red=no", "dia_tipo="):
         assert dato in log, dato

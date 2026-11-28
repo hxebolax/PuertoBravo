@@ -424,7 +424,7 @@ def test_pack_envolvente(app):
     assert meta["nombre"] == "Envolvente" and meta["ambientes_en_estereo"] == 11 and "CC0" in meta["licencia"]
     nombres = {os.path.splitext(f)[0] for f in os.listdir(carpeta) if f.endswith((".wav", ".ogg", ".flac", ".mp3"))}
     realista = {os.path.splitext(f)[0] for f in os.listdir(os.path.join(os.path.dirname(carpeta), "realista")) if f.endswith(".flac")}
-    assert nombres == realista and len(nombres) == 282          # los mismos archivos que los demás packs
+    assert nombres == realista and len(nombres) == 284          # los mismos archivos que los demás packs
     serie = os.path.join(os.path.dirname(carpeta), "por_defecto")
     vistos = 0
     for n in nombres:                                   # los de orientación son, byte a byte, los de serie
@@ -441,7 +441,7 @@ def test_pack_envolvente(app):
         info = app.recargar_sonidos()
         assert info["pack"] == "envolvente" and info["del_pack"] > 150
         # los ambientes largos no se cargan al arrancar: se piden cuando hacen falta y se sueltan después
-        assert info["bajo_demanda"] == 11 and app.mez.memoria_diferidos() == 0
+        assert info["bajo_demanda"] == 12 and app.mez.memoria_diferidos() == 0
         de_serie = app.mez.sonidos["amb_ciudad"]
         assert app.mez.pedir("amb_ciudad") and app.mez.sonidos["amb_ciudad"] is not de_serie and app.mez.memoria_diferidos() > 10
         assert app.mez.pedir("amb_ciudad") and app.mez.pedir("claxon")

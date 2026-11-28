@@ -157,7 +157,7 @@ class Trabajos:
             t.update(lugar=l, limite=35 + d / 4.0, texto=tr('Mensajería: entrega el paquete en {nombre}.').format(nombre=(l.nombre)))
             self.gps_a_lugar(l, auto=True, callar=True)
         elif tipo == "camion":
-            otros = [m for m in self.mapas.values() if m.id != self.mundo.id and m.tipo != "mar"
+            otros = [m for m in self.mapas.values() if m.id != self.mundo.id and m.tipo not in ("mar", "recinto")
                      and any(l.tipo == "salida" for l in m.lugares.values()) and self.saltos_por_tierra(self.mundo.id, m.id) is not None]
             if not otros or not any(l.tipo == "salida" for l in self.mundo.lugares.values()):
                 self.terminar_trabajo(tr("Desde aquí no sale ninguna carretera para los camiones."))

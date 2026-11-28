@@ -1938,10 +1938,10 @@ def test_los_sonidos_nuevos_estan_en_las_cinco_carpetas_con_su_grupo_y_su_descri
     nuevos = ("despido", "inspeccion", "factura", "titulo")
     assert sintesis.VERSION_CACHE >= 24
     S = sintesis.generar()
-    assert len(S) == 282                                         # 279 hasta la 1.7.2; la 1.7.3 trae tres más
+    assert len(S) == 284                                         # 279 hasta la 1.7.2; la 1.7.3 trae tres más; la 1.7.7, el motor que se apaga y el pabellón
     for carpeta in ("por_defecto", "realista", "alternativo", "retro", "envolvente"):
         archivos = {os.path.splitext(f)[0] for f in os.listdir(os.path.join(rutas.PACKS, carpeta)) if f.lower().endswith(rutas.EXT_AUDIO)}
-        assert set(nuevos) <= archivos and len(archivos) == 282, carpeta
+        assert set(nuevos) <= archivos and len(archivos) == 284, carpeta
     grupo = {s: t for t, lista in menus_juego.grupos_de_sonidos(sorted(S)) for s in lista}
     aprender = {x[0] for x in ayuda.SONIDOS}
     guia = open(rutas.data("docs", "cambiar_sonidos_es.html"), encoding="utf-8").read()

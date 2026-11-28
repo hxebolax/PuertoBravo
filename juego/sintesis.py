@@ -10,7 +10,7 @@ import os
 import numpy as np
 
 SR = 44100
-VERSION_CACHE = 26
+VERSION_CACHE = 27
 PI2 = 2 * np.pi
 
 

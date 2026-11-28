@@ -215,7 +215,7 @@ def test_sonidos_nuevos_en_todos_los_packs():
         cuentas[pack] = len(archivos)
         for n in nuevos:
             assert n in archivos, (pack, n)
-    assert len(set(cuentas.values())) == 1 and cuentas["por_defecto"] == 282, cuentas       # todos los packs, los mismos archivos
+    assert len(set(cuentas.values())) == 1 and cuentas["por_defecto"] == 284, cuentas       # todos los packs, los mismos archivos
     # en los packs de grabaciones son grabaciones de verdad, no el sonido de serie
     for n in ("lugar_tranvia", "lugar_tren", "lugar_aeropuerto"):                 # las firmas de los lugares son las de serie en todos los packs
         assert open(os.path.join(base, "por_defecto", n + ".flac"), "rb").read() == open(os.path.join(base, "realista", n + ".flac"), "rb").read()
