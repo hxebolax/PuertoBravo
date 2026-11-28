@@ -1,7 +1,7 @@
 {
  "idioma-en": {
-  "version": 7,
-  "huella": "5e73ba22cfaa78ddd78cc63d1dac05b161c1561db27fea455d3f06edcff22acd",
+  "version": 8,
+  "huella": "f38e74f9e7ff930769f5c9a12b69b64756ec778a643895d9acac988cdcdb778b",
   "archivos": [
    "data/idiomas/en/palabras.json",
    "data/idiomas/en/textos.json",
@@ -2533,8 +2533,8 @@
   ]
  },
  "docs-es": {
-  "version": 6,
-  "huella": "4b38bde44dc9448fc065cae204c7b6c338d17e4c4961e5d7c95e96710c6b017b",
+  "version": 7,
+  "huella": "efa9c3e65c5cead4a69981d60903499f031f6849ec83496f60558f07a1caef87",
   "archivos": [
    "data/docs/cambiar_sonidos_es.html",
    "data/docs/editor_mods_es.html",
@@ -2545,8 +2545,8 @@
   ]
  },
  "sonidos-alternativo": {
-  "version": 5,
-  "huella": "3326689d41e710b46328aceae8f3e7aa7464e2621a35e0c27d61f7da816c4644",
+  "version": 6,
+  "huella": "1d4d8db6ed536f26b7e788f7850b3558c54b8db397eda92b54da00384f93d11a",
   "archivos": [
    "data/sonidos/alternativo/CREDITOS.txt",
    "data/sonidos/alternativo/abstinencia.flac",
@@ -2562,6 +2562,7 @@
    "data/sonidos/alternativo/amb_mar.flac",
    "data/sonidos/alternativo/amb_montana.flac",
    "data/sonidos/alternativo/amb_noche.flac",
+   "data/sonidos/alternativo/amb_pabellon.flac",
    "data/sonidos/alternativo/amb_parque.flac",
    "data/sonidos/alternativo/amb_playa.flac",
    "data/sonidos/alternativo/amb_puerto.flac",
@@ -2724,6 +2725,7 @@
    "data/sonidos/alternativo/menu_ok.flac",
    "data/sonidos/alternativo/mision_fallo.flac",
    "data/sonidos/alternativo/mision_ok.flac",
+   "data/sonidos/alternativo/motor_apagar.flac",
    "data/sonidos/alternativo/motor_avioneta.flac",
    "data/sonidos/alternativo/motor_barco.flac",
    "data/sonidos/alternativo/motor_bici.flac",
@@ -2835,8 +2837,8 @@
   ]
  },
  "sonidos-envolvente": {
-  "version": 5,
-  "huella": "5527423234ab5904d82104ed50be56a14106f0a9bc3d095921682abf891632be",
+  "version": 6,
+  "huella": "fe2c74cf00f0e22832c82926949e5b5b002f03f60fef2a2632b2296a73241b0e",
   "archivos": [
    "data/sonidos/envolvente/CREDITOS.txt",
    "data/sonidos/envolvente/abstinencia.flac",
@@ -2852,6 +2854,7 @@
    "data/sonidos/envolvente/amb_mar.ogg",
    "data/sonidos/envolvente/amb_montana.ogg",
    "data/sonidos/envolvente/amb_noche.ogg",
+   "data/sonidos/envolvente/amb_pabellon.flac",
    "data/sonidos/envolvente/amb_parque.ogg",
    "data/sonidos/envolvente/amb_playa.ogg",
    "data/sonidos/envolvente/amb_puerto.ogg",
@@ -3014,6 +3017,7 @@
    "data/sonidos/envolvente/menu_ok.flac",
    "data/sonidos/envolvente/mision_fallo.flac",
    "data/sonidos/envolvente/mision_ok.flac",
+   "data/sonidos/envolvente/motor_apagar.flac",
    "data/sonidos/envolvente/motor_avioneta.flac",
    "data/sonidos/envolvente/motor_barco.flac",
    "data/sonidos/envolvente/motor_bici.flac",
@@ -3125,8 +3129,8 @@
   ]
  },
  "sonidos-realista": {
-  "version": 5,
-  "huella": "4acc826bd35745617f773846cea8d8efd4cd9c338f3ab12951e3ec6ce2131f1b",
+  "version": 6,
+  "huella": "7c5cea0c8c08d883929b3a08e679402383048b508d1db88c91d4e797a0d59f46",
   "archivos": [
    "data/sonidos/realista/CREDITOS.txt",
    "data/sonidos/realista/abstinencia.flac",
@@ -3142,6 +3146,7 @@
    "data/sonidos/realista/amb_mar.flac",
    "data/sonidos/realista/amb_montana.flac",
    "data/sonidos/realista/amb_noche.flac",
+   "data/sonidos/realista/amb_pabellon.flac",
    "data/sonidos/realista/amb_parque.flac",
    "data/sonidos/realista/amb_playa.flac",
    "data/sonidos/realista/amb_puerto.flac",
@@ -3304,6 +3309,7 @@
    "data/sonidos/realista/menu_ok.flac",
    "data/sonidos/realista/mision_fallo.flac",
    "data/sonidos/realista/mision_ok.flac",
+   "data/sonidos/realista/motor_apagar.flac",
    "data/sonidos/realista/motor_avioneta.flac",
    "data/sonidos/realista/motor_barco.flac",
    "data/sonidos/realista/motor_bici.flac",
@@ -3415,8 +3421,8 @@
   ]
  },
  "sonidos-retro": {
-  "version": 5,
-  "huella": "2c401ecfe606c428ce34b103bca11bae63ffc1aed5609e8e4e4b91debf2f9b1c",
+  "version": 6,
+  "huella": "8aa39cc351ec14fb506a13654808cd3215645c145ac867d75a72e4f4e49ca807",
   "archivos": [
    "data/sonidos/retro/CREDITOS.txt",
    "data/sonidos/retro/abstinencia.flac",
@@ -3432,6 +3438,7 @@
    "data/sonidos/retro/amb_mar.flac",
    "data/sonidos/retro/amb_montana.flac",
    "data/sonidos/retro/amb_noche.flac",
+   "data/sonidos/retro/amb_pabellon.flac",
    "data/sonidos/retro/amb_parque.flac",
    "data/sonidos/retro/amb_playa.flac",
    "data/sonidos/retro/amb_puerto.flac",
@@ -3594,6 +3601,7 @@
    "data/sonidos/retro/menu_ok.flac",
    "data/sonidos/retro/mision_fallo.flac",
    "data/sonidos/retro/mision_ok.flac",
+   "data/sonidos/retro/motor_apagar.flac",
    "data/sonidos/retro/motor_avioneta.flac",
    "data/sonidos/retro/motor_barco.flac",
    "data/sonidos/retro/motor_bici.flac",
@@ -3705,57 +3713,57 @@
   ]
  },
  "mod-bahia_del_ocaso": {
-  "version": 5,
-  "huella": "47a9828b208cb5d2134ecf9090d6a6ad26aa4ee4c981b9511075ec7179aecff9",
+  "version": 6,
+  "huella": "67d8adb174faa0e4c42513c2042067ff5b52e16c0ad613b655f18c49a0992780",
   "archivos": [
    "data/mods/bahia_del_ocaso.pbm"
   ]
  },
  "mod-costa_dorada": {
-  "version": 5,
-  "huella": "d2bbf6ef855441be4a165c7311eda2c2ae52526d12e821ce6062af112cd3101b",
+  "version": 6,
+  "huella": "61ebef01030af849cd870b1bca7307afcb14f7f57ceab952fea4072ffff586a8",
   "archivos": [
    "data/mods/costa_dorada.pbm"
   ]
  },
  "mod-isla_de_los_vientos": {
-  "version": 5,
-  "huella": "6f1edba1400a8e56450f937f613481a9905b14e9f3a92711869978b2ccc57741",
+  "version": 6,
+  "huella": "4bed95287857955518acd514fbb583ad962f32c37c0ead7298d89a558a5d1bf0",
   "archivos": [
    "data/mods/isla_de_los_vientos.pbm"
   ]
  },
  "mod-motor_y_asfalto": {
-  "version": 5,
-  "huella": "813ca3057876855d03992428454f3414540b9132cf541329add8f0e2d7196a71",
+  "version": 6,
+  "huella": "ba533b56c4f4425cc5cc2ced25956ff802762ec31cae5a416f08890155032d3d",
   "archivos": [
    "data/mods/motor_y_asfalto.pbm"
   ]
  },
  "mod-noches_de_neon": {
-  "version": 5,
-  "huella": "00036910aa9ed269374b965366f9227e064d1cac4c13138e3e8eb87f1d062734",
+  "version": 6,
+  "huella": "0f3ff71531f298e4d7147b35c5250b64db001a555abb345e96744066f44ed9f8",
   "archivos": [
    "data/mods/noches_de_neon.pbm"
   ]
  },
  "mod-oficios_y_recados": {
-  "version": 5,
-  "huella": "cb01262b941d5917716b242c30be11158087cf91bdafe3b356887ac48ed36009",
+  "version": 6,
+  "huella": "110a91b100470ed7a72fdc2b6636d7eca886e9a01e3aaabed6e2e8bd2abd6ff3",
   "archivos": [
    "data/mods/oficios_y_recados.pbm"
   ]
  },
  "mod-penas_altas": {
-  "version": 5,
-  "huella": "c9faf2eacc863319ca3b10ef5de109f3038e6b402f5b37b5504eec9ac2561076",
+  "version": 6,
+  "huella": "47ad05a0986d5c166fa336eba50ee895958618089c7b70d598827b4ba7e3fb85",
   "archivos": [
    "data/mods/penas_altas.pbm"
   ]
  },
  "mod-valdeolmos": {
-  "version": 5,
-  "huella": "383f6406c8864d1ad071e8867000a12385ae2a9b1059e95ff038f9f80b1e4bd9",
+  "version": 6,
+  "huella": "f93f74642a80d42ad637ab6e9778917920393ef3a37c5950062d9de88192fec7",
   "archivos": [
    "data/mods/valdeolmos.pbm"
   ]
@@ -4173,8 +4181,8 @@
   ]
  },
  "idioma-vi": {
-  "version": 8,
-  "huella": "1290d1da7a183f520d75c5871656db89b0e72578ac06096c4a4971072988d81e",
+  "version": 9,
+  "huella": "64f473cf314d8b9c088d2586ea1be8406822c1e9be8d1c86c5bae87894abf8cb",
   "archivos": [
    "data/idiomas/vi/idioma.json",
    "data/idiomas/vi/palabras.json",
@@ -4479,8 +4487,8 @@
   ]
  },
  "idioma-pt": {
-  "version": 7,
-  "huella": "0630c4e0e6caf097ba55fc27db926006292ef4513e4653cdecf96562aef5fe06",
+  "version": 8,
+  "huella": "476dcf840fb13002e5fde0b399b03f334141848b98a3df5fba82eb196a4ab88a",
   "archivos": [
    "data/idiomas/pt/idioma.json",
    "data/idiomas/pt/palabras.json",
@@ -4500,8 +4508,8 @@
   ]
  },
  "idioma-ru": {
-  "version": 8,
-  "huella": "f94680e74724b69c9f3f9332d7c959930786bccd0a65142b212d74901a59345d",
+  "version": 9,
+  "huella": "8fdf0675b9cccc84ad0867930a99ecaa747bbf1ac5c0e335773b9f6f1cb2480f",
   "archivos": [
    "data/idiomas/ru/idioma.json",
    "data/idiomas/ru/palabras.json",
@@ -4511,8 +4519,8 @@
   ]
  },
  "idioma-pl": {
-  "version": 1,
-  "huella": "8d47773ec0bd1f7f0b0d5e95024397a958e9702a491979304200cafde9017b74",
+  "version": 2,
+  "huella": "83fc4c867cae07001b2bc9f15a3634aadafb5f95f51af769fffb3867c254ef5a",
   "archivos": [
    "data/idiomas/pl/idioma.json",
    "data/idiomas/pl/palabras.json",
