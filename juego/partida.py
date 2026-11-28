@@ -1948,7 +1948,8 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
 
     def usar_botiquin(self):
         j = self.j
-        herido = self.aliado_herido_cerca() if j.salud >= j.salud_max else None
+        lleno = j.salud > j.salud_max - 1                              # a menos de un punto se dice «100»: no se gasta para nada
+        herido = self.aliado_herido_cerca() if lleno else None
         if j.objetos.get("botiquin", 0) <= 0:
             self.app.son("error")
             self.decir(tr("No te quedan botiquines."), True)
@@ -1957,8 +1958,9 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
             herido.salud = min(self.salud_max_aliado(herido), herido.salud + 50)
             self.son("curar", cat="interfaz")
             self.decir(tr('Curas a {nombre} con un botiquín. {salud} Te quedan {botiquin}.').format(nombre=herido.nombre, salud=self.salud_aliado_txt(herido), botiquin=j.objetos['botiquin']), True)
-        elif j.salud >= j.salud_max:
-            self.decir(tr("Tu salud ya está al máximo."), True)
+        elif lleno:
+            self.app.son("error")
+            self.decir(tr("Tu salud ya está al máximo: guardas el botiquín."), True)
         else:
             j.objetos["botiquin"] -= 1
             j.salud = min(j.salud_max, j.salud + 50)

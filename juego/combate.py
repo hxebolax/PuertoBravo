@@ -267,7 +267,7 @@ class Combate:
                 o = enc[0] if enc else None
         if o is None:
             return
-        d = o.dist(x, y)
+        d = self.dist_tiro(o, x, y)                              # volando, la altura también cuenta
         if d > a["alcance"]:
             if fuego and self.t - self.t_fuera_alcance > 2.5:
                 self.t_fuera_alcance = self.t
@@ -333,6 +333,13 @@ class Combate:
         self.explosiones.append({"t": 0.35 + d / 45.0, "x": tx, "y": ty, "radio": a.get("radio", 8), "dano": a["dano"], "arma": a["id"],
                                  "sigue": o if getattr(o, "volando", False) else None})
         self.decir(tr('Quedan {v}.').format(v=(m['cargador'] + m['reserva'])))
+
+    def dist_tiro(self, o, x, y):
+        """La distancia de tiro hasta o: la del suelo y, si vas volando, también la altura (en el foro, a 800 metros
+        se acertaba a un atracador de la calle)."""
+        alt = self.vuelo_alt() if hasattr(self, "vuelo_alt") else 0.0
+        d = o.dist(x, y)
+        return math.hypot(d, alt) if alt > 0 else d
 
     def _va_contigo(self, p):
         """Tu perro o un guardaespaldas que viaja contigo en el vehículo: va donde tú (extras.py, extras3.py)."""
@@ -992,7 +999,7 @@ class Combate:
                     d = o.dist(x, y)
                     self.t_objetivo = max(0.25, min(1.0, d / 40.0))
                     f = min(d, 25) / d if d > 0.5 else 1.0
-                    dentro = d <= self.arma()["alcance"]
+                    dentro = self.dist_tiro(o, x, y) <= self.arma()["alcance"]
                     self.son("tono_objetivo" if dentro else "tono_apuntado", xy=(x + (o.x - x) * f, y + (o.y - y) * f),
                              ref=8, maxd=80, vol=0.7, cat="interfaz")
         if j.salud < 30 and self.latido_canal is None:

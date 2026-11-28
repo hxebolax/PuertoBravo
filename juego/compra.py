@@ -744,7 +744,7 @@ class Tienda(sistemas.Local):
                     t += tr(", de oferta")
                 if p.agotado(self.l, prod):
                     return tr('{nombre}: hoy no queda').format(nombre=(prod['nombre']))
-                t += ". " + ((tr("Para beber") if prod.get("bebida") else tr("Para comer")) + tr(" tal cual") if comestible(prod) else tr("Para cocinar"))
+                t += ". " + (tr("Para asearte") if _num(prod, "aseo") > 0 else (tr("Para beber") if prod.get("bebida") else tr("Para comer")) + tr(" tal cual") if comestible(prod) else tr("Para cocinar"))
                 return t + (tr('. En la cesta: {v}').format(v=(self.cesta[prod['id']])) if self.cesta.get(prod["id"]) else "")
             return f
 

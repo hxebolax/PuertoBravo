@@ -3,7 +3,7 @@ from .i18n import tr
 import math
 import random
 
-from . import gente as G
+from . import gente as G, vuelo
 from . import mundo as M
 from .entidades import Objeto, Persona
 
@@ -222,6 +222,8 @@ class Extras2:
             return
         if self.mision or self.trabajo or self.guerra or j.estrellas or self.mundo.tipo in ("mar", "isla") or self.transicion or not self.cfg["sucesos"]:
             return
+        if self.volando() and self.vuelo_real() and self.vuelo_alt() >= vuelo.AJ("alt_alta"):
+            return                                               # volando alto no te enteras de lo que pasa en la calle
         self.t_evento -= dt
         if self.t_evento > 0:
             return
