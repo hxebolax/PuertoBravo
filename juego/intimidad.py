@@ -119,7 +119,7 @@ class Intimidad:
                 return False
         j.stats["aventuras"] = j.stats.get("aventuras", 0) + 1
         self.personas = [x for x in self.personas if x is not q]
-        self.encuentro(n, random.choice(["apasionado", "jugueton", "romantico"]), donde, desconocido=True)
+        self.encuentro(n, random.choice(["apasionado", "jugueton", "romantico"]), donde, desconocido=True, perfil=f)
         self.cambiar_reputacion(1)
         if j.pareja:
             self.celos()
@@ -137,22 +137,36 @@ class Intimidad:
             return tr(" No habéis usado protección.")
         return tr(" No lleváis protección.") if desconocido else ""
 
-    def encuentro(self, nombre, tipo, donde, desconocido=False, pid=None, sintonia=None):
+    def encuentro(self, nombre, tipo, donde, desconocido=False, pid=None, sintonia=None, perfil=None, escena=None):
         """Una noche con alguien. Se cuenta sin detalles explícitos y tiene efectos en el ánimo, la salud y la relación.
 
         Con la opción «la noche, paso a paso», antes se juega: decides tú qué haces y la otra persona responde. Lo bien
         que os entendáis (sintonía, de 0 a 1) cambia el ánimo que te deja y lo que os acerca.
+
+        Con la opción «escenas privadas con lenguaje directo», antes hay una escena (escenas_privadas.py): la otra persona
+        propone, tú decides, y con cada persona puede salir uno de sus relatos. `perfil` es la ficha de alguien de la calle
+        (su carácter elige sus relatos) y `escena`, las líneas que cuenta la escena al acabar. Devuelve True si empieza algo.
         """
         from .menus import Dialogo
         j = self.j
-        if self.cfg["noche_por_pasos"] and sintonia is None:
+        participante = (self.persona_social(pid) if pid else None) or perfil or {}
+        if participante.get("edad", 18) < 18:                  # nunca con menores, por si un mod o unos datos lo intentan
+            return False
+        if escena is None and sintonia is None and self.cfg["escenas_directas"] and self.modo_adulto() and not self.en_servidor:
+            from .escenas_privadas import escena_de, ofrecer
+            if escena_de(self, tipo) is not None:
+                self._a_la_partida()
+                self.son("puerta_entrar", cat="interfaz", vol=0.6)
+                if ofrecer(self, nombre, tipo, donde, lambda lineas, s: self.encuentro(nombre, tipo, donde, desconocido, pid, sintonia=s, perfil=perfil, escena=lineas),
+                           participante=participante, pid=pid):
+                    return True
+        if self.cfg["noche_por_pasos"] and sintonia is None and escena is None:
             from .laboratorio import Noche
-            while len(self.app.pila) > 1 and self.app.pila[-1] is not self:
-                self.app.pila.pop()
-            self.app.teclas.clear()
+            self._a_la_partida()
             self.son("puerta_entrar", cat="interfaz", vol=0.6)
-            Noche(self, nombre, donde, lambda s: self.encuentro(nombre, tipo, donde, desconocido, pid, sintonia=s)).empezar()
-            return
+            Noche(self, nombre, donde, lambda s: self.encuentro(nombre, tipo, donde, desconocido, pid, sintonia=s, perfil=perfil),
+                  habitual=participante.get("ritmo")).empezar()
+            return True
         titulo, frases, animo, horas = ENCUENTROS[tipo]
         if sintonia is not None:
             animo = int(animo * (0.6 + 0.6 * sintonia))
@@ -174,12 +188,23 @@ class Intimidad:
         j.stats["noches"] = j.stats.get("noches", 0) + 1
         self.son("puerta_entrar", cat="interfaz", vol=0.6)
         self.son("noche_juntos", cat="interfaz")
-        while len(self.app.pila) > 1 and self.app.pila[-1] is not self:
-            self.app.pila.pop()
-        self.app.teclas.clear()
+        self._a_la_partida()
+        if escena:                                              # la escena privada: lo que ha contado, y la mañana
+            primera, *resto = escena
+            lineas = [primera + proteccion + extra, *resto,
+                      tr('Por la mañana, son las {hora_txt} y te sientes {animo_txt}.').format(hora_txt=self.hora_txt(), animo_txt=self.animo_txt())]
+            self.app.abrir(Dialogo(self.app, [(tr("Narrador"), x) for x in lineas]))
+            return True
         self.app.abrir(Dialogo(self.app, [
             (tr("Narrador"), tr('{titulo} con {nombre}, en {donde}. {choice}{extra}').format(titulo=(titulo), nombre=(nombre), donde=(donde), choice=(random.choice(frases)), extra=(extra))),
             (tr("Narrador"), tr('Lo que pasa después es solo vuestro.{proteccion} Por la mañana, son las {hora_txt} y te sientes {animo_txt}.').format(proteccion=(proteccion), hora_txt=(self.hora_txt()), animo_txt=(self.animo_txt())))]))
+        return True
+
+    def _a_la_partida(self):
+        """Cierra los menús abiertos (el móvil, la charla) para que la noche se cuente sobre el juego."""
+        while len(self.app.pila) > 1 and self.app.pila[-1] is not self:
+            self.app.pila.pop()
+        self.app.teclas.clear()
 
     def gesto(self, pid, pers, clave):
         """Un gesto de cariño con alguien con quien tienes una relación: beso, baile, masaje o un susurro."""

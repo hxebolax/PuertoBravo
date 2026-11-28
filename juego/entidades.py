@@ -50,6 +50,7 @@ class Jugador:
         self.voluntario_dia = 0
         self.reputacion = 0.0
         self.relaciones = {}
+        self.turnos_escena = {}      # escenas privadas: por dónde va la rueda de cada tipo de noche y de los relatos de cada persona
         self.ocultos_social = []     # personas de la vida social que has quitado del móvil: no salen hasta que las recuperes
         self.conocidos = []          # gente de la calle que te ha dado su número
         self.intimos = {}            # artículos íntimos (contenido para adultos): preservativos, velas...

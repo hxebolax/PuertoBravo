@@ -44,12 +44,20 @@ def ritmo_de(nombre, dia):
 
 
 class Noche:
-    """Una noche con alguien, decidida paso a paso. Al terminar llama a al_acabar(sintonia), de 0 a 1."""
+    """Una noche con alguien, decidida paso a paso. Al terminar llama a al_acabar(sintonia), de 0 a 1.
 
-    def __init__(self, p, nombre, donde, al_acabar, azar=None):
+    `habitual` es el ritmo que a esa persona le gusta siempre (el campo «ritmo» de su ficha en adultos.json). No quita el
+    del día, que sigue mandando: si eliges el habitual un día que le apetece otro, os acerca algo más que un fallo cualquiera.
+    """
+
+    momentos = MOMENTOS            # las escenas privadas (escenas_privadas.py) ponen los suyos, leídos de los datos
+    privada = False                # las escenas privadas añaden la opción de pedir una pausa
+
+    def __init__(self, p, nombre, donde, al_acabar, azar=None, habitual=None):
         self.p, self.app, self.nombre, self.donde, self.al_acabar = p, p.app, nombre, donde, al_acabar
         self.azar = azar or random
         self.ritmo = ritmo_de(nombre, p.dia)
+        self.habitual = habitual if habitual in RITMOS else None
         self.paso = 0
         self.puntos = 0.0
         self.maximo = 0.0
@@ -68,13 +76,16 @@ class Noche:
             titulo = antes + self.azar.choice(ESPERA).format(n=n)
             ops = [Opcion(tr("Parar, y preguntarle si está bien"), lambda: self._responde_espera(True), ayuda=tr("Un espera se respeta. Parar y escuchar es lo que más os acerca.")),
                    Opcion(tr("Bajar el ritmo sin decir nada"), lambda: self._responde_espera(False), ayuda=tr("Aflojas, pero no preguntas."))]
-        elif self.paso >= len(MOMENTOS):
+        elif self.paso >= len(self.momentos):
+            self.menu = None
             self._fin(antes)
             return
         else:
-            texto, opciones = MOMENTOS[self.paso]
-            titulo = antes + texto.format(n=n)
+            texto, opciones = self.momentos[self.paso]
+            titulo = antes + texto.replace("{n}", n)
             ops = [Opcion(t, (lambda r=r, d=d: self._elegir(r, d)), ayuda=tr("No hay una respuesta correcta para todo el mundo: fíjate en cómo responde.")) for t, r, d in opciones]
+            if self.privada:
+                ops.append(Opcion(tr("Pedir una pausa"), self._pausa, ayuda=tr("Os apartáis un momento. Podéis volver cuando estéis listos o dejarlo aquí, sin que pase nada.")))
         self.menu = Menu(self.app, titulo, ops, escapable=False)
         self.app.abrir(self.menu)
 
@@ -88,18 +99,21 @@ class Noche:
             return
         if ritmo == "cede":
             self.puntos += 0.7
-            self._mostrar(dice.format(n=n) + " ")
+            self._mostrar(dice.replace("{n}", n) + " ")
             return
         if ritmo == self.ritmo:
             self.puntos += 1.0
             self.app.son("afinidad_sube", vol=0.5)
-            self._mostrar(dice.format(n=n) + tr(" Es justo lo que quería. "))
+            self._mostrar(dice.replace("{n}", n) + tr(" Es justo lo que quería. "))
         elif ritmo == "intenso" and self.ritmo == "lento":   # ir más deprisa de lo que quiere: te frena
             self.espera = True
             self._mostrar()
+        elif ritmo == self.habitual:                         # lo que le gusta siempre, aunque hoy no tocaba: algo más que un fallo
+            self.puntos += 0.6
+            self._mostrar(dice.replace("{n}", n) + tr(" Le gusta, como siempre, aunque hoy le apetecía otra cosa. "))
         else:
             self.puntos += 0.4
-            self._mostrar(dice.format(n=n) + tr(" Aunque notas que hoy le apetecía otra cosa. "))
+            self._mostrar(dice.replace("{n}", n) + tr(" Aunque notas que hoy le apetecía otra cosa. "))
 
     def _responde_espera(self, pregunta):
         n = self.nombre
@@ -111,6 +125,22 @@ class Noche:
         else:
             self.puntos += 0.2
             self._mostrar(tr('Aflojas. {n} no dice nada, pero tarda en volver a acercarse. ').format(n=(n)))
+
+    def _pausa(self):
+        """Una pausa en mitad de una escena privada: volver a donde estabais, o dejarlo aquí sin que la noche cuente."""
+        from .menus import Menu, Opcion
+        paso = self.menu
+        self.app.cerrar(paso)
+
+        def reanudar():
+            self.app.cerrar(descanso)
+            self.app.abrir(paso)
+
+        descanso = Menu(self.app, tr("Os apartáis un momento. {n} pregunta si quieres seguir o dejarlo aquí.").format(n=self.nombre),
+                        [Opcion(tr("Volver cuando los dos estéis listos"), reanudar, ayuda=tr("Seguís justo donde lo habíais dejado.")),
+                         Opcion(tr("Terminar aquí"), lambda: self.app.cerrar(descanso), ayuda=tr("Lo dejáis aquí. Esta noche no cuenta."))],
+                        escapable=False)
+        self.app.abrir(descanso)
 
     def _fin(self, antes):
         from .menus import Dialogo

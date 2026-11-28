@@ -41,6 +41,7 @@ TIPOS_PASO = [
     ("practica", tr("Práctica de un tutorial: comprueba que el jugador hace algo")),
 ]
 LADOS = [("N", tr("Fachada norte de la manzana")), ("S", tr("Fachada sur")), ("E", tr("Fachada este")), ("O", tr("Fachada oeste"))]
+RITMOS_NOCHE = [("lento", tr("Lento, sin prisa")), ("intenso", tr("Intenso, con ganas")), ("jugando", tr("Jugando, entre risas"))]
 BLOQUES = [("pared", tr("Edificios, no se puede pisar")), ("plaza", tr("Plaza")), ("hierba", tr("Césped o campo")), ("arena", tr("Arena")), ("muelle", tr("Muelle de tablones"))]
 TRABAJOS = [("taxi", tr("Taxi")), ("ambulancia", tr("Ambulancia")), ("autobus", tr("Autobús")), ("vigilante", tr("Vigilante")), ("camion", tr("Transporte entre localidades")),
             ("helados", tr("Heladero")), ("mensajeria", tr("Mensajería del mar")), ("bomberos", tr("Bombero")), ("grua", tr("Grúa")), ("paqueteria", tr("Mensajero"))]
@@ -302,7 +303,38 @@ ESQUEMAS = {
         c("hasta", tr("Y hora a la que se va"), "entero", minimo=1, maximo=24),
         c("libre", tr("Día que libra"), "opcion", tr("Sin valor, lo decide el juego para cada partida."),
           ops=[("lunes", tr("Lunes")), ("martes", tr("Martes")), ("miércoles", tr("Miércoles")), ("jueves", tr("Jueves")), ("viernes", tr("Viernes")), ("sábado", tr("Sábado")), ("domingo", tr("Domingo"))]),
+        c("ritmo", tr("Ritmo que le gusta siempre en la noche paso a paso"), "opcion",
+          tr("Cada día le apetece un ritmo que cambia, y ese sigue mandando; si eliges este otro día, os acerca algo más que un fallo. Sin valor, solo cuenta el del día."), ops=RITMOS_NOCHE),
+        c("despedida", tr("Despedida en las escenas privadas"), "largo",
+          tr("Lo que cuenta al final de una escena privada con uno de sus relatos. Vacío, no hay despedida propia.")),
         c("desc", tr("Descripción"), "largo", req=True)]},
+    "escena_privada": {"titulo": tr("Escenas privadas de un tipo de noche, contenido para adultos"),
+                       "resumen": lambda d: tr('{get}: {len} escenas').format(get=(d.get('id', '?')), len=(len(d.get('escenas') or []))), "campos": [
+        c("id", tr("Tipo de noche"), "opcion", tr("Con el identificador de un tipo que ya tiene escenas, las de tu mod las sustituyen."), req=True,
+          ops=[("romantico", tr("Una noche romántica")), ("apasionado", tr("Una noche apasionada")), ("jugueton", tr("Una noche de risas y juegos")), ("tranquilo", tr("Una noche tranquila"))]),
+        c("momento", tr("El momento a solas, si la persona no tiene relatos"), "largo", tr("Con {n}, el nombre de la otra persona.")),
+        c("despues", tr("Lo que pasa después, tras un relato"), "largo", tr("Con {n}.")),
+        c("escenas", tr("Escenas"), "lista", tr("Cada una con cómo empieza y cómo acaba. No se repiten hasta haber salido todas."), sub="par_escena", como_pares=("entrada", "final"))]},
+    "par_escena": {"titulo": tr("Escena"), "resumen": lambda d: f"{str(d.get('entrada', ''))[:60]}", "campos": [
+        c("entrada", tr("Cómo empieza"), "largo", tr("Con {n}."), req=True), c("final", tr("Cómo acaba"), "largo", tr("Con {n}."), req=True)]},
+    "acuerdo_privado": {"titulo": tr("Propuesta de una escena privada, contenido para adultos"), "resumen": lambda d: f"{str(d.get('texto', ''))[:60]}", "campos": [
+        c("id", tr("Identificador"), req=True), c("texto", tr("Lo que propone la otra persona"), "largo", tr("Con {n}. Acaba con la pregunta: el jugador dice que sí o que no."), req=True),
+        c("proteccion", tr("Solo con preservativo"), "si_no", tr("Si se marca y el jugador no lleva, lo dejan para otro día."))]},
+    "momento_privado": {"titulo": tr("Momento de la noche paso a paso en una escena privada, contenido para adultos"), "resumen": lambda d: f"{str(d.get('texto', ''))[:60]}", "campos": [
+        c("id", tr("Identificador"), req=True), c("texto", tr("Lo que pasa"), "largo", tr("Con {n}."), req=True),
+        c("opciones", tr("Lo que puede hacer el jugador"), "lista", tr("Tres suele ir bien. Se juegan en el orden de la lista."), sub="opcion_momento")]},
+    "opcion_momento": {"titulo": tr("Lo que puede hacer el jugador"), "resumen": lambda d: f"{d.get('texto', '?')} ({d.get('ritmo', '?')})", "campos": [
+        c("texto", tr("Qué hace"), req=True),
+        c("ritmo", tr("Cómo es"), "opcion", tr("Si coincide con el ritmo que le apetece hoy, acierta. Preguntar siempre acierta y le hace decir lo que quiere; dejarle decidir casi siempre."), req=True,
+          ops=RITMOS_NOCHE + [("pregunta", tr("Preguntar qué le apetece")), ("cede", tr("Dejar que decida la otra persona"))]),
+        c("respuesta", tr("Cómo responde"), "largo", tr("Con {n}. Vacío con Preguntar: entonces dice lo que quiere."))]},
+    "relato_privado": {"titulo": tr("Relatos de una persona, contenido para adultos"),
+                       "resumen": lambda d: tr('{get}: {len} relatos').format(get=(d.get('id', '?')), len=(len(d.get('relatos') or []))), "campos": [
+        c("id", tr("De quién son"), "texto", tr("El identificador de una persona de la vida social, como lucia; o, para la gente de la calle, el carácter con el que habla: amable, hablador, seco, timido o chulo."), req=True),
+        c("relatos", tr("Relatos"), "lista", tr("Cada uno con cómo empieza y cómo sigue. Salen en el momento a solas de una escena privada y no se repiten hasta haber salido todos."),
+          sub="par_relato", como_pares=("inicio", "sigue"))]},
+    "par_relato": {"titulo": tr("Relato"), "resumen": lambda d: f"{str(d.get('inicio', ''))[:60]}", "campos": [
+        c("inicio", tr("Cómo empieza"), "largo", tr("Con {n}, o con su nombre si es de una persona concreta."), req=True), c("sigue", tr("Cómo sigue"), "largo", req=True)]},
     "actividad": {"titulo": tr("Plan para una cita"), "resumen": lambda d: tr('{get}: {get2} euros').format(get=(d.get('nombre', '?')), get2=(d.get('precio', 0))), "campos": [
         c("id", tr("Identificador"), req=True), c("nombre", tr("Nombre"), req=True), c("precio", tr("Precio"), "entero", req=True, defecto=0),
         c("horas", tr("Horas que dura"), "decimal", req=True, defecto=2),
@@ -1465,6 +1497,10 @@ SECCIONES = [
     ("encuentros", tr("Quedar en persona, horarios y confianza"), "ajuste_encuentros"), ("horarios_locales", tr("Horarios de los locales"), "horario_local"), ("objetos_valor", tr("Objetos de valor"), "objeto_valor"),
     ("personas", tr("Personas, contenido para adultos"), "persona"), ("sustancias", tr("Sustancias, contenido para adultos"), "sustancia"),
     ("actividades", tr("Planes para citas, contenido para adultos"), "actividad"), ("regalos", tr("Regalos, contenido para adultos"), "regalo"),
+    ("escenas_privadas", tr("Escenas privadas de cada tipo de noche, contenido para adultos"), "escena_privada"),
+    ("acuerdos_privados", tr("Propuestas de las escenas privadas, contenido para adultos"), "acuerdo_privado"),
+    ("momentos_privados", tr("Momentos de la noche en las escenas privadas, contenido para adultos"), "momento_privado"),
+    ("relatos_privados", tr("Relatos de cada persona, contenido para adultos"), "relato_privado"),
 ]
 
 
