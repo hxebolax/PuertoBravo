@@ -20,8 +20,9 @@ import sys
 # Constantes de IsProcessorFeaturePresent. De la 36 en adelante solo contestan bien desde Windows 10 de mayo de 2020.
 INSTRUCCIONES = (("SSE3", 13), ("CX16", 14), ("SSSE3", 36), (tr("SSE4.1"), 37), (tr("SSE4.2"), 38), ("AVX", 39), ("AVX2", 40))
 NECESARIAS = ("SSE3", "CX16", "SSSE3", tr("SSE4.1"), tr("SSE4.2"))
-# The same flags, with the names they take in the «flags» line of /proc/cpuinfo on Linux.
-INSTRUCCIONES_LINUX = {"sse3": "SSE3", "cx16": "CX16", "ssse3": "SSSE3", "sse4_1": tr("SSE4.1"), "sse4_2": tr("SSE4.2"), "avx": "AVX", "avx2": "AVX2"}
+# The same flags, with the name each one takes in the «flags» line of /proc/cpuinfo on Linux. SSE3 appears as
+# «pni» in older kernels and as «sse3» in newer ones, so both names are accepted.
+INSTRUCCIONES_LINUX = {("sse3", "pni"): "SSE3", ("cx16",): "CX16", ("ssse3",): "SSSE3", ("sse4_1",): tr("SSE4.1"), ("sse4_2",): tr("SSE4.2"), ("avx",): "AVX", ("avx2",): "AVX2"}
 estado = {"numpy": "", "motivo": "", "instrucciones": {}}
 
 AVISO = (tr("Puerto Bravo no puede funcionar en este ordenador. Su procesador es demasiado antiguo: le faltan instrucciones "
@@ -50,7 +51,7 @@ def _instrucciones_linux():
             for linea in f:
                 if linea.split(":", 1)[0].strip() == "flags":
                     hay = set(linea.split(":", 1)[1].split())
-                    return {nombre: (bandera in hay) for bandera, nombre in INSTRUCCIONES_LINUX.items()}
+                    return {nombre: any(bandera in hay for bandera in banderas) for banderas, nombre in INSTRUCCIONES_LINUX.items()}
     except Exception:
         pass
     return {}
