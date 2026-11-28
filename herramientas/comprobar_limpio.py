@@ -102,7 +102,7 @@ def comprobar(raiz):
     if os.path.isdir(os.path.join(data, "voces_generadas")):
         problemas.append("Voces generadas para un personaje propio: " + os.path.join("data", "voces_generadas"))
     # una carpeta por historia y por idioma: historia_principal_es, historia_principal_en...
-    for cod, deben in (("es", ("m01_1_1", "m01_1_1@alex", "m01_1_2@cris_m")), ("en", ("m01_1_1",))):
+    for cod, deben in (("es", ("m01_1_1", "m01_1_1@alex", "m01_1_2@cris_m")), ("en", ("m01_1_1",)), ("pl", ("m01_1_1", "m01_1_1@alex"))):
         principal = os.path.join(puente, "historia_principal_" + cod)
         if not os.path.isdir(principal):
             problemas.append("Faltan las voces de la historia principal en " + cod + ": " + principal)
@@ -113,8 +113,8 @@ def comprobar(raiz):
         for hace_falta in deben:
             if hace_falta not in nombres:
                 problemas.append("Falta la voz " + hace_falta + " de la historia principal en " + cod + ": las de esta versión llevan una por personaje y género")
-    if os.path.isdir(puente) and any(not os.path.isdir(os.path.join(puente, d)) or not d.rsplit("_", 1)[-1] in ("es", "en") for d in os.listdir(puente)):
-        problemas.append("Hay en las voces carpetas sin idioma en el nombre: " + ", ".join(d for d in os.listdir(puente) if d.rsplit("_", 1)[-1] not in ("es", "en")))
+    if os.path.isdir(puente) and any(not os.path.isdir(os.path.join(puente, d)) or not d.rsplit("_", 1)[-1] in ("es", "en", "pl") for d in os.listdir(puente)):
+        problemas.append("Hay en las voces carpetas sin idioma en el nombre: " + ", ".join(d for d in os.listdir(puente) if d.rsplit("_", 1)[-1] not in ("es", "en", "pl")))
     if not os.path.exists(os.path.join(data, "phonon", "reparto_en.json")) or not os.path.isdir(os.path.join(data, "phonon", "voces_en")):
         problemas.append("Faltan las voces inglesas del generador del personaje propio: data\\phonon\\voces_en y reparto_en.json")
     for n in ("config.json", "tokenizer.json", "model.q8.gguf", "reparto.json", "LICENCIA.txt"):
