@@ -8,6 +8,10 @@ Hereda del mezclador clásico toda la lógica (qué suena, con qué volumen, cat
 cambia quién pone el sonido en los auriculares: en lugar de mezclar muestras en Python, mantiene una «fuente» de
 OpenAL por cada sonido en marcha y la actualiza una vez por fotograma. Si la biblioteca no está o no arranca,
 `crear()` devuelve el motor clásico: el juego nunca se queda sin sonido por esto.
+
+On Linux there is no bundled library: the OpenAL Soft already installed on the system is used, the one the
+player has put in place with their package manager (for example `apt install libopenal1`). Nothing is ever
+downloaded or shipped for Linux.
 """
 from .i18n import tr
 import ctypes
@@ -50,7 +54,12 @@ def entorno_de(ambiente):
 
 
 def ruta_dll():
-    """Dónde está la biblioteca: junto al ejecutable en el juego compilado, o en terceros en el código fuente."""
+    """Dónde está la biblioteca: junto al ejecutable en el juego compilado, o en terceros en el código fuente.
+
+    En Linux no se incluye ninguna biblioteca: se usa la OpenAL Soft que el jugador tenga instalada en el
+    sistema (con su gestor de paquetes); el juego no descarga ni lleva nada para Linux."""
+    if sys.platform == "linux":
+        return _ruta_sistema()
     base = os.path.dirname(os.path.abspath(sys.executable)) if getattr(sys, "frozen", False) else rutas.base()
     for r in (os.path.join(base, "lib", "soft_oal.dll"), os.path.join(base, "soft_oal.dll"), os.path.join(rutas.base(), "terceros", "openal_soft", "soft_oal.dll")):
         if os.path.exists(r):
@@ -58,7 +67,31 @@ def ruta_dll():
     return ""
 
 
+def _ruta_sistema():
+    """The OpenAL Soft installed on the system (Linux), found through the normal loader path (the ldconfig
+    cache, so no LD_LIBRARY_PATH tricks are needed). Returns the library name to hand to ctypes, or "" if it
+    is not installed."""
+    try:
+        import ctypes.util
+        nombre = ctypes.util.find_library("openal")
+        if nombre:
+            return nombre
+        for so in ("libopenal.so.1", "libopenal.so"):        # usual sonames, if find_library comes up empty
+            try:
+                ctypes.CDLL(so)
+                return so
+            except OSError:
+                pass
+    except Exception:
+        pass
+    return ""
+
+
 def disponible():
+    """Whether the surround engine can run on this platform: Windows with its bundled OpenAL Soft, Linux with
+    the system one. Any other platform, or a missing library, means no."""
+    if sys.platform == "linux":
+        return bool(_ruta_sistema())
     return bool(ruta_dll()) and os.name == "nt"
 
 
