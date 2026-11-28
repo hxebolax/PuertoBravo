@@ -458,6 +458,9 @@
 " Le das {prima} euros de prima.": [
 "juego/reacciones.py"
 ],
+" Le gusta, como siempre, aunque hoy le apetecía otra cosa. ": [
+"juego/laboratorio.py"
+],
 " Le gustas.": [
 "juego/intimidad.py"
 ],
@@ -2590,6 +2593,9 @@
 "A esos los tengo calados.": [
 "juego/respuestas_datos2.py"
 ],
+"A esta distancia distingues una pequeña cicatriz junto a la ceja de {n}. Os habéis visto muchas veces desde el otro extremo de una habitación. Desde aquí la expresión es distinta.": [
+"data/datos/escenas_privadas.json"
+],
 "A este negocio ya le han vaciado la caja hoy. Vuelve otro día.": [
 "servidor/nucleo.py"
 ],
@@ -2598,6 +2604,9 @@
 ],
 "A fin de mes llegamos, pero arrastrándonos.": [
 "juego/respuestas_datos1.py"
+],
+"A la luz de la mesilla, {n} te ayuda con el botón que siempre se atasca. Tu camisa resbala al suelo. Mucho después, al ir a apagar la luz, te besa en el hombro desnudo, justo donde la almohada te ha dejado una raya.": [
+"data/datos/escenas_privadas.json"
 ],
 "A la mañana siguiente vas a ver a la inspectora Olalla y se lo cuentas todo, empezando por lo que hiciste tú. Te escucha sin apuntar nada hasta el final.": [
 "data/datos/misiones_honrada.json"
@@ -2842,9 +2851,15 @@
 "juego/reacciones.py",
 "data/datos/vida.json"
 ],
+"A {n} le cuesta desconectar del trabajo. Os sentáis hasta que deja de mirar la hora.": [
+"data/datos/escenas_privadas.json"
+],
 "A {n} no le hace gracia el olor. La cita se queda en menos de lo que podía ser.": [
 "juego/necesidades.py",
 "data/datos/vida.json"
+],
+"A {n} se le escapa la risa antes de que llegues al final. Te contesta con un secreto propio, tan bajito que solo tú vas a enterarte.": [
+"data/datos/escenas_privadas.json"
 ],
 "A {n} se le ilumina la cara.": [
 "juego/convivencia.py",
@@ -2881,6 +2896,9 @@
 ],
 "Abrazarle fuerte y dejar que hablen las manos": [
 "juego/laboratorio.py"
+],
+"Abrazarle y dejar que el momento dure": [
+"data/datos/escenas_privadas.json"
 ],
 "Abre Defensa de tus barrios: desde allí marcas el barrio en el GPS para ir en persona, o envías a tu gente. Si no haces nada antes de que se acabe el plazo, defiende sola la guardia fija, si la hay; si no, lo pierdes.": [
 "juego/reconquista.py"
@@ -3204,6 +3222,9 @@
 ],
 "Acerca del panel": [
 "panel_servidor/ventana.py"
+],
+"Acercarte para un beso": [
+"data/datos/escenas_privadas.json"
 ],
 "Acero, y un guardia delante.": [
 "juego/sistemas.py"
@@ -3641,11 +3662,17 @@
 "Al aceptarlo": [
 "editor/esquema_vuelo.py"
 ],
+"Al apoyar los codos os cargáis media cocina. Lucía recoge las monedas del suelo menos dos. Las deja juntas, detrás de la barra imaginaria, y se inclina para besarte.": [
+"data/datos/relatos_privados.json"
+],
 "Al arrancar no se molesta con errores, pero aquí queda dicho: si no se puede buscar, el juego no puede avisarte de las versiones nuevas. Intro dice el motivo.": [
 "juego/menus_actualizar.py"
 ],
 "Al atracar a un peatón, de cada cien veces, cuántas sale además un objeto": [
 "editor/esquema.py"
+],
+"Al cabo de un rato se os cae la chaqueta. Ninguno hace ademán de recogerla. Así, hombro contra hombro, ya habéis entrado en calor.": [
+"data/datos/relatos_privados.json"
 ],
 "Al cambiarlo aparecen los campos propios de ese tipo.": [
 "editor/esquema.py"
@@ -3677,6 +3704,9 @@
 "Al dejar la cesta y salir": [
 "editor/esquema.py"
 ],
+"Al despedirte pruebas la frase. Esta vez te sale a la primera.": [
+"data/datos/escenas_privadas.json"
+],
 "Al despegar de un campo": [
 "editor/esquema_vuelo.py"
 ],
@@ -3700,6 +3730,12 @@
 ],
 "Al entrar bajo techo, el helicóptero te pierde de vista.": [
 "juego/calle.py"
+],
+"Al entrar os interrumpe el despertador de {n}. Sigue puesto a la hora del turno de ayer.": [
+"data/datos/escenas_privadas.json"
+],
+"Al final te enseña el discurso en una servilleta llena de tachones.": [
+"data/datos/escenas_privadas.json"
 ],
 "Al forzar un coche, de cada cien, cuántos tienen algo en la guantera": [
 "editor/esquema.py"
@@ -3740,11 +3776,26 @@
 "Al pasar a pie o despacio junto a dos personas, a veces se oye lo que van diciendo: una frase suelta y, a veces, la respuesta. Nunca en mitad de una persecución, de una pelea o de una escena. Elige cuánto: nunca, pocas veces, que es una cada dos o tres minutos como mucho, de vez en cuando, o a menudo.": [
 "juego/menus_juego.py"
 ],
+"Al principio cuenta cada paso. Luego le rozas la mejilla con la tuya y pierde la cuenta. Seguís bailando mucho mejor. Antes de soltarle le pegas la estrella en el pecho.": [
+"data/datos/relatos_privados.json"
+],
 "Al principio de la charla sube la confianza, más o menos según su carácter. Repetirlo ya da poco.": [
 "juego/menus_charla.py"
 ],
+"Al principio la sábana está fría contra tu piel. Cuando volvéis a estirarla, ya tiene el calor de los dos. Afuera alguien baja una persiana a tirones. {n} levanta la cabeza de tu pecho para escuchar. En cuanto vuelve el silencio, se acomoda otra vez.": [
+"data/datos/escenas_privadas.json"
+],
+"Al principio solo se tocan vuestros meñiques. {n} vuelve la palma hacia arriba y encaja la mano en la tuya.": [
+"data/datos/escenas_privadas.json"
+],
+"Al quedaros a solas, {n} se detiene a escucharte. «Ahora tenemos tiempo. ¿Qué te apetece?»": [
+"data/datos/escenas_privadas.json"
+],
 "Al quedarse con el último barrio de una ciudad, o al llegar a tener muchos.": [
 "editor/esquema.py"
+],
+"Al sacar las llaves, {n} encuentra una entrada vieja. Te cuenta por qué la conserva.": [
+"data/datos/escenas_privadas.json"
 ],
 "Al salir de la localidad se acaba el trabajo.": [
 "juego/partida.py"
@@ -3770,6 +3821,9 @@
 ],
 "Al subir a él": [
 "juego/partida.py"
+],
+"Al subir la persiana descubrís que la calle ya está despierta.": [
+"data/datos/escenas_privadas.json"
 ],
 "Al tener muchos barrios": [
 "editor/esquema.py"
@@ -4295,6 +4349,9 @@
 "Ampliación y segunda línea de negocio": [
 "data/datos/vida.json"
 ],
+"Amplías la foto. En el espejo sale Andrés con la cámara, sonriendo igual que ahora. Le das un beso justo donde se le forma ese hoyuelo. «Mira que nunca me había fijado en el reflejo.»": [
+"data/datos/relatos_privados.json"
+],
 "Amueblar la casa: {puestos} de {cuantos} cosas puestas": [
 "juego/menus_juego.py"
 ],
@@ -4326,6 +4383,18 @@
 "data/datos/adultos.json",
 "data/datos/gente.json"
 ],
+"Andrés intenta contarte el chiste del boxeador y el taxista. Se le escapa el remate antes de que el taxista haya subido al coche. Lo intenta desde el principio y vuelve a pasar. Te ríes al verle tan feliz por haberte hecho reír. «En el gimnasio nadie me corta. Igual llevo diez años contándolo mal.»": [
+"data/datos/relatos_privados.json"
+],
+"Andrés llega al bolsillo buscando un pañuelo y encuentra una estrella de papel dorado. Se la ha ganado hoy por atreverse a bailar en la clase de los jubilados del gimnasio. «La profesora tiene ochenta y dos años. Dice que tengo buena defensa pero no dejo entrar a la música.» Te ofrece la mano para que juzgues por tu cuenta.": [
+"data/datos/relatos_privados.json"
+],
+"Andrés te enseña una foto del Yunque el día antes de que abriera. Hay un espejo torcido y un señor barriendo con zapatos de vestir. Es su padre. Había dicho que el local era una ruina, que el barrio no daba para tanto y que quién le mandaba meterse en aquello. A las seis ya estaba allí con su propia escoba.": [
+"data/datos/relatos_privados.json"
+],
+"Andrés tiene una marca roja en el hombro de haberse apoyado en una costura. Le pasas el dedo por encima. «Esta noche me he olvidado hasta del reloj», murmura. Sigue en su muñeca, con la esfera vuelta hacia dentro.": [
+"data/datos/adultos.json"
+],
 "Anillo de acero": [
 "data/datos/vida.json"
 ],
@@ -4340,6 +4409,9 @@
 ],
 "Anotar la dirección de quien se conecta": [
 "servidor/opciones.py"
+],
+"Anotáis el menú inventado en el dorso del recibo.": [
+"data/datos/escenas_privadas.json"
 ],
 "Anselmo": [
 "data/datos/misiones_extra.json",
@@ -4398,17 +4470,26 @@
 "Antes de atracar un banco, un local o un proveedor puedes repartir papeles entre los tuyos: conductor, vigilante, escolta, el de la caja y tirador.": [
 "juego/sistemas.py"
 ],
+"Antes de decidir, habláis de lo que os apetece, de vuestros límites y de protección.": [
+"juego/escenas_privadas.py"
+],
 "Antes de empezar repartes los papeles: eliges a cada uno de los tuyos y le das uno. A quien no le des ninguno, viene contigo y pelea a tu lado, como siempre. Quien tiene un papel está en lo suyo.": [
 "juego/golpes.py"
 ],
 "Antes de firmar nada, date una vuelta. En el centro cívico del Barrio Viejo pregunta por Paulino: da las clases. Y pásate por el comedor social, que allí se conoce al barrio de verdad.": [
 "data/datos/misiones_honrada.json"
 ],
+"Antes de levantaros os repartís las últimas dos tiritas.": [
+"data/datos/escenas_privadas.json"
+],
 "Antes de que cambie la marea hay que encender las cuatro luces de la isla.": [
 "data/mods/isla_de_los_vientos.json"
 ],
 "Antes de que revienten el lago": [
 "data/mods/penas_altas.json"
+],
+"Antes de salir dejáis las tazas secándose boca abajo.": [
+"data/datos/escenas_privadas.json"
 ],
 "Antes de salir te pregunta. Lo que no hayas guardado se pierde.": [
 "juego/menus_juego.py"
@@ -4557,6 +4638,9 @@
 ],
 "Apostar {n} euros": [
 "juego/sistemas.py"
+],
+"Apoyas el pie junto al suyo. La alfombra por fin queda plana. Os quedáis así hasta que {n} levanta la cabeza y la distancia entre vuestras caras se acaba.": [
+"data/datos/relatos_privados.json"
 ],
 "Aprende a defenderte": [
 "data/datos/misiones.json"
@@ -6877,6 +6961,12 @@
 "Busco coches. Hay un sedán aparcado junto a la iglesia de San Telmo. Su dueño me debe dinero. Tráemelo entero.": [
 "data/datos/misiones.json"
 ],
+"Buscáis otra fecha para volver al sitio de la entrada.": [
+"data/datos/escenas_privadas.json"
+],
+"Buscáis sitio para dos cabezas en una almohada. Cuando por fin lo encontráis, {n} te da un beso de buenas noches aunque todavía queda mucho para dormir.": [
+"data/datos/escenas_privadas.json"
+],
 "Butroner[o|a]": [
 "juego/extras2.py"
 ],
@@ -6972,6 +7062,9 @@
 ],
 "Cada día gasta una tanda de material, que se compra a un proveedor, y deja la mercancía en el armario de esa casa. Puede salir mal.": [
 "juego/golpes.py"
+],
+"Cada día le apetece un ritmo que cambia, y ese sigue mandando; si eliges este otro día, os acerca algo más que un fallo. Sin valor, solo cuenta el del día.": [
+"editor/esquema.py"
 ],
 "Cada día piden más y pagan menos.": [
 "juego/respuestas_datos1.py"
@@ -7136,6 +7229,9 @@
 "Cada título lleva varias sesiones, una al día. Al completarlas, es tuyo para siempre": [
 "juego/menus_honrado.py"
 ],
+"Cada una con cómo empieza y cómo acaba. No se repiten hasta haber salido todas.": [
+"editor/esquema.py"
+],
 "Cada unidad de un producto y cada ración cocinada ocupan un sitio.": [
 "editor/esquema.py"
 ],
@@ -7144,6 +7240,9 @@
 ],
 "Cada uno cobra su parte al acabar, si el golpe sale bien. A quien detienen no cobra.": [
 "juego/golpes.py"
+],
+"Cada uno con cómo empieza y cómo sigue. Salen en el momento a solas de una escena privada y no se repiten hasta haber salido todos.": [
+"editor/esquema.py"
 ],
 "Cada uno en su casa.": [
 "juego/respuestas_datos1.py"
@@ -8634,6 +8733,9 @@
 "Cierra las opciones. También sirve Escape.": [
 "juego/menus_juego.py"
 ],
+"Cierra los ojos bajo tu mano. Afuera alguien llama dos veces a un perro y la segunda vez se oye el cascabel del collar acercarse. Cuando vuelves a mirarle, Ibai sonríe todavía con los ojos cerrados.": [
+"data/datos/relatos_privados.json"
+],
 "Cierras el trato por esa cifra, la de ahora, también si ha cambiado al regatear.": [
 "juego/pactos.py"
 ],
@@ -9347,6 +9449,9 @@
 "Como un rey. ¿No se me nota?": [
 "juego/respuestas_datos1.py"
 ],
+"Compartir un último secreto al oído": [
+"data/datos/escenas_privadas.json"
+],
 "Compartís el postre. {n} se queda con la última cucharada.": [
 "juego/convivencia.py",
 "data/datos/vida.json"
@@ -9702,6 +9807,9 @@
 ],
 "Con el helicóptero de la policía encendido, sube hasta el nivel con el que sale.": [
 "editor/esquema_vuelo.py"
+],
+"Con el identificador de un tipo que ya tiene escenas, las de tu mod las sustituyen.": [
+"editor/esquema.py"
 ],
 "Con el mando: cruceta arriba y abajo recorren las letras, cruceta derecha escribe la letra elegida y cruceta izquierda borra la última. {n} pone un espacio. {n2} cambia entre minúsculas, mayúsculas, números y signos. ": [
 "juego/menus.py"
@@ -10179,6 +10287,9 @@
 "Con sí, algún coche patrulla hace su ronda por las calles aunque nadie te busque, como en los servidores en línea. Ven los delitos que cometas cerca, y con las normas de tráfico activadas son quienes ponen las multas. Si te atacan y hay una cerca, acude. Con no, la policía solo aparece cuando te busca. En un servidor con policía común las lleva el servidor.": [
 "juego/menus_juego.py"
 ],
+"Con sí, antes de la noche la otra persona te propone pasarla juntos y tú dices que sí o que no; luego hay un momento a solas, que con cada persona de tu vida social puede ser uno de sus relatos, y se cuenta con un lenguaje más directo, siempre consentido y sin descripciones gráficas. Puedes pedir una pausa o terminar cuando quieras, y si te pide preservativo y no llevas, lo dejáis para otro día. Con la noche paso a paso, también se juega. Con no, que es como viene, la noche se cuenta como siempre. Solo jugando en solitario.": [
+"juego/menus_juego.py"
+],
 "Con sí, aunque el contenido para adultos esté desactivado, en el móvil aparece Vida sentimental: personas a las que conocer, citas, regalos, ser pareja, prometeros, vivir juntos y una boda sencilla. Sin nada de contenido para adultos. Con no, las relaciones solo existen con el contenido para adultos activado, como antes.": [
 "juego/menus_juego.py"
 ],
@@ -10388,6 +10499,24 @@
 "Con {n} se te pasa la hora volando. Al despedirse, te cuenta un chisme.": [
 "juego/encuentros.py",
 "data/datos/vida.json"
+],
+"Con {n}, el nombre de la otra persona.": [
+"editor/esquema.py"
+],
+"Con {n}, o con su nombre si es de una persona concreta.": [
+"editor/esquema.py"
+],
+"Con {n}.": [
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py"
+],
+"Con {n}. Acaba con la pregunta: el jugador dice que sí o que no.": [
+"editor/esquema.py"
+],
+"Con {n}. Vacío con Preguntar: entonces dice lo que quiere.": [
+"editor/esquema.py"
 ],
 "Con él lo eligen los grupos de enemigos de las misiones, las bandas, la policía y la caja de los locales. Si coincide con uno del juego, lo cambia: por ejemplo agente, guardaespaldas, vigilante o pandillero.": [
 "editor/esquema.py"
@@ -10646,6 +10775,12 @@
 "Contenido para adultos: ": [
 "juego/menus_enlinea.py"
 ],
+"Contenido para mayores de 18 años. Los relatos de cada persona de la vida social, por su identificador, y los de la gente de la calle, por el carácter con el que habla (amable, hablador, seco, timido o chulo). Cada relato tiene dos partes: cómo empieza y cómo sigue.": [
+"data/datos/relatos_privados.json"
+],
+"Contenido para mayores de 18 años. Solo con el contenido para adultos y la opción Escenas privadas con lenguaje directo. Todas las personas son adultas y todo es consentido. Donde pongas {n} irá el nombre de la otra persona.": [
+"data/datos/escenas_privadas.json"
+],
 "Contenido para mayores de 18 años. Solo se usa si la opción está activada. Todos los personajes son adultos.": [
 "data/datos/adultos.json"
 ],
@@ -10874,6 +11009,9 @@
 ],
 "Correcto. Puntual y discret[o|a]. Vuelve al casino mañana, tendré algo más interesante.": [
 "data/datos/misiones.json"
+],
+"Corregís la alarma antes de que os vuelva a dar un susto.": [
+"data/datos/escenas_privadas.json"
 ],
 "Correo urgente": [
 "juego/vuelo.py",
@@ -11141,6 +11279,9 @@
 "Cuando quieras nos movemos.": [
 "juego/partida.py"
 ],
+"Cuando recuperáis el aliento, el aire fresco en la espalda te hace buscar la sábana. {n} encuentra primero tu camisa y te la pasa. Está del revés. Os la quedáis mirando un segundo antes de echaros a reír. Fuera, el semáforo sigue cambiando para una calle vacía.": [
+"data/datos/escenas_privadas.json"
+],
 "Cuando se cierra la puerta del ascensor, en la planta de arriba solo queda una silla ocupada. La tuya.": [
 "data/datos/misiones_extra2.json"
 ],
@@ -11158,6 +11299,9 @@
 ],
 "Cuando trabajas de agente: el chasquido del canal y dos pitidos. Entras de servicio, llega un aviso o termina el turno.": [
 "juego/catalogo_sonidos.py"
+],
+"Cuando volvéis a la ventana, abajo solo queda alguien recogiendo cables.": [
+"data/datos/escenas_privadas.json"
 ],
 "Cuando yo era pequeñ{o}, se podía jugar en la calle.": [
 "juego/respuestas_datos1.py"
@@ -11645,6 +11789,9 @@
 "Cómo abrir tu partida, cómo unirte a la de otro y qué se puede hacer juntos. Se lee aquí mismo: no es una misión.": [
 "juego/menus_online.py"
 ],
+"Cómo acaba": [
+"editor/esquema.py"
+],
 "Cómo caminas y cómo conduces.": [
 "juego/menus_juego.py"
 ],
@@ -11660,8 +11807,15 @@
 "Cómo contestan las personas de la calle cuando les escribes lo que quieres: con el motor del juego o con una inteligencia artificial.": [
 "juego/menus_juego.py"
 ],
+"Cómo empieza": [
+"editor/esquema.py",
+"editor/esquema.py"
+],
 "Cómo enviar un fallo": [
 "juego/menus_registro.py"
+],
+"Cómo es": [
+"editor/esquema.py"
 ],
 "Cómo es el barrio. No escribas aquí de qué banda es: para eso está el campo anterior, y así la frase cambia cuando el barrio cambia de manos.": [
 "editor/esquema.py"
@@ -11738,6 +11892,9 @@
 "Cómo reacciona la gente, qué hace la policía cuando no te busca, cómo se pelea por los barrios y el oficio de policía.": [
 "juego/menus_juego.py"
 ],
+"Cómo responde": [
+"editor/esquema.py"
+],
 "Cómo se anuncia en el tablón": [
 "editor/esquema.py"
 ],
@@ -11804,6 +11961,9 @@
 "Cómo se rolea aquí": [
 "juego/menus_enlinea.py"
 ],
+"Cómo sigue": [
+"editor/esquema.py"
+],
 "Cómo te habla": [
 "editor/esquema.py"
 ],
@@ -11863,6 +12023,9 @@
 ],
 "Dais dos vueltas a la manzana hasta que aparece el abuelo, blanco como la cal. Te abraza a ti antes que al niño.": [
 "data/datos/vida.json"
+],
+"Dais nombres de grandes restaurantes a las sobras que hay para cenar.": [
+"data/datos/escenas_privadas.json"
 ],
 "Dan de comer a los viejos mineros. Siempre faltan manos.": [
 "data/mods/penas_altas.json"
@@ -12198,6 +12361,9 @@
 "De cada clase se lleva uno solo: gafas, cadena, anillo, reloj, gorra, pendiente, bolso, cinturón, pulsera, bufanda, corbata, perfume, piercing o la que tú inventes. Comprar otro de la misma clase sustituye al que se llevaba, y el anterior sigue siendo tuyo.": [
 "editor/esquema.py"
 ],
+"De camino a la puerta seguís tarareando el mismo estribillo.": [
+"data/datos/escenas_privadas.json"
+],
 "De camino a la puerta, Remigia te para para preguntarte cómo se lee una palabra. Es «porvenir».": [
 "data/datos/misiones_honrada.json"
 ],
@@ -12361,6 +12527,9 @@
 "De por ahí.": [
 "juego/respuestas_datos1.py"
 ],
+"De quién son": [
+"editor/esquema.py"
+],
 "De qué depende lo bien que lo hace": [
 "editor/esquema_golpes.py"
 ],
@@ -12484,8 +12653,14 @@
 "Decir las localidades junto a las que se pasa": [
 "editor/esquema_vuelo.py"
 ],
+"Decir lo que este momento significa para ti": [
+"juego/escenas_privadas.py"
+],
 "Decir los botones del mando en lugar de las teclas: {v}": [
 "juego/menus_extra.py"
+],
+"Decir que sí": [
+"juego/escenas_privadas.py"
 ],
 "Decir {t}": [
 "juego/mesa.py"
@@ -12642,14 +12817,23 @@
 "Dejar la policía": [
 "juego/agente.py"
 ],
+"Dejar que decida la otra persona": [
+"editor/esquema.py"
+],
 "Dejar que el mercado se organice solo": [
 "data/datos/misiones_extra2.json"
+],
+"Dejar que elija el siguiente gesto": [
+"data/datos/escenas_privadas.json"
 ],
 "Dejar que lo publique": [
 "juego/honrado.py"
 ],
 "Dejar que sea quien decida": [
 "juego/laboratorio.py"
+],
+"Dejar que te acerque a su manera": [
+"data/datos/escenas_privadas.json"
 ],
 "Dejar que te detengan": [
 "juego/combate.py"
@@ -12771,6 +12955,9 @@
 ],
 "Dejaste {v} en {nombre}, {v2}. Te espera allí.": [
 "juego/partida.py"
+],
+"Dejáis la regla escrita en la caja para quien vuelva a jugar.": [
+"data/datos/escenas_privadas.json"
 ],
 "Del dinero del armario, cuánto se llevan, por ciento": [
 "editor/esquema.py"
@@ -13054,6 +13241,9 @@
 "Desde hoy, esto te deja {int} euros cada medianoche.": [
 "juego/misiones.py"
 ],
+"Desde la calle suben tres notas de una salsa y después el pitido de un camión que da marcha atrás. Lucía ya ha encontrado la forma de bailarlo. Te enseña el paso que usa para atravesar una terraza llena sin tirar una cerveza. A la tercera vuelta te tiene entre sus brazos y ninguno recuerda quién llevaba la bandeja.": [
+"data/datos/relatos_privados.json"
+],
 "Desde lo alto de la Torre Belmonte se ven el puerto, Villaseca y San Lucero. En los tres sitios se paga, y en los tres se paga a la misma persona. La tía Encarna ha dejado de preguntar, y en el Barrio Viejo bajan la voz cuando entras. Tienes todo lo que tenía Belmonte. También lo que le quitaba el sueño.": [
 "data/datos/misiones_extra2.json"
 ],
@@ -13114,6 +13304,9 @@
 ],
 "Despacio. Diez mil litros no frenan, se paran cuando ellos quieren.": [
 "data/mods/bahia_del_ocaso.json"
+],
+"Despedida en las escenas privadas": [
+"editor/esquema.py"
 ],
 "Despedir a los guardaespaldas": [
 "juego/menus_lugares.py"
@@ -13359,6 +13552,9 @@
 "Devolver {nombre} a {banda_interesada} a cambio de dinero": [
 "juego/pactos.py"
 ],
+"Devolverle el beso con ganas": [
+"data/datos/escenas_privadas.json"
+],
 "Devolverle la cartera, pero quedarte el dinero": [
 "data/datos/misiones_honrada.json"
 ],
@@ -13388,6 +13584,9 @@
 ],
 "Devuelve {int} puntos, hasta el tope de {int2}. Si te lo han retirado, con el curso vuelves a tenerlo.": [
 "juego/menus_vida.py"
+],
+"Devuelves el billete a la página para que mañana siga ahí.": [
+"data/datos/escenas_privadas.json"
 ],
 "Devuelves el coche patrulla y dejas el aviso que tuvieras a medias. Sigues siendo agente: el próximo turno lo empiezas en cualquier comisaría.": [
 "juego/agente.py"
@@ -13789,6 +13988,9 @@
 ],
 "Diálogo: una conversación": [
 "editor/esquema.py"
+],
+"Doblas la circular y la metes debajo de una pata coja de la mesa. Sole la prueba con el codo. «Primera propuesta de la empresa que sirve para algo.» Después deja caer todo su peso contra ti.": [
+"data/datos/relatos_privados.json"
 ],
 "Doble vida": [
 "editor/esquema_honrado.py",
@@ -15099,6 +15301,9 @@
 "El camionero me ha dejado tirado y tengo la camioneta cargada de tomates para doña Remedios, la del Mercado de Abastos de San Lucero.": [
 "data/datos/misiones_extra.json"
 ],
+"El camión arranca y os deja sin percusión. Lucía sigue marcando el compás con el pulgar en tu espalda. Hace un buen rato que el paso dejó de parecerse al de una camarera con prisa.": [
+"data/datos/relatos_privados.json"
+],
 "El camión de las garrafas": [
 "data/mods/valdeolmos.json"
 ],
@@ -15621,6 +15826,9 @@
 "El fin del mundo lo anuncian cada año y aquí seguimos.": [
 "juego/respuestas_datos2.py"
 ],
+"El final del cuento vuelve justo en medio de un beso. Lo notas por la risa que os obliga a separaros. «Mañana», promete {n}. «Es un loro. Puede esperar.»": [
+"data/datos/relatos_privados.json"
+],
 "El fondo de cada sitio: la ciudad, el mar, los pájaros, la lluvia, los truenos y las campanas. Al cambiarlo suena una muestra. Cámbialo con las flechas izquierda y derecha.": [
 "juego/menus_juego.py"
 ],
@@ -15819,6 +16027,9 @@
 ],
 "El hospital de la ciudad. Urgencias a la vuelta.": [
 "data/mods/bahia_del_ocaso.json"
+],
+"El identificador de una persona de la vida social, como lucia; o, para la gente de la calle, el carácter con el que habla: amable, hablador, seco, timido o chulo.": [
+"editor/esquema.py"
 ],
 "El identificador de uno de los estilos de El vestuario. Si es el mismo que el de la ropa que llevas, vas conjuntado, y en una cita se nota algo más.": [
 "editor/esquema.py"
@@ -16072,6 +16283,9 @@
 "El modelo local no contesta.": [
 "juego/ia.py"
 ],
+"El momento a solas, si la persona no tiene relatos": [
+"editor/esquema.py"
+],
 "El mostrador y las bolsas. Aquí se paga.": [
 "juego/sistemas.py"
 ],
@@ -16170,6 +16384,9 @@
 ],
 "El mío ya ni lo celebro. Me limito a cumplir.": [
 "juego/respuestas_datos2.py"
+],
+"El móvil sigue apagado mientras desayunáis.": [
+"data/datos/escenas_privadas.json"
 ],
 "El negocio del Caimán se ha quedado sin dueño. ¿Qué haces?": [
 "data/datos/misiones_extra2.json"
@@ -16570,6 +16787,9 @@
 ],
 "El ruido de los neumáticos de tu vehículo. Suena más fuerte cuanto más corres.": [
 "juego/catalogo_sonidos.py"
+],
+"El ruido imposible era una cuchara dentro de una taza vacía.": [
+"data/datos/escenas_privadas.json"
 ],
 "El rumor va de cero a cien.": [
 "editor/esquema_honrado.py"
@@ -17446,6 +17666,9 @@
 ],
 "En Radio Taxi Luna falta un chófer para un servicio especial.": [
 "data/mods/noches_de_neon.json"
+],
+"En San Lucero han puesto un cartel municipal que dice SILENCIO CULTURAL junto a una obra que empieza a las siete. Noa te enseña la foto y empieza a redactar el reglamento de vuestra noche. Primer artículo, los teléfonos boca abajo. Segundo, se admiten enmiendas. Le propones un tercero al oído. Lo piensa con una seriedad que te hace cosquillas.": [
+"data/datos/relatos_privados.json"
 ],
 "En San Lucero, la ciudad universitaria, doña Remedios tiene un problema con una banda.": [
 "data/datos/misiones_extra.json"
@@ -18723,6 +18946,9 @@
 "Entregas un regalo: papel de envolver.": [
 "juego/catalogo_sonidos.py"
 ],
+"Entrelazar los dedos": [
+"data/datos/escenas_privadas.json"
+],
 "Entrenador del Gimnasio El Yunque. Fue boxeador y lo dejó a tiempo. Tranquilo, protector y pésimo contando chistes.": [
 "data/datos/adultos.json"
 ],
@@ -19119,7 +19345,11 @@
 "Escape: el motor suena más bajo y la policía te oye de menos lejos": [
 "editor/esquema.py"
 ],
+"Escena": [
+"editor/esquema.py"
+],
 "Escenas": [
+"editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py",
@@ -19144,6 +19374,15 @@
 "editor/esquema.py"
 ],
 "Escenas del cine": [
+"editor/esquema.py"
+],
+"Escenas privadas con lenguaje directo": [
+"juego/menus_juego.py"
+],
+"Escenas privadas de cada tipo de noche, contenido para adultos": [
+"editor/esquema.py"
+],
+"Escenas privadas de un tipo de noche, contenido para adultos": [
 "editor/esquema.py"
 ],
 "Escolta": [
@@ -22366,6 +22605,9 @@
 "Guardas": [
 "juego/mochila.py"
 ],
+"Guardas el mapa. La próxima vez te toca enseñar un rincón de tu barrio.": [
+"data/datos/escenas_privadas.json"
+],
 "Guardas el vehículo en el que has venido y te quedas a pie en la puerta. No caben las aeronaves ni los vehículos que no puedes quedarte, y nada si el garaje está lleno.": [
 "juego/menus_juego.py"
 ],
@@ -22404,6 +22646,12 @@
 ],
 "Guardias fijos que admite un barrio": [
 "editor/esquema.py"
+],
+"Guardáis el barquito con la fecha escrita en la vela.": [
+"data/datos/escenas_privadas.json"
+],
+"Guardáis el resto para luego. Hace rato que se os ha derretido el chocolate en los dedos cuando os dais cuenta de que seguís de la mano.": [
+"data/datos/relatos_privados.json"
 ],
 "Guardártelo y hacerle una visita: 2500 euros": [
 "data/mods/bahia_del_ocaso.json"
@@ -22576,6 +22824,9 @@
 "Hablar con el gestor discreto": [
 "juego/menus_capo.py"
 ],
+"Hablar de lo que quiere cada uno": [
+"juego/escenas_privadas.py"
+],
 "Hablar en personaje": [
 "juego/menus_enlinea.py"
 ],
@@ -22619,6 +22870,9 @@
 ],
 "Habláis de todo un poco.": [
 "juego/charla.py"
+],
+"Habláis de vuestros límites y de protección. Podéis cambiar de idea.": [
+"juego/escenas_privadas.py"
 ],
 "Habláis un rato de nada en particular.": [
 "juego/menus_adultos.py"
@@ -22717,6 +22971,9 @@
 "Hacer un plan juntos": [
 "juego/convivencia.py",
 "juego/menus_adultos.py"
+],
+"Hacer una reverencia y ofrecerle la mano": [
+"data/datos/escenas_privadas.json"
 ],
 "Hacer voluntariado cuatro horas": [
 "juego/menus_vida.py"
@@ -23275,6 +23532,12 @@
 ],
 "Hay una cisterna llena en la desaladora, y un barrio entero esperando.": [
 "data/mods/bahia_del_ocaso.json"
+],
+"Hay una esquina de la alfombra que insiste en levantarse. {n} lleva un rato alisándola con el pie mientras tú hablas. Al terminar le preguntas qué ha oído. Te devuelve entera la frase que más te costó decir, hasta la pausa del medio. «La alfombra me da igual. Cuando me importa algo tengo que mover los pies.»": [
+"data/datos/relatos_privados.json"
+],
+"Hay una etiqueta cosida del revés en la manga de Valeria. La descubres cuando te rodea los hombros. Esperas que vaya a buscar unas tijeras, pero se ríe. La cosió su hermana la víspera de abrir la tienda, cuando todavía había que hacer de todo entre las dos. Nadie en una cena se ha atrevido jamás a señalarle el defecto.": [
+"data/datos/relatos_privados.json"
 ],
 "Hay una fiesta en un yate fondeado junto al Arrecife de las Sirenas. Gente de Las Torres, con más dinero que sentido. Quieren pastillas, y las mejores las hace La Química, en San Lucero.": [
 "data/datos/misiones_adultos.json"
@@ -24045,6 +24308,21 @@
 "Ibai": [
 "data/datos/adultos.json"
 ],
+"Ibai ha traído una manzana para partirla contigo. La frota contra la manga hasta que brilla y le da vueltas buscando el lado bueno. De crío su abuelo le daba siempre la mitad con el golpe, decía que era más dulce. Tardó años en enterarse de que el viejo también le decía lo mismo a su hermana de la mitad que le tocaba a ella.": [
+"data/datos/relatos_privados.json"
+],
+"Ibai pone dos vasos de agua uno junto al otro. Un motor grave hace temblar las dos superficies. «El camión del hielo hace eso en Cala Brava. Antes de tener reloj ya sabía la hora por el agua de la mesilla.» Esperáis a que se aquieten. Le preguntas qué sonido le gustaría oír al despertarse un día que no tenga que salir a pescar.": [
+"data/datos/relatos_privados.json"
+],
+"Ibai roza tu muñeca con las yemas ásperas y se detiene. «¿Raspan?» Le vuelves la mano para besarle la palma. Afuera pasa un motor. Por una vez, ni siquiera intenta adivinar qué barco es.": [
+"data/datos/adultos.json"
+],
+"Ibai te enseña el concurso de fotos del puerto. Ha ganado otro atardecer naranja sobre una cubierta recién pintada. En la foto que él mandó sale una mujer zurciendo una red mientras con el pie mece un cochecito. «Mi madre dice que salí movido.» Amplía la imagen hasta que distingues la punta de un calcetín diminuto asomando del coche.": [
+"data/datos/relatos_privados.json"
+],
+"Ibai tiene la frente marcada de llevar la gorra todo el día. Pasas el pulgar por la raya y te cuenta que de niño creía que era así como se reconocía a los adultos del muelle. La primera vez que volvió con marca propia durmió sin lavarse, por si se le borraba. «Y ahora mírame, feliz de que alguien me la quite.»": [
+"data/datos/relatos_privados.json"
+],
 "Iban a romperme la toma de agua. Gracias, hij[o|a]. Llévate lo que quieras del mostrador.": [
 "data/mods/bahia_del_ocaso.json"
 ],
@@ -24061,6 +24339,8 @@
 "juego/menus_enlinea.py"
 ],
 "Identificador": [
+"editor/esquema.py",
+"editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py",
 "editor/esquema.py",
@@ -24328,6 +24608,9 @@
 ],
 "Insultar": [
 "juego/menus_charla.py"
+],
+"Intenso, con ganas": [
+"editor/esquema.py"
 ],
 "Intentar sobornar al inspector: {soborno} euros": [
 "juego/honrado.py"
@@ -24625,6 +24908,9 @@
 "Invitarle a algo caliente y acompañarle al comedor social": [
 "data/datos/vida.json"
 ],
+"Invitarle a bailar ese bajo que ya se va": [
+"data/datos/escenas_privadas.json"
+],
 "Invitarle a tu banda, {nombre}": [
 "juego/menus_enlinea.py"
 ],
@@ -24850,6 +25136,9 @@
 ],
 "Jugando sin conexión, conquistar no es el final: cuando tienes todos los barrios de una ciudad, o muchos sin tenerlos todos, las bandas vencidas se rehacen y, pasados unos días de calma, intentan recuperarlos. Te avisan del asalto y tienes unas horas para ir a defender el barrio en persona o para enviar a tu gente desde el móvil; si no haces nada, lo pierdes. Te preparas en el móvil, en Territorios, Defensa de tus barrios: guardias, refuerzos, informantes, treguas y golpes a sus escondites. Elige cuánto aprietan: apagado, y nadie te los disputa de esta manera; tranquilo, con pocos asaltos y {entero} horas para responder; normal, que es lo de serie, con {entero2} horas; o duro, con asaltos más seguidos, más fuertes y {entero3} horas. Nunca hay dos asaltos a la vez. En un servidor en línea y jugando con amigos no ocurre.": [
 "juego/menus_juego.py"
+],
+"Jugando, entre risas": [
+"editor/esquema.py"
 ],
 "Jugar a la siete y media": [
 "juego/sistemas.py",
@@ -25446,6 +25735,9 @@
 "La cesta: ": [
 "juego/compra.py"
 ],
+"La chaqueta se ha quedado enganchada entre los dos. {n} consigue soltarla y la deja caer sobre el respaldo. «Así, mucho mejor.»": [
+"data/datos/escenas_privadas.json"
+],
 "La churrera": [
 "data/mods/noches_de_neon.json",
 "data/mods/noches_de_neon.json",
@@ -25577,6 +25869,9 @@
 ],
 "La cámara acorazada está vacía y llena de policías: ya lo atracaste hoy.": [
 "juego/menus_lugares.py"
+],
+"La cáscara sigue de una pieza. Reconoces que has perdido la apuesta.": [
+"data/datos/escenas_privadas.json"
 ],
 "La da el servicio que hayas elegido.": [
 "juego/ia.py"
@@ -25760,6 +26055,9 @@
 "La firma de la versión no es válida. No se actualiza.": [
 "juego/actualizador.py"
 ],
+"La flauta para. Se oyen dos palmadas tímidas al otro lado del tabique. Sole te besa entre risas y contesta dando las buenas noches con los nudillos.": [
+"data/datos/relatos_privados.json"
+],
 "La forastera se marcha": [
 "editor/esquema.py"
 ],
@@ -25768,6 +26066,9 @@
 ],
 "La frase que ha escrito sobre su personaje.": [
 "juego/menus_enlinea.py"
+],
+"La frente de {n} encuentra el hueco de tu hombro. Notas que suelta el aire. Tenías los hombros tensos y también tú los aflojas.": [
+"data/datos/escenas_privadas.json"
 ],
 "La fuerza va de 0 a 100.": [
 "editor/esquema.py"
@@ -26958,6 +27259,9 @@
 "Le dices algo al oído. {n} se ríe y te mira de otra manera.": [
 "juego/intimidad.py"
 ],
+"Le dices que esa es la primera foto suya que habrías reconocido sin verle la cara. Sigues el balanceo con el pie y él se acurruca contra ti, los dos un poco mecidos por la misma mujer.": [
+"data/datos/relatos_privados.json"
+],
 "Le dices que tienes mala memoria para las caras, pero buena para los hoteles.": [
 "data/mods/noches_de_neon.json"
 ],
@@ -27018,12 +27322,18 @@
 "juego/golpes.py",
 "data/datos/vida.json"
 ],
+"Le pides a Valeria que te enseñe a entrar en una habitación como si fuera tuya. Sales al pasillo y vuelves bajo su mirada de experta. «Bien. Ahora entra como si supieras que hay alguien dentro que se alegra de verte.» Esa vez no piensas dónde poner las manos. Al volver la encuentras con los brazos abiertos y una sonrisa casi tímida.": [
+"data/datos/relatos_privados.json"
+],
 "Le pides perdón a {n} sin excusas. Se le escapa una media sonrisa. Algo se arregla.": [
 "juego/encuentros.py",
 "data/datos/vida.json"
 ],
 "Le pides que se vaya": [
 "editor/esquema.py"
+],
+"Le pides que te reserve una mesa para el día de la apertura. «La primera noche cierro temprano», dice. Dobla la carta y la deja a un lado. «Quiero poder hacer esto después.»": [
+"data/datos/relatos_privados.json"
 ],
 "Le plantas cara. Saca la navaja.": [
 "juego/capo.py"
@@ -27063,6 +27373,9 @@
 "Le tenemos localizado. Deténgase y salga con las manos en alto.": [
 "juego/calle.py",
 "data/datos/vida.json"
+],
+"Le toca probarlo a ella. Oyes sus tacones pararse al otro lado, una pausa y dos golpecitos suaves. Cuando abres, Valeria ha dejado los zapatos en el umbral. «Creo que así entraría en casa.»": [
+"data/datos/relatos_privados.json"
 ],
 "Le vemos desde el aire. No empeore las cosas: entréguese.": [
 "juego/calle.py",
@@ -27164,6 +27477,9 @@
 ],
 "Lento y robusto. Un barco de trabajo de toda la vida.": [
 "data/datos/vehiculos.json"
+],
+"Lento, sin prisa": [
+"editor/esquema.py"
 ],
 "Leo": [
 "data/mods/motor_y_asfalto.json"
@@ -27931,6 +28247,14 @@
 "Lo dejáis al momento, sin pedir confirmación. La relación cae mucho, tu ánimo baja y, si vivíais juntos, se va de casa.": [
 "juego/menus_adultos.py"
 ],
+"Lo dejáis aquí. Esta noche no cuenta.": [
+"juego/escenas_privadas.py",
+"juego/escenas_privadas.py",
+"juego/laboratorio.py"
+],
+"Lo dejáis para otro día.": [
+"juego/escenas_privadas.py"
+],
 "Lo dejé hace diez años. Sueño con él todas las noches.": [
 "juego/respuestas_datos2.py"
 ],
@@ -28177,6 +28501,9 @@
 ],
 "Lo que consta en tu ficha, cuándo caduca y cómo atenuarlo: servicios a la comunidad o un abogado.": [
 "juego/menus_juego.py"
+],
+"Lo que cuenta al final de una escena privada con uno de sus relatos. Vacío, no hay despedida propia.": [
+"editor/esquema.py"
 ],
 "Lo que cuesta cada nivel de informantes al día": [
 "editor/esquema.py"
@@ -28432,8 +28759,14 @@
 "Lo que pagas al tomar algo con un conocido": [
 "editor/esquema.py"
 ],
+"Lo que pasa": [
+"editor/esquema.py"
+],
 "Lo que pasa después es solo vuestro.{proteccion} Por la mañana, son las {hora_txt} y te sientes {animo_txt}.": [
 "juego/intimidad.py"
+],
+"Lo que pasa después, tras un relato": [
+"editor/esquema.py"
 ],
 "Lo que pasa en el aire. Turbulencias, otro aparato a tu altura al que hay que dejar paso subiendo o bajando, y tormentas que puedes rodear, pasar por encima si tu aparato sube lo bastante, o atravesar. Con lluvia hay más viento y más tormentas.": [
 "juego/vuelo_pantalla.py"
@@ -28478,6 +28811,13 @@
 "editor/esquema_honrado.py"
 ],
 "Lo que pierdes de lo que llevas si le das la cartera, por ciento": [
+"editor/esquema.py"
+],
+"Lo que propone la otra persona": [
+"editor/esquema.py"
+],
+"Lo que puede hacer el jugador": [
+"editor/esquema.py",
 "editor/esquema.py"
 ],
 "Lo que puede salir mal. A quien le fallan los nervios llega tarde, no avisa o tarda más con la caja. Al de dentro le pueden herir y está de baja unos días. Al vigilante lo pueden detener, y si su lealtad es baja, da tu nombre: sube la búsqueda y te queda un antecedente. Si el golpe fracasa, todos pierden confianza en ti, y quien se queda sin ninguna se va.": [
@@ -29586,6 +29926,18 @@
 ],
 "Lucía aparece ahora en Vida social, en el móvil. Hay otras cinco personas por la comarca: preséntate cuando estés en su lugar habitual.": [
 "data/datos/misiones_adultos.json"
+],
+"Lucía saca del bolsillo una carta de bebidas que ha escrito a mano. Hay un cóctel inspirado en el concejal que prometió arreglar el paseo. Lleva mucho hielo y se sirve en un vaso con una fuga. Mientras le inventáis un precio, le ves borrar con la uña una cifra del margen. Es lo que todavía le falta para la fianza del local.": [
+"data/datos/relatos_privados.json"
+],
+"Lucía te pasa el pulgar por la ceja para apartarte el pelo. «Mírame. Con todo el ruido que hago cuando me gustas, igual se me ha olvidado decírtelo bajito.» Esta vez lo dice bajito.": [
+"data/datos/adultos.json"
+],
+"Lucía tiene una queja formal. Alguien ha puesto una estrella al Espeto porque el mar hacía ruido. Recita la reseña con tal solemnidad que aguantas hasta lo de la gaviota «visiblemente ajena a la plantilla». Cuando dejas de reírte, le preguntas por las otras reseñas. Guarda el móvil. «Las buenas también me las sé de memoria.»": [
+"data/datos/relatos_privados.json"
+],
+"Lucía vuelca un puñado de monedas sobre la mesa y dibuja con ellas el bar que algún día será suyo. Dos euros son la cocina. Diez céntimos eres tú. Te pone al extremo de la barra y luego cambia de idea y te acerca a su sitio. «Desde allí me tocaría gritarte para ligar contigo. Bastante hago eso en el trabajo.»": [
+"data/datos/relatos_privados.json"
 ],
 "Lugar": [
 "editor/esquema.py",
@@ -31360,6 +31712,12 @@
 "Molino, girasoles, la era y la fuente. Poco más de tres minutos, que el pan no espera.": [
 "data/datos/misiones_extra3.json"
 ],
+"Momento de la noche paso a paso en una escena privada, contenido para adultos": [
+"editor/esquema.py"
+],
+"Momentos de la noche en las escenas privadas, contenido para adultos": [
+"editor/esquema.py"
+],
 "Mono de trabajo": [
 "data/datos/vida.json"
 ],
@@ -31954,6 +32312,7 @@
 "juego/encuentros.py",
 "juego/encuentros.py",
 "juego/encuentros.py",
+"juego/intimidad.py",
 "juego/intimidad.py",
 "juego/intimidad.py",
 "juego/laboratorio.py",
@@ -33855,6 +34214,9 @@
 "No, dejarlo desactivado": [
 "juego/menus_adultos.py"
 ],
+"No, despedirte por hoy": [
+"juego/escenas_privadas.py"
+],
 "No, me quedo": [
 "juego/menus_honrado.py"
 ],
@@ -33949,6 +34311,15 @@
 "Noa": [
 "data/datos/adultos.json",
 "data/mods/oficios_y_recados.json"
+],
+"Noa alisa el envoltorio de su bocadillo y escribe un título para una tesis sobre los dos. Te concede el cargo de tribunal a condición de que no hagas la pregunta que lleva meses quitándole el sueño. «¿Y esto para qué sirve?» Haces una pregunta distinta. ¿Cuándo fue la última vez que empezó algo por puro gusto? Deja el boli.": [
+"data/datos/relatos_privados.json"
+],
+"Noa ha encontrado una entrada de cine con un agujero justo en el nombre de la película. Te reta a adivinarla por el sonido que hacía la señora de al lado al abrir un caramelo durante la escena decisiva. Su imitación dura tanto que llegas a temer por la señora. Noa acaba confesando que tampoco se acuerda de la película.": [
+"data/datos/relatos_privados.json"
+],
+"Noa lleva en el bolso un libro con tantos papelitos de colores que apenas cierra. Le pides que te lea el pasaje más subrayado. Al abrirlo se cae una lista de la compra. La lee en voz alta con su mejor dicción académica hasta llegar al último renglón. Ahí pone tu nombre y, entre paréntesis, acordarse de preguntar qué tal el día.": [
+"data/datos/relatos_privados.json"
 ],
 "Noche de carreras": [
 "data/datos/misiones_extra.json"
@@ -34575,6 +34946,14 @@
 "Os acerca un poco. Una vez al día.": [
 "juego/convivencia.py"
 ],
+"Os apartáis un momento. Podéis volver cuando estéis listos o dejarlo aquí, sin que pase nada.": [
+"juego/escenas_privadas.py",
+"juego/laboratorio.py"
+],
+"Os apartáis un momento. {n} pregunta si quieres seguir o dejarlo aquí.": [
+"juego/escenas_privadas.py",
+"juego/laboratorio.py"
+],
 "Os buscáis con prisa, como si llevarais semanas esperándolo. Nadie duerme mucho.": [
 "juego/intimidad.py"
 ],
@@ -34582,9 +34961,18 @@
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
+"Os da la risa a la vez. «Me gusta que podamos reírnos de esto», dice {n}.": [
+"data/datos/escenas_privadas.json"
+],
 "Os dais la mano. {banda} entra en {barrio} sin un tiro, y tú cuentas {euros} euros.": [
 "juego/pactos.py",
 "data/datos/vida.json"
+],
+"Os despedís con el ridículo eslogan que acabáis de inventar.": [
+"data/datos/escenas_privadas.json"
+],
+"Os encontráis a mitad de camino. Al separaros, {n} aún tiene los dedos prendidos de tu solapa.": [
+"data/datos/escenas_privadas.json"
 ],
 "Os estáis conociendo": [
 "juego/menus_adultos.py"
@@ -34601,6 +34989,9 @@
 "Os prometéis": [
 "editor/esquema_honrado.py"
 ],
+"Os quedáis abrazados. {n} espera contigo hasta que te apetece hablar.": [
+"juego/escenas_privadas.py"
+],
 "Os quedáis hasta que refresca, con arena hasta en los bolsillos.": [
 "juego/convivencia.py",
 "data/datos/vida.json"
@@ -34611,6 +35002,9 @@
 "Os quedáis un rato en silencio, a gusto.": [
 "juego/convivencia.py",
 "data/datos/vida.json"
+],
+"Os quitáis los zapatos y comparáis las ampollas de una semana larga.": [
+"data/datos/escenas_privadas.json"
 ],
 "Os retáis, os provocáis, os reís. Es de esas noches en las que todo vale si lo queréis los dos.": [
 "juego/intimidad.py"
@@ -35720,6 +36114,9 @@
 "Partidas guardadas": [
 "juego/menus_juego.py"
 ],
+"Partís la galleta. La moneda queda de propina para otra apuesta.": [
+"data/datos/escenas_privadas.json"
+],
 "Paráis el motor mar adentro. Solo se oye el agua contra el casco.": [
 "juego/convivencia.py",
 "data/datos/vida.json"
@@ -36088,6 +36485,10 @@
 "Pedir una ambulancia: {precio} euros": [
 "juego/menus_extra.py"
 ],
+"Pedir una pausa": [
+"juego/escenas_privadas.py",
+"juego/laboratorio.py"
+],
 "Pedir una rebaja": [
 "juego/pactos.py",
 "juego/pactos.py"
@@ -36115,6 +36516,9 @@
 ],
 "Pedirles tu parte por no haber visto nada": [
 "data/datos/vida.json"
+],
+"Pedís dos cafés mientras miráis los horarios de la mañana.": [
+"data/datos/escenas_privadas.json"
 ],
 "Pedís en la barra y os vais a una esquina tranquila.": [
 "juego/encuentros.py",
@@ -36902,6 +37306,9 @@
 "Pones el {_nombre}.": [
 "juego/mesa.py"
 ],
+"Pones la golondrina a la altura de vuestros ojos para ver cómo vuela. Sole te mira a ti todo el rato. Cuando bajas la mano la encuentras esperando un beso y se lo das.": [
+"data/datos/relatos_privados.json"
+],
 "Pones la mesa para ti y das cuenta de todo.": [
 "juego/domicilio.py",
 "data/datos/vida.json"
@@ -36923,6 +37330,12 @@
 ],
 "Pones una ficha de {apuesta} euros. Aciertas si sale uno de esos doce números, y ganas el doble de la ficha. Con el cero pierdes.": [
 "juego/menus_extra.py"
+],
+"Ponéis cinco minutos en su reloj. Cuando vibra seguís en el suelo, hombro con hombro. Andrés apaga la alarma a tientas y se queda exactamente donde está.": [
+"data/datos/relatos_privados.json"
+],
+"Ponéis un lazo en uno de los llaveros para distinguirlos.": [
+"data/datos/escenas_privadas.json"
 ],
 "Por aquí se sale.": [
 "juego/sistemas.py"
@@ -37034,6 +37447,9 @@
 "Por la mañana levantas la persiana y saludas a Casilda, que pasa con el carro de la compra. Por la noche cuentas billetes que no han entrado por la puerta.": [
 "data/datos/misiones_honrada.json"
 ],
+"Por la mañana, son las {hora_txt} y te sientes {animo_txt}.": [
+"juego/intimidad.py"
+],
 "Por leerla entera": [
 "juego/misiones.py"
 ],
@@ -37049,6 +37465,9 @@
 "Por muy poco. Lo vas a ver en un papel con membrete.": [
 "juego/vuelo.py",
 "data/datos/vida.json"
+],
+"Por primera vez en toda la noche, tenéis que buscar un reloj para saber la hora.": [
+"data/datos/escenas_privadas.json"
 ],
 "Por qué falló la última actualización": [
 "juego/menus_actualizar.py"
@@ -37262,6 +37681,9 @@
 "Preguntar a qué se dedica": [
 "juego/menus_charla.py"
 ],
+"Preguntar cómo le gustaría que siguierais": [
+"data/datos/escenas_privadas.json"
+],
 "Preguntar por el barrio": [
 "juego/menus_charla.py"
 ],
@@ -37269,11 +37691,17 @@
 "juego/menus_charla.py",
 "juego/menus_charla.py"
 ],
+"Preguntar qué le apetece": [
+"editor/esquema.py"
+],
 "Preguntar qué se cuenta": [
 "juego/menus_charla.py"
 ],
 "Preguntarle qué le apetece": [
 "juego/laboratorio.py"
+],
+"Preguntas si puedes quedártelo. La sonrisa tarda un segundo en llegar y luego ocupa toda la cara. {n} te enseña dónde doblarlo para que no se borre la tinta.": [
+"data/datos/relatos_privados.json"
 ],
 "Pregúntale a otro.": [
 "juego/respuestas.py"
@@ -37548,6 +37976,9 @@
 "Probar la vibración": [
 "juego/menus_extra.py"
 ],
+"Probáis de ambos lados para resolverlo de una vez. Cuando le limpias una gota de zumo de la barbilla, se le olvida dictar sentencia. Dejáis el asunto pendiente para la próxima manzana.": [
+"data/datos/relatos_privados.json"
+],
 "Procesador": [
 "juego/registro.py"
 ],
@@ -37607,8 +38038,14 @@
 "Propones una carrera hasta {nombre} con {apuesta} euros de apuesta. Cuando tus amigos acepten, dale a Empezar.": [
 "juego/online.py"
 ],
+"Propuesta de una escena privada, contenido para adultos": [
+"editor/esquema.py"
+],
 "Propuesta enviada a %s.": [
 "servidor/nucleo.py"
+],
+"Propuestas de las escenas privadas, contenido para adultos": [
+"editor/esquema.py"
 ],
 "Protecciones de la armería": [
 "editor/esquema.py"
@@ -38153,6 +38590,9 @@
 "Queda apuntado en tus antecedentes penales: {texto}, falta {v}. Caduca en {dias} días si no hay más.": [
 "juego/honrado.py"
 ],
+"Queda media manzana. La repartís antes de dar por terminada la noche.": [
+"data/datos/escenas_privadas.json"
+],
 "Queda poco combustible: un {pct} por ciento.": [
 "juego/vuelo.py",
 "data/datos/vida.json"
@@ -38209,6 +38649,9 @@
 ],
 "Quedar en un sitio a una hora": [
 "juego/menus_adultos.py"
+],
+"Quedaros cerca en silencio": [
+"juego/escenas_privadas.py"
 ],
 "Quedarte al convite": [
 "data/mods/valdeolmos.json"
@@ -38502,6 +38945,9 @@
 ],
 "Qué es. Un atraco de los de siempre, a un banco, a un local con caja o a un proveedor, lo puedes preparar antes si tienes a gente de tu banda al lado. No es obligatorio: sin prepararlo, el atraco es el de siempre.": [
 "juego/golpes.py"
+],
+"Qué hace": [
+"editor/esquema.py"
 ],
 "Qué hace cada botón": [
 "juego/menus_extra.py"
@@ -39186,6 +39632,9 @@
 "Recorte del periódico: ": [
 "juego/sistemas.py"
 ],
+"Recostaros juntos un rato": [
+"data/datos/escenas_privadas.json"
+],
 "Recreativos Campus": [
 "data/datos/mapas/san_lucero.json"
 ],
@@ -39364,6 +39813,18 @@
 ],
 "Relaja y sube el ánimo, pero embota los reflejos y la puntería.": [
 "data/datos/adultos.json"
+],
+"Relato": [
+"editor/esquema.py"
+],
+"Relatos": [
+"editor/esquema.py"
+],
+"Relatos de cada persona, contenido para adultos": [
+"editor/esquema.py"
+],
+"Relatos de una persona, contenido para adultos": [
+"editor/esquema.py"
 ],
 "Reloj de oro": [
 "data/datos/vida.json"
@@ -39658,6 +40119,9 @@
 "Resulta que conoce a media ciudad.": [
 "juego/charla.py"
 ],
+"Resulta que habíais pensado en dos canciones distintas con el mismo ritmo.": [
+"data/datos/escenas_privadas.json"
+],
 "Resumen para el móvil": [
 "editor/esquema.py"
 ],
@@ -39730,6 +40194,9 @@
 ],
 "Ring del pabellón": [
 "data/datos/mapas/arena.json"
+],
+"Ritmo que le gusta siempre en la noche paso a paso": [
+"editor/esquema.py"
 ],
 "Riñonera": [
 "data/datos/vida.json"
@@ -39907,6 +40374,9 @@
 "Rosa": [
 "juego/gente.py",
 "data/datos/gente.json"
+],
+"Rozarle la mejilla con los nudillos": [
+"data/datos/escenas_privadas.json"
 ],
 "Rozas algo con la panza del aparato. Has perdido piezas.": [
 "juego/vuelo.py",
@@ -40940,6 +41410,9 @@
 "Se le saca del servidor, pero puede volver a entrar. Deja el motivo vacío si no quieres decirle nada. Cancelar no le expulsa.": [
 "panel_servidor/ventana.py"
 ],
+"Se le sube el color y tú empiezas a contarle el día desde el principio. Cierra el libro para hacer sitio en su regazo. Por una vez no toma apuntes y no se le escapa nada.": [
+"data/datos/relatos_privados.json"
+],
 "Se lee en el menú de elegir personaje. Cuenta sus ventajas.": [
 "editor/esquema.py"
 ],
@@ -40969,6 +41442,9 @@
 ],
 "Se lo pides para esta casa. Dice que sí si os lleváis bastante bien y habéis tenido citas; si no, tendrás que esperar unos días para volver a pedírselo.": [
 "juego/convivencia.py"
+],
+"Se lo piensa mirando hacia arriba, como si el techo pudiera darle el parte. «A ti dando vueltas y buscando el lado fresco de la almohada.» Aparta un vaso para hacerte sitio junto a él.": [
+"data/datos/relatos_privados.json"
 ],
 "Se marchan y dejan de cobrarte los {precio} euros de cada medianoche.": [
 "juego/menus_extra.py"
@@ -41002,6 +41478,9 @@
 ],
 "Se ocupa de la gente": [
 "editor/esquema_golpes.py"
+],
+"Se oye el último autobús. {n} comprueba que ambos tenéis cómo volver antes de proponerte que te quedes.": [
+"data/datos/escenas_privadas.json"
 ],
 "Se oye que hay alguien moviendo los hilos en el puerto. Gente nueva.": [
 "juego/charla.py"
@@ -41440,6 +41919,10 @@
 "Seguro de tus vehículos: {cubre}. Pagas {seguro_cuota} euros al día por cada uno en la calle; ahora, {v}. Llevas pagados {int} euros, franquicias incluidas.{espera}": [
 "juego/misvehiculos.py"
 ],
+"Seguís justo donde lo habíais dejado.": [
+"juego/escenas_privadas.py",
+"juego/laboratorio.py"
+],
 "Según los planos, hay una sala de válvulas en la desaladora. Con la llave maestra se abre el ramal del Cauce entero, sin contador.": [
 "data/mods/bahia_del_ocaso.json"
 ],
@@ -41707,6 +42190,9 @@
 "Si cambia de manos el barrio, que sea para bien.": [
 "juego/respuestas_datos1.py"
 ],
+"Si coincide con el ritmo que le apetece hoy, acierta. Preguntar siempre acierta y le hace decir lo que quiere; dejarle decidir casi siempre.": [
+"editor/esquema.py"
+],
 "Si coincide con una del juego, la cambia; si es nueva, se añade al recetario.": [
 "editor/esquema.py"
 ],
@@ -41946,6 +42432,9 @@
 "editor/esquema.py"
 ],
 "Si se iría a vivir con el jugador": [
+"editor/esquema.py"
+],
+"Si se marca y el jugador no lleva, lo dejan para otro día.": [
 "editor/esquema.py"
 ],
 "Si se marca, el lugar solo existe con esa opción activada.": [
@@ -42408,6 +42897,24 @@
 "Sole": [
 "data/datos/adultos.json"
 ],
+"Sole abre la mano sobre la mesa. Entrelazas tus dedos con los suyos y por un rato nadie necesita hacer fuerza. Cuando suelta el aire parece que llevaba guardándolo desde la salida del taller.": [
+"data/datos/relatos_privados.json"
+],
+"Sole da dos palmadas y espera. Te has perdido la entrada de la verbena de Monteferro por un compás entero. Te coloca una mano en la cintura y vuelve a empezar, cantando ella misma el bajo porque el vecino que ponía música ha decidido practicar la flauta. Cuando entra la primera nota torcida, Sole cambia de tono para acompañarlo.": [
+"data/datos/relatos_privados.json"
+],
+"Sole deja en tu mano una golondrina pequeña hecha con dos arandelas y un trozo de chapa. Al moverla da la impresión de que levanta un ala. La hizo en el descanso con retales del taller. «Tengo un cajón lleno de pájaros que parecían abrelatas. Este es el primero que me ha dado vergüenza regalarte, así que debe de estar bien.»": [
+"data/datos/relatos_privados.json"
+],
+"Sole desdobla una circular de la empresa. La dirección propone sustituir la paga de calor por una jornada de «conciencia térmica». Te pide que pongas voz al director mientras ella interpreta a toda la asamblea. La cosa termina en carcajadas hasta que le ves frotarse el puente de la nariz. Hoy ha tenido que conseguir que se rieran cuarenta personas cansadas.": [
+"data/datos/relatos_privados.json"
+],
+"Sole guarda un buzón de voz de una compañera que se jubiló el invierno pasado. Son once segundos de una mujer diciendo que ha conseguido abrir sola el tarro de pepinillos. Te quedas esperando el chiste. «Estuvo seis meses sin poder cerrar la mano», explica Sole. Reproduce el mensaje otra vez y ahora oyes el orgullo debajo de aquel tono tan normal.": [
+"data/datos/relatos_privados.json"
+],
+"Sole se aparta el pelo de la nuca para que quepa tu brazo. «Ven, que al taller ya voy yo sola.» Acomoda la cabeza en el hueco y por fin deja descansar los hombros.": [
+"data/datos/adultos.json"
+],
 "Solo a quien tiene un negocio y nadie respeta en la calle.": [
 "editor/esquema_honrado.py"
 ],
@@ -42435,6 +42942,9 @@
 "editor/esquema.py"
 ],
 "Solo con los sucesos activados.": [
+"editor/esquema.py"
+],
+"Solo con preservativo": [
 "editor/esquema.py"
 ],
 "Solo conducía mal y ha parado cuando se lo has pedido: detenerle es pasarse, y te lo apuntarán.": [
@@ -42511,6 +43021,9 @@
 ],
 "Solo hace falta si usas un servicio que no sea OpenRouter.": [
 "juego/menus_charla.py"
+],
+"Solo hay una galleta. {n} propone echar a suertes quién se la lleva.": [
+"data/datos/escenas_privadas.json"
 ],
 "Solo informa: Intro lo vuelve a leer. Las teclas se cambian en Opciones, Teclado: cambiar las teclas.": [
 "juego/menus_juego.py"
@@ -43502,6 +44015,9 @@
 "Tardáis media hora, pero salen los dos conformes. Tu jefe se entera de cómo lo has llevado.": [
 "data/datos/vida.json"
 ],
+"Tardáis un rato en abrir la puerta. Os habéis intercambiado las llaves sin daros cuenta.": [
+"data/datos/escenas_privadas.json"
+],
 "Tarea para {n}": [
 "juego/golpes.py"
 ],
@@ -43582,6 +44098,9 @@
 "Te alejas del puesto. Vuelve: está a {int} metros, {direccion_txt}.": [
 "juego/misiones.py"
 ],
+"Te apoyas en él para inventarle otro final. Le notas la risa en el hombro antes de oírla. A medio cuento te pregunta bajito si puede besarte y esta vez espera tu respuesta sin adelantarse.": [
+"data/datos/relatos_privados.json"
+],
 "Te apuntas. Si es una carrera, tienes que llevar encima el dinero de la apuesta. Empieza cuando lo diga quien la ha propuesto.": [
 "juego/menus_enlinea.py",
 "juego/menus_online.py"
@@ -43646,6 +44165,9 @@
 ],
 "Te cuenta en dos frases cómo va su día.": [
 "juego/menus_adultos.py"
+],
+"Te cuenta la de un señor que volvió solo por primera vez y encontró su mesa de siempre puesta para uno. Le acaricias el ancla de la muñeca. Esa reseña le cuesta un poco más terminarla.": [
+"data/datos/relatos_privados.json"
 ],
 "Te cuenta qué datos salen de tu ordenador cuando hablas con la gente usando el modo IA.": [
 "juego/menus_charla.py"
@@ -44025,6 +44547,9 @@
 "Te lo comes en el sitio y te sube un poco la salud.": [
 "juego/menus_extra.py"
 ],
+"Te lo deja en la palma y te cierra los dedos encima. «La gente cree que guardo las cosas caras.» Por la manera en que deja su mano sobre la tuya, entiendes cuánto le costaría perder esta.": [
+"data/datos/relatos_privados.json"
+],
 "Te lo dejan en la pista y lo pilotas tú. Más lento que la avioneta, pero se detiene en el aire y aterriza en menos sitio.": [
 "juego/menus_lugares.py"
 ],
@@ -44298,6 +44823,9 @@
 "Te toca cocinar": [
 "editor/esquema.py"
 ],
+"Te toca imitar a {n}. Te acercas para hablar con su misma voz al oído. Esta parte de la conversación seguramente tampoco se le va a olvidar.": [
+"data/datos/relatos_privados.json"
+],
 "Te van a ver, eso seguro. Piérdelos antes de entregar.": [
 "data/mods/costa_dorada.json"
 ],
@@ -44522,6 +45050,11 @@
 ],
 "Terminar": [
 "juego/menus.py"
+],
+"Terminar aquí": [
+"juego/escenas_privadas.py",
+"juego/escenas_privadas.py",
+"juego/laboratorio.py"
 ],
 "Terminar el turno": [
 "juego/agente.py"
@@ -44865,6 +45398,9 @@
 "editor/esquema.py"
 ],
 "Tipo de lugar que tiene que haber en la localidad": [
+"editor/esquema.py"
+],
+"Tipo de noche": [
 "editor/esquema.py"
 ],
 "Tipo de paso": [
@@ -45663,6 +46199,9 @@
 ],
 "Tres sonidos avisan: tres notas que suben cuando alguien entra, tres que bajan cuando se va, y dos agudas cuando llega un mensaje.": [
 "data/datos/misiones.json"
+],
+"Tres suele ir bien. Se juegan en el orden de la lista.": [
+"editor/esquema.py"
 ],
 "Tres teclas más para recordar. La V dice tu estado: salud, dinero y arma. La O, el objetivo de la misión en curso. La M abre el móvil, con las misiones, los lugares, los servicios y mucho más.": [
 "data/datos/misiones.json"
@@ -46735,6 +47274,9 @@
 "Un coche levantado y herramientas por el suelo.": [
 "juego/sistemas.py"
 ],
+"Un coche pasa anunciando colchones por megafonía. Andrés pone la misma voz de locutor para presentaros como aspirantes al campeonato municipal de estarse quietos. Perdéis en cuanto le cruje una rodilla. Se sienta contigo en el suelo y te cuenta que antes, los días de combate, habría dado lo que fuera por aburrirse así durante cinco minutos.": [
+"data/datos/relatos_privados.json"
+],
 "Un coche patrulla aguanta 150.": [
 "editor/esquema.py"
 ],
@@ -47021,6 +47563,9 @@
 ],
 "Un niño de unos seis años llora junto a un semáforo. Dice que no encuentra a su abuelo.": [
 "data/datos/vida.json"
+],
+"Un no se respeta. Os despedís y esta noche no pasa nada.": [
+"juego/escenas_privadas.py"
 ],
 "Un nombre por línea. Van de oeste a este.": [
 "editor/esquema.py"
@@ -47322,6 +47867,9 @@
 ],
 "Un volquete baja cargado de la mina cuando el pueblo duerme.": [
 "data/mods/penas_altas.json"
+],
+"Un zapato cae al suelo con tal estruendo que os da la risa en mitad del beso. El otro lo quitáis con más cuidado. Mucho después, {n} encuentra un calcetín bajo la almohada. «Conque ahí estaba.» Compartís un vaso de agua sin salir de la cama.": [
+"data/datos/escenas_privadas.json"
 ],
 "Un ático con terraza sobre los letreros luminosos. Dos plazas de garaje.": [
 "data/mods/noches_de_neon.json"
@@ -47828,14 +48376,16 @@
 "juego/respuestas_datos1.py"
 ],
 "Una noche apasionada": [
-"juego/intimidad.py"
+"juego/intimidad.py",
+"editor/esquema.py"
 ],
 "Una noche de feria": [
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
 "Una noche de risas y juegos": [
-"juego/intimidad.py"
+"juego/intimidad.py",
+"editor/esquema.py"
 ],
 "Una noche de sofá, película y manta": [
 "juego/convivencia.py",
@@ -47845,10 +48395,12 @@
 "juego/respuestas_datos2.py"
 ],
 "Una noche romántica": [
-"juego/intimidad.py"
+"juego/intimidad.py",
+"editor/esquema.py"
 ],
 "Una noche tranquila": [
-"juego/intimidad.py"
+"juego/intimidad.py",
+"editor/esquema.py"
 ],
 "Una noria, tiro al blanco y máquinas recreativas.": [
 "data/mods/bahia_del_ocaso.json"
@@ -48341,6 +48893,9 @@
 ],
 "Una reja y una lupa. Aquí se trata.": [
 "juego/sistemas.py"
+],
+"Una ráfaga de aire frío te levanta el vello del brazo. {n} extiende la chaqueta sobre los dos y te cuenta que en su casa se discutía siempre por la manta delante del televisor. Había una solución familiar. Quien quisiera más manta tenía que arrimarse a la otra persona. Debajo de la chaqueta queda sitio de sobra para probar la teoría.": [
+"data/datos/relatos_privados.json"
 ],
 "Una sastrería de toda la vida.": [
 "data/datos/mapas/san_lucero.json"
@@ -48845,6 +49400,15 @@
 "data/datos/misiones_extra2.json"
 ],
 "Valeria": [
+"data/datos/adultos.json"
+],
+"Valeria lleva una caja de la boutique atada con cinta de raso. Dentro hay un botón verde. Te cuenta que fue la primera venta de Las Torres. La clienta pagó con una moneda tan caliente de llevarla en la mano que aún recuerda el tacto. Años después le devolvió el abrigo para arreglarlo. Valeria se quedó con el botón viejo.": [
+"data/datos/relatos_privados.json"
+],
+"Valeria se quita los pendientes mientras escucháis un anuncio de pisos de lujo con «vistas exclusivas al mar». Conoce el edificio. Para ver agua hay que subirse al bidé y mirar entre dos antenas. Te hace la visita guiada entera sin moverse de tu lado. Al llegar al dormitorio imaginario deja la voz de agente inmobiliaria y baja la mirada.": [
+"data/datos/relatos_privados.json"
+],
+"Valeria te suelta la mano, se quita un anillo que se os clavaba y vuelve a buscar tus dedos. «Mucho mejor.» Te sorprende lo pequeña que suena aquí esa voz que llena una tienda entera.": [
 "data/datos/adultos.json"
 ],
 "Valor": [
@@ -49991,6 +50555,10 @@
 ],
 "Volver al objetivo: marcarlo en el GPS y en el radar": [
 "juego/menus_juego.py"
+],
+"Volver cuando los dos estéis listos": [
+"juego/escenas_privadas.py",
+"juego/laboratorio.py"
 ],
 "Volvió de la ciudad para llevar el bar de su padre. Destila su propio licor, lee en la barra cuando no hay nadie y dice las cosas una sola vez.": [
 "data/mods/penas_altas.json"
@@ -57298,10 +57866,16 @@
 "{get}: {get2}, {len} pasos": [
 "editor/esquema.py"
 ],
+"{get}: {len} escenas": [
+"editor/esquema.py"
+],
 "{get}: {len} pasillos, precios al {get2} por ciento": [
 "editor/esquema.py"
 ],
 "{get}: {len} platos y bebidas": [
+"editor/esquema.py"
+],
+"{get}: {len} relatos": [
 "editor/esquema.py"
 ],
 "{group} {_frase} para": [
@@ -58671,6 +59245,18 @@
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
+"{n} abre la ventana para oír los últimos compases de un concierto callejero.": [
+"data/datos/escenas_privadas.json"
+],
+"{n} abre un libro por donde dejó un billete de autobús como marcador y te lee dos líneas.": [
+"data/datos/escenas_privadas.json"
+],
+"{n} apaga el móvil en mitad de una frase. «Esto prefiero decírtelo mirándote».": [
+"data/datos/escenas_privadas.json"
+],
+"{n} apaga la lámpara y te guía por la mano hasta que os acomodáis. En la oscuridad te llega una frase dicha con una sonrisa. «Menudo día para acabar tan bien.»": [
+"data/datos/escenas_privadas.json"
+],
 "{n} arruga la nariz: «Mejor después de una ducha, ¿vale?»": [
 "juego/necesidades.py",
 "data/datos/vida.json"
@@ -58678,6 +59264,9 @@
 "{n} baila sin vergüenza ninguna y te saca de la esquina.": [
 "juego/encuentros.py",
 "data/datos/vida.json"
+],
+"{n} baja la persiana hasta que deja de vibrar. Por fin podéis oíros sin levantar la voz.": [
+"data/datos/escenas_privadas.json"
 ],
 "{n} brinda por vosotros. Tú brindas por que no se acabe.": [
 "juego/convivencia.py",
@@ -58707,6 +59296,9 @@
 "juego/encuentros.py",
 "data/datos/vida.json"
 ],
+"{n} contesta con un beso largo. Te llega el tintineo de unas llaves al caer del bolsillo. Ya las buscaréis luego.": [
+"data/datos/escenas_privadas.json"
+],
 "{n} cuenta los billetes dos veces y sonríe: ya sabe en qué se lo va a gastar, en {cosa}.": [
 "juego/convivencia.py",
 "data/datos/vida.json"
@@ -58717,12 +59309,24 @@
 "{n} de {lower}": [
 "juego/atracos.py"
 ],
+"{n} deja la mano abierta junto a la tuya. «¿Te quedas conmigo esta noche?»": [
+"data/datos/escenas_privadas.json"
+],
 "{n} deja lo que hacía.": [
 "juego/golpes.py"
 ],
 "{n} deja su cepillo de dientes junto al tuyo, en {casa}. Ya está hecho.": [
 "juego/convivencia.py",
 "data/datos/vida.json"
+],
+"{n} deja un hueco a su lado. De la calle llega el bajo de un coche parado en el semáforo. Cuando cambia la luz, podéis oír hasta el roce de una manga.": [
+"data/datos/escenas_privadas.json"
+],
+"{n} dibuja un mapa de memoria y marca el banco donde se sentaba de adolescente.": [
+"data/datos/escenas_privadas.json"
+],
+"{n} dobla la carta del restaurante hasta hacer un barco. Dentro ha escrito una pregunta para ti.": [
+"data/datos/escenas_privadas.json"
 ],
 "{n} días": [
 "juego/atracos.py"
@@ -58734,11 +59338,17 @@
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
+"{n} encuentra una baraja a la que le falta un rey. Os inventáis una regla para sustituirlo.": [
+"data/datos/escenas_privadas.json"
+],
 "{n} entra en {banda_nombre}.": [
 "juego/sistemas.py"
 ],
 "{n} es su nombre.": [
 "editor/esquema_honrado.py"
+],
+"{n} escucha hasta el final. «Me alegra que me lo hayas contado.»": [
+"juego/escenas_privadas.py"
 ],
 "{n} estaba en casa. No hay nada que explicar: coge el abrigo y se va dando un portazo.": [
 "juego/convivencia.py",
@@ -58753,6 +59363,9 @@
 ],
 "{n} está en {v}. Para hacer planes tenéis que estar en la misma localidad.": [
 "juego/convivencia.py"
+],
+"{n} golpea un ritmo en la mesa y espera a que adivines la canción.": [
+"data/datos/escenas_privadas.json"
 ],
 "{n} ha cocinado en {casa}: {u} unidades de {sust}, guardadas en el armario.": [
 "juego/capo.py",
@@ -58777,6 +59390,21 @@
 "{n} iba a cocinar en {casa}, pero allí ya no tienes laboratorio. Se queda sin tarea hasta que le des otra desde su ficha.": [
 "juego/capo.py",
 "data/datos/vida.json"
+],
+"{n} imita las voces de toda la gente que suele coger el último autobús. El conductor que anuncia cada bache. La señora que le pregunta si mañana también va a haber baches. Cuando le pides que te imite a ti, cambia el tono. Repite algo que dijiste al conoceros, palabra por palabra. Ni siquiera sabías que entonces te estaba escuchando.": [
+"data/datos/relatos_privados.json"
+],
+"{n} inclina la cara un poco. Te sorprende el contraste entre el aire fresco de la habitación y el calor de su mejilla.": [
+"data/datos/escenas_privadas.json"
+],
+"{n} intenta colgar la chaqueta de un lanzamiento sin dejar de mirarte. Falla el perchero por un metro. «Eso ha sido para que veas que tengo defectos.» La segunda vez se engancha de milagro. Te ofrece una reverencia tan aparatosa que la chaqueta se cae de nuevo. Acabáis sentados junto a ella, con la espalda contra la pared.": [
+"data/datos/relatos_privados.json"
+],
+"{n} inventa un concurso de anuncios de radio. Tu premio es elegir la siguiente canción.": [
+"data/datos/escenas_privadas.json"
+],
+"{n} jura que puede reconocer cualquier coche de Puerto Bravo solo con oír cómo arranca. Acierta con un taxi y se crece tanto que el siguiente lo identifica hasta por el año de fabricación. Se oye a alguien gritar desde abajo que apague de una vez la batidora. Os miráis. Por una vez {n} tarda más que tú en encontrar una respuesta.": [
+"data/datos/relatos_privados.json"
 ],
 "{n} kilobytes": [
 "juego/menus_componentes.py"
@@ -58816,12 +59444,18 @@
 "juego/encuentros.py",
 "data/datos/vida.json"
 ],
+"{n} lleva un rato pasando un posavasos de una mano a otra. Cuando te lo entrega, descubres un dibujo a boli. Sois vosotros dos en la calle, mirándoos mientras todo el mundo espera que cambie el semáforo. Los coches son cajas y el semáforo parece un helado, pero la inclinación de tu cabeza es tan tuya que te reconoces enseguida.": [
+"data/datos/relatos_privados.json"
+],
 "{n} lo agradece de verdad: se le nota.": [
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
 "{n} lugares cerca": [
 "juego/pantallas.py"
+],
+"{n} marca el ritmo en tu hombro. El coche ya ha doblado la esquina cuando por fin os sale la vuelta.": [
+"data/datos/escenas_privadas.json"
 ],
 "{n} megas": [
 "juego/menus_componentes.py"
@@ -58887,11 +59521,20 @@
 "{n} objetos robados": [
 "juego/mochila.py"
 ],
+"{n} oye a alguien en la calle jurar que solo va a tocar el claxon una vez más. Los dos contáis seis. «Hombre de palabra.» Es lo primero que dice en varios minutos y te ríes tan fuerte que tienes que apoyarte en su brazo. No lo retira. Cuando pasa el coche, descubres que el silencio con esta persona tiene sitio para ti dentro.": [
+"data/datos/relatos_privados.json"
+],
+"{n} parte una chocolatina con toda la concentración del mundo y te da a elegir mitad. Los dos cogéis la pequeña a la vez. Después de tres intentos os la coméis a medias y queda la grande intacta. «Puerto Bravo debería mandarnos a negociar el presupuesto.» Te limpia una miga de la manga y deja la mano allí un instante.": [
+"data/datos/relatos_privados.json"
+],
 "{n} pasa por las propuestas. ": [
 "juego/menus.py"
 ],
 "{n} pasa por {hay} propuestas ya escritas. ": [
 "juego/menus.py"
+],
+"{n} pela una manzana mientras te cuenta algo que le daba vergüenza preguntar en público.": [
+"data/datos/escenas_privadas.json"
 ],
 "{n} personas gritan y se dispersan.": [
 "juego/calle.py",
@@ -58901,8 +59544,14 @@
 "juego/calle.py",
 "data/datos/vida.json"
 ],
+"{n} pone agua a hervir y te pregunta si hoy prefieres compañía o conversación.": [
+"data/datos/escenas_privadas.json"
+],
 "{n} pone rumbo a {nombre}, lejos de aquí. Con la L eliges tú otro destino.": [
 "juego/golpes.py"
+],
+"{n} pregunta por la protección antes de decidir. «Sin preservativo, otro día.»": [
+"data/datos/escenas_privadas.json"
 ],
 "{n} prueba un poco: «Oye, pues te ha quedado muy bien».": [
 "juego/compra.py",
@@ -58924,6 +59573,12 @@
 ],
 "{n} saldrá cada día a vender lo que guardas en el armario de tus casas. Al final del día te trae lo suyo.": [
 "juego/golpes.py"
+],
+"{n} se acomoda a tu lado.": [
+"juego/escenas_privadas.py"
+],
+"{n} se acomoda a tu lado. Durante un rato solo se oye vuestra respiración.": [
+"data/datos/escenas_privadas.json"
 ],
 "{n} se aparta en seco: «Ni se te ocurra.»": [
 "juego/encuentros.py",
@@ -59009,6 +59664,9 @@
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
+"{n} te acerca con una mano en la cintura. «Aquí.» Os quedáis frente a frente, las narices casi juntas.": [
+"data/datos/escenas_privadas.json"
+],
 "{n} te agarra de la camisa y no te suelta.": [
 "juego/laboratorio.py"
 ],
@@ -59018,6 +59676,9 @@
 ],
 "{n} te ayuda, con las manos torpes de ganas.": [
 "juego/laboratorio.py"
+],
+"{n} te besa despacio. A tientas encuentras el borde de la cama y os sentáis sin separaros del todo. Desde aquí la calle parece lejos.": [
+"data/datos/escenas_privadas.json"
 ],
 "{n} te busca la boca con hambre.": [
 "juego/laboratorio.py"
@@ -59029,6 +59690,9 @@
 "{n} te coge la mano: «Todavía no. Dame tiempo». Necesitáis más confianza y más tiempo juntos.": [
 "juego/honrado.py",
 "data/datos/vida.json"
+],
+"{n} te concede el baile con una seriedad impecable hasta que chocáis rodilla con rodilla. La risa os pilla en pleno abrazo.": [
+"data/datos/escenas_privadas.json"
 ],
 "{n} te cuenta un cotilleo del barrio y acabáis riendo.": [
 "juego/convivencia.py",
@@ -59044,6 +59708,9 @@
 ],
 "{n} te deja hacer y suspira.": [
 "juego/laboratorio.py"
+],
+"{n} te enseña a decir buenas noches como se decía en su casa.": [
+"data/datos/escenas_privadas.json"
 ],
 "{n} te enseña el portal donde se crió. No se lo había contado a nadie.": [
 "juego/convivencia.py",
@@ -59068,6 +59735,12 @@
 "{n} te escucha sin interrumpir. Al final te coge la mano: «No me lo vuelvas a hacer.»": [
 "juego/encuentros.py",
 "data/datos/vida.json"
+],
+"{n} te esperaba con un discurso preparado. Al verte, se salta el discurso y te pregunta qué quieres.": [
+"data/datos/escenas_privadas.json"
+],
+"{n} te está contando cómo un loro acabó aprendiendo el anuncio entero del supermercado cuando de pronto se queda en blanco. «Tenía un final buenísimo. El problema es que me has mirado así y ahora solo me acuerdo de cuánto costaban los puerros.» Preguntas cuánto. Te lo dice al céntimo. Por primera vez en la noche os quedáis sin conversación y a gusto.": [
+"data/datos/relatos_privados.json"
 ],
 "{n} te gana en la caseta de tiro y no deja de recordártelo.": [
 "juego/convivencia.py",
@@ -59106,6 +59779,18 @@
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
+"{n} te pregunta si te apetece pasar la noche juntos.": [
+"juego/escenas_privadas.py"
+],
+"{n} te presta un auricular. Es la canción que sonaba el día que os conocisteis.": [
+"data/datos/escenas_privadas.json"
+],
+"{n} te propone pasar la noche juntos. «Si mañana alguien pregunta, prefiero que esto quede entre nosotros.»": [
+"data/datos/escenas_privadas.json"
+],
+"{n} te reta a reconocer tres cosas por su sonido con los ojos cerrados.": [
+"data/datos/escenas_privadas.json"
+],
 "{n} te sigue sin soltarte.": [
 "juego/laboratorio.py"
 ],
@@ -59113,9 +59798,18 @@
 "juego/convivencia.py",
 "data/datos/vida.json"
 ],
+"{n} te toma de la mano. «Quiero acordarme de esta noche. ¿Dejamos la luz así?»": [
+"data/datos/escenas_privadas.json"
+],
 "{n} te trae lo de hoy: ha vendido {u} unidades y te da {euros} euros.": [
 "juego/capo.py",
 "data/datos/vida.json"
+],
+"{n} tiene una lista de canciones preparadas para esta noche, pero la primera en sonar es una lección de italiano. Una voz muy segura os dice cómo declarar un equipaje extraviado. Antes de que {n} pueda quitarla, repites la frase con una pronunciación espantosa. Cuando llega la música de verdad, la mano que buscaba el botón está descansando en la tuya.": [
+"data/datos/relatos_privados.json"
+],
+"{n} trae dos mandarinas y se apuesta algo a que puede pelar una de un tirón.": [
+"data/datos/escenas_privadas.json"
 ],
 "{n} y tú no sois pareja.": [
 "juego/convivencia.py",
@@ -60341,9 +61035,15 @@
 "«Amor en el desguace»: lloras, y no sabes si de pena o de risa.": [
 "juego/menus_lugares.py"
 ],
+"«Aprobado por unanimidad.» Te besa despacio. Cuando el móvil vibra contra la mesa, lo desliza encima de la chaqueta doblada sin siquiera mirar quién llama.": [
+"data/datos/relatos_privados.json"
+],
 "«Aquí no te atendemos. Haz el favor de salir».": [
 "juego/honrado.py",
 "data/datos/vida.json"
+],
+"«Bien aquí», dice {n} por fin. Dos palabras y el pulgar que te roza la muñeca. Empiezas a cogerle el gusto a esta manera de conversar.": [
+"data/datos/relatos_privados.json"
 ],
 "«Dame tiempo. Mucho tiempo», te dice {n}.": [
 "juego/encuentros.py",
@@ -60362,11 +61062,38 @@
 "«El último tranvía»: un drama lentísimo en el que no pasa nada, pero pasa muy bien.": [
 "juego/menus_lugares.py"
 ],
+"«Eso sí que lo recuerdo», dice cuando le recuerdas cómo se buscaron vuestras manos hace un rato. Os quedáis así, con los dedos enlazados. Esta vez nadie abre ningún caramelo.": [
+"data/datos/relatos_privados.json"
+],
+"«Esta sí era para ti.» Escucháis el primer estribillo con las frentes juntas. Ni siquiera el italiano habría encontrado una forma más clara de decirlo.": [
+"data/datos/relatos_privados.json"
+],
 "«Hablamos luego», dices, lo bastante bajo para que Matilde no lo oiga. El Mellao asiente: ha entendido.": [
 "data/datos/misiones_honrada.json"
 ],
+"«Hasta aquí llega la visita pública.» Te ofrece la mejilla y luego los labios. Los pendientes siguen en su mano cerrada hasta que os separáis un poco para recuperar el aliento.": [
+"data/datos/relatos_privados.json"
+],
+"«Hoy», contesta al cabo de un rato. Gira el papel hacia ti. Debajo del título ha dibujado cómo os cogíais de la mano al llegar. Tiene una mancha de tomate en lugar de firma.": [
+"data/datos/relatos_privados.json"
+],
 "«La venganza del boquerón»: cine de terror marinero. Sales con hambre.": [
 "juego/menus_lugares.py"
+],
+"«Mañana madrugo», dice {n}, sin soltarte la mano. «Pero esta noche me gustaría que te quedaras. ¿Quieres?»": [
+"data/datos/escenas_privadas.json"
+],
+"«Me apetece ir a la cama contigo», dice {n}. «Para mí, solo con preservativo. ¿Tienes uno?»": [
+"data/datos/escenas_privadas.json"
+],
+"«Me gusta que mires de cerca.» Se remanga para enseñarte la otra costura, todavía más torcida. Acabáis tan cerca que para seguir hablando basta con un susurro.": [
+"data/datos/relatos_privados.json"
+],
+"«Me gustaría acostarme contigo», dice {n}. «¿A ti te apetece?»": [
+"data/datos/escenas_privadas.json"
+],
+"«Me gustaría seguir», dice {n}. «Podemos parar cuando quieras. ¿Te apetece?»": [
+"data/datos/escenas_privadas.json"
 ],
 "«No me escribas, de momento», te responde {n}. Y nada más.": [
 "juego/encuentros.py",
@@ -60394,6 +61121,12 @@
 "juego/honrado.py",
 "data/datos/vida.json"
 ],
+"«Pues llevaba el motor bastante fino.» Esta vez la carcajada más fuerte es la de {n}. Te acerca un poco más para que le escuches admitir en voz baja que el taxi también fue de suerte.": [
+"data/datos/relatos_privados.json"
+],
+"«Quiero despertarme contigo», dice {n}. «Y si solo te apetece volver mañana a desayunar, también pongo café.»": [
+"data/datos/escenas_privadas.json"
+],
 "«Qué bien te queda eso», te dice {n}. Has acertado con la ropa.": [
 "juego/vestuario.py",
 "data/datos/vida.json"
@@ -60405,12 +61138,18 @@
 "«Rápidos y jubilados»: persecuciones en utilitario a cuarenta por hora. Una joya.": [
 "juego/menus_lugares.py"
 ],
+"«Si te digo que estoy un poco de los nervios, ¿me crees?» Le coges la mano y se la llevas a tu pecho para que note que tu corazón también va deprisa.": [
+"data/datos/relatos_privados.json"
+],
 "«Sorpréndeme. Hazme reír.»": [
 "juego/laboratorio.py"
 ],
 "«Sí. Claro que sí». {n} te abraza. Desde hoy estáis prometidos.": [
 "juego/honrado.py",
 "data/datos/vida.json"
+],
+"«Tenía una observación muy inteligente», dice Noa contra tu mejilla. Le preguntas qué ha sido de ella. «Has puesto esa mano ahí y he perdido el hilo.» La dejas justo donde está, en su cintura.": [
+"data/datos/adultos.json"
 ],
 "«Tiburones en la Gran Vía»: tan mala que el público aplaude de pie.": [
 "juego/menus_lugares.py"

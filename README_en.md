@@ -498,6 +498,7 @@ Thanks to everyone who has helped make Puerto Bravo better through GitHub. Whene
 - [leoguimaoficial](https://github.com/leoguimaoficial): the complete Brazilian Portuguese translation and its corrections.
 - [dimasya34](https://github.com/dimasya34): the Russian translation of the game, its README and its corrections, the fix for the update installer, which could not run with the game in Russian, and the controller names in Russian.
 - [MichalBrajer123](https://github.com/MichalBrajer123): the Polish translation of the game, its guides and the Marisma Negra mod, with the scene voices in Polish, and the suggestion to start and switch off the vehicle's engine.
+- [Inanis7787](https://github.com/Inanis7787): the private scenes with direct language of the adult content and the stories of each person in your social life.
 
 ### Bug reports and suggestions
 

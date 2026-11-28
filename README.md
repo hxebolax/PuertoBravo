@@ -484,6 +484,7 @@ Gracias a todas las personas que han ayudado a mejorar Puerto Bravo desde GitHub
 - [leoguimaoficial](https://github.com/leoguimaoficial): la traducción completa al portugués de Brasil y sus correcciones.
 - [dimasya34](https://github.com/dimasya34): la traducción al ruso del juego, su README y sus correcciones, el arreglo del instalador de las actualizaciones, que con el juego en ruso no se podía ejecutar, y los nombres del mando en ruso.
 - [MichalBrajer123](https://github.com/MichalBrajer123): la traducción al polaco del juego, de sus guías y del mod Marisma Negra, con las voces de las escenas en polaco, y la propuesta de arrancar y apagar el motor del vehículo.
+- [Inanis7787](https://github.com/Inanis7787): las escenas privadas con lenguaje directo del contenido para adultos y los relatos de cada persona de la vida social.
 
 ### Con avisos de fallos y propuestas
 
