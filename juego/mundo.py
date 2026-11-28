@@ -84,6 +84,10 @@ SECCIONES_VIDA = ("sucesos", "prendas", "complementos", "protecciones", "jornada
                   "carta_domicilio", "cartas", "domicilio", "atracos", "pactos", "reconquista", "contratos", "reacciones", "planes_pareja", "convivencia", "alquiler", "desguace", "mochila", "objetos_valor", "encuentros", "horarios_locales", "calzado", "vestuario", "bolsa", "bolsa_empresas", "necesidades", "capo", "policia_oficio", "avisos_policia",
                   "pasillos", "productos", "tipos_tienda", "recetas", "cocina", "escolta_misiones", "persecuciones", "golpes", "papeles_golpe", "vuelo", "aeronaves", "mapa_aire",
                   "vida_honrada", "titulos", "empleos_fijos", "mejoras_negocio", "incidencias_trabajo", "buenas_acciones")
+# Contenido para adultos de la noche con alguien: cada archivo y sus secciones. Los mods las suman o las sustituyen por id.
+ARCHIVOS_PRIVADOS = (("escenas_privadas.json", ("escenas_privadas", "acuerdos_privados", "momentos_privados")),
+                     ("relatos_privados.json", ("relatos_privados",)))
+SECCIONES_PRIVADAS = tuple(clave for _, claves in ARCHIVOS_PRIVADOS for clave in claves)
 
 
 def cargar_datos(con_mods=True, traducir=True):
@@ -113,6 +117,14 @@ def cargar_datos(con_mods=True, traducir=True):
         d["adultos"] = _leer_json(os.path.join(rutas.DATOS, "adultos.json"))
     except (OSError, ValueError):
         d["adultos"] = {"personas": [], "actividades": [], "regalos": [], "sustancias": []}
+    for archivo, claves in ARCHIVOS_PRIVADOS:                  # escenas privadas y relatos de cada persona (escenas_privadas.py)
+        try:
+            privado = _leer_json(os.path.join(rutas.DATOS, archivo))
+        except (OSError, ValueError):
+            privado = {}                                       # unos datos antiguos, sin el archivo: la noche se cuenta como siempre
+        for clave in claves:
+            v = privado.get(clave, [])
+            d[clave] = [x for x in v if isinstance(x, dict)] if isinstance(v, list) else []
     try:
         vida = _leer_json(os.path.join(rutas.DATOS, "vida.json"))
     except (OSError, ValueError):
@@ -158,7 +170,7 @@ def cargar_datos(con_mods=True, traducir=True):
                 continue
             for nuevo in mod.get("gente", []) if isinstance(mod.get("gente", []), list) else []:      # las listas de la gente se suman, o se sustituyen si el mod lo pide
                 d["gente"] = [gente.fusionar_gente(d["gente"][0] if d["gente"] else {}, nuevo)]
-            for clave in ("armas", "objetos", "vehiculos", "carreras", "misiones", "comidas", "personajes") + SECCIONES_VIDA + gente.SECCIONES[1:]:
+            for clave in ("armas", "objetos", "vehiculos", "carreras", "misiones", "comidas", "personajes") + SECCIONES_VIDA + gente.SECCIONES[1:] + SECCIONES_PRIVADAS:
                 for nuevo in mod.get(clave, []):
                     lista = d[clave]
                     ident = nuevo.get("id")

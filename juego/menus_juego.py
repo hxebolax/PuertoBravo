@@ -1100,6 +1100,10 @@ def opciones(app):
             si_no("noche_por_pasos", tr("La noche con alguien, paso a paso"),
                   tr("Con sí, cuando pasas la noche con alguien decides tú qué haces en cada momento y la otra persona responde. Fijarte en lo que quiere, y parar si te lo pide, es lo que hace que salga bien. "
                   "Se sigue contando de forma sensual, sin escenas explícitas. Con no, la noche se cuenta en un par de frases, como antes.")),
+            si_no("escenas_directas", tr("Escenas privadas con lenguaje directo"),
+                  tr("Con sí, antes de la noche la otra persona te propone pasarla juntos y tú dices que sí o que no; luego hay un momento a solas, que con cada persona de tu vida social puede ser uno de sus relatos, "
+                  "y se cuenta con un lenguaje más directo, siempre consentido y sin descripciones gráficas. Puedes pedir una pausa o terminar cuando quieras, y si te pide preservativo y no llevas, lo dejáis para otro día. "
+                  "Con la noche paso a paso, también se juega. Con no, que es como viene, la noche se cuenta como siempre. Solo jugando en solitario.")),
             si_no("minijuego_laboratorio", tr("El laboratorio, con su minijuego"),
                   tr("Con sí, cada tanda del laboratorio clandestino se juega: un minijuego de oído en el que mantienes un tono igualado a otro, y cuanto mejor lo haces, más unidades sacas. "
                   "Con no, la tanda sale al momento, normal, y sin peligro de que arda. El material, el olor que pueden notar los vecinos y lo demás siguen igual.")),

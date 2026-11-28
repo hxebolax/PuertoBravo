@@ -62,6 +62,7 @@ POR_DEFECTO = {
     "mod_policia": False,          # modificador: los delitos cuentan la mitad más
     "mod_dinero": False,           # modificador: las misiones pagan la mitad
     "noche_por_pasos": True,       # contenido para adultos: la noche con alguien se juega paso a paso
+    "escenas_directas": False,     # contenido para adultos: la noche se cuenta con escenas privadas y relatos de cada persona (escenas_privadas.py); solo en solitario
     "minijuego_laboratorio": True,  # contenido para adultos: cada tanda del laboratorio se juega con el minijuego de oído; con no, sale al momento
     "multas": True,                # con poca búsqueda, al cogerte puedes pagar la multa o intentar un soborno
     "fuego_amigo": True,           # tus balas y tus explosivos hieren también a tu perro, a tus guardaespaldas y a tu banda

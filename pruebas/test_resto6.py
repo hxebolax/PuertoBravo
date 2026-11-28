@@ -87,6 +87,203 @@ def test_la_noche_paso_a_paso(robot):
         app.cfg["noche_por_pasos"] = True
 
 
+# ============================================================ las escenas privadas (escenas_privadas.py)
+import contextlib
+
+
+@contextlib.contextmanager
+def _escenas(robot, por_pasos=False):
+    """Una partida con el contenido para adultos y las escenas privadas; deja las opciones como venían."""
+    p = robot.nueva_partida()
+    cfg = p.cfg
+    antes = {k: cfg[k] for k in ("adultos", "escenas_directas", "noche_por_pasos", "pareja_familiar")}
+    cfg["adultos"], cfg["escenas_directas"], cfg["noche_por_pasos"] = True, True, por_pasos
+    try:
+        yield p
+    finally:
+        _cerrar_todo(p.app, p)
+        for k, v in antes.items():
+            cfg[k] = v
+
+
+def _opcion(app, texto):
+    m = app.pila[-1]
+    m.i = next(k for k, o in enumerate(m.opciones) if o.texto.startswith(texto))
+    app.inyectar(pygame.K_RETURN, 0, "")
+
+
+def test_ritmo_habitual_se_suma_al_del_dia(robot):
+    from juego import laboratorio as L
+    p = robot.nueva_partida()
+    assert len({L.ritmo_de("Lucía", d) for d in range(3)}) == 3                # el del día sigue cambiando
+    lucia = p.persona_social("lucia")
+    assert lucia["ritmo"] in L.RITMOS and lucia["despedida"]
+    try:
+        for habitual, puntos in (("jugando", 0.6), (None, 0.4)):
+            n = L.Noche(p, "Lucía", "tu casa", lambda s: None, azar=random.Random(1), habitual=habitual)
+            n.ritmo = "intenso"
+            n.empezar()
+            n._elegir("jugando", "{n} se ríe.")
+            assert n.puntos == puntos
+            _cerrar_todo(p.app, p)
+    finally:
+        _cerrar_todo(p.app, p)
+
+
+def test_escenas_privadas_no_se_repiten_y_un_no_es_un_no(robot):
+    import json
+    from juego.escenas_privadas import escena_de
+    from juego.config import POR_DEFECTO
+    assert not POR_DEFECTO["escenas_directas"]                                 # de serie, apagadas
+    with _escenas(robot) as p:
+        app = p.app
+        assert p.encuentro("Alguien", "romantico", "tu casa", perfil={"edad": 17}) is False and app.pila[-1] is p
+        for tipo in ("romantico", "tranquilo"):
+            banco = escena_de(p, tipo)["escenas"]
+            vistas = set()
+            for i in range(len(banco)):
+                assert p.encuentro("Lucía", tipo, "tu casa", pid="lucia")
+                titulo = app.pila[-1].titulo
+                entrada = next(e for e, _ in banco if e.replace("{n}", "Lucía") in titulo)
+                assert entrada not in vistas
+                vistas.add(entrada)
+                robot.tecla(pygame.K_ESCAPE)                                    # decir que no: no pasa nada
+                assert app.pila[-1] is p
+                if i == 1:                                                      # la rueda se guarda con la partida
+                    p.cargar_dict(json.loads(json.dumps(p.a_dict())))
+            assert len(vistas) == len(banco)
+        assert not p.j.stats.get("noches")
+
+
+def test_escena_privada_cura_va_al_historial_y_escape_no_la_anula(robot):
+    with _escenas(robot) as p:
+        app, j = p.app, p.j
+        j.intimos["preservativos"] = 3
+        j.salud, j.animo = 30, 30.0
+        relatos = next(x["relatos"] for x in p.datos["relatos_privados"] if x["id"] == "lucia")
+        p.encuentro("Lucía", "tranquilo", "tu casa", pid="lucia")
+        _opcion(app, "Decir que sí")
+        assert any(inicio in app.pila[-1].titulo for inicio, _ in relatos)       # el momento a solas es uno de sus relatos
+        _opcion(app, "Quedaros cerca")
+        assert isinstance(app.pila[-1], Dialogo) and j.stats["noches"] == 1
+        assert j.salud == j.salud_max and j.intimos["preservativos"] == 2      # pasar la noche cura, como siempre
+        assert p.persona_social("lucia")["despedida"][:30] in robot.dicho()
+        robot.tecla(pygame.K_ESCAPE)                                            # saltar el texto no deshace la noche
+        assert app.pila[-1] is p and j.stats["noches"] == 1 and j.animo > 30
+        despedida = p.persona_social("lucia")["despedida"][:30]
+        assert any(despedida in x for x in app.voz.historial)                  # la escena se puede repasar con Re Pág
+
+
+def test_noche_descriptiva_paso_a_paso_con_pausa_y_sin_escape(robot):
+    with _escenas(robot, por_pasos=True) as p:
+        app, j = p.app, p.j
+        j.intimos["preservativos"] = 3
+        afinidad = p.relacion("andres")["afinidad"]
+        p.encuentro("Andrés", "romantico", "un hotel", pid="andres")
+        assert app.pila[-1].opciones[0].texto == "Hablar de lo que quiere cada uno"
+        _opcion(app, "Decir que sí")
+        _opcion(app, "Decir lo que")
+        paso = app.pila[-1]
+        assert isinstance(paso, Menu) and not paso.escapable and any(o.texto == "Pedir una pausa" for o in paso.opciones)
+        robot.tecla(pygame.K_ESCAPE)
+        assert app.pila[-1] is paso                                             # de la noche no se sale con Escape
+        _opcion(app, "Pedir una pausa")
+        _opcion(app, "Volver cuando")
+        assert app.pila[-1] is paso
+        for _ in range(12):
+            m = app.pila[-1]
+            if isinstance(m, Dialogo):
+                break
+            m.i = next((k for k, o in enumerate(m.opciones) if o.texto.startswith(("Preguntar", "Parar"))), 0)
+            robot.tecla(pygame.K_RETURN)
+        assert isinstance(app.pila[-1], Dialogo) and j.stats["noches"] == 1
+        assert p.relacion("andres")["afinidad"] > afinidad
+        robot.tecla(pygame.K_ESCAPE)
+        assert app.pila[-1] is p and j.stats["noches"] == 1
+
+
+def test_noche_paso_a_paso_escape_en_la_narracion_cuenta(robot):
+    p = robot.nueva_partida()
+    app = p.app
+    app.cfg["adultos"], app.cfg["noche_por_pasos"] = True, True
+    try:
+        p.j.salud = 25
+        p.encuentro("Lucía", "romantico", "tu casa", pid="lucia")
+        for _ in range(12):
+            m = app.pila[-1]
+            if isinstance(m, Dialogo):
+                break
+            m.i = 0
+            robot.tecla(pygame.K_RETURN)
+        assert isinstance(app.pila[-1], Dialogo) and not p.j.stats.get("noches")
+        robot.tecla(pygame.K_ESCAPE)                                            # Escape salta el texto, el resultado cuenta
+        while isinstance(app.pila[-1], Dialogo):
+            robot.tecla(pygame.K_ESCAPE)
+        assert p.j.stats["noches"] == 1 and p.j.salud == p.j.salud_max
+    finally:
+        _cerrar_todo(app, p)
+        app.cfg["adultos"] = False
+
+
+def test_aventura_en_hotel_se_cobra_al_empezar_y_usa_los_relatos_de_su_caracter(robot):
+    from juego.charla import ficha
+    from juego.entidades import Persona
+    with _escenas(robot) as p:
+        app = p.app
+        q = Persona("civil", *p.pos())
+        p.personas.append(q)
+        f = ficha(q)
+        f.update(confianza=95, interes=True, calabazas=False, caracter="seco", edad=30)
+        p.j.dinero = dinero = 1000
+        p.j.intimos["preservativos"] = 2
+        assert p.proponer_aventura(q, en_hotel=True)
+        assert p.j.dinero == dinero - p.precio("hotel_cita", 70)               # el hotel, al empezar, como siempre
+        _opcion(app, "Decir que sí")
+        relatos = next(x["relatos"] for x in p.datos["relatos_privados"] if x["id"] == "seco")
+        assert any(inicio.replace("{n}", f["nombre"]) in app.pila[-1].titulo for inicio, _ in relatos)
+        robot.tecla(pygame.K_ESCAPE)                                            # lo dejáis: el hotel no se devuelve
+        assert app.pila[-1] is p and p.j.dinero == dinero - p.precio("hotel_cita", 70)
+
+
+def test_modo_familiar_sin_coquetear(robot):
+    from juego import menus_charla
+    from juego.entidades import Persona
+    p = robot.nueva_partida()
+    cfg = p.cfg
+    antes = cfg["adultos"], cfg["pareja_familiar"]
+    cfg["adultos"], cfg["pareja_familiar"] = False, True
+    try:
+        q = Persona("civil", *p.pos())
+        menus_charla.conversar(p, q)
+        textos = [o.texto for o in p.app.pila[-1].opciones]
+        assert "Coquetear" not in textos and not any(t.startswith("Proponerle ir") for t in textos)
+    finally:
+        _cerrar_todo(p.app, p)
+        cfg["adultos"], cfg["pareja_familiar"] = antes
+
+
+def test_un_mod_anade_y_sustituye_relatos_y_escenas(monkeypatch, tmp_path):
+    import json
+    import os
+    from juego import mundo as M, rutas
+    mod = {"relatos_privados": [{"id": "lucia", "relatos": [["Relato del mod con {n}.", "Y sigue."]]},
+                                {"id": "persona_del_mod", "relatos": [["Otro relato.", "Fin."]]}],
+           "escenas_privadas": [{"id": "romantico", "escenas": [["Entrada del mod.", "Final del mod."]]}],
+           "acuerdos_privados": [{"id": "del_mod", "texto": "¿Seguimos, {n}?"}],
+           "personas": [{"id": "lucia", "nombre": "Lucía", "edad": 29, "lugar": "chiringuito", "desc": "x", "ritmo": "lento", "despedida": "Adiós del mod."}]}
+    with open(os.path.join(tmp_path, "relatos.json"), "w", encoding="utf-8") as fh:
+        json.dump(mod, fh)
+    monkeypatch.setattr(rutas, "MODS", str(tmp_path))
+    d = M.cargar_datos(traducir=False)
+    relatos = {x["id"]: x["relatos"] for x in d["relatos_privados"]}
+    assert relatos["lucia"] == [["Relato del mod con {n}.", "Y sigue."]] and "persona_del_mod" in relatos and "andres" in relatos
+    escenas = {x["id"]: x for x in d["escenas_privadas"]}
+    assert escenas["romantico"]["escenas"] == [["Entrada del mod.", "Final del mod."]] and len(escenas["tranquilo"]["escenas"]) > 1
+    assert any(a["id"] == "del_mod" for a in d["acuerdos_privados"]) and len(d["acuerdos_privados"]) > 1
+    lucia = next(x for x in d["adultos"]["personas"] if x["id"] == "lucia")
+    assert lucia["ritmo"] == "lento" and lucia["despedida"] == "Adiós del mod."
+
+
 class Fijo:
     """Un azar que no se mueve: la deriva siempre hacia arriba y ningún suceso."""
 
