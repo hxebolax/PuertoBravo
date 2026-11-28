@@ -1,5 +1,5 @@
 PUERTO BRAVO: LEY DEL ASFALTO
-Audiogame de mundo aberto, em português do Brasil, inglês, espanhol e vietnamita, totalmente acessível. Versão 1.7.2.
+Audiogame de mundo aberto, em português do Brasil, inglês, espanhol, vietnamita, russo e polonês, totalmente acessível. Versão 1.7.7.
 Você joga só pelo som, com o teclado ou com um controle Xbox ou PlayStation.
 
 PARA JOGAR

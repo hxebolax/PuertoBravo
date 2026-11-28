@@ -1,5 +1,5 @@
 PUERTO BRAVO: LEY DEL ASFALTO
-Trò chơi âm thanh thế giới mở, bằng tiếng Việt, tiếng Anh và tiếng Tây Ban Nha, hoàn toàn tiếp cận. Phiên bản 1.7.2.
+Trò chơi âm thanh thế giới mở, bằng tiếng Việt, tiếng Anh, tiếng Tây Ban Nha, tiếng Bồ Đào Nha Brasil, tiếng Nga và tiếng Ba Lan, hoàn toàn tiếp cận. Phiên bản 1.7.7.
 Trải nghiệm hoàn toàn bằng thính giác, sử dụng bàn phím hoặc tay cầm Xbox / PlayStation.
 
 ĐỂ CHƠI
