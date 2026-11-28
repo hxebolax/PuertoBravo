@@ -257,5 +257,7 @@
  "conductor[|a]": "driver",
  "gerente": "general manager",
  "operari[o|a]": "worker",
- "reponedor[|a]": "shelf stacker"
+ "reponedor[|a]": "shelf stacker",
+ "Ambiente del pabellón de los combates": "Fight arena ambience",
+ "Estás en el pabellón de los combates del gimnasio: el público murmura bajo un techo alto y a ratos jalea.": "You're in the gym's fight arena: the crowd murmurs under a high roof and cheers now and then."
 }

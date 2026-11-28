@@ -513,7 +513,7 @@ def test_cambiados_y_restablecer_uno_un_grupo_o_todos(robot):
         _ir(app, "Vehículos y conducción")
         robot.tecla(pygame.K_RETURN)
         m = app.pila[-1]
-        assert app.voz.registro[-1].startswith("Vehículos y conducción, 19 sonidos.")
+        assert app.voz.registro[-1].startswith("Vehículos y conducción, 20 sonidos.")
         m.i = next(k for k, o in enumerate(m.opciones) if o.ayuda and o.ayuda.startswith("Archivo claxon."))
         robot.tecla(pygame.K_RIGHT)
         robot.tecla(pygame.K_RIGHT)
@@ -521,7 +521,7 @@ def test_cambiados_y_restablecer_uno_un_grupo_o_todos(robot):
         m.i = next(k for k, o in enumerate(m.opciones) if o.ayuda and o.ayuda.startswith("Archivo frenazo."))
         robot.tecla(pygame.K_LEFT)
         assert m.opciones[m.i].texto == "Frenazo: 90 por ciento, cambiado" and igual("frenazo", 0.9)
-        assert m.titulo == "Vehículos y conducción, 19 sonidos, cambiados: 2" and m.opciones[-2].texto == "Restablecer este grupo. Cambiados: 2"
+        assert m.titulo == "Vehículos y conducción, 20 sonidos, cambiados: 2" and m.opciones[-2].texto == "Restablecer este grupo. Cambiados: 2"
         # Suprimir devuelve uno a su volumen de serie; sobre uno que no está cambiado, lo dice
         robot.tecla(pygame.K_DELETE)
         assert "frenazo" not in app.cfg["vol_sonidos"] and igual("frenazo", 1.0) and m.opciones[m.i].texto == "Frenazo: 100 por ciento"
@@ -543,8 +543,8 @@ def test_cambiados_y_restablecer_uno_un_grupo_o_todos(robot):
         robot.tecla(pygame.K_ESCAPE)
         assert app.pila[-1] is principal and app.cfg["vol_sonidos"] == {"claxon": 1.2, "sirena": 0.8, "esposas": 0.8}
         textos = [o.texto for o in principal.opciones]
-        assert "Sonidos cambiados: 3" in textos and "Vehículos y conducción: 19 sonidos, cambiados: 1" in textos and "Policía y emergencias: 12 sonidos, cambiados: 2" in textos
-        assert "Ambientes y clima: 19 sonidos" in textos and "Restablecer todos. Tienes 3 sonidos ajustados" in textos
+        assert "Sonidos cambiados: 3" in textos and "Vehículos y conducción: 20 sonidos, cambiados: 1" in textos and "Policía y emergencias: 12 sonidos, cambiados: 2" in textos
+        assert "Ambientes y clima: 20 sonidos" in textos and "Restablecer todos. Tienes 3 sonidos ajustados" in textos
         # restablecer un grupo entero no toca los demás
         _ir(app, "Policía y emergencias")
         robot.tecla(pygame.K_RETURN)
@@ -609,8 +609,8 @@ def test_una_configuracion_antigua_conserva_sus_volumenes(app, tmp_path):
         principal = app.pila[-1]
         textos = [o.texto for o in principal.opciones]
         assert "Sonidos cambiados: 6" in textos
-        for linea in ("Vehículos y conducción: 19 sonidos, cambiados: 1", "Sonidos de los lugares: 37 sonidos, cambiados: 1", "Menús, móvil y avisos del juego: 17 sonidos, cambiados: 2",
-                      "Misiones, trabajo, reputación y ánimo: 14 sonidos, cambiados: 1", "Ambientes y clima: 19 sonidos, cambiados: 1"):
+        for linea in ("Vehículos y conducción: 20 sonidos, cambiados: 1", "Sonidos de los lugares: 37 sonidos, cambiados: 1", "Menús, móvil y avisos del juego: 17 sonidos, cambiados: 2",
+                      "Misiones, trabajo, reputación y ánimo: 14 sonidos, cambiados: 1", "Ambientes y clima: 20 sonidos, cambiados: 1"):
             assert linea in textos, linea
         _ir(app, "Sonidos de los lugares")
         principal.opciones[principal.i].accion()

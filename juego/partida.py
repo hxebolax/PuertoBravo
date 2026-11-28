@@ -2262,13 +2262,15 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         x, y = self.pos()
         b = self.mundo.barrio(x, y)
         nombre = b["ambiente"]
-        noche = self.es_noche()
+        techo = self.mundo.tipo == "recinto"                     # bajo techo (el pabellón): ni noche, ni lluvia, ni pájaros
+        noche = self.es_noche() and not techo
+        lluvia = self.lluvia and not techo
         if nombre != self.amb_nombre and self.mez.pedir(nombre):      # los ambientes largos se cargan al entrar en el barrio
             if self.amb_canal:
                 self.amb_canal.parar()
             self.amb_nombre = nombre
             self.amb_canal = self.son(nombre, bucle=True, cat="ambiente", vol=0.5)
-            self.mez.soltar({nombre, "amb_noche", "lluvia"} if (noche or self.lluvia) else {nombre})
+            self.mez.soltar({nombre, "amb_noche", "lluvia"} if (noche or lluvia) else {nombre})
         if self.amb_canal:
             self.amb_canal.volumen(0.22 if noche else 0.5)
         if noche and self.noche_canal is None and self.mez.pedir("amb_noche"):
@@ -2276,13 +2278,15 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         elif not noche and self.noche_canal is not None:
             self.noche_canal.parar()
             self.noche_canal = None
-        if self.lluvia and self.lluvia_canal is None and self.mez.pedir("lluvia"):
+        if lluvia and self.lluvia_canal is None and self.mez.pedir("lluvia"):
             self.lluvia_canal = self.son("lluvia", bucle=True, cat="ambiente", vol=0.6)
-        elif not self.lluvia and self.lluvia_canal is not None:
+        elif not lluvia and self.lluvia_canal is not None:
             self.lluvia_canal.parar()
             self.lluvia_canal = None
         self.t_azar -= dt
-        if self.t_azar <= 0:
+        if self.t_azar <= 0 and techo:
+            self.t_azar = random.uniform(4, 11)
+        elif self.t_azar <= 0:
             self.t_azar = random.uniform(4, 11)
             a = random.uniform(0, 2 * math.pi)
             d = random.uniform(18, 45)

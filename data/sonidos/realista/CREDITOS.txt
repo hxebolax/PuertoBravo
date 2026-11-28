@@ -2,7 +2,7 @@
 
 Grabaciones reales para pasos, puertas, armas, golpes, cristales, coche, lluvia, agua y monedas.
 
-Trae los 283 sonidos del juego: 217 son grabaciones reales descargadas y 66 son el sonido
+Trae los 284 sonidos del juego: 218 son grabaciones reales descargadas y 66 son el sonido
 original del juego, para los que no hay una grabación libre que encaje o que conviene no tocar
 (balizas, tonos, semáforos, radar y firmas de los lugares: de ellos depende orientarse sin ver).
 Todos proceden de colecciones con licencia CC0 (dominio público): se pueden usar, modificar y
@@ -98,6 +98,7 @@ QUÉ SONIDO SALE DE DÓNDE
   amb_mar.flac: wave_02_cc0-18363__jasinski__alkaibeach.flac, de beach ocean waves. Dura 2,10 segundos.
   amb_montana.flac: Hollow Wind.wav, de random sfx. Dura 8,00 segundos.
   amb_noche.flac: crickets_1.mp3, de crickets ambient noise loopable. Dura 8,00 segundos.
+  amb_pabellon.flac: charla_2968.wav, de BigSoundBank.com y LaSonotheque.org. Dura 8,00 segundos.
   amb_parque.flac: birds-isaiah658_0.ogg, de ambient bird sounds. Dura 9,00 segundos.
   amb_playa.flac: wave_01_cc0-18363__jasinski__alkaibeach.flac, de beach ocean waves. Dura 3,50 segundos.
   amb_puerto.flac: puerto_2571.wav, de BigSoundBank.com y LaSonotheque.org. Dura 9,00 segundos.

@@ -301,6 +301,7 @@ EXTRA = {
     # combustible, averías, multas y beber (1.7.0)
     "repostar": ("WAT", "loop_water_01", {"dur": 1.6}), "beber": ("WAT", "bubble_01"), "motor_seco": ("CAR", "Car_Engine_Turning_Off"),
     "motor_apagar": ("CAR", "Car_Engine_Turning_Off", {"dur": 1.6}),      # el motor que se apaga con la llave (issue 48)
+    "amb_pabellon": ("BSB", "charla_2968", {"bucle": 8.0, "desde": 40.0}),     # el público del pabellón de los combates
     "pinchazo": ("BANG", "bang_03", {"dur": 0.9}), "reserva": ("IF", "error_004"), "multa": ("@steam-whistle", "steamwhistle_0", {"dur": 0.35}),
     "buho": ("BIRD", "birdNight"), "claxon_camion": ("@steam-whistle", "steamwhistle_0", {"dur": 0.8}),
     "claxon_helados": ("@bell-arpeggio-24", "24", {"dur": 1.6}),

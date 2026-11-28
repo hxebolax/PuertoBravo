@@ -329,6 +329,7 @@ SONIDOS = {
         ("amb_mar", tr("Ambiente de mar abierto"), tr("Estás en el mar, lejos de la costa.")),
         ("amb_campo", tr("Ambiente de campo"), tr("Estás en el campo: pájaros y cencerros.")),
         ("amb_montana", tr("Ambiente de montaña"), tr("Estás en la montaña: viento.")),
+        ("amb_pabellon", tr("Ambiente del pabellón de los combates"), tr("Estás en el pabellón de los combates del gimnasio: el público murmura bajo un techo alto y a ratos jalea.")),
         ("amb_noche", tr("Ambiente de noche"), tr("Es de noche: grillos.")),
         ("lluvia", tr("Lluvia"), tr("Está lloviendo: el suelo resbala más y se oye peor.")),
         ("trueno", tr("Trueno"), tr("Un trueno, cuando llueve.")),

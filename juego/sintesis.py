@@ -411,6 +411,18 @@ def generar(semilla=7):
     S["claxon_lejano"] = _norm(_filtro(S["claxon"].astype(np.float64), hi=900), 0.25)
     mu = _filtro(ruido(6.0), 250, 1300) * (0.4 + np.abs(_filtro(ruido(6.0), hi=5)) * 7)
     S["multitud"] = _norm(_bucle(mu, 300), 0.35)
+    # el pabellón de los combates: público murmurando bajo un techo alto, con su reverberación y algún grito suelto.
+    # Con su propia semilla, para no cambiar los sonidos que vienen después.
+    rp = np.random.default_rng(77)
+    dp = 8.0
+    mp = _filtro(rp.standard_normal(int(SR * dp)), 220, 1500) * (0.45 + np.abs(_filtro(rp.standard_normal(int(SR * dp)), hi=4)) * 6)
+    for t0 in (1.3, 4.6, 6.2):                                   # «¡dale!» lejano: un golpe de voces que sube y baja
+        grito = _filtro(rp.standard_normal(int(SR * 0.6)), 400, 2200) * np.sin(np.pi * np.linspace(0, 1, int(SR * 0.6))) ** 2
+        _poner(mp, grito, t0, 1.6)
+    ir = rp.standard_normal(int(SR * 1.4)) * np.exp(-np.linspace(0, 1.4, int(SR * 1.4)) / 0.45)      # la sala: casi un segundo y medio de cola
+    ir[0] = 6.0
+    sala = np.fft.irfft(np.fft.rfft(mp, len(mp) + len(ir)) * np.fft.rfft(ir, len(mp) + len(ir)))[:len(mp)]
+    S["amb_pabellon"] = _norm(_bucle(_filtro(sala, 120, 4200), 400), 0.3)
     S["viento_playa"] = S["amb_playa"]
 
     # ------------------------------------------------- ampliación: mar y más
@@ -927,7 +939,7 @@ def generar(semilla=7):
 
 # Sonidos que el juego reproduce en bucle: si los sustituyes, el final debe empalmar con el principio.
 PREFIJOS_BUCLE = ("amb_", "motor_", "lugar_", "loc_")
-BUCLES = {"avion", "tren", "tranvia", "bajo_agua", "rodadura", "alarma", "sirena", "sirena_ambulancia", "fuego", "ganzua", "intermitente", "lluvia", "latido", "multitud", "helicoptero_policia"}
+BUCLES = {"amb_pabellon", "avion", "tren", "tranvia", "bajo_agua", "rodadura", "alarma", "sirena", "sirena_ambulancia", "fuego", "ganzua", "intermitente", "lluvia", "latido", "multitud", "helicoptero_policia"}
 
 
 def es_bucle(nombre):

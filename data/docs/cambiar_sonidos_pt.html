@@ -19,7 +19,7 @@ li { margin-bottom: .3em; }
 <h2>1. Onde está tudo</h2>
 <ul>
 <li><code>data\sonidos</code>: todos os efeitos sonoros, espalhados em subpastas.</li>
-<li><code>data\sonidos\por_defecto</code>: os sons padrão, um arquivo por som. Existem arquivos 283. Se algum estiver faltando ou você o excluir, o jogo o criará novamente.</li>
+<li><code>data\sonidos\por_defecto</code>: os sons padrão, um arquivo por som. Existem arquivos 284. Se algum estiver faltando ou você o excluir, o jogo o criará novamente.</li>
 <li><code>data\radio</code>: a música das estações de rádio, um arquivo por estação.</li>
 <li><code>data\radio\mi_musica</code>: sua própria estação. Copie aqui as músicas que você deseja.</li>
 <li><code>data\musica</code>: a música ambiente, com uma pasta por situação e diversas peças em cada.</li>
@@ -55,7 +55,7 @@ li { margin-bottom: .3em; }
 <p>Cada gravação tem um volume diferente. Para que isso não prejudique o equilíbrio do jogo, ao carregar um som que você alterou o jogo o coloca no mesmo nível que o original tinha: mede o trecho mais alto do seu arquivo, compara-o com o som original e aumenta ou diminui conforme necessário, sem deixá-lo cortar. Dessa forma, alguns passos não podem ser mais altos que um tiro ou um sinal sonoro inaudível. Você pode desligar isso em Opções, Som e música, equilibrando o volume dos sons alterados.</p>
 <p>Se um som específico ainda parecer alto ou baixo para você, vá para Opções, Som e música, Ajuste o volume de cada som. Eles estão todos lá, nos mesmos grupos da lista no final deste documento: Enter reproduz e as setas esquerda e direita diminuem ou aumentam, de 30 a 200 por cento. A busca por um som o encontra por uma palavra de seu nome, sem precisar saber em qual grupo ele está. O menu diz quantos sons você alterou, no total e em cada grupo, e permite retornar um único, um grupo inteiro ou todos eles ao volume padrão. A configuração é salva com suas opções e atende pelo nome do arquivo, para que não seja perdida quando você atualizar o jogo.</p>
 <h3>Ouvir qualquer som dentro do jogo</h3>
-<p>No menu principal e no menu de pausa, Aprender os sons tem os sons 283 do jogo: primeiro o grupo O mais importante, depois Procurar um som e depois todos eles, nos mesmos grupos da lista no final deste documento e na mesma ordem. Entre em um grupo e pressione Enter em um som: o jogo diz como se chama e o que significa, e joga sozinho, com o pack que você escolheu. Com Procurar um som você digita uma palavra, por exemplo sirene, e obtém todas as que a possuem no nome ou na explicação. É útil verificar como ficou uma de suas gravações sem precisar acionar o som durante a reprodução.</p>
+<p>No menu principal e no menu de pausa, Aprender os sons tem os sons 284 do jogo: primeiro o grupo O mais importante, depois Procurar um som e depois todos eles, nos mesmos grupos da lista no final deste documento e na mesma ordem. Entre em um grupo e pressione Enter em um som: o jogo diz como se chama e o que significa, e joga sozinho, com o pack que você escolheu. Com Procurar um som você digita uma palavra, por exemplo sirene, e obtém todas as que a possuem no nome ou na explicação. É útil verificar como ficou uma de suas gravações sem precisar acionar o som durante a reprodução.</p>
 
 <h2>3. Pacotes de som</h2>
 <p>Um pacote é uma pasta com arquivos com o mesmo nome dos sons do jogo. Os pacotes vão dentro de <code>data\sonidos</code>, cada um em sua subpasta, ao lado de <code>por_defecto</code>, e você os escolhe dentro do jogo em Opções, Som e música, Pacote de sons, com as setas esquerda e direita. A mudança é ouvida imediatamente e não afeta seus arquivos em <code>data\sonidos\por_defecto</code>: para voltar, escolha «default».</p>
@@ -64,7 +64,7 @@ li { margin-bottom: .3em; }
 <li>O volume de cada som do pacote é igual ao original, conforme explicado acima.</li>
 <li>Os pacotes que acompanham o jogo trazem exatamente os mesmos arquivos do <code>por_defecto</code>, com os mesmos nomes: nem um a mais e nem um a menos. Suas gravações são de domínio público (licença CC0) e vêm de kenney.nl, opengameart.org, freesound.org e bigsoundbank.com.</li>
 <li>Os tons dos canais interpretação de personagem (<code>chat_personaje</code>, <code>chat_fuera</code> e <code>chat_accion</code>) e o de espera pelo servidor (<code>espera_servidor</code>) são os padrões em cada pack, propositalmente: são um código de tons e isso ajuda se eles soarem sempre iguais.</li>
-<li>Os pacotes instalados como padrão são «Alternativo», com sons 283, «Envolvente», com sons 283, «Realista», com sons 283, «Retrô», com sons 283. Cada um traz todos os sons do jogo: substituem por gravações de domínio público tudo o que não é orientação, e mantêm o original para os sons de orientação: balizas, tons, semáforos, radar, localizadores e sons de lugares. O arquivo <code>CREDITOS.txt</code> de cada pacote diz de onde vem cada som e quais são originais.</li>
+<li>Os pacotes instalados como padrão são «Alternativo», com sons 284, «Envolvente», com sons 284, «Realista», com sons 284, «Retrô», com sons 284. Cada um traz todos os sons do jogo: substituem por gravações de domínio público tudo o que não é orientação, e mantêm o original para os sons de orientação: balizas, tons, semáforos, radar, localizadores e sons de lugares. O arquivo <code>CREDITOS.txt</code> de cada pacote diz de onde vem cada som e quais são originais.</li>
 </ul>
 <h3>Fazendo seu próprio pacote</h3>
 <ol>
@@ -147,7 +147,7 @@ li { margin-bottom: .3em; }
 <li>Territórios e gangues: 4 sons.</li>
 <li>Jogo on-line e interpretação de personagem: 7 sons.</li>
 <li>Pesca, cassino e jogos: 12 sons.</li>
-<li>Ambiente e clima: 19 sons.</li>
+<li>Ambiente e clima: 20 sons.</li>
 <li>Relacionamentos, apenas com conteúdo adulto: 7 sons.</li>
 <li>Substâncias e tráfico, apenas com conteúdo adulto: 13 sons.</li>
 </ol>
@@ -464,13 +464,14 @@ li { margin-bottom: .3em; }
 <li><code>campana_ring</code>: Sino de luta de boxe. Uma luta começa no ginásio. Dura 1.20 segundos.</li>
 </ul>
 <h3>Ambiente e clima</h3>
-<p>19 sons. Longos loops que tocam ao fundo em cada bairro, com chuva e à noite, e sons únicos que aparecem de vez em quando ao seu redor.</p>
+<p>20 sons. Longos loops que tocam ao fundo em cada bairro, com chuva e à noite, e sons únicos que aparecem de vez em quando ao seu redor.</p>
 <ul>
 <li><code>amb_campo</code>: Ambiente campestre. Você está no campo: pássaros e sinos. Ele toca em loop. Dura 9.70 segundos.</li>
 <li><code>amb_mar</code>: Ambiente de mar aberto. Você está no mar, longe da costa. Ele toca em loop. Dura 9.70 segundos.</li>
 <li><code>amb_montana</code>: Ambiente de montanha. Você está nas montanhas: vento. Ele toca em loop. Dura 9.70 segundos.</li>
 <li><code>amb_playa</code>: Ambiente de praia. Você está na praia: ondas. Ele toca em loop. Dura 8.70 segundos.</li>
 <li><code>amb_parque</code>: Ambiente do parque. Você está em um parque: pássaros. Ele toca em loop. Dura 9.70 segundos.</li>
+<li><code>amb_pabellon</code>: Ambiente do pavilhão das lutas. Você está no pavilhão das lutas do ginásio: o público murmura sob um teto alto e às vezes vibra. Ele toca em loop. Dura 7.60 segundos.</li>
 <li><code>amb_industrial</code>: Ambiente industrial. Você está em uma área industrial: máquinas. Ele toca em loop. Dura 5.70 segundos.</li>
 <li><code>amb_noche</code>: Ambiente noturno. É noite: grilos. Ele toca em loop. Dura 5.80 segundos.</li>
 <li><code>amb_puerto</code>: Ambiente portuário. Você está no porto: ondas e o buzina de um navio distante. Ele toca em loop. Dura 8.70 segundos.</li>

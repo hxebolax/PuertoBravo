@@ -11,12 +11,12 @@
   "avenidas": ["Grada oeste", "Grada este"],
   "calles": ["Grada sur", "Grada norte"],
   "barrios": [
-    {"id": "arena", "nombre": "Pabellón de los combates", "i": [0, 0], "j": [0, 0], "ambiente": "lugar_gimnasio", "vehiculos": [],
+    {"id": "arena", "nombre": "Pabellón de los combates", "i": [0, 0], "j": [0, 0], "ambiente": "amb_pabellon", "vehiculos": [],
      "descripcion": "Un pabellón cerrado con el ring en el centro y las gradas alrededor. Aquí solo estáis tu rival y tú."}
   ],
   "bloques": {"0,0": "plaza"},
   "lugares": [
-    {"id": "arena_ring", "nombre": "Ring del pabellón", "tipo": "ring", "bloque": [0, 0], "xy": [36, 36],
+    {"id": "arena_ring", "nombre": "Ring del pabellón", "tipo": "ring", "sonido": "lugar_gimnasio", "bloque": [0, 0], "xy": [36, 36],
      "desc": "El ring, en el centro del pabellón. Al terminar el combate vuelves a la puerta del gimnasio."}
   ],
   "casetes": []

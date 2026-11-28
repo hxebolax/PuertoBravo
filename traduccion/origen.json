@@ -4207,6 +4207,9 @@
 "Ambiente de puerto": [
 "juego/catalogo_sonidos.py"
 ],
+"Ambiente del pabellón de los combates": [
+"juego/catalogo_sonidos.py"
+],
 "Ambientes y clima": [
 "juego/catalogo_sonidos.py"
 ],
@@ -20192,6 +20195,9 @@
 "juego/catalogo_sonidos.py"
 ],
 "Estás en el mar, lejos de la costa.": [
+"juego/catalogo_sonidos.py"
+],
+"Estás en el pabellón de los combates del gimnasio: el público murmura bajo un techo alto y a ratos jalea.": [
 "juego/catalogo_sonidos.py"
 ],
 "Estás en el puerto: olas y una sirena de barco lejana.": [
