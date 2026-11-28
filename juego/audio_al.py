@@ -297,6 +297,8 @@ class MezcladorAL(Mezclador):
         else:
             dx, dy = c.xy[0] - ox, c.xy[1] - oy
             d = math.hypot(dx, dy)
+            if self.altura > 0 and c.cat in ("efectos", "ambiente"):    # volando, la calle queda abajo (ver audio.py)
+                d = math.hypot(d, self.altura - c.alto)
             if d >= c.maxd:
                 g = 0.0
             else:

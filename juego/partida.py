@@ -2057,7 +2057,8 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         if j.veh:
             self.oy_rumbo += M.norm180(j.veh.rumbo - self.oy_rumbo) * min(1.0, dt * 4)
         self.mez.situar_oyente(x, y, self.frente())
-        # dónde suena todo: el eco del barrio, y la altura si vas volando (solo lo usa el motor envolvente)
+        # dónde suena todo: el eco del barrio, y la altura si vas volando: los dos motores alejan con ella la calle
+        # (efectos y ambiente), y el envolvente además la pone por debajo
         from .audio_al import entorno_de
         self.mez.entorno = entorno_de(self.mundo.barrio(x, y).get("ambiente", ""))
         alt = self.vuelo_alt()

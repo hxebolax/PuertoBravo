@@ -334,6 +334,8 @@ class Mezclador:
         dx = c.xy[0] - ox
         dy = c.xy[1] - oy
         d = math.hypot(dx, dy)
+        if self.altura > 0 and c.cat in ("efectos", "ambiente"):    # volando, la calle queda abajo: más lejos cuanto más alto
+            d = math.hypot(d, self.altura - c.alto)                  # (las señales y la interfaz, no: con ellas te orientas)
         if d >= c.maxd:
             c.gl_obj = c.gr_obj = 0.0
             return
