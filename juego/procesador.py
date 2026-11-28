@@ -20,6 +20,9 @@ import sys
 # Constantes de IsProcessorFeaturePresent. De la 36 en adelante solo contestan bien desde Windows 10 de mayo de 2020.
 INSTRUCCIONES = (("SSE3", 13), ("CX16", 14), ("SSSE3", 36), (tr("SSE4.1"), 37), (tr("SSE4.2"), 38), ("AVX", 39), ("AVX2", 40))
 NECESARIAS = ("SSE3", "CX16", "SSSE3", tr("SSE4.1"), tr("SSE4.2"))
+# The same flags, with the name each one takes in the «flags» line of /proc/cpuinfo on Linux. SSE3 appears as
+# «pni» in older kernels and as «sse3» in newer ones, so both names are accepted.
+INSTRUCCIONES_LINUX = {("sse3", "pni"): "SSE3", ("cx16",): "CX16", ("ssse3",): "SSSE3", ("sse4_1",): tr("SSE4.1"), ("sse4_2",): tr("SSE4.2"), ("avx",): "AVX", ("avx2",): "AVX2"}
 estado = {"numpy": "", "motivo": "", "instrucciones": {}}
 
 AVISO = (tr("Puerto Bravo no puede funcionar en este ordenador. Su procesador es demasiado antiguo: le faltan instrucciones "
@@ -29,6 +32,8 @@ AVISO = (tr("Puerto Bravo no puede funcionar en este ordenador. Su procesador es
 
 def instrucciones():
     """Qué instrucciones dice Windows que tiene el procesador. Diccionario vacío si no se puede preguntar."""
+    if sys.platform == "linux":
+        return _instrucciones_linux()
     if os.name != "nt":
         return {}
     try:
@@ -39,8 +44,21 @@ def instrucciones():
         return {}
 
 
+def _instrucciones_linux():
+    """The same processor instruction flags on Linux, read from /proc/cpuinfo. Empty dict if it cannot be read."""
+    try:
+        with open("/proc/cpuinfo", "r", encoding="utf-8", errors="replace") as f:
+            for linea in f:
+                if linea.split(":", 1)[0].strip() == "flags":
+                    hay = set(linea.split(":", 1)[1].split())
+                    return {nombre: any(bandera in hay for bandera in banderas) for banderas, nombre in INSTRUCCIONES_LINUX.items()}
+    except Exception:
+        pass
+    return {}
+
+
 def moderno(ins=None):
-    """¿Tiene todo lo que exige la numpy oficial? Si Windows no sabe contestar, se toma como que no: lo seguro."""
+    """¿Tiene todo lo que exige la numpy oficial? Si el sistema no sabe contestar, se toma como que no: lo seguro."""
     ins = instrucciones() if ins is None else ins
     return bool(ins) and all(ins.get(n) for n in NECESARIAS)
 

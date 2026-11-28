@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import logging
 import queue
+import sys
 import threading
 import time
 from collections import deque
@@ -110,17 +111,59 @@ def historial() -> list[tuple[float, str]]:
 
 # ── Salida ────────────────────────────────────────────────────────────────────
 
+class _SalidaPrism:
+	"""Screen reader output for Linux through prismatoid (``import prism``).
+
+	Prism talks to whatever the player is using: the running screen reader
+	(Orca, Speech Dispatcher, Spiel...) or a speech engine as a fallback. It
+	is wrapped here behind the same speak/braille interface that
+	accessible_output2 offers on Windows, so the rest of the module does not
+	need to know which platform it is on. A Prism backend is not thread-safe,
+	so every call is serialized with a lock.
+	"""
+
+	def __init__(self) -> None:
+		import prism
+
+		self._contexto = prism.Context()
+		self._backend = self._contexto.create_best()
+		self._candado = threading.Lock()
+
+	def speak(self, texto: str, interrupt: bool = False) -> None:
+		with self._candado:
+			if texto:
+				self._backend.speak(texto, interrupt=bool(interrupt))
+			else:
+				self._backend.stop()
+
+	def braille(self, texto: str) -> None:
+		try:
+			with self._candado:
+				self._backend.braille(texto)
+		except Exception:  # noqa: BLE001 - not every backend reaches a braille display
+			log.debug("The active backend does not support braille.", exc_info=True)
+
+	def stop(self) -> None:
+		with self._candado:
+			self._backend.stop()
+
+
 def _obtener_salida():
-	"""Inicializa accessible_output2 una sola vez; ``None`` si no está disponible."""
+	"""Initializes the screen reader output once; ``None`` if it is not available."""
 	global _salida, _salida_intentada
 	with _candado_salida:
 		if not _salida_intentada:
 			_salida_intentada = True
 			try:
-				from accessible_output2.outputs.auto import Auto
+				if sys.platform == "linux":
+					# Linux: prismatoid talks to the running screen reader (or a speech engine as a fallback).
+					_salida = _SalidaPrism()
+					log.info("Speech output initialized (prismatoid).")
+				else:
+					from accessible_output2.outputs.auto import Auto
 
-				_salida = Auto()
-				log.info("Salida de voz inicializada (accessible_output2).")
+					_salida = Auto()
+					log.info("Salida de voz inicializada (accessible_output2).")
 			except Exception:
 				log.warning("accessible_output2 no está disponible; los anuncios irán al registro.", exc_info=True)
 				_salida = None

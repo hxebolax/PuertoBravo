@@ -1,10 +1,48 @@
 """Salida de voz y braille mediante el lector de pantalla (NVDA, JAWS...) o SAPI."""
 from .i18n import tr
 import re
+import sys
+import threading
 import time
 from collections import deque
 
 from . import genero, palabras, registro
+
+
+class _SalidaPrism:
+    """Screen reader output for Linux through prismatoid (``import prism``).
+
+    Prism talks to whatever the player is using: the running screen reader (Orca, Speech Dispatcher,
+    Spiel...) or a speech engine as a fallback. It is wrapped here behind the same speak/braille
+    interface that accessible_output2 offers on Windows, so the rest of the class does not need to
+    know which platform it is on. A Prism backend is not thread-safe, so every call is serialized
+    with a lock.
+    """
+
+    def __init__(self):
+        import prism
+        self._contexto = prism.Context()
+        self._backend = self._contexto.create_best()
+        self._candado = threading.Lock()
+
+    def speak(self, texto, interrupt=False):
+        with self._candado:
+            if texto:
+                self._backend.speak(texto, interrupt=bool(interrupt))
+            else:
+                self._backend.stop()
+
+    def braille(self, texto):
+        try:
+            with self._candado:
+                self._backend.braille(texto)
+        except Exception:
+            pass
+
+    def callar(self):
+        with self._candado:
+            self._backend.stop()
+
 
 # Mientras repasas el historial, los mensajes que llegan no te llevan al final: si no, con el GPS o los partes del día
 # hablando, Re Pág se quedaba siempre en el mismo mensaje. Se deja de repasar al llegar al último o tras este rato quieto.
@@ -43,7 +81,11 @@ class Voz:
 
     def _iniciar(self, sapi):
         try:
-            if sapi:
+            if sys.platform == "linux":
+                # Linux: prismatoid talks to the running screen reader (or a speech engine as a fallback).
+                self.salida = _SalidaPrism()
+                self.sapi = False
+            elif sapi:
                 from accessible_output2.outputs.sapi5 import SAPI5
                 self.salida = SAPI5()
                 self.sapi = True

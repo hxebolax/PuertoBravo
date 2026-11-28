@@ -4,6 +4,7 @@ sounddevice>=0.5.5
 soundfile>=0.13
 ptts>=0.7.1
 accessible-output2>=0.17
+prismatoid>=0.18.4
 wxPython>=4.2.3
 cx_Freeze>=8.7
 pytest>=9.0
