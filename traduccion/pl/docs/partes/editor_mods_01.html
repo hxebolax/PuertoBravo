@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Manual del editor de mods de Puerto Bravo</title>
+<style>
+body { font-family: Segoe UI, Arial, sans-serif; max-width: 54em; margin: 1em auto; padding: 0 1em; line-height: 1.6; background: #111; color: #f2f2f2; font-size: 1.1em; }
+h1, h2, h3 { color: #ffd84d; }
+a { color: #8fd0ff; }
+code { color: #9fe89f; }
+kbd { border: 1px solid #aaa; border-radius: 4px; padding: 0 .35em; background: #2a2a2a; }
+li { margin-bottom: .3em; }
+</style>
+</head>
+<body>
+<h1>Manual del editor de mods de Puerto Bravo</h1>
+<p>El editor de mods es un programa aparte, con ventanas y controles normales de Windows, pensado para usarse con lector de pantalla y teclado. Con él se crea todo lo que admite un mod sin escribir ni una línea a mano. Este manual está organizado por encabezados.</p>
+
+<h2>1. Abrir el editor</h2>
+<ul>
+<li>Ejecuta <strong>EditorMods.exe</strong>, que está junto a <strong>PuertoBravo.exe</strong>.</li>
+</ul>
+<p>El editor guarda los mods en la carpeta <code>data\mods</code>, que es de donde los lee el juego. Un mod es un único archivo, con extensión <code>.pbm</code>.</p>
+<p>Los mods que guarda el editor quedan protegidos, con la extensión <code>.pbm</code>: el archivo está cifrado y firmado, y no se puede leer ni retocar con un editor de texto. El editor abre los mods protegidos, incluidos los que vienen con el juego; al guardar, siempre protege.</p>
+<p>El editor sale en el idioma del juego: el que elijas en Opciones, Idioma, o, en automático, el de tu Windows. Los textos de tu mod, en cambio, se ven en el juego tal como los escribas, en el idioma que sea.</p>
+<p>Si te pasan un mod sin proteger, en un archivo <code>.json</code>, el juego no lo carga: ábrelo aquí con <kbd>Control O</kbd> y guárdalo con <kbd>Control S</kbd>. El editor lo comprueba, lo deja como <code>.pbm</code>, listo para usar, y conserva el archivo original con la terminación <code>.json.original</code>.</p>
+
+<h2>2. La ventana principal</h2>
+<p>Tiene dos listas y una fila de botones. Con <kbd>Tabulador</kbd> pasas de una a otra.</p>
+<ul>
+<li>Secciones: los tipos de contenido. Al moverte por ella con las flechas, la segunda lista cambia.</li>
+<li>Elementos: lo que tu mod tiene en la sección elegida.</li>
+<li>Botones: Añadir, Editar, Duplicar, Borrar, Subir, Bajar y Copiar del juego original.</li>
+</ul>
+<p>Cada lista y cada botón tiene su letra de acceso: pulsa <kbd>Alt</kbd> y la letra que anuncia tu lector para saltar a él.</p>
+<h3>Secciones</h3>
+<ul>
+<li>Lugares: comercios, casas, negocios, bancos, oficinas de empleo, academias, comedores sociales y todos los demás tipos, con su posición, su sonido y sus opciones.</li>
+<li>Misiones: con su lugar de inicio, sus requisitos, su recompensa y todos sus pasos.</li>
+<li>Armas, vehículos y carreras.</li>
+<li>Comidas, objetos y peces.</li>
+<li>Personajes para elegir al empezar la partida.</li>
+<li>Ropa: las prendas de las tiendas de ropa, con su precio y, si llevan refuerzos, el blindaje que dan.</li>
+<li>Complementos: gafas, cadenas, anillos, relojes y lo que inventes. Cada uno tiene su clase; de cada clase se lleva uno solo.</li>
+<li>Protecciones de la armería: lo que se vende además del chaleco, con el blindaje en el que deja.</li>
+<li>Jornadas de trabajo: los trabajos sin vehículo de la oficina de empleo, con su paga y lo que desgastan.</li>
+<li>Combates del gimnasio: el boxeo, las artes marciales mixtas y los que añadas. Cuántos asaltos, los nombres de los rivales, lo que aguantan y lo que se cobra. La casilla Es un combate deportivo viene marcada: tumbar a los rivales no es delito ni baja el prestigio. Desmárcala solo si quieres una pelea ilegal, en la que cada rival que cae cuenta como una agresión si alguien lo ve.</li>
+<li>Muebles de la casa: su nombre, su precio y sus textos.</li>
+<li>Mejoras del taller: su nombre, su precio, cuántos niveles tienen, qué mejoran y cuánto da cada nivel. Puedes cambiar las siete del juego o añadir otras.</li>
+<li>Gente de la calle: los nombres, los apellidos, los oficios y las frases de la gente, los apodos de los objetivos de los contratos, los nombres de perro y otros nombres que el juego elige al azar.</li>
+<li>Caracteres de la gente: las formas de ser de las personas con las que se habla.</li>
+<li>Bandas: las bandas de la comarca y con qué enemigos pelea cada una.</li>
+<li>Tipos de enemigo: el catálogo de enemigos, con su nombre, su arma, su salud, su puntería, sus frases y, si lo tienen, su vehículo.</li>
+<li>Policía por nivel de búsqueda: qué tipo de agente sale con cada nivel.</li>
+<li>Caja de los locales: cuánto dinero hay en la caja de cada tipo de local y quién la guarda.</li>
+<li>Comida a domicilio, en dos secciones: la carta, con cada plato y cada bebida, su precio y lo que quita de hambre y de sed; y los tiempos y las frases.</li>
+<li>La compra y la cocina, en cinco secciones: Productos de las tiendas de comida, Pasillos de las tiendas, Tipos de tienda de comida, Recetas de cocina, y los números y las frases de la compra, la despensa y la cocina.</li>
+<li>Atracos a locales y asaltos a proveedores: cuántos días te recuerda un local atracado, y todo lo de los asaltos a los proveedores y sus consecuencias.</li>
+<li>Golpes preparados, en dos secciones: Papeles de un golpe, con cada papel, lo que hace, de qué depende y qué parte del botín se lleva; y los números y las frases de la radio.</li>
+<li>Volar, en tres secciones: Volar: números y frases; Aeronaves: cómo vuela cada una; y Mapa del aire: dónde está cada localidad.</li>
+<li>Negociar con las bandas: lo que se paga por devolver, comprar o cobrar tributo, lo que cuesta una tregua, y las frases de cada respuesta.</li>
+<li>Reconquista de barrios: todo lo de las bandas vencidas que intentan recuperar los barrios del jugador: ritmo, avisos, asaltos, defensa, lealtad y frases.</li>
+<li>Contratos del tablón: las clases de encargo que cuelgan del tablón de las tabernas.</li>
+<li>La gente actúa y se une a tu banda: cuándo te acompaña, te pega o te denuncia alguien, los favores y las condiciones para reclutar.</li>
+<li>El oficio de policía y Avisos de la emisora de la policía: los rangos, las pagas, los apercibimientos y los avisos que pasa la central.</li>
+<li>Planes en pareja y Vivir en pareja, para el contenido para adultos: los planes con sus escenas, y los números y las frases de la convivencia.</li>
+<li>Tarifas y precios: lo que cuestan los servicios, los billetes, las entradas, los alquileres, las multas y los sobornos, y lo que pagan los trabajos y los premios fijos. De cada una puedes cambiar el precio y el nombre; el identificador lo usa el juego para encontrarla y no debe cambiarse. Donde el precio sale de una cuenta, por ejemplo el soborno por cada nivel de búsqueda, la tarifa es la base.</li>
+<li>La calle: reacciones, policía y helicóptero: lo que dice el juego cuando la gente huye, cada cuánto habla la gente al pasar, la munición que sueltan los enemigos, cuántas patrullas hacen la ronda, las ambulancias, lo que cuesta rendirse y todo lo del helicóptero de la policía.</li>
+<li>Guerra de barrios en la calle: cuántos de la banda andan por su barrio, cuántas oleadas son, lo que se gana y las frases. En la pestaña Buscar pelea, los números y las frases de las peleas que el jugador busca con una banda sin conquistar nada.</li>
+<li>Las misiones se ajustan a tu escolta: cuánto sube la oposición de una misión por cada persona que acompaña al jugador, en moderado y en fuerte, con sus topes, y las frases con las que se avisa.</li>
+<li>Persecuciones y la tecla del objetivo: cada cuántos segundos se dice por dónde va quien huye y desde qué distancia, a cuántos metros afloja y cuánto, los mismos números con la opción Ayuda en las persecuciones puesta, lo que se aguanta al seguir a alguien a pie, el tiempo de la doble pulsación del objetivo y las frases que explican la persecución al empezar.</li>
+<li>Mis vehículos y chófer: cuántos vehículos del jugador caben en la calle, cuánto tarda en llegar el chófer de la banda, con qué vehículos viene y las frases que dice.</li>
+<li>Radio a pie y en los locales: en qué tipos de local suena música de fondo y a qué volumen, y el volumen del reproductor con auriculares. Cada lugar puede además pedir o quitar la música por su cuenta.</li>
+<li>Realismo: los números de la sed, la higiene, las averías y las normas de tráfico: cada cuánto se pincha, cuánto cuesta una multa, cuántos puntos tiene el carné.</li>
+<li>Combustible: el precio del litro, lo que da de sí un depósito, cuándo avisa la reserva, el bidón, la asistencia en carretera y los litros del depósito según el motor.</li>
+<li>Capítulos de la historia.</li>
+<li>Mapas: localidades enteras, con sus barrios, sus calles y sus islas.</li>
+<li>Para el contenido para adultos: personas, actividades, regalos y sustancias. Cada persona dice si es un hombre o una mujer: con la opción Me atraen, a quien no atrae al jugador no se le pueden pedir citas románticas. Sin ese dato, sale para cualquiera.</li>
+</ul>
+
+<h2>3. Teclas</h2>
+<h3>En cualquier parte del editor</h3>
+<ul>
+<li><kbd>Control H</kbd>: dice el nombre y la explicación del control en el que estás. Úsala siempre que dudes de para qué sirve un campo.</li>
+<li><kbd>F1</kbd>: abre este manual.</li>
+<li><kbd>Alt</kbd>: va a la barra de menús.</li>
+</ul>
+<h3>Menú Archivo</h3>
+<ul>
+<li><kbd>Control N</kbd>: mod nuevo.</li>
+<li><kbd>Control O</kbd>: abrir un mod de la carpeta de mods.</li>
+<li><kbd>Control S</kbd>: guardar.</li>
+<li><kbd>Control Mayúsculas S</kbd>: guardar con otro nombre.</li>
+<li><kbd>Control Q</kbd>: salir. Si hay cambios sin guardar, pregunta antes.</li>
+</ul>
+<h3>Menú Mod</h3>
+<ul>
+<li><kbd>Control D</kbd>: datos del mod: nombre, autor, versión y descripción.</li>
+<li><kbd>F5</kbd>: comprobar el mod.</li>
+<li><kbd>Control M</kbd>: activar o desactivar mods, para elegir cuáles carga el juego.</li>
+<li><kbd>Control B</kbd>: abrir la carpeta de mods en el Explorador.</li>
+<li><kbd>F9</kbd>: guardar, comprobar y abrir el juego para probar el mod.</li>
+<li><kbd>Control G</kbd>: escribir el guion de voces del mod, para grabar las frases de las misiones.</li>
+<li><kbd>Control Mayúsculas V</kbd>: abrir la carpeta de voces.</li>
+<li><kbd>Control Mayúsculas A</kbd>: añadir un sonido propio, para usarlo en armas, vehículos y lugares.</li>
+</ul>
+<h3>En las listas de elementos</h3>
+<ul>
+<li><kbd>Flechas</kbd>: recorrer la lista.</li>
+<li><kbd>Intro</kbd>: editar el elemento elegido.</li>
+<li><kbd>Suprimir</kbd>: borrarlo. Pide confirmación.</li>
+</ul>
+<h3>En los formularios</h3>
+<ul>
+<li><kbd>Tabulador</kbd> y <kbd>Mayúsculas Tabulador</kbd>: campo siguiente y anterior.</li>
+<li><kbd>Alt</kbd> más la letra del campo: saltar a ese campo.</li>
+<li><kbd>Control Tabulador</kbd>: en los formularios con pestañas, pasar a la pestaña siguiente.</li>
+<li><kbd>Intro</kbd>: aceptar. <kbd>Escape</kbd>: cancelar sin guardar los cambios del formulario.</li>
+</ul>
+
+<h2>4. Crear un elemento</h2>
+<ol>
+<li>Elige la sección.</li>
+<li>Pulsa Añadir. Se abre un formulario con los campos de ese tipo de contenido.</li>
+<li>Rellena los campos. Los obligatorios lo dicen en su nombre. <kbd>Control H</kbd> explica cada uno.</li>
+<li>Acepta. Si falta algo obligatorio, el editor te lleva al campo y te dice qué falta.</li>
+</ol>
+<p>Los formularios largos están repartidos en pestañas. Solo aparecen los campos que tienen sentido: por ejemplo, al elegir el tipo de lugar «academia» aparece el campo de los cursos que imparte.</p>
+<h3>Campos que son listas</h3>
+<p>Algunos campos contienen a su vez una lista: los pasos de una misión, las frases de un diálogo, los enemigos de un paso o los barrios de un mapa. Se editan con un botón que abre otra ventana con su lista y sus botones Añadir, Editar, Duplicar, Borrar, Subir y Bajar. El orden importa: los pasos de una misión se juegan de arriba abajo.</p>
+<h3>Campos que eligen algo del juego</h3>
+<p>Donde hay que indicar un lugar, un arma, un vehículo, un sonido o una misión, el editor ofrece un desplegable con todo lo que existe: lo del juego, lo de los demás mods y lo de tu propio mod. No hay que recordar identificadores.</p>
+<h3>Copiar del juego original</h3>
+<p>El botón Copiar del juego original trae a tu mod una copia de un elemento original para modificarlo. Si le dejas el mismo identificador, sustituye al original; si se lo cambias, se añade como uno nuevo. Es la manera más rápida de aprender: copia una misión que te guste y mira cómo está hecha.</p>
+
+<h3>Crear un vehículo propio</h3>
+<p>Un vehículo nuevo es un elemento más: no hace falta programar nada. En la sección Vehículos, pulsa Añadir, o trae uno parecido con Copiar del juego original y cámbiale el identificador. Rellena el nombre, la velocidad máxima, la aceleración, la frenada y la resistencia; elige el sonido del motor y su tono, que con un número mayor suena más agudo; y, si quieres, el claxon, la sirena, los litros del depósito y el trabajo que se puede hacer con él. Marca si es una embarcación o si vuela. Para que aparezca en el juego: añádelo a los vehículos de un barrio para que circule y aparque por allí, ponle precio para que lo vendan los concesionarios o las náuticas, o úsalo en un paso de misión. Sin precio no se puede comprar en ningún sitio, y la comprobación del mod (<kbd>F5</kbd>) lo avisa. Con precio se vende en todos los concesionarios que no limitan sus modelos; para que solo lo venda uno, márcalo en los Modelos a la venta de ese concesionario.</p>
+<h3>Aprender de los mods de ejemplo</h3>
+<p>En la carpeta de mods hay nueve mods completos: Bahía del Ocaso, que es una ciudad entera con una historia larga, Costa Dorada, Valdeolmos, Peñas Altas, Isla de los Vientos, Noches de neón, Oficios y recados, Motor y asfalto, y El Diablo, una agencia de sicarios con sus propios contratos. Ábrelos con <kbd>Control O</kbd>: <code>costa_dorada</code> tiene un ejemplo de cada cosa que se puede crear, incluido un mapa entero y misiones con los nueve tipos de paso.</p>
+
+<h3>Sucesos callejeros, pesca y comisarías</h3>
+<p>La sección Sucesos callejeros tiene los tres del juego, el maletín perdido, el atraco y los pandilleros, y los que añadas. Cada suceso es de una clase que el juego sabe llevar: algo perdido que se busca con el radar, un atraco con su víctima o un grupo que amenaza la calle. Dices su nombre, cuánto abunda, cuánto dura, el premio, lo que dice al empezar (con {situar} donde va el sitio), lo que dice si lo resuelves o si se acaba el tiempo, sus enemigos y sus armas, y si solo sale en algunas localidades. Con el mismo identificador que uno del juego, lo cambias.</p>
+<p>En cada localidad, Sucesos callejeros que admite marca solo los que pegan, por ejemplo el maletín en un pueblo tranquilo, y Aquí no hay sucesos callejeros los quita todos. Cada jugador puede además quitar los que no quiera en sus opciones.</p>
+<p>En un punto de pesca o un embarcadero, Qué agua es dice si es mar, río o lago. En cada pez, En qué aguas vive y Solo en estas localidades: un pez de río propio de tu pueblo pica solo allí. Un pez sin marcar nada pica en cualquier sitio, como antes.</p>
+<p>Los kilómetros de cada salida cuentan también para la policía: a quien detienen en un pueblo sin comisaría lo llevan a la que esté a menos kilómetros, siguiendo las salidas. Si tu pueblo no tiene comisaría, pon bien los kilómetros. En Mejoras del taller, Se pone también a helicópteros y avionetas decide si el taller la ofrece a lo que vuela.</p>
+<h2>5. Las misiones</h2>
+<p>Una misión es una lista de pasos. Cada paso tiene un tipo:</p>
+<ul>
+<li>Diálogo: frases que dice cada personaje.</li>
+<li>Ir: llegar a un lugar, a pie o en vehículo, con o sin tiempo límite.</li>
+<li>Dar: el juego te entrega un arma, dinero o un objeto.</li>
+<li>Robar: conseguir un vehículo concreto.</li>
+<li>Entregar: llevar el vehículo a un lugar, con un daño máximo permitido.</li>
+<li>Eliminar: acabar con unos enemigos.</li>
+<li>Recoger: recoger uno o varios objetos.</li>
+<li>Policía: te pone un nivel de búsqueda, o te pide perderla.</li>
+<li>Perseguir: alcanzar a un vehículo que huye.</li>
+</ul>
+<p>En los textos puedes escribir Dani: el juego lo cambia por el nombre del personaje que haya elegido quien juega.</p>
+<h3>Misiones con vehículo: si exigen el suyo</h3>
+<p>Una misión con un paso de robar un vehículo exige, de serie, ese vehículo: el jugador tiene que subirse a él y entregarlo. Si en tu misión lo que importa es llevar algo y da igual con qué, marca en la misión la casilla Se puede hacer con el vehículo del jugador. Entonces el jugador puede llegar con el suyo hasta donde está el de la misión, detenerse a su lado y hacerla con él; al entregar, se lo queda. Su vehículo tiene que ser de la misma clase que el de la misión: si el de la misión vuela, el suyo también. No la marques cuando el vehículo es el encargo, como en un robo. El juego le dice al jugador, en el resumen de la misión y antes de aceptarla, si le dan vehículo, si tiene que llevarse uno concreto o si vale el suyo: no hace falta que lo escribas tú.</p>
+<h3>Mis vehículos y chófer</h3>
+<p>En la sección Mis vehículos y chófer hay un solo elemento, general. En él decides cuántos vehículos del jugador caben en la calle antes de que el más antiguo vaya solo a un garaje, entre cuántos segundos tarda en llegar el chófer de la banda, con qué nivel de búsqueda deja de venir, con qué vehículos de la banda puede presentarse y las frases que dice en cada momento: al salir, al llegar, cuando no tiene destino, al marcarle uno, al llegar al destino, cuando te bajas y al despedirlo. Si dejas una lista de frases vacía, valen las del juego. En la misma sección está la lista Nombres propuestos para los vehículos: son los que el juego ofrece, unos cuantos al azar cada vez, cuando el jugador le pone nombre a un vehículo y no quiere escribirlo, con Tabulador o con un botón del mando. Lo que cuesta llamarlo está en Tarifas y precios, en Chófer de tu banda.</p>
+<h3>La calle: reacciones, policía y helicóptero</h3>
+<p>En la sección La calle hay un solo elemento, general, repartido en seis pestañas. Son los números y las frases de lo que pasa en la calle sin que el jugador lo busque. Que cada cosa esté encendida o apagada lo decide cada jugador en sus opciones; aquí decides cómo es cuando está encendida.</p>
+<ul>
+<li>General: cada cuántos segundos puede decir el juego que alguien huye, cuántos de los que huyen gritan, y las frases. En las frases, donde escribas quien entre llaves irá «Un hombre», «Una mujer» o el nombre de la persona si el jugador ya la conoce; y donde escribas n entre llaves, cuántas personas son.</li>
+<li>Gente que habla: cuántos peatones pasean de dos en dos, cada cuántos segundos se oye una conversación con cada ajuste del jugador, cómo se presenta la frase y de qué temas hablan. Las frases en sí son las de la base de conversación del juego.</li>
+<li>Botín y patrullas: cuántos enemigos caídos sueltan munición y cuánta, cuántos sueltan el arma con la opción de dificultad, cuántas patrullas hacen la ronda de día y de noche, y cuántas veces sale una patrulla cuando atacan al jugador. Con cero patrullas no hay ninguna.</li>
+<li>Ambulancias y rendición: cuántas veces acude una ambulancia, cuánto tarda y cuánto se queda; y lo que cuesta rendirse: la multa por nivel, el tanto por ciento del dinero, las horas de calabozo y desde qué nivel se pierden todas las armas.</li>
+<li>Helicóptero: con qué nivel de búsqueda sale, cuánto tarda, cuánto aguanta, a qué altura y a qué distancia da vueltas, qué daño mínimo ha de tener un arma para hacerle algo y lo que cuesta derribarlo.</li>
+<li>Despistar al helicóptero: cuántos segundos hay que estar fuera de su vista, cuánto busca, cuánto tarda en reconocer al jugador y en volver, lo que dice por el altavoz y qué tipos de lugar no tienen techo.</li>
+</ul>
+<p>Un consejo: si subes mucho el radio del helicóptero, comprueba que alguna de tus armas pesadas llega hasta él, o no se le podrá derribar.</p>
+<h3>Guerra de barrios en la calle</h3>
+<p>También es un solo elemento, general, y solo cuenta para quien tenga encendido ese modo en sus opciones. Decides cuántos peatones del barrio de una banda son de la banda, con cuántas bajas declara la guerra, cuántas oleadas hay que vencer para conquistar y para defender, cuántos enemigos trae la primera, el respiro entre oleadas, cuánto se puede estar fuera del barrio, los premios y las frases. En las frases, banda entre llaves es el nombre de la banda y barrio entre llaves, el del barrio.</p>
+<p>Quién pelea en cada oleada sale de la sección Bandas: los tipos de enemigo de la banda, y sus refuerzos con vehículo en la última oleada. Los que andan por la calle son del tipo que la banda tenga puesto en el campo Tipo de enemigo de los suyos que andan por la calle; si no tiene ninguno, del primero de sus tipos. Y qué banda manda en un barrio, si quieres fijarla tú, se dice en el propio barrio, en el campo Banda que manda en el barrio; a los barrios que no tengan ninguna, el modo les da una, siempre la misma en cada partida.</p>
+<h3>Historias que se cruzan</h3>
+<p>Una decisión abre una rama: con Solo aparece si se tomó la decisión, una misión o un paso valen solo para quien eligió una opción. Para que una rama recuerde lo decidido en otra, o para juntar varias, hay tres campos más, en las misiones y en los pasos:</p>
+<ul>
+<li>Solo aparece si se cruzan estas decisiones: varias decisiones a la vez, cada una como su nombre, dos puntos y el número de opción, separadas por comas. Por ejemplo, concejal:1, trono:3. Sin más, hacen falta todas.</li>
+<li>Cuántas de ellas hacen falta como mínimo, y cuántas como máximo: para contar. Con una lista de las opciones honradas, un mínimo de tres es el final de quien lo hizo todo bien, un máximo de cero el de quien no hizo bien nada, y de uno a dos, el de en medio.</li>
+<li>En las misiones, Y al menos una de cada grupo: para una misión que llega después de una bifurcación. Se escriben las misiones de cada rama separadas por espacios, y los grupos por punto y coma: fd2 fd3 fd4; vd2 vd3. Aparece cuando se ha completado una de cada grupo.</li>
+</ul>
+<p>Un paso de diálogo con una de estas condiciones, puesto al final de una misión, es la forma más sencilla de que un personaje comente lo que el jugador hizo en otra historia. Si esa decisión no se ha tomado todavía, el paso se salta.</p>
+<p>Quien juega puede ser hombre o mujer. Cuando una frase cambie según a quién se le diga, escribe las dos formas entre corchetes, primero la masculina y después la femenina, separadas por una barra vertical. El juego deja solo la que corresponde:</p>
+<ul>
+<li>Bienvenid[o|a] al pueblo: bienvenido o bienvenida.</li>
+<li>Tú eres [el nuevo|la nueva]: sirve también para varias palabras.</li>
+<li>Buen[|a] vecin[o|a]: una de las dos formas puede estar vacía.</li>
+</ul>
+<p>Vale en cualquier texto: diálogos, textos de los pasos, opciones de las decisiones, finales y descripciones. Si no pones corchetes, la frase se dice tal cual a todo el mundo, así que lo más cómodo es escribir frases que valgan para cualquiera y usar los corchetes solo donde no haya otra manera.</p>
+<p>En los personajes para elegir hay un campo, Le hablan. Si lo dejas sin valor, quien juega decide al empezar si le hablan en masculino o en femenino. Ponlo solo cuando tu personaje tenga que ser él o ella.</p>
+
+<h3>Pasos para jugar de oído</h3>
+<p>Además de los nueve tipos de paso de siempre, hay seis pensados para el oído:</p>
+<ul>
+<li>Seguir a alguien a pie sin que te descubra. En Lugar va el punto de partida, en Lugar de destino adonde va la persona, y en Quién es, cómo la llama el juego: el contable, tu prima.</li>
+<li>Acompañar a alguien hasta un lugar. En Lugar va donde se le recoge y en Lugar de destino adonde hay que llevarle.</li>
+<li>Llegar a un punto vigilado sin que te oigan. Eliges el lugar, cuántos vigilantes pasean alrededor y, si quieres, el nombre del objeto que se consigue al llegar.</li>
+<li>Pasar por varios lugares, en orden. Marcas los lugares; el tiempo límite, si lo pones, vale para todo el recorrido.</li>
+<li>Vigilar un lugar un rato sin que te vean. Eliges el lugar, cuántos segundos hay que vigilar, a cuántos metros hay que quedarse y, si quieres, qué descubre el jugador al terminar.</li>
+<li>Carrera en vehículo contra rivales. En Lugar va la salida; en los lugares por los que hay que pasar, el recorrido, cuyo último lugar es la meta. Eliges cuántos rivales corren, de uno a cuatro, y su velocidad en metros por segundo: diez es asequible y quince, difícil. Todos los lugares tienen que estar en la misma localidad.</li>
+</ul>
+<p>En el mod Bahía del Ocaso, las misiones ocs1 a ocs6 son un ejemplo de cada uno.</p>
+<h3>Tutoriales y muñecos de prácticas</h3>
+<p>Una misión puede marcarse como tutorial: mientras dura, la policía no acude, haga lo que haga el jugador. Y en un grupo de enemigos, la casilla No ataca los convierte en muñecos de prácticas: se les puede fijar y tumbar, pero no se mueven ni hacen daño. Con las dos cosas se hace un tutorial de combate en el que no se puede fallar.</p>
+<p>Para que un tutorial compruebe lo que hace el jugador, y no se complete con solo llegar a un sitio, está el tipo de paso Práctica de un tutorial. Se cumple cuando el jugador hace de verdad una de estas cosas: zarpar, llevar el timón un número de metros y de grados de giro que tú dices, atracar en un muelle, empezar a trabajar con un vehículo de trabajo, o completar un servicio de ese trabajo. Y un paso de ir a un lugar tiene el campo Además de llegar, exige: con él, el paso no se cumple al llegar si el jugador no ha usado antes el radar. Durante las prácticas de zarpar, timón y atracar, los embarcaderos prestan una lancha gratis; y durante las de trabajar se puede usar la tecla de trabajar aunque haya una misión en curso.</p>
+<p>La casilla Es una explicación convierte una misión en algo que no se juega: sale en el móvil con la palabra Explicación delante y, al elegirla, se leen seguidas las frases de sus pasos de diálogo, con sus voces si las tiene. Sirve para contar algo que no se puede comprobar, como jugar con amigos.</p>
+<p>Y en un grupo de enemigos, la casilla No hay que matarle hace que ese enemigo se rinda cuando le queda menos de la mitad de la salud: cuenta como resuelto, y si el jugador le mata, la misión falla. Es lo que usan los contratos de dar un escarmiento.</p>
+<h3>Gente de la calle</h3>
+<p>La sección Gente de la calle tiene un solo elemento, con varias listas repartidas en tres pestañas. En casi todas se escribe un nombre o una frase por línea:</p>
+<p>En el grupo Frases ya escritas están las que el juego ofrece a quien no quiere escribir, o juega con mando, al mandar un mensaje a otros jugadores: las del chat, las de hablar en personaje, las acciones del rol, que se escriben en minúscula y sin el nombre delante porque el juego lo pone, y las de hablar fuera de personaje. El jugador pasa por ellas con Tabulador o con un botón del mando.</p>
+<ul>
+<li>Nombres de hombre, nombres de mujer y apellidos: los de las personas con las que se habla por la calle.</li>
+<li>Apodos de los objetivos de los contratos, con su artículo: el Chato, la Culebra.</li>
+<li>Nombres de perro: los que ofrece la protectora de animales.</li>
+<li>Oficios: cada uno con su forma en femenino, si cambia, las edades entre las que se tiene y cuánto abunda. Así nadie estudia a los sesenta ni se jubila a los veinte.</li>
+<li>Frases sueltas: lo que dice alguien al pulsar Intro a su lado.</li>
+<li>Nombres para la banda del jugador, nombres de los rivales de las carreras de las misiones y nombres de los personajes de un servidor en línea.</li>
+<li>Personajes de un servidor: lo que dicen de vez en cuando los personajes que lleva un servidor en línea, con una lista para cada clase: paseantes, rateros, pistoleros, ladrones de coches y atracadores. Si dejas una lista vacía, el servidor usa las frases que trae él. Valen para el servidor en el que alguien entre con estos datos.</li>
+</ul>
+<p>Lo que escribas se añade a lo que ya trae el juego: con poner tres nombres nuevos, la gente se llamará como antes y además de esas tres maneras. Si quieres que solo existan los tuyos, por ejemplo para un mod ambientado en otro país, marca la casilla Mis listas sustituyen a las del juego: entonces cada lista que rellenes ocupa el sitio de la del juego, y las que dejes vacías siguen siendo las del juego. Con el botón Copiar del juego original traes las listas completas, para verlas o para recortarlas.</p>
+<p>En la sección Caracteres de la gente están las cinco formas de ser del juego: amable, hablador, seco, tímido y chulo. De cada una puedes cambiar cómo te habla y cuánta confianza gana o pierde con un saludo, un cumplido, un chiste o un insulto, y su valor, que decide si huye o se te encara. Puedes añadir caracteres nuevos; como el juego solo trae frases escritas para esos cinco, cada carácter nuevo dice con las frases de cuál de ellos habla.</p>
+<h3>Tipos de enemigo</h3>
+<p>Un tipo de enemigo es una ficha que se escribe una vez y se usa en muchos sitios. Dice el nombre, el arma, o varias armas para que cada uno salga con una al azar, la salud, la puntería, la voz, las frases que grita al ver al jugador y si va a pie o en un vehículo. Lo usan:</p>
+<ul>
+<li>Los pasos de eliminar de las misiones: en cada grupo de enemigos eliges el tipo y cuántos son. Los demás campos del grupo, que son el nombre, el arma, la salud, la puntería y el vehículo, quedan para cambiar algo de ese tipo solo en ese grupo. La forma de siempre sigue valiendo: un grupo sin tipo, con su nombre y su arma.</li>
+<li>Las bandas: cada banda dice con qué tipos pelea cuando se le conquista un barrio, cuál es el tipo de sus refuerzos y cuál el de los suyos que andan por la calle.</li>
+<li>La policía: la sección Policía por nivel de búsqueda dice qué tipos de agente salen con cada nivel.</li>
+<li>La caja de los locales: el tipo de quien la guarda.</li>
+</ul>
+<p>Si un tipo va en un vehículo, sus enemigos llegan en él: salen a unos doscientos metros, vienen por la calle hacia el jugador, paran cerca y se bajan. El campo Cuántos caben en el vehículo reparte un grupo grande en varios vehículos. En el mar, y jugando en un servidor, van a pie.</p>
+<p>Si le pones a un tipo el identificador de uno del juego, lo cambias en todo el juego. Así se cambian los enemigos de serie: los identificadores agente, agente_subfusil, agente_escopeta y asalto son los de la policía; guardaespaldas y objetivo_contrato, los de los contratos; vigilante y vigilante_armado, los de los bancos; pandillero, pandillero_duro y pandillero_motorizado, los de las bandas. Con el botón Copiar del juego original los ves todos.</p>
+<p>En las frases, lo que cambia según el protagonista sea él o ella se escribe entre corchetes, como en el resto del juego: A por [él|ella].</p>
+<h3>La policía de cada nivel de búsqueda</h3>
+<p>En la sección Policía por nivel de búsqueda hay cinco elementos, uno por nivel, con los identificadores nivel_1 a nivel_5. Cada uno marca los tipos de agente que pueden salir: cada patrulla que sale a por el jugador trae agentes de uno de esos tipos, elegido al azar. El tipo decide el arma, la salud, el vehículo de la patrulla y cuántos agentes se bajan de él. El campo Aviso es una frase que se dice al llegar a ese nivel; el juego la usa en el nivel 5 para anunciar su unidad de asalto. Para una policía más dura, crea tipos nuevos de agente y márcalos en los niveles altos.</p>
+<h3>La caja de los locales</h3>
+<p>Cada elemento de la sección Caja de los locales vale para un tipo de local: tiendas, bancos, talleres, gimnasios, armerías y los demás. Dice cuánto dinero hay en la caja, entre un mínimo y un máximo, cuántos la guardan, de qué tipo de enemigo son y qué nivel de búsqueda cae al atracarla. El juego elige cada día una cantidad distinta para cada local. Lo usan los atracos a cualquier local, a los bancos y los asaltos a los proveedores.</p>
+<h3>Atracos a locales y asaltos a proveedores</h3>
+<p>Todo local cuyo tipo tenga una caja en la sección Caja de los locales se puede atracar desde su menú: si pones una caja a un tipo de local que no la tenía, ese tipo pasa a poder atracarse; si la quitas, deja de poderse. Con guardia, hay que acabar antes con ella. La sección Atracos a locales y asaltos a proveedores, que tiene un solo elemento, dice lo demás: cuántos días te recuerda el local, cuántos de cada cien llaman a la policía al verte volver en lugar de cerrarte la puerta, qué tipos de local no te recuerdan, cómo se llama a quien atiende en cada uno y las frases. En sus otras pestañas está el asalto a los proveedores: los refuerzos, la mercancía que se lleva el jugador y las tres consecuencias, cada una con su peso; con peso cero, esa consecuencia no sale nunca.</p>
+<h3>Golpes preparados y papeles de un golpe</h3>
+<p>La sección Papeles de un golpe tiene un elemento por papel. Cada uno dice su nombre, lo que hace, de qué depende lo bien que lo hace, que puede ser la puntería, la conducción, los nervios o la lealtad, qué parte del botín se lleva y la explicación que se lee en el juego. Lo que hace se elige de una lista cerrada de cinco cosas: esperar fuera con el vehículo en marcha, entretener a la policía, tener a raya a la gente, abrir la caja o disparar desde el vehículo. Puedes cambiar los papeles del juego, usando su mismo identificador, quitar alguno o añadir otros con otro nombre y otra parte. Si tu mod trae esta sección, los papeles son los suyos y solo los suyos.</p>
+<p>La sección Golpes preparados: números y frases, que tiene un solo elemento, dice lo demás, repartido en pestañas: cuánto vale la gente recién reclutada y cuánto aprende; lo que tarda la caja según el tipo de local; lo que entretiene el vigilante, la ventaja del conductor y la puntería del tirador; la probabilidad de cada cosa que puede salir mal; lo que pasa con los detenidos; el tope del reparto; y todas las frases, las de las cinco fases y las que dice cada uno por la radio. Una probabilidad a cero apaga esa parte.</p>
+<p>Además, dos campos nuevos sirven en las misiones de cualquier mod. En un paso de Recoger, Segundos que tarda en abrirse o cogerse: con más de cero, el objeto no se coge al momento; el jugador pulsa Intro, se oye cómo avanza y tiene que quedarse al lado. En un paso de Policía, Segundos que tarda en llegar la policía: el jugador tiene ese tiempo para alejarse antes de que empiecen a buscarle.</p>
+<h3>Volar: números y frases, Aeronaves y Mapa del aire</h3>
+<p>La sección Aeronaves: cómo vuela cada una tiene un elemento por cada vehículo que vuela: su velocidad y su altitud de crucero, su techo, su autonomía con el depósito lleno, lo que sube por segundo y si necesita pista para aterrizar. Con el identificador de un aparato del juego cambias cómo vuela ese; para un vehículo tuyo que vuele y no esté en la lista, el juego deduce algo razonable de su velocidad.</p>
+<p>La sección Mapa del aire: dónde está cada localidad dice dónde queda cada una en la comarca, en kilómetros hacia el este y hacia el norte desde Puerto Bravo. De ahí salen las distancias y los rumbos de las travesías. Si tu mod añade una localidad con helipuerto o aeropuerto y no la pones aquí, el juego la coloca él mirando por dónde se llega: una isla, donde esté su muelle en el mar; una localidad con carretera, a unos kilómetros de su vecina, hacia el lado por el que sale esa carretera. Si quieres que quede en un sitio concreto, ponla aquí.</p>
+<p>La sección Volar: números y frases, que tiene un solo elemento, lleva lo demás, por pestañas: las alturas y el aterrizaje forzoso; el combustible; la travesía, con lo que se acelera y el viento; la aproximación; los sucesos y sus pesos, donde un peso a cero quita ese suceso; las tormentas y los obstáculos del vuelo bajo; el radar y el secuestro; los hangares y los vuelos comerciales; y todas las frases, las de la torre y las demás. En los lugares de tipo helipuerto o aeropuerto hay un campo nuevo, Precio de la plaza de hangar. Los precios del combustible, del alquiler del hangar y del traslado están en la sección Tarifas y precios, y la licencia de piloto, en la de títulos.</p>
+<h3>Comida a domicilio</h3>
+<p>La sección Comida a domicilio: la carta tiene un elemento por plato o bebida: su nombre, su precio, el hambre y la sed que quita, de cero a cien, y la salud que da. Con un identificador del juego cambias ese plato; con uno nuevo, añades otro a la carta. La sección Comida a domicilio: tiempos y frases tiene un solo elemento: cuánto tarda el pedido, entre un mínimo y un máximo en minutos del juego, cuánto más si llueve, cuántas cosas caben, cuánto espera el repartidor si el jugador no está, y las frases, con los nombres de los sitios que reparten. El precio del envío está en Tarifas y precios.</p>
+<h3>Cartas de los locales y lo que vende cada tienda</h3>
+<p>La sección Cartas de los locales de comida tiene una carta por clase de local: heladería, pizzería, chiringuito, taberna... Cada una lleva sus platos y bebidas, con su precio, el hambre y la sed que quitan, de cero a cien, la salud que dan y una explicación para <kbd>F1</kbd>. Cada lugar de comidas, bar o taberna elige la suya en su campo Carta; sin carta, un sitio de comidas sirve la lista general de comidas, como en versiones anteriores, y un bar o una taberna, solo la caña con tapa. Con el identificador de una carta del juego la sustituyes entera; con uno nuevo, añades otra. En las tiendas, el campo Qué vende además de comida marca si venden botiquines, ganzúas, el reproductor con auriculares, pienso o las armas de tienda; sin marcar ninguno, venden de todo.</p>
+<h3>La compra y la cocina: productos, pasillos, tiendas y recetas</h3>
+<p>Cinco secciones que van juntas. Con ellas un mod puede añadir productos y recetas, abrir un pasillo nuevo o inventarse una clase de tienda.</p>
+<ul>
+<li>Productos de las tiendas de comida: un elemento por producto, con su nombre, su precio, el pasillo en el que está, si en casa se guarda en la nevera o en la despensa y cuántos días aguanta; vacío o cero, no caduca. Si se puede comer sin cocinar, rellena en la pestaña Si se come sin cocinar el hambre y la sed que quita, la salud y el ánimo que da, y marca si es una bebida. Si lo dejas todo vacío, es solo un ingrediente.</li>
+<li>Pasillos de las tiendas: su nombre, con el artículo delante y en minúsculas, como lo dice el juego al llegar, y su descripción.</li>
+<li>Tipos de tienda de comida: qué pasillos tiene cada clase de tienda y lo cara que es, en tanto por ciento. El juego decide de qué clase es cada tienda así: primero mira el campo Qué clase de tienda de comida es del propio lugar; si está vacío, la lista de tiendas del tipo; después, las palabras del nombre, y gana el primer tipo de la lista que encaje; y por último el tipo que tenga marcado que vale para todas las demás. Un tipo sin pasillos es una tienda que no vende comida para casa.</li>
+<li>Recetas de cocina: su nombre, sus ingredientes, que se eligen de la lista de productos y de los que se gasta una unidad de cada uno, los minutos del juego que tarda, las raciones que salen, cuántos días aguantan en la nevera y cómo se hace: sin fuego, a la sartén o a la olla, que decide lo que se oye y si se puede quemar. En la pestaña Cada ración, el hambre y la sed que quita, la salud y el ánimo que da. Procura que alimente claramente más que lo envasado.</li>
+<li>La compra, la despensa y la cocina, números y frases: un solo elemento. Lo que cabe en la despensa, en la nevera y encima; con cuántos días de antelación se avisa de que algo caduca; cuántos productos faltan cada día y el descuento de la oferta; lo fácil que es que te vean salir sin pagar y lo que pasa entonces; cada cuánto se quema un plato o sale de categoría, cuánto cambia lo que alimenta, lo que da cada plato de práctica y cuánto ayudan la práctica y la cocina equipada; y las frases del tendero y de la cocina.</li>
+</ul>
+<p>Un producto nuevo aparece en todas las tiendas que tengan su pasillo. Una receta nueva aparece en el recetario de todas las cocinas.</p>
+<h3>Reconquista de barrios</h3>
+<p>La sección Reconquista de barrios tiene todos los números y las frases de lo que pasa cuando el jugador ya tiene una ciudad entera, o muchos barrios, y las bandas vencidas intentan recuperarlos. Solo se usa el primer elemento; déjale el identificador general. Está repartida en pestañas:</p>
+<ul>
+<li>La primera: los días de calma, con cuántos barrios empieza la versión suave y el ritmo de cada fase.</li>
+<li>Bandas: la fuerza con la que empiezan, lo que crecen cada día y en cada intensidad, la fuerza con la que se deciden a asaltar y las alianzas.</li>
+<li>Objetivo: lo que pesa cada motivo al elegir barrio: que fuera el suyo, que esté mal defendido, que esté abandonado o que sea el más rentable, y cuánto azar hay.</li>
+<li>Asalto: los días de preparación, las horas a las que empieza, el plazo para responder y el descanso en cada intensidad, y las horas que quedan siempre al despertar.</li>
+<li>En persona y Enviar gente: las oleadas, y la cuenta de fuerza contra defensa cuando el jugador no va.</li>
+<li>Defensa y Lealtad: guardias, refuerzos e informantes con sus precios, y cómo sube y baja la lealtad de un barrio.</li>
+<li>Consecuencias, y Golpe y forasteras: la fama, la moral, cuándo queda desmantelada una banda, el golpe a los escondites y los nombres de las bandas forasteras.</li>
+<li>Cuatro pestañas de frases: el aviso inicial, las amenazas, los resultados, y la lealtad y la tregua. Cada frase dice en su ayuda qué huecos admite, como {banda} o {barrio}.</li>
+</ul>
+<p>Los números de la tregua, que se pacta como los demás tratos, están en la sección Negociar con las bandas, pestaña Tregua.</p>
+<h3>Vida, reputación y consecuencias</h3>
+<p>Seis secciones llevan todo lo de la vida honrada, la doble vida y sus consecuencias.</p>
+<ul>
+<li>Vida, reputación y consecuencias: números y frases. Un solo elemento; déjale el identificador general. Está repartido en pestañas: Comercios, con las rebajas, el recargo y el fiado; Testigos y policía; La calle; Antecedentes, con los días que dura cada gravedad y lo que quitan los servicios a la comunidad y el abogado; Carrera profesional, con los días de cada periodo, las notas de la evaluación, los avisos y los ascensos; Empresa; Inspecciones y tapadera; Impuestos y facturas; Banco; Doble vida; Extorsión y buenas acciones; Pareja; y seis pestañas de frases. Cada frase dice en su ayuda qué huecos admite, como {jefe}, {euros} o {negocio}. El nivel suave y el exigente se sacan del normal con los dos tantos por ciento de la primera pestaña.</li>
+<li>Títulos de estudios. Cada título tiene nombre, cuántas sesiones lleva, lo que cuesta y dura cada una, el prestigio mínimo para matricularse, el título que hay que tener antes, si lo hay, y un texto que dice qué abre.</li>
+<li>Empleos fijos y sus puestos. Cada empleo tiene su empresa, si es de confianza, qué trabajos cuentan como turno y sus puestos, del primero al más alto. En Trabajos que cuentan como turno se escribe uno por línea: la palabra jornada, dos puntos y el identificador de una jornada de la sección Jornadas de trabajo, o la palabra oficio, dos puntos y un oficio con vehículo, como taxi o ambulancia. Cada puesto tiene nombre, nómina por periodo, turnos que pide, el título y el prestigio que exige y si trae decisiones de responsabilidad.</li>
+<li>Mejoras de los negocios. Cada una lleva a un nivel, del dos en adelante, y dice lo que cuesta y lo que sube, las dos cosas en tanto por ciento sobre el precio y sobre lo que da el negocio, y el título y el prestigio que pide. El juego admite los niveles que pongas.</li>
+<li>Decisiones de los puestos con responsabilidad. Una situación y de dos a cuatro salidas; cada una suma o resta a la calidad del turno, que cuenta en la evaluación.</li>
+<li>Situaciones de la calle: ayudar o aprovecharse. Una situación y hasta cuatro salidas. Cada salida puede pedir un objeto, dinero u horas, y tiene lo que pasa si sale bien y, si pones una probabilidad de que salga mal, lo que pasa entonces: prestigio, fama, dinero, ánimo y salud, y lo que se cuenta. Seguir tu camino lo pone siempre el juego.</li>
+</ul>
+<p>En las misiones hay campos nuevos para historias como la del buen camino: Es del buen camino, que hace que la misión dé prestigio en vez de fama y que no empiece sola al llegar a su lugar, sino que aparezca como una opción más del menú de ese sitio; Lo que pide de la vida del jugador, que la hace esperar a que tenga un contrato, unos turnos trabajados, títulos, prestigio, negocios, la ficha limpia o unos contratos del tablón cumplidos (en total o, con Solo los contratos del tablón de este sitio, solo los de un sitio: por ejemplo, una misión que se abre tras dos encargos de una agencia; al cumplir el contrato que la abre, el juego avisa de la misión nueva); y Epílogos, para que la última misión cierre la historia con un final u otro según lo decidido. En las opciones de una decisión hay también Prestigio que da o quita.</p>
+<h3>Negociar con las bandas</h3>
+<p>Un solo elemento con las cifras de los tres tratos: lo que pagan por devolverles un barrio, lo que piden por venderlo y el tributo diario, que el juego mueve según la fuerza del jugador y su relación con cada banda. También los días que dura un tributo, los que hay que esperar para volver a tratar lo mismo, lo que se gana regateando, y las frases de cada respuesta, en tres pestañas. Las bandas son las de la sección Bandas.</p>
+<h3>Contratos del tablón</h3>
+<p>Cada elemento es una clase de encargo de las tabernas. Lo principal es el campo Cómo es el encargo, que tiene ocho valores: eliminar al objetivo y a sus guardaespaldas; lo mismo con parte de la escolta llegando en un vehículo; un objetivo que huye en un vehículo; uno metido en un local; seguir a su recadero hasta la guarida; darle un escarmiento sin matarle; recuperar un objeto; o proteger a alguien y llevarle a un sitio seguro. Al elegir uno aparecen sus campos: los tipos de enemigo del objetivo, de la escolta y de los refuerzos, que salen de la sección Tipos de enemigo; los vehículos en los que puede huir; los tipos de local; los objetos, o las personas a proteger.</p>
+<p>Además: cuánto abunda, cuántos contratos hay que haber cumplido para que aparezca, la paga base y la paga de más por cada enemigo de la escolta, y el texto con el que se anuncia en el tablón, que admite el apodo del objetivo, el lugar, cuántos le acompañan y lo demás; la ayuda del campo dice cómo se escribe cada uno. El juego cuelga tres encargos distintos cada día. Los apodos de los objetivos están en la sección Gente de la calle. El campo Solo en los tablones de estos sitios limita dónde cuelga: sin marcar ninguno, en el tablón de todas las tabernas; marcando alguno, solo en el de esos sitios. El mod El Diablo lo usa para que sus encargos solo salgan en la barra de su agencia.</p>
+<h3>La gente actúa y se une a tu banda</h3>
+<p>Un solo elemento. En la primera pestaña, con qué confianza y cuántas veces de cada cien alguien acompaña un rato al jugador, cuánto dura, cuántas veces le pega quien ha sido ofendido, cuántas le denuncia y cuánta confianza hace falta para un favor. En la pestaña Reclutar, las condiciones para que alguien de la calle se una a la banda: confianza, fama, valor de su carácter, edad máxima y la prima, que es un tanto por ciento de la tarifa de reclutar. Las demás pestañas son frases. El valor de cada carácter se cambia en Caracteres de la gente.</p>
+<h3>El oficio de policía y los avisos de la emisora</h3>
+<p>La sección El oficio de policía tiene un solo elemento, en varias pestañas: el prestigio que hace falta para ingresar, los rangos, cada cuántos avisos se asciende y cuánto más se cobra, los apercibimientos, el tiempo entre avisos y para llegar, cuántos obedecen al dar el alto, cuántos conductores paran con la sirena, la multa y lo que se lleva el agente, y todas las frases. El precio del curso está en Tarifas y precios.</p>
+<p>La sección Avisos de la emisora de la policía tiene un elemento por aviso. Su clase es una de cuatro: robo en un local, pelea en la calle, conductor temerario o persecución. Cada uno dice cuánto abunda, lo que paga, el tipo de enemigo de los sospechosos, cuántos son, los vehículos que puede llevar y lo que dice la emisora, con el lugar y el vehículo. Puedes cambiar los cuatro del juego o añadir otros de esas mismas clases.</p>
+<h3>Planes en pareja y vivir en pareja</h3>
+<p>Son del contenido para adultos. Cada plan de la sección Planes en pareja tiene su precio, las horas que dura, la afinidad y el ánimo que da, el tipo de lugar que tiene que haber en la localidad, si lo pide, y sus escenas: cada vez que se hace el plan se cuentan dos, y no se repiten hasta haberlas oído todas, así que conviene escribir cuatro o más. En las escenas, el nombre de la pareja se escribe como dice la ayuda del campo, y hay que redactarlas de forma que valgan tanto si la pareja es un hombre como si es una mujer.</p>
+<p>La sección Vivir en pareja tiene un solo elemento: con qué afinidad y cuántas citas acepta mudarse, cuántas personas de cada cien no se mudan nunca, lo que da comer juntos, cada cuánto pide algo y lo que se gana o se pierde, y las frases. En la sección Personas, cada persona tiene además el campo Si se iría a vivir con el jugador, para fijarlo a mano: con facilidad, cuando la relación va muy bien, o nunca.</p>
+<h3>Mejoras del taller</h3>
+<p>Cada mejora dice qué mejora, de una lista de siete efectos que el juego sabe hacer: motor, frenos, blindaje, neumáticos, suspensión, escape y depósito. También dice cuántos niveles tiene, de uno a cinco, cuánto da cada nivel en tanto por ciento y cuánto cuesta el primero; cada nivel cuesta ese precio multiplicado por su número. Con el identificador de una mejora del juego la cambias; con uno nuevo añades otra línea al menú del taller. Una mejora sin efecto se puede comprar y se describe, pero no cambia nada.</p>
+<h3>Armas: dónde se compran</h3>
+<p>El campo Dónde se compra de un arma elige el tipo de local que la vende: las armerías, las tiendas o las casas de empeños. Sin valor, se vende en las armerías. La munición se compra también en las armerías, se venda donde se venda el arma. La casilla No admite silenciador quita esa mejora para esa arma. Y cada arma debería tener su sonido: elige uno del juego o pon el tuyo en la carpeta de sonidos, como explica el apartado de los sonidos.</p>
+<h3>Barrios y bandas</h3>
+<p>En la descripción de un barrio cuenta cómo es, no de quién es. Si en tu barrio manda una banda, escribe su nombre en el campo Banda que manda en el barrio, y deja la descripción sin frases como «territorio de tal banda». El juego añade solo la frase que toca en cada momento: territorio de esa banda mientras mande ella, territorio del jugador cuando lo conquista, en guerra mientras se pelea por él, y de la banda que se lo quite si no lo defiende. Si escribes la banda en la descripción, el barrio seguirá diciendo que es suyo cuando ya no lo sea. Quien conquiste ese barrio peleará contra la banda que hayas puesto; si no pones ninguna, contra una al azar. Las bandas están en la sección Bandas: puedes añadir las tuyas, con su nombre y sus tipos de enemigo, y escribir ese nombre en tus barrios.</p>
+<p>Si aun así quieres que la descripción del barrio hable de la gente que manda en él o que se ve por sus calles, rellena también Descripción cuando el barrio cambia de manos: el juego usa esa otra cuando el barrio pasa a ser del jugador o de otra banda. Los lugares tienen lo mismo, en Más opciones: Nombre cuando el barrio cambia de manos y Descripción cuando el barrio cambia de manos. Sirven para una guarida, un local que controla la banda o cualquier sitio cuyo nombre o descripción diga quién manda: por ejemplo, «Guarida de Los Calaveras» puede pasar a llamarse «Antigua guarida de Los Calaveras». Si los dejas vacíos, el lugar no cambia.</p>
+<p>Dos lugares no pueden estar en el mismo punto, porque el jugador solo podría entrar en uno. Si pones un lugar en una fachada y una posición que ya ocupa otro, también de otro mod o del juego, el juego lo corre solo a un hueco libre de esa misma fachada. Es mejor elegir tú una posición libre.</p>
+<h3>Gasolineras y combustible</h3>
+<p>Para que en tu localidad se pueda repostar, crea un lugar de tipo Tienda y marca Es una gasolinera: tiene surtidor. Puedes ponerle su propio precio del litro. Pon al menos una en cada localidad con coches: quien juegue con el combustible activado la va a necesitar. En cada vehículo puedes escribir los litros de su depósito, o marcar que no gasta combustible si no lleva motor.</p>
+<h3>Tranvía, tren y aeropuerto en tus localidades</h3>
+<p>En los datos del juego y en los mods que vienen con él, las paradas de tranvía, la estación de tren, el aeropuerto y las vías están escritos como todo lo demás, y se editan igual:</p>
+<ul>
+<li>Cada parada, estación y aeropuerto es un lugar, con su tipo: Parada de tranvía, Estación de tren o Aeropuerto. Puedes cambiarle el nombre, la descripción, la manzana, la fachada y la posición, o borrarlo.</li>
+<li>Cada parada tiene además su Orden en la línea de tranvía: el tranvía las recorre de menor a mayor y vuelve a la primera.</li>
+<li>Un aeropuerto puede ser un aeródromo: marca Es un aeródromo, con pista corta. A los aeródromos llegan avionetas de línea, no aviones grandes, y en ellos solo se alquilan avionetas. Es lo propio de un pueblo.</li>
+<li>La localidad tiene los campos La vía del tren va por, y Número de esa calle o avenida. La vía del tren cruza la localidad de lado a lado, en línea recta: por una calle, de oeste a este, o por una avenida, de sur a norte. Por ella pasan los trenes, que paran en la estación. Si los dejas sin valor, la vía va por delante de la estación de tren. Sin estación de tren no hay vía.</li>
+<li>La localidad tiene el campo Recorrido de las vías del tranvía: la lista de cruces por los que pasan, en orden. Basta con poner los cruces donde giran. Cada parada para en el punto de las vías que le queda más cerca.</li>
+<li>La localidad tiene también el campo Poner el transporte público que falte. Con sí, si a tu localidad le falta alguna de estas cosas, el juego se la pone al cargarla: paradas en todos los barrios y aeropuerto si es una ciudad, y estación de tren si tiene una salida por carretera. Con no, tiene solo lo que tú le pongas.</li>
+</ul>
+<p>Si creas una localidad nueva y no pones nada, funciona igual: el juego le pone lo que falte. Si pones tú las paradas, no añade ninguna más. El botón Comprobar avisa si un cruce de las vías no existe, si dos paradas tienen el mismo orden o si una parada queda a más de sesenta metros de las vías.</p>
+<h3>Decisiones, ramas y finales</h3>
+<p>Cada opción de una decisión puede dejar, además, una renta: dinero que el jugador cobra, o paga, cada medianoche, para siempre.</p>
+<p>El tipo de paso Una decisión del jugador abre un menú con las opciones que escribas, de dos a cuatro. Cada opción tiene el texto que elige el jugador, una explicación para F1, lo que se cuenta al elegirla, y sus consecuencias: dinero, fama, ánimo y relación con una banda.</p>
+<ul>
+<li>Ponle un nombre a la decisión, una palabra sin espacios. Con ese nombre, otras misiones y otros pasos pueden depender de lo que se eligió.</li>
+<li>En una misión, Solo aparece si se tomó la decisión y Número de la opción elegida hacen que esa misión exista solo en una rama de la historia. La primera opción es la 1.</li>
+<li>En un paso, los mismos dos campos hacen que ese paso se juegue solo en una rama; en las demás se salta.</li>
+<li>En una misión, Texto del final de la historia la convierte en un final: al completarla se dice ese texto y queda apuntado en el diario. Con varias misiones así, cada una tras una opción distinta, la historia tiene varios finales.</li>
+</ul>
+<p>En la historia principal, las misiones fd1 a fd4 son un ejemplo: una decisión con tres opciones y un final para cada una.</p>
+
+<h3>Dar voz a los personajes</h3>
+<p>Las frases de los diálogos las lee el lector de pantalla de quien juega. Si quieres que suenen con voces grabadas, no hay que tocar nada en el mod: basta con dejar las grabaciones en la carpeta de voces del juego.</p>
+<ol>
+<li>Guarda el mod y pulsa <kbd>Control G</kbd>, o elige Guion de voces para grabar en el menú Mod. El editor escribe un archivo de texto con todas las frases de todas las misiones y lo abre en el Bloc de notas.</li>
+<li>En el guion, cada frase lleva encima el nombre que debe tener su grabación, por ejemplo <strong>oc01_1_2</strong>: misión, número de paso y número de frase. Al final dice cuántas frases tiene cada personaje, para repartirlas entre varias personas.</li>
+<li>Graba cada frase en un archivo aparte, en WAV, OGG, FLAC o MP3, con ese nombre.</li>
+<li>Algunas frases cambian con el protagonista: las que dicen su nombre, las que llevan una forma masculina y otra femenina entre corchetes, y las que dice él mismo. El guion lo avisa debajo de cada una y da el nombre de sus otras formas, con una arroba detrás: <strong>oc01_1_2@alex</strong>, <strong>oc01_1_2@m</strong>, <strong>oc01_1_2@alex_m</strong>. El archivo sin nada detrás es el de Dani en masculino. Puedes grabar solo ese: a quien juegue con otro protagonista, esa frase se la dirá su lector, nunca la grabación de otro.</li>
+<li>Deja los archivos en la carpeta de voces, que se abre con <kbd>Control Mayúsculas V</kbd>. Pueden ir en subcarpetas.</li>
+<li>Vuelve a pulsar <kbd>Control G</kbd> cuando quieras: las frases que ya tienen archivo salen marcadas con la palabra GRABADA.</li>
+</ol>
+<p>Las frases sin grabación las sigue leyendo el lector, así que se puede grabar poco a poco. Si después cambias el orden de los pasos o de las frases de una misión, cambian sus números: vuelve a sacar el guion y renombra los archivos.</p>
+<p>Para compartir un mod con voces, pasa el archivo del mod y, aparte, una carpeta con las grabaciones para copiar en <strong>data\voces\propias</strong>. Usa voces propias o voces sintéticas que tengas permiso para usar: no voces clonadas de personas reales ni sacadas de otros juegos o películas.</p>
+
+<h2>6. Los sonidos</h2>
+<p>Todo lo que añadas debe sonar. Cada lugar tiene un campo de sonido, que es el que se oye al pasar por su puerta y de fondo al entrar, y las armas y los vehículos tienen los suyos. Elige en el desplegable uno de los sonidos del juego. Si quieres uno tuyo, en el menú Mod elige Añadir un sonido propio, con <kbd>Control Mayúsculas A</kbd>: escoges un archivo WAV, OGG, FLAC o MP3, el editor lo copia a <code>data\mods\sonidos</code> con un nombre sin tildes ni espacios, y ya sale en todos los desplegables de sonido. Si se llama como uno del juego, lleva delante <code>mod_</code>: un mod nunca sustituye los sonidos del juego, que son de todos los packs. La guía <a href="cambiar_sonidos_es.html">cambiar_sonidos_es.html</a> describe todos los sonidos.</p>
+
+<h2>7. Comprobar y probar</h2>
+<p><kbd>F5</kbd> revisa el mod y lista lo que encuentra: referencias a cosas que no existen, lugares fuera del mapa o sobre un edificio, misiones sin pasos, identificadores repetidos y pasos incoherentes. Cada aviso dice en qué elemento está. Corrige y vuelve a comprobar hasta que no quede ninguno.</p>
+<p><kbd>F9</kbd> guarda, comprueba y abre el juego. Empieza una partida nueva o carga una, y ve a ver tu contenido.</p>
+<p>Si la comprobación dice que algo apunta a una localidad que no existe, dice también por qué: si has puesto el nombre de la localidad en vez de su identificador, o si la localidad está en otro mod. Los lugares que llevan a una localidad tienen que ir en el mismo mod que ella. Al cambiar el identificador de una localidad de tu mod, todo lo que apuntaba a ella, lugares, salidas, carreras y el mapa del aire, se cambia solo, y el editor dice cuántas referencias ha cambiado.</p>
+
+<h2>8. Activar y desactivar mods</h2>
+<p>Con <kbd>Control M</kbd> se abre una lista de casillas con todos los mods de la carpeta. Los marcados son los que carga el juego. Un mod desactivado no se borra: su archivo cambia de extensión y el juego lo ignora. Desde la versión 1.7.3 se hace también dentro del juego, en Opciones, Mods: activar o desactivar.</p>
+
+<h2>9. Compartir un mod</h2>
+<p>Envía el archivo <code>.pbm</code> de la carpeta <code>data\mods</code>. Quien lo reciba solo tiene que copiarlo en su carpeta <code>data\mods</code>. Si tu mod usa sonidos propios, envía también esos archivos, que están en <code>data\mods\sonidos</code>, y quien lo reciba los copia en la misma carpeta.</p>
+
+<h2>10. Problemas frecuentes</h2>
+<ul>
+<li>El lector no dice el nombre de un campo: pulsa <kbd>Control H</kbd>.</li>
+<li>El juego no muestra mi contenido: comprueba con <kbd>Control M</kbd> que el mod está activado y con <kbd>F5</kbd> que no tiene errores. Los lugares con contenido para adultos solo aparecen con esa opción activada en el juego.</li>
+<li>He estropeado un mod: los originales del juego no se tocan nunca. Desactiva o borra el archivo del mod y el juego vuelve a estar como antes.</li>
+</ul>
+
+</body>
+</html>

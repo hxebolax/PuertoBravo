@@ -32,7 +32,7 @@ def conversar(p, q):
             app.cerrar(menu)
 
     def sitios():
-        ops = [Opcion(tr('Dónde puedo {c}').format(c=(c)) if c in ("comer", "curarme", "dormir", "comprar") else tr('Dónde hay {c}').format(c=(c)) if c != "policía" else tr("Dónde está la policía"),
+        ops = [Opcion(_SITIO_PL[c] if _pl() and c in _SITIO_PL else tr('Dónde puedo {c}').format(c=(c)) if c in ("comer", "curarme", "dormir", "comprar") else tr('Dónde hay {c}').format(c=(c)) if c != "policía" else tr("Dónde está la policía"),
                       (lambda c=c: (app.cerrar(m), app.decir(p.responder(q, "sitio", c), True))),
                       ayuda=tr("Te dice cuál es el más cercano, a cuántos metros y hacia dónde, y te lo marca en el GPS. Si en esta localidad no hay, te lo dice.")) for c in SITIOS]
         m = Menu(app, tr("Preguntar por un sitio"), ops + [Opcion(tr("Volver"), lambda: app.cerrar(m))])
@@ -295,3 +295,16 @@ def local(app):
 
     m_ = Menu(app, tr("Modelo local"), ops, al_cerrar=cfg.guardar)
     app.abrir(m_)
+
+
+def _pl():
+    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
+    try:
+        from .i18n import actual
+        return actual() == "pl"
+    except Exception:  # noqa: BLE001
+        return False
+
+_SITIO_PL = {"comer": "Gdzie mogę coś zjeść", "curarme": "Gdzie mogę się podleczyć", "dormir": "Gdzie mogę się przespać",
+             "comprar": "Gdzie mogę zrobić zakupy", "dinero": "Gdzie jest bank", "armas": "Gdzie jest sklep z bronią",
+             "trabajo": "Gdzie znajdę pracę", "taller": "Gdzie jest warsztat", "fiesta": "Gdzie można się zabawić", "policía": "Gdzie jest policja"}

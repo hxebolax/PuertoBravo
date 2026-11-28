@@ -307,3 +307,69 @@ class Charla:
 
 def descripcion_json(f):
     return json.dumps({k: f[k] for k in ("nombre", "genero", "edad", "oficio", "caracter", "confianza")}, ensure_ascii=False)
+
+
+def _pl():
+    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
+    try:
+        from .i18n import actual
+        return actual() == "pl"
+    except Exception:  # noqa: BLE001
+        return False
+
+# ---------------------------------------------------------------- łatka polskiej wersji (latki/rozmowy_zamiary_pl.py)
+import unicodedata as _ud
+
+
+def _bez_znakow(s):
+    s = _ud.normalize("NFD", (s or "").lower().replace("ł", "l"))
+    return "".join(c for c in s if _ud.category(c) != "Mn")
+
+
+_PALABRAS_PL = {
+    "despedir": ("do widzenia", "na razie", " pa ", "nara", "ide juz", "musze isc", "musze leciec", "do zobaczenia", "zegnaj", "trzymaj sie"),
+    "amenazar": ("dawaj", "portfel", "zabije", "bo cie", "groze", "pozalujesz", "oddawaj", "kase albo"),
+    "insultar": ("idiot", "debil", "kretyn", "glup", "palant", "dupek", "frajer", "spierdal", "kurw", "chuj", "smiec", "cymbal", "baran"),
+    "ligar": ("ladn", "przystojn", "podobasz mi sie", "randk", "twoj numer", "numer telefonu", "telefon", "kolacje ze mna",
+              "umowisz sie", "wyjdziesz ze mna", "sliczn", "flirt"),
+    "limosna": ("masz,", "wez to", "daje ci", "to dla ciebie", "dla ciebie", "napiwek", "trzymaj,"),
+    "invitar": ("zapraszam", "kawe", "kawy", "kawk", "piwo", "piwa", "piwk", "na drinka", "postawie", "stawiam"),
+    "chiste": ("kawal", "dowcip", "znasz ten", "opowiem ci jeden", "zart"),
+    "cumplido": ("super", "swietn", "ekstra", "fajn", "mily", "mila", "sympatyczn", "elegancko", "pieknie", "wspaniale", "uwielbiam", "fajowo"),
+    "amistad": ("przyjaci", "kumpl", "przyjazn", "spotkajmy sie", "zobaczymy sie jeszcze"),
+    "rumor": ("co slychac", "co nowego", "plotk", "wiesci", "nowin", "co sie dzieje"),
+    "barrio": ("dzielnic", "okolic", "tutaj", "to miejsce", "miasto", "miasteczk"),
+    "trabajo_npc": ("czym sie zajmujesz", "gdzie pracujesz", "pracujesz", "twoja praca", "zawod", "co robisz"),
+    "saludar": ("czesc", "dzien dobry", "witaj", "siema", "hej", "dobry wieczor", "jak sie masz", " elo "),
+}
+_SITIOS_PL = {"comer": ("jedz", "jesc", " bar", "tawern", "restaurac", "glod", "kolac", "obiad", "knajp", "pizz"), "curarme": ("szpital", "aptek", "lekarz", "rann", "lecz", "przychodni"),
+              "dinero": ("bank", "lombard", "pieniad", "wyplac", "bankomat"), "armas": ("bron", "rusznik"), "trabajo": ("prac", "urzad pracy", "robot"),
+              "dormir": ("hotel", "spac", "nocleg"), "taller": ("warsztat", "mechanik"), "policía": ("policj", "komisariat"),
+              "comprar": ("sklep", "kupi", "zakup"), "fiesta": ("klub", "kasyn", "impreza", "dyskotek")}
+_PYTANIE_O_SITIO = ("gdzie", "jak dojsc", "jak dojechac", "jak trafic", "szukam",
+                    "jest tu jakis", "jest tu jakas", "jest tu jakies", "potrzebuje")
+
+
+def _interpretar_pl(texto):
+    """Tylko polskie słowa: hiszpańskie skróty (maja, zona, o te) pasowałyby do polskich wyrazów (mają, żona, o tej)."""
+    t = " " + _bez_znakow(texto).strip() + " "
+    if not t.strip():
+        return "nada", None
+    if any(c in t for c in _PALABRAS_PL["trabajo_npc"]):
+        return "trabajo_npc", None
+    if any(x in t for x in _PYTANIE_O_SITIO):
+        for clave in SITIOS:
+            if any(x in t for x in _SITIOS_PL.get(clave, ())):
+                return "sitio", clave
+        return "sitio", None
+    for intencion, _claves in PALABRAS:
+        if any(c in t for c in _PALABRAS_PL.get(intencion, ())):
+            return intencion, None
+    return "otra", None
+
+
+_interpretar_es = interpretar
+
+
+def interpretar(texto):
+    return (_interpretar_pl if _pl() else _interpretar_es)(texto)

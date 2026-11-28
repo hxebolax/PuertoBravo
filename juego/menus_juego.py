@@ -685,7 +685,7 @@ def opciones(app):
                "completa": tr("completa, apunta sola al enemigo más cercano"), "manual": tr("manual, hay que encararse al enemigo"),
                "facil": tr("fácil"), "normal": tr("normal"), "dificil": tr("difícil"),
                "cardinal": tr("puntos cardinales"), "reloj": tr("horas del reloj"), "relativa": tr("delante, derecha, detrás, izquierda"),
-               "todos": tr("todo el mundo"), "mujeres": tr("las mujeres"), "hombres": tr("los hombres"), "x": tr("prefiero no decirlo"), "h": tr("hombre"), "m": tr("mujer"),
+               "todos": tr("todo el mundo"), "mujeres": tr("las mujeres"), "hombres": tr("los hombres"), "x": tr("prefiero no decirlo"), "h": ("mężczyzna" if _pl() else tr("hombre")), "m": tr("mujer"),
                "nada": tr("nunca"), "pocas": tr("pocas veces"), "algunas": tr("de vez en cuando"), "muchas": tr("a menudo"),
                "apagado": tr("apagado, nadie intenta quitártelos"), "tranquilo": tr("tranquilo, pocos asaltos y con mucho plazo"), "duro": tr("duro, asaltos seguidos y con poco plazo"),
                "no": tr("no, te esperan los mismos vayas con quien vayas"), "moderado": tr("moderado, algo más de oposición si vas acompañado"),
@@ -2645,3 +2645,12 @@ def _blackjack(p):
                        ayuda=tr("Tus cartas, lo que suman y la carta que enseña la banca. Intro lo vuelve a leer."))]
     m = Menu(app, tr("Blackjack. Gana quien se acerque más a 21 sin pasarse"), ops)
     app.abrir(m)
+
+
+def _pl():
+    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
+    try:
+        from .i18n import actual
+        return actual() == "pl"
+    except Exception:  # noqa: BLE001
+        return False

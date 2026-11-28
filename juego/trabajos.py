@@ -414,3 +414,15 @@ class Trabajos:
                     self._carrera_punto()
             elif _agotado(t):
                 self.terminar_trabajo(tr("Se acabó el tiempo. Has perdido la carrera."))
+
+
+def _pl():
+    try:
+        from .i18n import actual
+        return actual() == "pl"
+    except Exception:  # noqa: BLE001
+        return False
+
+
+if _pl():
+    NOMBRE_TRABAJO.update({"taxi": "[taksówkarz|taksówkarka]", "vigilante": "[strażnik|strażniczka]", "camion": "[przewoźnik|przewoźniczka]"})

@@ -63,7 +63,7 @@ def texto_reloj(rel):
 
 def metros(d):
     d = int(round(d))
-    return tr("1 metro") if d == 1 else tr('{d} metros').format(d=(d))
+    return _metry_pl(d) if _pl() else (tr("1 metro") if d == 1 else tr('{d} metros').format(d=(d)))
 
 
 def _leer_json(ruta_archivo):
@@ -893,3 +893,20 @@ class Mar(Mundo):
         d = math.hypot(dx, dy) or 1.0
         x, y = self.punto_libre(lugar.x + dx / d * 12, lugar.y + dy / d * 12)
         return x, y, dir_de_rumbo(rumbo_a(dx, dy))
+
+
+def _pl():
+    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
+    try:
+        from .i18n import actual
+        return actual() == "pl"
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def _metry_pl(d):
+    if d == 1:
+        return "1 metr"
+    if d % 10 in (2, 3, 4) and d % 100 not in (12, 13, 14):
+        return f"{d} metry"
+    return f"{d} metrów"

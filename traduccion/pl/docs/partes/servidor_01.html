@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Montar un servidor de Puerto Bravo</title>
+<style>
+body { font-family: Segoe UI, Arial, sans-serif; max-width: 56em; margin: 1em auto; padding: 0 1em; line-height: 1.6; background: #111; color: #f2f2f2; font-size: 1.1em; }
+h1, h2, h3, h4 { color: #ffd84d; }
+li { margin-bottom: .4em; }
+code, kbd { background: #2a2a2a; padding: 0 .3em; }
+a { color: #9fd0ff; }
+</style>
+</head>
+<body>
+<h1>Montar un servidor de Puerto Bravo</h1>
+<p>Un servidor es un programa pequeño que se deja encendido para que varias personas jueguen juntas en la misma ciudad. Guarda los personajes, las bandas y los barrios, y decide lo que pasa entre jugadores. No necesita una máquina potente y lo mismo vale para dos amigos que para cien personas o más.</p>
+<p>Todo se puede hacer con teclado y con lector de pantalla: hay un panel con ventana para Windows y, en cualquier sistema, el servidor se lleva por texto.</p>
+<p>Esta guía se puede recorrer por encabezados. Cada manera de montarlo tiene su apartado, con los pasos uno a uno. No hace falta leerla entera: elige tu manera en el apartado 3 y ve a ella.</p>
+
+<h2 id="indice">Índice</h2>
+<ol>
+<li><a href="#que">Qué hace falta</a></li>
+<li><a href="#carpeta">Lo que hay en la carpeta servidor</a></li>
+<li><a href="#elegir">Elegir cómo montarlo</a></li>
+<li><a href="#panel">En tu Windows, con el panel</a></li>
+<li><a href="#consola">En tu Windows, por consola</a></li>
+<li><a href="#inicio">Que arranque solo con Windows</a></li>
+<li><a href="#linux">En Linux o en un servidor alquilado, con Python</a></li>
+<li><a href="#systemd">En Linux, como servicio de systemd</a></li>
+<li><a href="#raspberry">En una Raspberry Pi</a></li>
+<li><a href="#mac">En un Mac</a></li>
+<li><a href="#docker">Con Docker y docker compose</a></li>
+<li><a href="#synology">En un NAS Synology</a></li>
+<li><a href="#direccion">La dirección que das a tu gente, y cómo entrar desde fuera de casa</a></li>
+<li><a href="#cifrado">Cifrado y certificado</a></li>
+<li><a href="#entrada">Quién puede entrar</a></li>
+<li><a href="#administrar">Administrar el servidor</a></li>
+<li><a href="#versiones">Jugar con versiones distintas del juego</a></li>
+<li><a href="#dinero">El dinero de los jugadores: el tope por hora y los encargos</a></li>
+<li><a href="#rol">Rol por texto, la voz y la radio de los vehículos</a></li>
+<li><a href="#copias">Copias de seguridad, mover el servidor y actualizarlo</a></li>
+<li><a href="#grandes">Servidores con mucha gente</a></li>
+<li><a href="#problemas">Solución de problemas</a></li>
+<li><a href="#privacidad">Qué guarda el servidor</a></li>
+<li><a href="#opciones">Todas las opciones de configuración</a></li>
+</ol>
+
+<h2 id="que">1. Qué hace falta</h2>
+<ul>
+<li>Un ordenador que se quede encendido mientras se juega: tu PC, un portátil viejo, un NAS, una Raspberry Pi o un servidor alquilado.</li>
+<li>En Windows no hay que instalar nada: el servidor viene con el juego.</li>
+<li>En Linux, Mac, NAS o Raspberry Pi hace falta Python 3.8 o posterior, que casi siempre viene ya instalado. No hay que instalar nada más: el servidor solo usa lo que trae Python. Allí no hace falta el juego.</li>
+<li>Para que entre gente de fuera de tu casa: abrir un puerto en el router, o usar una red privada. Está explicado en el apartado 13.</li>
+<li>Consume muy poco: con unos pocos jugadores apenas se nota en el procesador ni en la memoria.</li>
+</ul>
+
+<h2 id="carpeta">2. Lo que hay en la carpeta servidor</h2>
+<p>Dentro de la carpeta del juego hay una carpeta llamada <code>servidor</code>. Ahí está todo lo del servidor y ahí se guarda todo lo suyo. Las actualizaciones del juego no tocan tu configuración ni tus datos.</p>
+<ul>
+<li><code>Panel del servidor.bat</code>: abre la ventana del panel. Es lo más cómodo en Windows.</li>
+<li><code>Servidor por consola.bat</code>: arranca el servidor en una ventana de texto.</li>
+<li><code>Parar el servidor.bat</code>: para con orden el servidor que esté en marcha.</li>
+<li><code>Arrancar con Windows - activar.bat</code> y <code>Arrancar con Windows - quitar.bat</code>: para que arranque solo al iniciar sesión.</li>
+<li><code>documentacion_es.html</code> y <code>documentacion_en.html</code>: esta guía, en español y en inglés.</li>
+<li><code>servidor.conf.ejemplo</code>: todas las opciones, explicadas una a una.</li>
+<li><code>otros_sistemas</code>: lo que se copia a un Linux, un Mac, un NAS o una Raspberry Pi. Lleva el código del servidor, los guiones <code>arrancar.sh</code>, <code>parar.sh</code>, <code>reiniciar.sh</code> y <code>estado.sh</code>, el servicio de systemd <code>puertobravo.service</code>, y los archivos de Docker: <code>Dockerfile</code>, <code>docker-compose.yml</code> y <code>entrada_docker.sh</code>.</li>
+</ul>
+<p>Cuando arranques el servidor por primera vez aparecerán además:</p>
+<ul>
+<li><code>servidor.conf</code>: tu configuración.</li>
+<li><code>datos_servidor</code>: los personajes, las bandas, el certificado y, dentro, la carpeta <code>copias</code> con las copias de seguridad.</li>
+</ul>
+<p>Los programas del servidor en Windows están en la carpeta del juego, junto al juego: <code>PuertoBravoServidorPanel.exe</code>, el panel, y <code>PuertoBravoServidor.exe</code>, la consola. Los dos trabajan siempre con la carpeta <code>servidor</code>, se abran desde donde se abran.</p>
+
+<h2 id="elegir">3. Elegir cómo montarlo</h2>
+<ul>
+<li>Quieres jugar con unos amigos desde tu PC con Windows y que sea fácil: <a href="#panel">el panel</a>, apartado 4.</li>
+<li>Prefieres una ventana de texto, o vas a dejarlo arrancado sin atenderlo: <a href="#consola">la consola</a>, apartado 5, y <a href="#inicio">que arranque solo</a>, apartado 6.</li>
+<li>Tienes un ordenador con Linux, o alquilas un servidor: apartados <a href="#linux">7</a> y <a href="#systemd">8</a>.</li>
+<li>Tienes una Raspberry Pi: <a href="#raspberry">apartado 9</a>.</li>
+<li>Tienes un Mac: <a href="#mac">apartado 10</a>.</li>
+<li>Usas Docker: <a href="#docker">apartado 11</a>.</li>
+<li>Tienes un NAS Synology: <a href="#synology">apartado 12</a>.</li>
+</ul>
+<p>La configuración y los datos son los mismos en todas: puedes empezar en tu PC y llevarte el servidor a otra máquina más adelante. El apartado 20 dice cómo.</p>
+
+<h2 id="panel">4. En tu Windows, con el panel</h2>
+<h3>Arrancarlo por primera vez</h3>
+<ol>
+<li>Abre la carpeta del juego, entra en la carpeta <code>servidor</code> y abre <code>Panel del servidor.bat</code>. También puedes abrir directamente <code>PuertoBravoServidorPanel.exe</code>, en la carpeta del juego.</li>
+<li>Se abre la ventana del panel, con el foco en el estado del servidor, que dirá que está parado.</li>
+<li>Si quieres cambiar algo antes de arrancar, pulsa Control+P para abrir la configuración. Lo mínimo es ponerle un nombre a tu servidor, en la primera pestaña. Pulsa Aceptar para guardar.</li>
+<li>Pulsa F5 para arrancar. La primera vez tarda unos segundos, porque el servidor crea su certificado para cifrar la conexión.</li>
+<li>Cuando termina, el panel dice «Servidor en marcha» y el puerto. Si Windows pregunta si permites al programa comunicarse por la red, di que sí: sin eso no puede entrar nadie.</li>
+<li>En la pestaña Estado está la dirección que tienes que dar a quien juegue en tu misma casa. El botón Copiar la dirección la pone en el portapapeles.</li>
+<li>Entra tú el primero desde el juego: la primera cuenta que entra es la administradora.</li>
+</ol>
+<h3>Las pestañas</h3>
+<p>Se cambia de pestaña con Control+Tabulador y Control+Mayúsculas+Tabulador.</p>
+<ul>
+<li>Estado: si está en marcha, cuánta gente hay, el puerto, la dirección para tus amigos, el cifrado con su huella y el mundo con el que trabaja. Una cosa por línea. Se pone al día solo cuando cambia algo, sin mover el cursor de donde lo tengas; F6 lo pone al día en el momento.</li>
+<li>Jugadores: quién está dentro, dónde y con qué versión del juego. Con los botones, o con la tecla Aplicaciones sobre un jugador, puedes mandarle un mensaje, expulsarle, vetarle o hacerle administrador.</li>
+<li>Cuentas: todas las cuentas que han entrado alguna vez. Desde aquí se veta, se perdona un veto, se da o se quita la administración y se borra una cuenta, aunque la persona no esté dentro.</li>
+<li>Invitaciones: los códigos de invitación, libres y usados. Se crean, se copian y se anulan.</li>
+<li>Registro: lo que va diciendo el servidor, con lo más nuevo al final. Debajo hay un campo para escribirle órdenes, las mismas de la consola.</li>
+</ul>
+<h3>Teclas del panel</h3>
+<ul>
+<li>F5: arrancar el servidor. Mayúsculas+F5: pararlo. Control+F5: reiniciarlo.</li>
+<li>Control+P: configuración. Control+Q: salir.</li>
+<li>Control+N: anuncio a todos los jugadores. Control+M: mensaje al jugador elegido. Control+E: expulsar al jugador elegido.</li>
+<li>Control+I: crear una invitación. Control+D: cambiar el mensaje del día. Control+O: escribir una orden.</li>
+<li>F6: actualizar el estado y las listas.</li>
+<li>Control+S: guardar ahora. Control+B: copia de seguridad ahora. Control+R: restaurar una copia. Control+G: guardar el registro en un archivo.</li>
+<li>F1: abrir esta guía. Control+H: explica el control en el que estás.</li>
+<li>Alt más la letra subrayada: ir a un control de la pestaña o abrir un menú.</li>
+<li>Tecla Aplicaciones, o Mayúsculas+F10, en las listas de jugadores y de cuentas: acciones sobre lo elegido.</li>
+</ul>
+<h3>La configuración</h3>
+<ul>
+<li>Control+P abre un diálogo con una pestaña por cada grupo de opciones. Control+H sobre cualquier control dice qué hace, qué valores admite y si pide reiniciar.</li>
+<li>Aceptar guarda y cierra. Aplicar guarda sin cerrar. Cancelar no cambia nada.</li>
+<li>Valores de fábrica deja como vienen de serie las opciones de la pestaña en la que estás, o todas. No se guarda nada hasta que pulsas Aceptar o Aplicar.</li>
+<li>Casi todo se aplica con el servidor en marcha. Si cambias algo que pide reiniciar, como el puerto o el cifrado, el panel te lo dice y te ofrece reiniciar en ese momento.</li>
+<li>La configuración se guarda en <code>servidor.conf</code>, un archivo de texto con cada opción explicada, que también se puede cambiar con el Bloc de notas.</li>
+</ul>
+<h3>Parar y cerrar</h3>
+<ul>
+<li>Mayúsculas+F5 para el servidor: avisa a los jugadores, guarda todo y los desconecta. Si hay gente dentro, antes pregunta.</li>
+<li>Si cierras el panel con el servidor en marcha, pregunta y, si dices que sí, lo para con orden antes de cerrarse.</li>
+<li>El servidor solo funciona mientras el panel está abierto. Puedes minimizarlo.</li>
+<li>Control+F5 lo reinicia: se dice a los jugadores que es un reinicio, y sus juegos esperan y vuelven a entrar solos en cuanto arranca otra vez.</li>
+<li>Si actualizas el juego con el panel abierto, el panel se cierra solo, con orden, y vuelve a abrirse al terminar, con el servidor otra vez en marcha si lo estaba. Está en el <a href="#copias">apartado 20</a>.</li>
+</ul>
+
+<h2 id="consola">5. En tu Windows, por consola</h2>
+<ol>
+<li>En la carpeta <code>servidor</code> del juego, abre <code>Servidor por consola.bat</code>.</li>
+<li>La primera vez escribe <code>servidor.conf</code> con todas las opciones explicadas, y arranca con los valores de serie.</li>
+<li>La ventana va diciendo lo que pasa: en qué puerto escucha, si cifra, quién entra y quién sale.</li>
+<li>En esa misma ventana se le escriben órdenes. Escribe <code>ayuda</code> y pulsa Intro para oírlas todas. Están en el apartado 16.</li>
+<li>Para cambiar la configuración, abre <code>servidor.conf</code> con el Bloc de notas, cambia lo que quieras y guarda. Después escribe <code>recargar</code> en la consola: aplica lo que se puede cambiar sin reiniciar y te dice qué espera al reinicio.</li>
+<li>Para pararlo escribe <code>apagar</code>, pulsa Control+C o cierra la ventana. En los tres casos avisa a los jugadores y lo guarda todo.</li>
+</ol>
+<p>El panel y la consola usan la misma configuración y los mismos datos: puedes usar un día uno y otro día el otro, pero no los dos a la vez.</p>
+<p>Quien sepa manejar una ventana de órdenes puede llamar al programa directamente desde la carpeta del juego:</p>
+<ul>
+<li><code>PuertoBravoServidor.exe --ejemplo</code>: escribe <code>servidor.conf</code> y sale.</li>
+<li><code>PuertoBravoServidor.exe --comprobar</code>: revisa <code>servidor.conf</code>, dice lo que no vale y sale.</li>
+<li><code>PuertoBravoServidor.exe --opciones</code>: dice todas las opciones con su explicación.</li>
+<li><code>PuertoBravoServidor.exe --parar</code>: para con orden el servidor que está en marcha.</li>
+<li><code>PuertoBravoServidor.exe --actualizar</code>: lo para avisando a los jugadores de que se reinicia para actualizarse. Sus juegos esperan y vuelven a entrar solos cuando lo arranques otra vez.</li>
+<li><code>PuertoBravoServidor.exe --reiniciar</code>: lo mismo, diciendo que es por mantenimiento.</li>
+<li><code>PuertoBravoServidor.exe --puerto=47821</code>: cualquier opción se puede dar así, sin tocar el archivo.</li>
+</ul>
+
+<h2 id="inicio">6. Que arranque solo con Windows</h2>
+<h3>Al iniciar tu sesión</h3>
+<ol>
+<li>En la carpeta <code>servidor</code>, abre <code>Arrancar con Windows - activar.bat</code>. Deja un acceso en la carpeta Inicio de tu usuario. No hacen falta permisos de administrador.</li>
+<li>Desde entonces, cada vez que inicies sesión el servidor arranca solo, en una ventana minimizada.</li>
+<li>Para pararlo sin buscar esa ventana, abre <code>Parar el servidor.bat</code>.</li>
+<li>Para que deje de arrancar solo, abre <code>Arrancar con Windows - quitar.bat</code>.</li>
+</ol>
+<h3>Al encender el ordenador, sin que nadie inicie sesión</h3>
+<p>Esto es para quien tiene un ordenador dedicado. Hace falta una cuenta con permisos de administrador.</p>
+<ol>
+<li>Abre el Programador de tareas de Windows: pulsa la tecla Windows, escribe Programador de tareas y pulsa Intro.</li>
+<li>En el menú Acción, elige Crear tarea.</li>
+<li>En la pestaña General, ponle de nombre Servidor de Puerto Bravo y marca Ejecutar tanto si el usuario inició sesión como si no.</li>
+<li>En la pestaña Desencadenadores, pulsa Nuevo y elige Al iniciar el sistema.</li>
+<li>En la pestaña Acciones, pulsa Nueva. En Programa, pon la ruta completa de <code>PuertoBravoServidor.exe</code>, que está en la carpeta del juego. En Agregar argumentos, escribe <code>servidor.conf</code>.</li>
+<li>En la pestaña Configuración, desmarca Detener la tarea si se ejecuta durante más de, para que no la corte a los tres días.</li>
+<li>Acepta. Windows te pedirá la contraseña de tu cuenta para poder arrancarla sin sesión.</li>
+</ol>
+<p>Arrancado así no tiene ventana. Para pararlo con orden usa <code>Parar el servidor.bat</code>, y para administrarlo, las órdenes desde el chat del juego, que están en el apartado 16. Si en el Programador de tareas eliges Finalizar, se corta en seco: no se pierde más que lo del último minuto, pero es mejor pararlo con orden.</p>
+
+<h2 id="linux">7. En Linux o en un servidor alquilado, con Python</h2>
+<ol>
+<li>Comprueba que hay Python 3.8 o posterior: escribe <code>python3 --version</code>.</li>
+<li>Copia la carpeta <code>otros_sistemas</code> del juego a la máquina, con el nombre que quieras, por ejemplo <code>puertobravo</code> dentro de tu carpeta personal. Sirve cualquier manera de copiar archivos: un lápiz de memoria, <code>scp</code>, o un programa de transferencia de archivos.</li>
+<li>Entra en esa carpeta: <code>cd puertobravo</code>. Dentro tiene que estar la carpeta <code>servidor</code>, con el código.</li>
+<li>Escribe la configuración de ejemplo: <code>python3 -m servidor --ejemplo</code>. Crea <code>servidor.conf</code>.</li>
+<li>Cámbiala a tu gusto con un editor de texto, por ejemplo <code>nano servidor.conf</code>. Para comprobar que no hay errores: <code>python3 -m servidor --comprobar</code>.</li>
+<li>Arranca: <code>python3 -m servidor</code>. Dice en qué puerto escucha y si cifra. En esa misma terminal se le escriben órdenes; <code>ayuda</code> las dice todas. Se para con <code>apagar</code> o con Control+C.</li>
+</ol>
+<h3>Dejarlo en segundo plano</h3>
+<ul>
+<li><code>sh arrancar.sh</code>: lo arranca en segundo plano, si no está ya en marcha. Lo que va diciendo queda en <code>servidor.log</code>.</li>
+<li><code>sh estado.sh</code>: dice si está en marcha y enseña lo último que ha dicho.</li>
+<li><code>sh parar.sh</code>: lo para con orden.</li>
+<li><code>sh reiniciar.sh</code>: avisa a los jugadores con la cuenta atrás, lo para con orden y lo vuelve a arrancar. Es lo que hay que usar después de poner el código nuevo del servidor: los juegos esperan y vuelven a entrar solos.</li>
+<li>Para que arranque al encender la máquina sin systemd, añade a tu cron una línea como <code>@reboot sh /home/tu_usuario/puertobravo/arrancar.sh</code>, con <code>crontab -e</code>.</li>
+<li>Arrancado así no tiene consola. Se administra desde el chat del juego, con las órdenes del apartado 16.</li>
+</ul>
+<h3>El cortafuegos</h3>
+<ul>
+<li>Si la máquina tiene cortafuegos, hay que dejar pasar el puerto del servidor por TCP. Con ufw: <code>sudo ufw allow 47820/tcp</code>. Con firewalld: <code>sudo firewall-cmd --permanent --add-port=47820/tcp</code> y después <code>sudo firewall-cmd --reload</code>.</li>
+<li>En un servidor alquilado suele haber además un cortafuegos en el panel del proveedor, a veces llamado grupo de seguridad: abre ahí también el puerto 47820 por TCP.</li>
+<li>Un servidor alquilado tiene dirección pública fija: no hay router que configurar. La dirección para tu gente es <code>puertobravo://</code>, la dirección de la máquina, dos puntos y el puerto.</li>
+</ul>
+
+<h2 id="systemd">8. En Linux, como servicio de systemd</h2>
+<p>Así arranca solo con el sistema, se reinicia si se cae y se para con orden al apagar. Hace falta poder usar <code>sudo</code>.</p>
+<ol>
+<li>Copia la carpeta del servidor a <code>/opt/puertobravo</code>: <code>sudo cp -r puertobravo /opt/puertobravo</code>. Dentro tiene que quedar la carpeta <code>servidor</code>.</li>
+<li>Crea un usuario sin privilegios para él: <code>sudo useradd --system --home /opt/puertobravo puertobravo</code>.</li>
+<li>Dale la carpeta: <code>sudo chown -R puertobravo: /opt/puertobravo</code>.</li>
+<li>Si todavía no hay configuración, escríbela: <code>cd /opt/puertobravo</code> y <code>sudo -u puertobravo python3 -m servidor --ejemplo</code>. Cámbiala con <code>sudo -u puertobravo nano servidor.conf</code>.</li>
+<li>Copia el servicio: <code>sudo cp /opt/puertobravo/puertobravo.service /etc/systemd/system/</code>.</li>
+<li>Actívalo: <code>sudo systemctl daemon-reload</code> y después <code>sudo systemctl enable --now puertobravo</code>.</li>
+</ol>
+<ul>
+<li>Ver cómo va: <code>systemctl status puertobravo</code>.</li>
+<li>Oír lo que va diciendo: <code>journalctl -u puertobravo -f</code>. Se sale con Control+C.</li>
+<li>Pararlo: <code>sudo systemctl stop puertobravo</code>. Arrancarlo: <code>sudo systemctl start puertobravo</code>. Reiniciarlo, por ejemplo tras cambiar el puerto: <code>sudo systemctl restart puertobravo</code>.</li>
+<li>Si usas otra carpeta u otro usuario, cambia las líneas <code>WorkingDirectory</code> y <code>User</code> del archivo del servicio.</li>
+<li>Como servicio no tiene consola: se administra desde el chat del juego.</li>
+<li>Reiniciarlo avisando, por ejemplo tras actualizarlo: un administrador escribe en el chat del juego <code>/reiniciar</code> o <code>/actualizar</code>, o en la máquina, desde la carpeta del servidor, <code>sudo -u puertobravo python3 -m servidor --actualizar</code>. El servidor avisa con su cuenta atrás, lo guarda todo y termina con el código 75; el servicio lo vuelve a arrancar solo a los cinco segundos, y los juegos vuelven a entrar.</li>
+</ul>
+
+<h2 id="raspberry">9. En una Raspberry Pi</h2>
+<ul>
+<li>Vale cualquier modelo con Raspberry Pi OS: ya trae Python 3. Para unos pocos amigos sobra con el modelo más modesto.</li>
+<li>Los pasos son los mismos que en Linux: los apartados 7 y 8. Lo más práctico es dejarlo como servicio de systemd, para que arranque solo al encenderla.</li>
+<li>Para copiar la carpeta <code>otros_sistemas</code> puedes usar un lápiz de memoria, o <code>scp</code> desde tu ordenador si tienes activado SSH en la Raspberry.</li>
+<li>En los modelos más lentos, comprobar la identidad de quien entra tarda algo más de un segundo. Solo ocurre al entrar; jugando no se nota.</li>
+<li>Dale a la Raspberry una dirección fija en tu red desde la configuración del router, en el apartado de reserva de direcciones o DHCP estático. Así la dirección que das a tu gente no cambia, y la redirección del puerto sigue apuntando a ella.</li>
+<li>Usa una tarjeta de memoria de buena calidad y deja activadas las copias de seguridad automáticas: las tarjetas se estropean.</li>
+</ul>
+
+<h2 id="mac">10. En un Mac</h2>
+<ol>
+<li>Abre Terminal y escribe <code>python3 --version</code>. Si el Mac te ofrece instalar las herramientas de desarrollo, acepta: traen Python. También puedes instalar Python desde su página oficial.</li>
+<li>Copia la carpeta <code>otros_sistemas</code> al Mac, por ejemplo a tu carpeta personal con el nombre <code>puertobravo</code>.</li>
+<li>En Terminal: <code>cd ~/puertobravo</code>, después <code>python3 -m servidor --ejemplo</code> y, cuando hayas cambiado <code>servidor.conf</code> a tu gusto, <code>python3 -m servidor</code>.</li>
+<li>La primera vez, el Mac pregunta si permites conexiones entrantes a Python: di que sí.</li>
+<li>Para dejarlo en segundo plano valen los mismos guiones: <code>sh arrancar.sh</code>, <code>sh estado.sh</code>, <code>sh parar.sh</code> y <code>sh reiniciar.sh</code>.</li>
+<li>Para que el Mac no se duerma mientras hay gente jugando, mira en Ajustes del Sistema, en el apartado de energía o de batería.</li>
+</ol>
+
+<h2 id="docker">11. Con Docker y docker compose</h2>
+<ol>
+<li>Copia la carpeta <code>otros_sistemas</code> a la máquina donde tienes Docker, con el nombre <code>puertobravo</code>. Dentro están <code>Dockerfile</code>, <code>docker-compose.yml</code>, <code>entrada_docker.sh</code> y la carpeta <code>servidor</code>.</li>
+<li>Entra en esa carpeta y escribe <code>docker compose up -d --build</code>. Construye la imagen y arranca el servidor.</li>
+<li>Al lado aparece la carpeta <code>datos</code>. Dentro están <code>servidor.conf</code>, que se escribe solo la primera vez, y <code>datos_servidor</code>, con los personajes y las copias. Están fuera del contenedor: sobreviven a las actualizaciones.</li>
+<li>Para cambiar la configuración, edita <code>datos/servidor.conf</code> y reinicia: <code>docker compose restart</code>.</li>
+</ol>
+<ul>
+<li>Oír lo que dice: <code>docker compose logs -f</code>. Se sale con Control+C, sin parar el servidor.</li>
+<li>Pararlo con orden: <code>docker compose down</code>. Avisa a los jugadores y lo guarda todo.</li>
+<li>Escribirle órdenes: <code>docker attach puertobravo</code>, escribe la orden y pulsa Intro. Para salir sin pararlo, pulsa Control+P y después Control+Q. Lo más cómodo es administrarlo desde el chat del juego.</li>
+<li>No uses la orden <code>apagar</code> dentro de Docker para pararlo: Docker lo volvería a arrancar. Usa <code>docker compose down</code>.</li>
+<li>Para reiniciarlo avisando sí valen las órdenes <code>reiniciar</code> y <code>actualizar</code>, desde el chat del juego o con <code>docker attach</code>: el servidor avisa con su cuenta atrás, lo guarda todo y sale, y Docker lo vuelve a arrancar. Los juegos esperan y vuelven a entrar solos.</li>
+<li>Si cambias el puerto en <code>servidor.conf</code>, cambia también los dos números de la línea <code>ports</code> de <code>docker-compose.yml</code>.</li>
+<li>Con Docker, todas las conexiones pueden llegarle al servidor desde la misma dirección interna. Por eso la opción <code>conexiones_por_ip</code> debe quedarse en 0.</li>
+</ul>
+
+<h2 id="synology">12. En un NAS Synology</h2>
+<h3>Con Container Manager</h3>
+<p>Container Manager es el paquete de Docker de Synology. Se instala desde el Centro de paquetes y crea una carpeta compartida llamada <code>docker</code>.</p>
+<ol>
+<li>Abre File Station, entra en la carpeta compartida <code>docker</code> y crea dentro una carpeta llamada <code>puertobravo</code>.</li>
+<li>Sube a esa carpeta todo el contenido de <code>otros_sistemas</code>: la carpeta <code>servidor</code>, <code>Dockerfile</code>, <code>docker-compose.yml</code> y <code>entrada_docker.sh</code>. Los demás archivos no estorban.</li>
+<li>Abre Container Manager y ve al apartado Proyecto.</li>
+<li>Pulsa Crear. De nombre del proyecto pon <code>puertobravo</code>. En Ruta, elige la carpeta <code>docker/puertobravo</code>.</li>
+<li>Container Manager ve que ahí ya hay un <code>docker-compose.yml</code> y pregunta si lo usas: di que sí.</li>
+<li>Sigue con Siguiente hasta el final, sin activar el portal web, y pulsa Listo. Construye la imagen y arranca el servidor. La primera vez tarda unos minutos.</li>
+<li>La configuración queda en <code>docker/puertobravo/datos/servidor.conf</code>. Se puede cambiar desde File Station con el paquete Editor de texto. Después, en Container Manager, Proyecto, elige <code>puertobravo</code> y, en Acción, Detener e Iniciar.</li>
+<li>Lo que dice el servidor está en Container Manager, Contenedor, <code>puertobravo</code>, pestaña Registro.</li>
+</ol>
+<ul>
+<li>Si tienes activado el cortafuegos del NAS, en Panel de control, Seguridad, Cortafuegos, añade una regla que permita el puerto 47820 por TCP.</li>
+<li>Dale al NAS una dirección fija en tu red, o resérvasela en el router, para que la redirección del puerto no deje de apuntar a él.</li>
+<li>Para actualizar el servidor: sube la carpeta <code>servidor</code> nueva encima de la anterior y, en el proyecto, elige Acción, Compilar. La carpeta <code>datos</code> no se toca.</li>
+</ul>
+<h3>Sin Docker, con el Python del NAS</h3>
+<ol>
+<li>Instala el paquete Python 3 desde el Centro de paquetes, si no lo tienes.</li>
+<li>Copia el contenido de <code>otros_sistemas</code> a una carpeta del NAS, por ejemplo <code>puertobravo</code> dentro de una carpeta compartida.</li>
+<li>En Panel de control, Programador de tareas, crea una Tarea activada, de tipo Script definido por el usuario, con el evento Inicio y con tu usuario, no con el administrador del sistema.</li>
+<li>En el script, escribe <code>sh</code>, un espacio y la ruta completa de <code>arrancar.sh</code>. Por ejemplo, <code>sh /volume1/docker/puertobravo/arrancar.sh</code>.</li>
+<li>Para arrancarlo ya, sin reiniciar el NAS, elige la tarea y pulsa Ejecutar.</li>
+<li>Para pararlo, crea otra tarea igual, sin evento, con <code>parar.sh</code>, y ejecútala cuando haga falta.</li>
+</ol>
+
+<h2 id="direccion">13. La dirección que das a tu gente, y cómo entrar desde fuera de casa</h2>
+<h3>Cómo es la dirección</h3>
+<ul>
+<li>Es <code>puertobravo://</code>, la dirección de la máquina, dos puntos y el puerto. Por ejemplo, <code>puertobravo://192.168.1.50:47820</code>.</li>
+<li>En el juego se añade en Jugar en un servidor, Añadir un servidor.</li>
+<li>Si no has cambiado el puerto, que de serie es el 47820, se puede dar la dirección sin los dos puntos ni el puerto.</li>
+</ul>
+<h3>Para quien juega en tu misma casa</h3>
+<ul>
+<li>Vale la dirección de la máquina en tu red, que suele empezar por 192.168. El panel la dice en la pestaña Estado y la copia con el botón Copiar la dirección.</li>
+<li>En Windows también se puede saber abriendo una ventana de órdenes y escribiendo <code>ipconfig</code>: es la línea Dirección IPv4. En Linux, con <code>hostname -I</code>.</li>
+<li>Si el servidor está en el mismo ordenador en el que juegas, tú puedes entrar con <code>puertobravo://127.0.0.1</code>.</li>
+</ul>
+<h3>Para quien juega desde fuera: abrir el puerto en el router</h3>
+<p>Desde internet solo se ve tu router. Hay que decirle que lo que llegue al puerto del servidor se lo pase a la máquina donde está. Eso se llama abrir un puerto, redirigir un puerto o, en inglés, port forwarding.</p>
+<ol>
+<li>Dale a la máquina del servidor una dirección fija en tu red. En el router suele estar en el apartado de red local o DHCP, con un nombre como reserva de direcciones o DHCP estático.</li>
+<li>Entra en la configuración del router desde el navegador. La dirección suele ser <code>192.168.1.1</code> o <code>192.168.0.1</code>, y el usuario y la contraseña vienen en una pegatina del propio router.</li>
+<li>Busca el apartado de puertos. Según la marca se llama Puertos, Redirección de puertos, NAT, Servidor virtual o Port forwarding.</li>
+<li>Añade una regla: protocolo TCP, puerto externo 47820, puerto interno 47820 y, como destino, la dirección de la máquina del servidor en tu red.</li>
+<li>Guarda. Algunos routers piden reiniciarse.</li>
+<li>Averigua tu dirección pública: el router la enseña en su página de estado, con un nombre como dirección IP de internet o WAN. Esa, con <code>puertobravo://</code> delante, es la que das a tu gente.</li>
+</ol>
+<h3>Abrirlo solo, con UPnP</h3>
+<ul>
+<li>Muchos routers aceptan que un programa de tu red les pida abrir un puerto. Ese mecanismo se llama UPnP.</li>
+<li>En el panel, con el servidor en marcha, ve al menú Gestión y elige Abrir el puerto en el router con UPnP. Si el router lo permite, queda abierto y el panel lo dice; al parar el servidor se cierra solo.</li>
+<li>Si el router no contesta o lo rechaza, es que tiene UPnP desactivado o no lo admite. Puedes activarlo en su configuración, o abrir el puerto a mano como se explica arriba.</li>
+<li>El servidor por consola y el de Linux no abren el puerto solos: ahí hay que hacerlo a mano.</li>
+</ul>
+<h3>Si tu dirección pública cambia: DNS dinámico</h3>
+<ul>
+<li>En muchas casas la dirección pública cambia de vez en cuando. Para no tener que avisar a tu gente cada vez, se usa un nombre que apunta siempre a tu dirección del momento. Eso es un DNS dinámico.</li>
+<li>Hay servicios gratuitos que lo dan. Muchos routers y los NAS traen un apartado llamado DDNS o DNS dinámico para mantenerlo al día solos.</li>
+<li>Con el nombre, la dirección para tu gente queda, por ejemplo, <code>puertobravo://minombre.ejemplo.net:47820</code>.</li>
+</ul>
+<h3>Si no puedes abrir puertos</h3>
+<ul>
+<li>Algunas compañías no dan una dirección pública propia a cada casa: varias casas comparten una. Se llama CG-NAT. Se nota porque la dirección WAN que enseña tu router no coincide con la que ven las páginas que dicen cuál es tu dirección. En ese caso abrir el puerto no sirve. Puedes pedir a tu compañía que te saque del CG-NAT, o usar una red privada.</li>
+<li>Una red privada, como las que crean Tailscale o ZeroTier, une por internet los ordenadores que tú elijas como si estuvieran en la misma casa, sin abrir ningún puerto. Tú y cada persona que vaya a jugar instaláis el programa y os unís a la misma red. Cada ordenador recibe una dirección dentro de esa red.</li>
+<li>La dirección para tu gente es entonces <code>puertobravo://</code> y la dirección que la red privada le da a la máquina del servidor. Con Tailscale empieza por 100.</li>
+<li>Solo pueden entrar quienes estén en tu red privada: es además una manera de tener un servidor solo para tu grupo.</li>
+<li>Otra salida es alquilar un servidor pequeño, que tiene dirección pública propia: apartado 7.</li>
+</ul>
+
+<h2 id="cifrado">14. Cifrado y certificado</h2>
+<ul>
+<li>De serie, con <code>cifrado = auto</code>, la conexión va cifrada. El servidor crea su propio certificado la primera vez que arranca. No hay que instalar nada, tampoco en Windows.</li>
+<li>El certificado y su llave quedan en la carpeta de datos, en <code>certificado.pem</code> y <code>llave.pem</code>.</li>
+<li>El servidor dice al arrancar la huella de su certificado, y el panel la enseña en la pestaña Estado. Es una ristra de letras y números que lo identifica.</li>
+<li>El juego de cada jugador recuerda el certificado del servidor la primera vez que entra. Si otro día el servidor presenta un certificado distinto, el juego avisa y no entra sin permiso: puede ser que alguien se esté haciendo pasar por tu servidor.</li>
+<li>Por eso, si mueves el servidor a otra máquina, llévate <code>certificado.pem</code> y <code>llave.pem</code> con los datos: así nadie ve un aviso. Las copias de seguridad los llevan dentro.</li>
+<li>Si de verdad cambias de certificado, avisa a tu gente de que el juego les preguntará, y de que deben aceptar el nuevo.</li>
+<li>Si tienes un certificado propio, pon las rutas de sus archivos en las opciones <code>certificado</code> y <code>llave</code>. No es necesario: el juego no comprueba el nombre del certificado, sino que sea siempre el mismo.</li>
+<li>Con <code>cifrado = si</code>, el servidor no arranca si no puede cifrar. Con <code>cifrado = no</code>, nunca cifra: solo tiene sentido para pruebas en tu propia casa.</li>
+<li>La llave del certificado es secreta. No compartas <code>llave.pem</code> ni tus copias de seguridad.</li>
+</ul>
+
+<h2 id="entrada">15. Quién puede entrar</h2>
+<ul>
+<li>Cada jugador tiene una identidad que crea su juego y que no sale de su ordenador. El servidor le reconoce por ella: no hay contraseñas de cuenta que recordar ni que robar.</li>
+<li>La opción <code>entrada</code> decide quién puede crear un personaje nuevo. Quien ya tiene personaje vuelve a entrar siempre.</li>
+<li><code>abierta</code>: cualquiera que tenga la dirección.</li>
+<li><code>clave</code>: hay que saber la contraseña de entrada, que pones en la opción <code>clave</code>. El juego la pide la primera vez.</li>
+<li><code>invitacion</code>: hace falta un código de un solo uso. Se crean en el panel con Control+I, o con la orden <code>invitar</code>. Cada código vale para un solo personaje.</li>
+<li>La opción <code>max_jugadores</code> dice cuánta gente cabe a la vez. Con 0 no hay límite. Los administradores entran aunque esté lleno.</li>
+<li>Para no dejar pasar a alguien: en el panel, botón Vetar; por texto, la orden <code>vetar</code> y su nombre. Se levanta con Perdonar el veto o con la orden <code>perdonar</code>. También hay una lista de nombres vetados en la configuración, en la opción <code>vetados</code>.</li>
+<li>Para dejar sitio en servidores llenos, la opción <code>inactividad_minutos</code> saca a quien lleva ese tiempo sin hacer nada. Su personaje queda guardado.</li>
+</ul>
+
+<h2 id="administrar">16. Administrar el servidor</h2>
+<h3>Quién administra</h3>
+<ul>
+<li>La primera cuenta que entra en un servidor nuevo es administradora. Lo normal es que seas tú: entra el primero.</li>
+<li>Se nombran más con el botón Hacer administrador del panel, con la orden <code>admin</code> y el nombre, o poniendo sus nombres en la opción <code>admins</code>, separados por comas.</li>
+<li>Se quita con el botón Quitar la administración, en la pestaña Cuentas, o con la orden <code>quitaradmin</code>.</li>
+</ul>
+<h3>Desde dónde se dan las órdenes</h3>
+<ul>
+<li>Desde el panel: con sus botones y menús, o escribiéndolas en el campo Orden para el servidor, en la pestaña Registro.</li>
+<li>Desde la consola: escribiéndolas en la ventana del servidor.</li>
+<li>Desde el juego, si eres administrador: en el chat general, que se abre con F10, con una barra delante. Por ejemplo, <code>/jugadores</code> o <code>/aviso Esta noche hay guerra de bandas</code>. La respuesta te la dice el juego solo a ti. Así se administra un servidor que no tiene consola: un servicio, un contenedor o un NAS.</li>
+</ul>
+<h3>Las órdenes</h3>
+<p>Desde la versión 1.7.3 cada orden vale en español y en inglés, a la vez y sea cual sea el idioma del servidor: <code>ayuda</code> o <code>help</code>, <code>jugadores</code> o <code>players</code>, <code>expulsar</code> o <code>kick</code>, <code>vetar</code> o <code>ban</code>, <code>apagar</code> o <code>shutdown</code>, y así todas. La ayuda las dice en el idioma de la consola: en inglés, con la española entre paréntesis. Y con <code>renombrar nombre: nombre nuevo</code> le cambias el nombre de jugador a una cuenta sin que pierda nada; desde la 1.7.3 nadie entra por primera vez sin nombre de jugador, así que no hacen falta cuentas como «Jugador 3».</p>
+<!-- ORDENES:INICIO -->
+<ul>
+<li><code>ayuda</code>: dice todas las órdenes.</li>
+<li><code>estado</code>: cómo está el servidor: puerto, cifrado, mundo, tiempo en marcha y cuánta gente hay.</li>
+<li><code>jugadores</code>: quién está dentro y dónde.</li>
+<li><code>cuentas</code>: todas las cuentas del servidor, con las vetadas y las que administran.</li>
+<li><code>aviso texto</code>: dice algo a todos los que están dentro.</li>
+<li><code>decir nombre: texto</code>: dice algo solo a un jugador.</li>
+<li><code>expulsar nombre</code>: saca a un jugador; puede volver a entrar. Detrás de dos puntos se le puede decir el motivo.</li>
+<li><code>vetar nombre</code>: saca a un jugador y no le deja volver.</li>
+<li><code>perdonar nombre</code>: levanta el veto.</li>
+<li><code>admin nombre</code>: hace administrador a un jugador.</li>
+<li><code>quitaradmin nombre</code>: le quita la administración.</li>
+<li><code>renombrar nombre: nuevo nombre</code>: le cambia el nombre de jugador a una cuenta, sin perder nada; si está dentro, vuelve a entrar con el nuevo.</li>
+<li><code>borrarcuenta nombre</code>: borra una cuenta con su personaje, sus propiedades y su sitio en la banda; no se puede deshacer.</li>
+<li><code>invitar</code>: crea un código de invitación de un solo uso; con un número detrás, crea varios.</li>
+<li><code>invitaciones</code>: las invitaciones que hay, libres y usadas.</li>
+<li><code>anular código</code>: anula una invitación que aún no ha usado nadie.</li>
+<li><code>mensaje texto</code>: cambia el mensaje del día; sin texto, lo quita.</li>
+<li><code>hora número</code>: pone la hora del juego, de 0 a 23.</li>
+<li><code>bandas</code>: las bandas, con su gente y su caja.</li>
+<li><code>guardar</code>: guarda todo ahora.</li>
+<li><code>copia</code>: hace una copia de seguridad.</li>
+<li><code>copias</code>: las copias de seguridad que hay.</li>
+<li><code>recargar</code>: vuelve a leer servidor.conf y aplica lo que se puede cambiar sin reiniciar.</li>
+<li><code>actualizar</code>: avisa a todos de que el servidor se reinicia para actualizarse, espera la cuenta atrás, lo guarda todo y lo para; los juegos esperan y vuelven a entrar solos cuando lo arranques otra vez. Detrás se pueden poner los segundos de aviso.</li>
+<li><code>reiniciar</code>: lo mismo, pero diciendo que es por mantenimiento. Detrás se pueden poner los segundos de aviso.</li>
+<li><code>apagar</code>: avisa a todos, lo guarda todo y para el servidor.</li>
+</ul>
+<!-- ORDENES:FIN -->
+<p>Los nombres de jugador se escriben tal cual, con sus espacios. Por ejemplo, <code>expulsar Ana la Rápida</code> o <code>decir Ana la Rápida: baja la música</code>.</p>
+
+<h2 id="versiones">17. Jugar con versiones distintas del juego</h2>
+<p>En tu servidor pueden jugar juntas personas con versiones distintas del juego. No se echa a nadie por ir por detrás ni por ir por delante: solo se rechaza por versión si tú lo pides, con la versión mínima. Y a partir de ahí, todos lo más igualados posible.</p>
+<h3>El mundo lo trae el primero que entra</h3>
+<p>El servidor gestiona, pero el contenido lo pone el juego. El mundo, con sus lugares, sus armas, sus vehículos y sus misiones, no va atado al servidor: se lo da el juego de quien entra.</p>
+<ul>
+<li>El servidor que se reparte con el juego ya trae el mundo de su versión. Si lo montas sin él, o lo borras, arranca vacío y toma el mundo del primero que entra.</li>
+<li>Si el primero que entra tiene una versión anterior y después llega alguien con una más nueva, el servidor pasa al mundo de la versión más nueva, sin reiniciarse y sin echar a nadie. Lo anuncia a quien esté dentro. Solo lo hace si ese mundo lo firma quien publica el juego, así que nadie puede colarle un mundo cambiado.</li>
+<li>Si es al revés, y llega alguien con una versión anterior a la del servidor, el servidor conserva su mundo, que es el más nuevo, y esa persona entra igual.</li>
+<li>El servidor conoce de fábrica el mundo de las versiones ya publicadas, y recuerda los que va comprobando: a quien llega con uno de ellos no le pide nada.</li>
+<li>Si el servidor está vacío y el primero que entra lleva mods, o juega con una copia sin firmar, su mundo se toma de momento, se avisa en el registro, y se cambia por el primero firmado que llegue.</li>
+</ul>
+<h3>Qué pasa cuando no todos tienen lo mismo</h3>
+<ul>
+<li><strong>El daño, el alcance, la cadencia y el dinero los decide el servidor</strong>, con las cifras de su mundo, las mismas para quien dispara con una versión y para quien recibe con otra. Tener la versión nueva no da ventaja.</li>
+<li><strong>Un arma que el juego de alguien no tiene</strong> le llega como lo más parecido de lo que su juego conoce: oye el disparo de un arma suya de la misma clase y recibe el daño que marca el servidor. Por ejemplo, a quien juega con la 1.7.0 la escopeta de corredera de la 1.7.1 le suena como una de sus escopetas.</li>
+<li><strong>Un vehículo que no tiene</strong> lo oye pasar y lo ve aparcado como el más parecido de los suyos, con el nombre que le puso su dueño. En el servidor sigue siendo lo que es.</li>
+<li><strong>Dar un arma</strong> a quien no la tiene en su versión no se puede: el servidor se la devuelve a quien la daba, y se lo dice.</li>
+<li><strong>Los canales de rol</strong> le llegan a un juego anterior por el chat de siempre, con unas palabras delante que dicen qué son.</li>
+<li><strong>Los avisos de reinicio</strong> le llegan como un aviso normal, y el cierre, con un texto que su juego dice tal cual. Su personaje se guarda igual.</li>
+<li><strong>Si el mundo del servidor es el de una versión anterior</strong> (porque no quieres mundos nuevos, o porque aún no ha entrado nadie con la nueva), las armas nuevas de quien las tenga cuentan contra otros jugadores como ir con las manos, sus vehículos nuevos se ven como un utilitario, y en una localidad nueva no le ve nadie. A esa persona se le dice.</li>
+<li><strong>Al entrar</strong>, a quien no tiene los mismos datos que el servidor se le dice con nombres qué armas y qué vehículos no coinciden y qué va a notar. También está en el móvil del juego, En línea, Datos y reglas de este servidor.</li>
+</ul>
+<h3>El personaje, de una versión a otra</h3>
+<p>El personaje se guarda en el servidor entero, también con lo que el servidor no conoce. Si alguien juega con una versión nueva y un día entra con una anterior, no pierde nada:</p>
+<ul>
+<li>Su juego antiguo recibe el personaje sin las armas ni los vehículos que no conoce. Siguen guardados en el servidor, y se le avisa.</li>
+<li>Cuando ese juego guarda, el servidor vuelve a poner todo lo que la versión antigua no sabe guardar. Lo que haya ganado, gastado o conseguido jugando con la antigua, vale.</li>
+<li>Al volver a entrar con la versión nueva, lo tiene todo otra vez.</li>
+</ul>
+<h3>Lo que decides tú</h3>
+<ul>
+<li><code>version_minima</code>: la versión más antigua con la que se puede entrar. Vacía, que es lo de serie, cualquiera. Es la única manera de rechazar a alguien por su versión.</li>
+<li><code>mundo_distinto</code>: qué hacer con quien trae datos que no se pueden comprobar, que casi siempre es alguien con mods que cambian el mundo. Con <code>admitir</code>, lo de serie, entra y juega en lo común: se le dice qué no coincide, y lo que su mod cambia o añade no cuenta contra los demás. Con <code>rechazar</code>, no entra.</li>
+<li><code>actualizar_mundo</code>: quién puede traer un mundo nuevo. Con <code>firmado</code>, lo de serie, cualquiera, si es de una versión de verdad. Con <code>admin</code>, además, un administrador sin firma: es lo que hace falta para que todo tu servidor juegue con un mod. Con <code>no</code>, el servidor se queda con el mundo que tiene.</li>
+<li><code>versiones</code>: con <code>compatibles</code>, lo de serie, todo lo de este apartado. Con <code>iguales</code>, solo entra quien tenga exactamente los mismos datos que el servidor.</li>
+<li><code>comprobar_datos = no</code> deja entrar a cualquiera sin mirar nada, y el servidor no se pone al día con los mundos nuevos. No hace falta para jugar con versiones distintas.</li>
+</ul>
+<h3>Lo que conviene saber</h3>
+<ul>
+<li>En el panel, la lista de jugadores dice con qué versión ha entrado cada uno.</li>
+<li>El servidor no hace falta actualizarlo cada vez que sale una versión del juego. Uno de la 1.7.0 admite juegos de la 1.7.1, pero no sabe dar a cada juego lo más parecido ni reponer el personaje: quien entre en él con una versión anterior a la suya no oirá las armas nuevas de los demás. Actualízalo cuando puedas.</li>
+<li>Para que todo el servidor juegue con un mod, pon <code>actualizar_mundo = admin</code> y que entre primero un administrador con el mod activado. Quien entre sin el mod jugará igual, con lo que tenga en común.</li>
+<li>Lo que solo existe en la versión nueva y no pasa por el servidor (una misión nueva, una tienda nueva, un oficio nuevo) lo tiene quien tiene esa versión, como cualquier otra novedad del juego. Lo que da dinero pasa por los topes del servidor, sea cual sea la versión.</li>
+<li>Si una versión nueva cambia de sitio las calles de una localidad que ya existía, quien siga con la anterior verá el tráfico del servidor moverse por donde ya no hay calle, hasta que actualice.</li>
+</ul>
+
+<h3>Lo nuevo de la calle en la versión 1.7.1, en un servidor</h3>
+<p>Desde la versión 1.7.1 el juego tiene, para quien juega en solitario, patrullas que hacen la ronda sin buscar a nadie, un helicóptero de la policía opcional y la posibilidad de rendirse con las manos arriba. Con la policía común, que es la opción <code>policia</code> en <code>si</code>, nada de eso se pone en el juego de cada jugador: las patrullas son las del servidor, y no hay helicóptero ni rendición. Con esa opción en <code>no</code>, cada jugador las tiene según sus propias opciones, y solo las ve él. Las ambulancias que acuden tras un tiroteo y el modo de guerra de barrios en la calle tampoco cuentan en un servidor. La defensa propia sí: a quien se defiende de un pandillero que le ha atacado primero, su juego no le apunta el delito.</p>
+<h2 id="dinero">18. El dinero de los jugadores: el tope por hora y los encargos</h2>
+<p>Con la opción <code>economia</code> en <code>si</code>, que es como viene, el servidor lleva la cuenta del dinero de cada jugador para que nadie se lo invente con un juego trucado. Gastar se puede siempre. Ganar, depende de dónde venga el dinero.</p>
+<h3>Lo que el servidor da por bueno sin límite</h3>
+<ul>
+<li>Lo que da el propio servidor: botines entre jugadores, ventas de casas y negocios, la caja de la banda, la paga por ayudar en una misión en grupo.</li>
+<li>Lo que da otro jugador.</li>
+<li>La recompensa de cada misión de la historia, una sola vez.</li>
+</ul>
+<h3>Los encargos repetibles</h3>
+<p>Los contratos del tablón, los combates del gimnasio, los atracos a bancos y a locales y los encargos de coches se pueden hacer una y otra vez. El servidor los reconoce sin que gasten la ganancia por hora, con dos límites:</p>
+<ul>
+<li><code>encargos_hora</code>: cuántos se reconocen por hora, de cada tipo. De serie, 6.</li>
+<li><code>encargo_max</code>: lo más que se da por bueno de la paga de uno solo. De serie, 15.000 euros. Además, el servidor sabe por los datos del juego lo más que puede pagar cada tipo de encargo, y no reconoce más que eso.</li>
+</ul>
+<p>Al jugador que pasa de ese número en una hora se le avisa, y ese encargo le cuenta como una ganancia cualquiera. Quien juega con una versión anterior a la 1.7.1 no avisa al servidor de sus encargos: a esa persona todo le cuenta contra la ganancia por hora, como antes, hasta que actualice.</p>
+<h3>Lo demás: la ganancia por hora</h3>
+<p>Todo lo demás que se gana jugando por cuenta propia (trabajos, ventas, juego, botín de la calle) tiene un tope por hora de reloj, la opción <code>ganancia_hora</code>, que de serie son 30.000 euros. Lo que pasa del tope se retira, y al jugador se le dice con cifras: cuánto ha ganado, cuánto se le acepta, cuál es el tope y a qué ritmo recupera margen.</p>
+<ul>
+<li>El margen que no se usa se acumula, hasta las horas que diga <code>ganancia_acumula</code>, que de serie son 3. Así, quien lleva un rato sin ganar nada puede hacer una buena racha entera sin perder dinero. Se acumula también mientras el jugador está fuera.</li>
+<li>Quien entra por primera vez empieza con el margen de un cuarto de hora. Salir y volver a entrar no lo rellena.</li>
+<li>El jugador puede mirar cómo va en su móvil: En línea, Datos y reglas de este servidor.</li>
+</ul>
+<h3>Los contratos fijos y sus nóminas</h3>
+<p>Desde la versión 1.7.1 el juego tiene contratos fijos: se firman en la oficina de empleo, piden un número de turnos cada siete días del juego y pagan una nómina al acabar cada periodo. En un servidor, la nómina la paga el servidor, para que nadie se la invente:</p>
+<ul>
+<li>El servidor cuenta los turnos, lleva el calendario y pone la cifra, que sale de los datos del juego. Lo que diga el juego de cada uno sobre cuánto cobra no cuenta.</li>
+<li>La nómina no gasta la ganancia por hora. Lo que se cobra por cada turno sí, como cualquier trabajo.</li>
+<li><code>nominas</code>: con <code>no</code>, en tu servidor no hay contratos fijos. De serie, sí.</li>
+<li><code>nomina_max</code>: lo más que pagas por una nómina. De serie, 1.500 euros, que no recorta ninguna de las del juego; está para que un mod no las dispare.</li>
+<li><code>nomina_turnos_dia</code>: cuántos turnos cuentas a cada jugador en un día del juego. De serie, 3.</li>
+<li>Pedir el cobro antes de tiempo, repetirlo, o salir y volver a entrar no da nada: el contrato y su fecha de cobro se guardan en el servidor.</li>
+<li>Hace falta que el mundo del servidor sea el de la 1.7.1 o posterior. Quien juega con la 1.7.0 no tiene contratos fijos, ni aquí ni jugando solo.</li>
+</ul>
+<p>Del resto de la vida honrada del juego, en un servidor existen los títulos de las academias, que solo cuestan dinero; los antecedentes, que cuentan para los empleos de confianza; y, si dejas <code>trato_prestigio</code> en <code>si</code>, una rebaja pequeña en las tiendas para quien tiene buen nombre y un recargo para quien lo tiene muy malo, igual para todos. No existen los créditos, las hipotecas, los impuestos ni la dirección de negocios: crean o mueven dinero que el servidor no puede comprobar. El juego se lo dice al jugador.</p>
+<h3>Qué poner en tu servidor</h3>
+<ul>
+<li>Entre amigos de confianza: sube <code>ganancia_hora</code> sin miedo, a 100.000 o más, o quita la cuenta del dinero con <code>economia = no</code>. El tope está para los servidores abiertos a desconocidos, no para amargar a tu gente.</li>
+<li>En un servidor abierto: deja el tope de serie y, si tu gente vive de los contratos o de los atracos y se queja, sube antes <code>encargos_hora</code> que <code>ganancia_hora</code>.</li>
+<li>Si alguien te dice que el servidor le quita dinero, pregúntale qué le ha dicho el juego: desde la 1.7.1 le da las cifras. En el registro del servidor sale una línea cada vez, con lo que se le retira y el tope.</li>
+<li>Todas estas opciones se cambian con el servidor en marcha.</li>
+</ul>
+<h3>Si se corta la conexión nada más comprar</h3>
+<p>El personaje se guarda en el servidor cada tres cuartos de minuto y, desde la 1.7.1, a los pocos segundos de una compra: a los dos o tres segundos de la primera y, si el jugador sigue gastando, cada doce como mucho. Si aun así a alguien se le corta la conexión antes de que su juego guarde, el servidor le devuelve al saldo lo que gastó desde el último guardado: lo comprado no está en su personaje, pero el dinero tampoco se ha perdido. Sale una línea en el registro. No vale para fabricar dinero: lo que se le dio a otro jugador, lo que cobró el servidor y las casas compradas no vuelven.</p>
+
+<h2 id="rol">19. Rol por texto, la voz y la radio de los vehículos</h2>
+<h3>Los canales de rol</h3>
+<p>Con la opción <code>rol</code> en <code>si</code>, que es como viene, los jugadores tienen además del chat de siempre:</p>
+<ul>
+<li>Un canal para hablar en personaje. Solo lo oye quien está cerca: a menos de los metros que diga <code>rol_metros</code>, que de serie son 30.</li>
+<li>Una orden para contar lo que hace su personaje. Quien escribe «abre la puerta» hace que los que están cerca oigan su nombre y «abre la puerta». Tiene el mismo alcance.</li>
+<li>Un canal para hablar fuera de personaje, como jugador. Lo oye todo el servidor.</li>
+<li>Una frase de ficha, de hasta doscientas letras, que dice quién es su personaje. Los demás la leen cuando quieren.</li>
+</ul>
+<p>Cada canal tiene su propio sonido en el juego, y todo lo dicho se puede repasar en el móvil, En línea, Rol. En el juego se usa así:</p>
+<ul>
+<li>Mayúsculas F10 habla en personaje, y Control F10 describe una acción. F10 a secas es el chat general de siempre. Quien juega con mando los tiene en el menú de acciones, y puede escribir con la rueda de letras o elegir una de las frases ya escritas.</li>
+<li>En cualquier mensaje se puede escribir delante una orden: barra yo y lo que hace el personaje; barra ep y lo que dice en personaje; barra fp y lo que se dice fuera de personaje; y barra ficha y la frase de ficha. Por ejemplo, <code>/yo abre la puerta</code>.</li>
+<li>La ficha de otro jugador se lee en el móvil, En línea, Quién hay, eligiéndole; o con Mayúsculas J cuando se le tiene cerca.</li>
+</ul>
+<ul>
+<li>Quien juega con una versión anterior a la 1.7.1 no tiene esos canales en su juego, pero no se queda fuera: lo dicho en personaje y las acciones le llegan por el chat de los que están cerca, con unas palabras delante que dicen qué son, y puede usar las órdenes con barra desde su chat general.</li>
+<li>Con <code>rol = no</code> no hay canales de rol ni fichas, y queda el chat de siempre. Se cambia con el servidor en marcha: quien ya está dentro se entera al intentar usarlos.</li>
+<li>Las órdenes de administración se siguen escribiendo en el chat con una barra delante. Las cuatro órdenes de rol son de todos; las demás, solo de quien administra.</li>
+<li>El servidor no guarda lo que se dice por ningún canal. La frase de ficha sí se guarda, con la cuenta de cada jugador.</li>
+</ul>
+<h3>La voz</h3>
+<p>El juego no lleva voz por micrófono. Si en tu servidor queréis hablaros de viva voz mientras jugáis, que es lo habitual en los servidores de rol, usad aparte un programa de voz: cualquiera de los que sirven para hablar en grupo por internet vale, y no hay que configurar nada en el servidor ni en el juego. Un consejo si usáis lector de pantalla: poned la voz de los demás por un altavoz o un auricular distinto del lector, o bajadle el volumen, para que no se pisen.</p>
+<h3>La radio de los vehículos de otros jugadores</h3>
+<p>Con la opción <code>radio_coches</code> en <code>si</code>, que es como viene, quien está cerca del vehículo de otro jugador oye, floja y apagada, la emisora que lleva puesta, y deja de oírla al alejarse.</p>
+<ul>
+<li>Solo vale para las emisoras que trae el juego. De «Mi música» y de las emisoras que cada uno se hace con sus propios archivos no se cuenta nada: ni la música ni el nombre salen de su ordenador.</li>
+<li>Por el servidor solo pasa el nombre corto de la emisora, unas pocas letras. No pasa sonido: cada juego hace sonar su propia copia de esa emisora, así que puede no ser la misma canción que oye quien conduce.</li>
+<li>Cada jugador puede quitársela en sus Opciones, en Sonido y música. Con <code>radio_coches = no</code> no la oye nadie.</li>
+<li>Quien juega con una versión anterior ni la oye ni la da a oír.</li>
+</ul>
+
+<h2 id="copias">20. Copias de seguridad, mover el servidor y actualizarlo</h2>
+<h3>Copias de seguridad</h3>
+<ul>
+<li>De serie, el servidor hace una copia cada 24 horas y conserva las 7 últimas. Se cambia con las opciones <code>copia_auto_horas</code> y <code>copias_guardar</code>.</li>
+<li>Están en la carpeta <code>copias</code>, dentro de la carpeta de datos. Cada copia es un archivo zip.</li>
+<li>Para hacer una en el momento: en el panel, Control+B; por texto, la orden <code>copia</code>. Las que haces tú no se borran solas.</li>
+<li>Una copia lleva la base de datos con las cuentas y los personajes, el mundo con el que trabajaba el servidor, el certificado con su llave y la configuración.</li>
+<li>Por llevar la llave del certificado y la configuración, una copia no es para repartir: guárdala donde solo tú la veas. Conviene tener alguna fuera de la máquina del servidor.</li>
+</ul>
+<h3>Restaurar una copia</h3>
+<ul>
+<li>En el panel: Control+R, elige la copia y pulsa Aceptar. Si el servidor está en marcha, lo para antes. Lo que hay en ese momento se guarda en otra copia, por si acaso, con un nombre que empieza por <code>antes_de_restaurar</code>.</li>
+<li>Puedes marcar que restaure también la configuración que va dentro de la copia. Si no lo marcas, se queda la de ahora.</li>
+<li>A mano, en cualquier sistema: para el servidor, descomprime el zip dentro de la carpeta de datos, dejando que sustituya los archivos, y arranca. El archivo <code>servidor.conf</code> de la copia va junto a la carpeta de datos, no dentro.</li>
+</ul>
+<h3>Mover el servidor a otra máquina</h3>
+<ol>
+<li>Para el servidor.</li>
+<li>Copia a la máquina nueva <code>servidor.conf</code> y la carpeta de datos entera, <code>datos_servidor</code>. O haz una copia de seguridad y llévate el zip.</li>
+<li>En la máquina nueva, monta el servidor como diga su apartado y pon esos archivos en su sitio: en Windows, en la carpeta <code>servidor</code> del juego; en Linux, junto a la carpeta <code>servidor</code> del código; con Docker, dentro de la carpeta <code>datos</code>.</li>
+<li>Arranca. Los personajes, las bandas y el certificado son los mismos: nadie nota el cambio, salvo la dirección nueva.</li>
+</ol>
+<h3>Actualizar el servidor</h3>
+<p>Desde la versión 1.7.1, actualizar ya no echa a nadie al menú. El servidor avisa a los jugadores con una cuenta atrás, espera a que cada juego guarde su personaje, lo guarda todo y se cierra diciendo por qué. Los juegos se quedan en una pantalla de espera, con la partida tal cual, y cuando el servidor vuelve, esperan y vuelven a entrar solos: cada uno sigue donde estaba.</p>
+<h4>En Windows</h4>
+<ul>
+<li>Basta con actualizar el juego, con el servidor o el panel abiertos. No hace falta pararlo antes.</li>
+<li>El juego dice que tienes abierto el servidor, explica lo que va a pasar y pide permiso. Si dices que sí: avisa a los jugadores, el servidor se para solo, el juego se cierra y se actualiza, y al terminar el servidor vuelve a arrancar solo, igual que estaba: el de consola en su ventana, minimizada, o el panel, con el servidor en marcha si lo estaba.</li>
+<li>Si solo tienes abierto el panel, con el servidor parado, aunque no lo hayas arrancado nunca, no hay nadie a quien avisar: el panel se cierra solo y vuelve a abrirse al terminar, parado como estaba.</li>
+<li>El servidor de consola y el panel vuelven minimizados y sin coger el foco: el foco se queda en el juego. Cuando vayas al panel, el foco está en el estado del servidor, como siempre.</li>
+<li>Si la actualización fallara, se deja la versión que tenías y el servidor se vuelve a arrancar igualmente. Lo que el servidor guardó al cerrarse no se pierde: la actualización solo guarda y devuelve programas, nunca tu base de datos.</li>
+<li>Al abrirse, el juego dice si el servidor ha vuelto a arrancar. Todo queda apuntado en el archivo <code>actualizacion.log</code> de la carpeta <code>data\logs</code> del juego.</li>
+<li>Si el servidor arranca solo al iniciar tu sesión, con Arrancar con Windows, también vuelve a arrancar solo.</li>
+<li>Si lo tienes montado como un servicio o como una tarea programada que funciona sin que nadie inicie sesión, el juego le puede pedir que se cierre, pero no puede arrancarlo igual que lo arranca Windows: te lo avisa antes de empezar, y después tendrás que arrancarlo como lo tengas montado, si no vuelve solo.</li>
+<li>Tu configuración y tus datos no se tocan, ni si la actualización sale bien ni si falla, estén en la carpeta de datos de serie o en otra que hayas puesto tú. Lo único que no vale es tener la carpeta de datos dentro de una carpeta del propio programa, como <code>lib</code>: si el juego lo ve, lo dice y no actualiza hasta que la muevas.</li>
+</ul>
+<h4>En Linux, Mac, NAS, Raspberry Pi o Docker</h4>
+<p>Ahí el servidor no se actualiza con el juego: se cambia su código a mano. Para que los jugadores tengan la misma espera y la misma vuelta, páralo con la orden de reinicio en vez de cortarlo:</p>
+<ol>
+<li>Sustituye la carpeta <code>servidor</code> del código por la de la carpeta <code>otros_sistemas</code> del juego nuevo. Se puede hacer con el servidor en marcha: no lee el código nuevo hasta que arranca otra vez. No toques <code>servidor.conf</code> ni la carpeta de datos.</li>
+<li>Reinícialo avisando. Según cómo lo tengas montado:
+<ul>
+<li>Con los guiones: <code>sh reiniciar.sh</code>. Avisa, lo para y lo vuelve a arrancar.</li>
+<li>Con systemd o con Docker: un administrador escribe <code>/actualizar</code> en el chat del juego. El servidor avisa, se cierra con el código 75, y systemd o Docker lo vuelven a arrancar solos. Con Docker, si además has cambiado la imagen, escribe <code>docker compose up -d --build</code>: al parar el contenedor, el servidor avisa igual a los juegos de que vuelve.</li>
+<li>A mano, con la consola delante: escribe <code>actualizar</code>, espera a que termine y arráncalo otra vez.</li>
+<li>Sin consola: desde la carpeta del servidor, <code>python3 -m servidor --actualizar</code>. O deja en la carpeta de datos un archivo de texto llamado <code>parar.txt</code> con la palabra <code>actualizar</code> dentro: el servidor lo mira cada segundo, lo borra y obedece. Con <code>reiniciar</code> dice que es por mantenimiento, y con <code>parar</code> se para sin más. Detrás de la palabra se pueden poner los segundos de aviso, por ejemplo <code>actualizar 60</code>.</li>
+</ul></li>
+</ol>
+<ul>
+<li>La cuenta atrás es la de la opción <code>parada_aviso</code>, que de serie son 20 segundos. Lo que espera al último guardado de cada juego, la de <code>parada_espera</code>.</li>
+<li>Cuando el servidor se para para volver (las órdenes <code>actualizar</code> y <code>reiniciar</code>), su programa termina con el código 75. Si lo para quien lo lleva (<code>apagar</code>, Control+C), termina con el 0 y los juegos vuelven al menú, como siempre.</li>
+<li>Si lo para el sistema (<code>systemctl stop</code>, <code>docker compose down</code>, <code>sh parar.sh</code>, apagar la máquina), no hay tiempo para una cuenta atrás, pero el servidor dice igualmente a los juegos que es un reinicio: esperan y vuelven a entrar solos si vuelve antes de que se cansen, que de serie son diez minutos.</li>
+<li>Quien juega con la versión 1.7.0 oye el aviso como un aviso normal y, al cerrarse el servidor, vuelve al menú con un texto que dice que el servidor se reinicia y que vuelva a entrar en unos minutos. Su personaje queda guardado igual.</li>
+</ul>
+<h4>En todos los casos</h4>
+<ul>
+<li>Las opciones nuevas valen con su valor de serie aunque tu <code>servidor.conf</code> no las tenga. Si guardas la configuración desde el panel, el archivo se reescribe con todas. Las opciones que un servidor no conoce las deja pasar y lo dice al arrancar.</li>
+</ul>
+
+<h2 id="grandes">21. Servidores con mucha gente</h2>
+<ul>
+<li>No hay un tope fijo de jugadores. Con <code>max_jugadores = 0</code> entra todo el que llegue.</li>
+<li>Lo que más pesa, en procesador y sobre todo en red, es contar a cada jugador dónde están los demás. Por eso a los que tiene cerca se los cuenta diez veces por segundo; de los demás de su localidad le dice por dónde andan una vez por segundo; y de los de otras localidades, cada dos segundos. Si alrededor hay una multitud, se lo cuenta menos veces por segundo.</li>
+<li>La distancia a la que se sigue a los demás al detalle la da la opción <code>radio_detalle</code>, que de serie son 150 metros. Si la conexión va justa, bájala a 100. No la pongas a 0 con mucha gente: con 0 se cuenta todo, a todos y siempre.</li>
+<li>Como orientación, lo que el servidor envía a cada jugador solo por las posiciones de los demás: con diez jugadores, unos 3 KB por segundo; con cien repartidos por una localidad, unos 25; con cien todos juntos, unos 40. Multiplicado por los jugadores, cien personas son entre 2,5 y 4 megas por segundo de subida. El tráfico, los peatones y la policía comunes suman algo más.</li>
+<li>El tráfico y los peatones del servidor salen por zonas, allí donde hay jugadores. Los topes por localidad son <code>trafico_total</code> y <code>peatones_total</code>. Si la máquina va justa, bájalos, o quita el tráfico, los peatones o la policía comunes: cada juego pondrá los suyos.</li>
+<li>Con mucha gente, lo que primero se queda corto es la subida de internet de una casa, no el ordenador. Para un servidor grande, alquila una máquina con buena conexión.</li>
+<li>En Linux, cada jugador ocupa una conexión abierta. El servicio de systemd ya sube el límite. Si arrancas a mano con más de unas mil personas, sube antes el límite con <code>ulimit -n 65536</code>.</li>
+<li>Activa <code>inactividad_minutos</code> para que no ocupe sitio quien se ha ido sin salir.</li>
+<li>Guardar cada minuto con miles de cuentas se nota poco, pero puedes espaciarlo con <code>guardado_minutos</code>.</li>
+</ul>
+
+<h2 id="problemas">22. Solución de problemas</h2>
+<h3>El servidor no arranca</h3>
+<ul>
+<li>«No se pudo abrir el puerto»: el servidor ya está en marcha en otra ventana, o en el panel y en la consola a la vez, o hay otro programa usando ese puerto. Cierra el otro, o cambia la opción <code>puerto</code>.</li>
+<li>«El cifrado es obligatorio pero no hay certificado»: has puesto <code>cifrado = si</code> y no se ha podido crear el certificado. Pon <code>cifrado = auto</code>, o revisa que la carpeta de datos se puede escribir.</li>
+<li>Dice que hay problemas en la configuración: cada aviso dice qué opción es y por qué no vale. El servidor arranca igual, con el valor de serie de esa opción. Con <code>--comprobar</code> se revisa sin arrancar.</li>
+</ul>
+<h3>Nadie puede entrar</h3>
+<ul>
+<li>Prueba primero tú, desde el mismo ordenador, con <code>puertobravo://127.0.0.1</code>. Si entras, el servidor está bien y el problema está en la red.</li>
+<li>Si no entra quien está en tu casa: revisa que usa la dirección de tu red y no la pública, y que el cortafuegos de la máquina del servidor deja pasar el puerto. En Windows, la primera vez pregunta; si dijiste que no, hay que permitirlo en Seguridad de Windows, Firewall, Permitir una aplicación.</li>
+<li>Si no entra quien está fuera: revisa la regla del router, que apunte a la dirección actual de la máquina del servidor y que sea TCP. Revisa también que le has dado tu dirección pública de ahora, y si estás en CG-NAT, apartado 13.</li>
+<li>Desde dentro de tu casa, muchos routers no dejan entrar usando tu propia dirección pública. No es un fallo: desde casa usa la dirección de tu red.</li>
+</ul>
+<h3>Lo que dice el juego al intentar entrar</h3>
+<ul>
+<li>«El servidor está lleno»: sube <code>max_jugadores</code> o ponlo a 0.</li>
+<li>«La contraseña de entrada no es correcta» o «ese código de invitación no vale»: la entrada es con clave o por invitación. Dale la contraseña, o un código nuevo.</li>
+<li>«No puedes entrar en este servidor»: esa cuenta está vetada. Se levanta con Perdonar el veto.</li>
+<li>«Los datos de tu juego no son los de este servidor»: lleva mods que cambian el mundo, o un juego sin firmar, y tú tienes <code>mundo_distinto</code> en <code>rechazar</code> o <code>versiones</code> en <code>iguales</code>. De serie, esa persona entra. Apartado 17.</li>
+<li>«Este servidor acaba de estrenarse y todavía no tiene los datos del juego»: el servidor está vacío y no ha podido tomar el mundo de quien entra, casi siempre porque tienes <code>actualizar_mundo</code> en <code>no</code>. Apartado 17.</li>
+<li>«Este servidor pide la versión tal del juego o una posterior»: tienes puesta la opción <code>version_minima</code>.</li>
+<li>«El servidor no presenta el mismo certificado que la otra vez»: has cambiado el certificado, por ejemplo al reinstalar sin llevarte los datos. Apartado 14.</li>
+<li>«Hay demasiadas conexiones desde tu dirección»: tienes puesta la opción <code>conexiones_por_ip</code> y varios jugadores comparten dirección. Súbela o ponla a 0.</li>
+</ul>
+<h3>Otras cosas</h3>
+<ul>
+<li>Tras actualizar el juego, el servidor no ha vuelto a arrancar: el juego lo dice al abrirse, con el motivo, y queda apuntado en <code>actualizacion.log</code>, en la carpeta <code>data\logs</code> del juego. Lo normal es que estuviera montado como servicio o tarea de Windows: arráncalo como lo tengas montado. Si no, ábrelo tú desde la carpeta <code>servidor</code>.</li>
+<li>Los jugadores se quedan esperando y no entran: esperan como mucho lo que cada uno tenga puesto en sus opciones, de serie diez minutos, y prueban cada pocos segundos. Si el servidor vuelve pidiendo una versión más nueva del juego (<code>version_minima</code>), su juego se lo dice y les ofrece actualizar.</li>
+<li>A alguien se le quita dinero: el servidor lleva la cuenta y no reconoce lo que se gana más deprisa de lo que permite <code>ganancia_hora</code>. Desde la 1.7.1 el juego le dice las cifras. Qué cuenta, qué no y qué conviene poner está en el <a href="#dinero">apartado 18</a>.</li>
+<li>He perdido la administración: para el servidor, pon tu nombre de jugador en la opción <code>admins</code> y arranca.</li>
+<li>Quiero empezar de cero: para el servidor y borra o aparta la carpeta de datos. Se crea una nueva al arrancar, con un certificado nuevo.</li>
+<li>Para pedir ayuda, guarda el registro: en el panel, Control+G. No lleva nada personal salvo los nombres de jugador, y las direcciones si activaste <code>registro_ip</code>.</li>
+</ul>
+
+<h2 id="privacidad">23. Qué guarda el servidor</h2>
+<ul>
+<li>De cada jugador: su clave pública, que es un número que le identifica; el nombre que eligió; su personaje; y la versión del juego con la que entró la última vez.</li>
+<li>No guarda correos, contraseñas de cuenta ni direcciones de red.</li>
+<li>La dirección de red de quien se conecta solo se anota en el registro, y solo se ve en el panel, si pones <code>registro_ip = si</code>. De serie, no.</li>
+<li>Los mensajes del chat no se guardan, tampoco los de los canales de rol. La frase de ficha que escribe cada jugador sí, con su cuenta, y se borra con ella.</li>
+<li>De la radio de los vehículos solo pasa por el servidor el nombre corto de una emisora del juego, y no se guarda.</li>
+<li>La contraseña de entrada, si la usas, está escrita en <code>servidor.conf</code>: no compartas ese archivo.</li>
+<li>Si llevas un servidor abierto a desconocidos, eres responsable de sus datos: dilo a tu gente y borra la cuenta de quien te lo pida. Se hace con el botón Borrar la cuenta, en la pestaña Cuentas del panel, o con la orden <code>borrarcuenta</code> y el nombre.</li>
+</ul>
+
+<h2 id="opciones">24. Todas las opciones de configuración</h2>
+<p>Cada opción va en una línea de <code>servidor.conf</code>, con la forma <code>nombre = valor</code>. Las líneas que empiezan por almohadilla son comentarios. En el panel están en Configuración, Control+P, cada grupo en su pestaña.</p>
+<p>La mayoría se aplica con el servidor en marcha: desde el panel, al aceptar; por texto, con la orden <code>recargar</code>. Algunas reglas, como el tráfico, la policía, los peatones, el combate, el contenido para adultos y los precios, las recibe el juego de cada jugador al entrar: quien ya esté dentro las notará del todo al volver a entrar. Las que piden reiniciar el servidor lo dicen.</p>
+<!-- OPCIONES:INICIO -->
+<h3>General</h3>
+<p>Cómo se llama el servidor, qué se le dice a quien entra y cuánta gente cabe.</p>
+<h4>Nombre del servidor: <code>nombre</code></h4>
+<p>El nombre con el que los jugadores ven tu servidor en su lista.</p>
+<ul>
+<li>Un texto de hasta 60 letras.</li>
+<li>De serie: <code>Servidor de Puerto Bravo</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Bienvenida: <code>bienvenida</code></h4>
+<p>Lo que se le dice a cada jugador nada más entrar.</p>
+<ul>
+<li>Un texto de hasta 300 letras.</li>
+<li>De serie: <code>Bienvenido. Juega limpio.</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Mensaje del día: <code>mensaje_dia</code></h4>
+<p>Un aviso que oye cada jugador al entrar, después de la bienvenida: una quedada, una norma nueva. Vacío, ninguno. Se puede cambiar con el servidor en marcha.</p>
+<ul>
+<li>Un texto de hasta 300 letras.</li>
+<li>De serie: vacío.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Máximo de jugadores a la vez: <code>max_jugadores</code></h4>
+<p>Cuántos jugadores pueden estar dentro a la vez. Con 0 no hay límite. Los administradores entran aunque esté lleno. Los personajes que lleva el servidor no cuentan.</p>
+<ul>
+<li>Un número entero entre 0 y 100000.</li>
+<li>De serie: <code>32</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Contenido para adultos: <code>adultos</code></h4>
+<p>Con no, quien entra juega sin el contenido para adultos aunque lo tenga activado en su juego.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>no</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Segundos de aviso antes de reiniciar por actualización o mantenimiento: <code>parada_aviso</code></h4>
+<p>Cuando el servidor se va a parar para actualizarlo o por mantenimiento (las órdenes actualizar y reiniciar, o la actualización del juego en Windows), avisa a los jugadores con esta cuenta atrás antes de cerrarse. Con 0 se cierra enseguida. Los juegos esperan y vuelven a entrar solos cuando el servidor vuelve.</p>
+<ul>
+<li>Un número entero entre 0 y 120.</li>
+<li>De serie: <code>20</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Guardado final: segundos que se espera al parar: <code>parada_espera</code></h4>
+<p>Al pararse, el servidor pide a cada juego que guarde su personaje y espera hasta estos segundos a que llegue. Si todos guardan antes, no espera más.</p>
+<ul>
+<li>Un número entero entre 0 y 30.</li>
+<li>De serie: <code>6</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Idioma del servidor: <code>idioma</code></h4>
+<p>En qué idioma escribe el servidor lo que lee quien lo administra: la consola, el registro, la ayuda de las órdenes y los comentarios de servidor.conf. Lo que oyen los jugadores no cambia: el servidor se lo manda en español y el juego de cada uno lo dice en el suyo, así que en un mismo servidor puede jugar gente de idiomas distintos. Si el servidor va dentro del panel, habla el idioma del juego.</p>
+<ul>
+<li>Valores:<ul>
+<li><code>auto</code>: el del sistema: si está en español, español; si no, inglés, o el del sistema si hay traducción a él.</li>
+<li><code>es</code>: Español.</li>
+<li><code>en</code>: English.</li>
+<li><code>pt</code>: Português do Brasil.</li>
+<li><code>ru</code>: Русский.</li>
+<li><code>vi</code>: Tiếng Việt.</li>
+</ul></li>
+<li>De serie: <code>auto</code>.</li>
+<li>Necesita reiniciar el servidor.</li>
+</ul>
+<h3>Red y cifrado</h3>
+<p>Por dónde escucha el servidor y cómo protege la conexión.</p>
+<h4>Puerto: <code>puerto</code></h4>
+<p>El puerto en el que escucha el servidor. Es el que hay que abrir en el router para que entren desde fuera de casa. Con 0, el sistema elige uno libre cada vez, cosa que solo sirve para pruebas.</p>
+<ul>
+<li>Un número entero entre 0 y 65535.</li>
+<li>De serie: <code>47820</code>.</li>
+<li>Necesita reiniciar el servidor.</li>
+</ul>
+<h4>Dirección en la que escucha: <code>interfaz</code></h4>
+<p>Con 0.0.0.0 escucha en todas las conexiones del equipo, que es lo normal. Con 127.0.0.1 solo se puede entrar desde este mismo ordenador. También vale la dirección de una sola de tus conexiones de red.</p>
+<ul>
+<li>Un texto de hasta 60 letras.</li>
+<li>De serie: <code>0.0.0.0</code>.</li>
+<li>Necesita reiniciar el servidor.</li>
+</ul>
+<h4>Cifrado de la conexión: <code>cifrado</code></h4>
+<p>Con auto, el servidor crea su propio certificado la primera vez que arranca y cifra; no hay que instalar nada.</p>
+<ul>
+<li>Valores:<ul>
+<li><code>auto</code>: cifra si puede, y casi siempre puede.</li>
+<li><code>si</code>: obligatorio: si no puede cifrar, no arranca.</li>
+<li><code>no</code>: nunca cifra.</li>
+</ul></li>
+<li>De serie: <code>auto</code>.</li>
+<li>Necesita reiniciar el servidor.</li>
+</ul>
+<h4>Archivo del certificado: <code>certificado</code></h4>
+<p>Solo si quieres usar un certificado tuyo: la ruta de su archivo PEM. Vacío, el servidor usa el que crea él mismo en la carpeta de datos.</p>
+<ul>
+<li>Un texto de hasta 260 letras.</li>
+<li>De serie: vacío.</li>
+<li>Necesita reiniciar el servidor.</li>
+</ul>
+<h4>Archivo de la llave del certificado: <code>llave</code></h4>
+<p>La ruta del archivo PEM con la llave privada de tu certificado. Vacío si la llave va dentro del propio certificado o si usas el que crea el servidor.</p>
+<ul>
+<li>Un texto de hasta 260 letras.</li>
+<li>De serie: vacío.</li>
+<li>Necesita reiniciar el servidor.</li>
+</ul>
+<h4>Conexiones a la vez desde una misma dirección: <code>conexiones_por_ip</code></h4>
+<p>Cuántas conexiones se admiten a la vez desde una misma dirección de red. Con 0 no hay límite. Ojo: quienes juegan desde la misma casa comparten dirección, y detrás de Docker o de un intermediario todos pueden parecer la misma.</p>
+<ul>
+<li>Un número entero entre 0 y 100000.</li>
+<li>De serie: <code>0</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Anotar la dirección de quien se conecta: <code>registro_ip</code></h4>
+<p>Con si, el registro anota la dirección de red de cada conexión y el panel la enseña. De serie, no: el servidor no guarda ningún dato personal.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>no</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h3>Acceso y administración</h3>
+<p>Quién puede entrar, quién manda y a quién no se deja pasar.</p>
+<h4>Quién puede crear un personaje: <code>entrada</code></h4>
+<p>Solo afecta a quien entra por primera vez: quien ya tiene personaje vuelve a entrar siempre.</p>
+<ul>
+<li>Valores:<ul>
+<li><code>abierta</code>: cualquiera que tenga la dirección.</li>
+<li><code>clave</code>: hay que saber la contraseña de entrada.</li>
+<li><code>invitacion</code>: hace falta un código de un solo uso.</li>
+</ul></li>
+<li>De serie: <code>abierta</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Contraseña de entrada: <code>clave</code></h4>
+<p>La contraseña que hay que saber para crear un personaje cuando la entrada es con clave.</p>
+<ul>
+<li>Un texto de hasta 60 letras. Se guarda tal cual en el archivo: no lo enseñes.</li>
+<li>De serie: vacío.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Administradores: <code>admins</code></h4>
+<p>Nombres de jugador que administran el servidor, separados por comas. Se suman a los que se nombran con la orden admin.</p>
+<ul>
+<li>Un texto de hasta 600 letras.</li>
+<li>De serie: vacío.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>La primera cuenta es administradora: <code>primer_admin</code></h4>
+<p>Con si, la primera cuenta que se crea en el servidor es administradora: lo normal es que seas tú.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>si</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Nombres vetados: <code>vetados</code></h4>
+<p>Nombres de jugador que no pueden entrar, separados por comas. Se suman a las cuentas vetadas con la orden vetar.</p>
+<ul>
+<li>Un texto de hasta 600 letras.</li>
+<li>De serie: vacío.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Expulsar por inactividad, en minutos: <code>inactividad_minutos</code></h4>
+<p>Minutos sin moverse ni hacer nada tras los que se saca a un jugador, para dejar sitio. Con 0, nunca. A los administradores no se les saca.</p>
+<ul>
+<li>Un número entero entre 0 y 1440.</li>
+<li>De serie: <code>0</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Permitir dos sesiones con la misma identidad: <code>varias_sesiones</code></h4>
+<p>Solo para pruebas. De serie, no: si alguien entra con su personaje desde otro sitio, la sesión anterior se cierra.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>no</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h3>Versiones del juego</h3>
+<p>Qué versiones del juego pueden jugar juntas en este servidor.</p>
+<h4>Comprobar los datos del juego de quien entra: <code>comprobar_datos</code></h4>
+<p>Con si, el servidor mira si el mundo que trae el juego de quien entra es el suyo, el de otra versión de verdad o uno cambiado con mods, y actúa según las opciones siguientes. Con no, no mira nada: entra cualquiera con lo que traiga, y el servidor no se pone al día con el mundo de las versiones nuevas.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>si</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Qué hacer con quien trae datos que no se pueden comprobar: <code>mundo_distinto</code></h4>
+<p>Quien juega con mods que cambian el mundo, o con una versión cuyos datos el servidor no puede comprobar. Con una versión de verdad distinta de la del servidor se entra siempre, pongas lo que pongas aquí.</p>
+<ul>
+<li>Valores:<ul>
+<li><code>admitir</code>: entra y juega en lo que tiene en común con el servidor; se le dice qué no coincide, y lo que afecta a los demás lo decide el servidor con su mundo.</li>
+<li><code>rechazar</code>: no entra: solo se juega con los datos de una versión de verdad.</li>
+</ul></li>
+<li>De serie: <code>admitir</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Versiones que pueden jugar juntas: <code>versiones</code></h4>
+<p>El servidor trabaja con el mundo de la versión más nueva que ha visto, y a cada juego le habla de lo que su versión conoce: un arma o un vehículo que no tiene le llegan como el más parecido de los suyos.</p>
+<ul>
+<li>Valores:<ul>
+<li><code>compatibles</code>: pueden jugar juntos quienes tengan versiones distintas del juego, cada uno con lo que su versión conoce.</li>
+<li><code>iguales</code>: solo entra quien tenga exactamente los mismos datos que el servidor.</li>
+</ul></li>
+<li>De serie: <code>compatibles</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Versión mínima del juego: <code>version_minima</code></h4>
+<p>La versión más antigua del juego con la que se puede entrar, por ejemplo 1.7.0. Vacío, cualquiera.</p>
+<ul>
+<li>Un texto de hasta 20 letras.</li>
+<li>De serie: vacío.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Quién puede traer un mundo nuevo: <code>actualizar_mundo</code></h4>
+<p>El mundo del juego (lugares, armas, misiones) no va atado al servidor: se lo trae el juego de quien entra. Un servidor sin mundo toma el del primero que entra; si ese no viene firmado, lo cambia por el primero firmado que llegue.</p>
+<ul>
+<li>Valores:<ul>
+<li><code>firmado</code>: el de una versión más nueva se acepta de cualquiera si lo firma quien publica el juego.</li>
+<li><code>admin</code>: además, sin firma, de un administrador: para servidores con mods.</li>
+<li><code>no</code>: nunca: el servidor se queda con el mundo que tiene.</li>
+</ul></li>
+<li>De serie: <code>firmado</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h3>Datos y copias de seguridad</h3>
+<p>Dónde se guarda todo, cada cuánto y cuántas copias se conservan.</p>
+<h4>Carpeta de datos: <code>datos</code></h4>
+<p>La carpeta donde se guarda todo: personajes, bandas, territorios, vehículos, el certificado y las copias de seguridad.</p>
+<ul>
+<li>Un texto de hasta 260 letras.</li>
+<li>De serie: <code>datos_servidor</code>.</li>
+<li>Necesita reiniciar el servidor.</li>
+</ul>
+<h4>Guardar cada tantos minutos: <code>guardado_minutos</code></h4>
+<p>Cada cuántos minutos se guarda todo en disco. Al parar el servidor se guarda siempre.</p>
+<ul>
+<li>Un número entero entre 1 y 120.</li>
+<li>De serie: <code>1</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Copia de seguridad automática, cada tantas horas: <code>copia_auto_horas</code></h4>
+<p>Cada cuántas horas hace el servidor una copia de seguridad en la carpeta copias, dentro de la de datos. Con 0, no hace ninguna.</p>
+<ul>
+<li>Un número entero entre 0 y 720.</li>
+<li>De serie: <code>24</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Copias de seguridad que se conservan: <code>copias_guardar</code></h4>
+<p>Cuántas copias automáticas se conservan: al hacer una nueva se borran las más antiguas. Las que haces tú a mano con otro nombre no se tocan.</p>
+<ul>
+<li>Un número entero entre 1 y 365.</li>
+<li>De serie: <code>7</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Guardar el registro en un archivo: <code>registro_archivo</code></h4>
+<p>Con si, lo que va diciendo el servidor se escribe también en registro.txt, dentro de la carpeta de datos.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>no</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h3>Combate entre jugadores</h3>
+<p>Las reglas de las peleas, los atracos y las recompensas.</p>
+<h4>Combate entre jugadores: <code>pvp</code></h4>
+<p>Con no, los jugadores no pueden herirse, atracarse ni robarse entre sí.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>si</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Zonas seguras: <code>zonas_seguras</code></h4>
+<p>Con si, en hospitales, comisarías, casas y dentro de los locales nadie puede herir a nadie.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>si</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Permitir el modo pasivo: <code>modo_pasivo</code></h4>
+<p>Con si, cada jugador puede ponerse en modo pasivo: ni hiere a otros jugadores ni le hieren.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>si</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Segundos de protección al llegar: <code>proteccion</code></h4>
+<p>Segundos sin poder herir ni ser herido al entrar y al reaparecer.</p>
+<ul>
+<li>Un número entero entre 0 y 600.</li>
+<li>De serie: <code>20</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Botín al tumbar a otro jugador, en tanto por ciento: <code>botin</code></h4>
+<p>El tanto por ciento del dinero de bolsillo que pierde quien cae ante otro jugador.</p>
+<ul>
+<li>Un número entero entre 0 y 100.</li>
+<li>De serie: <code>10</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Botín máximo: <code>botin_max</code></h4>
+<p>Lo más que se puede perder al caer ante otro jugador, en euros.</p>
+<ul>
+<li>Un número entero entre 0 y 100000000.</li>
+<li>De serie: <code>5000</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Atraco a otro jugador, en tanto por ciento: <code>atraco</code></h4>
+<p>El tanto por ciento del dinero de bolsillo que se lleva quien atraca a otro jugador.</p>
+<ul>
+<li>Un número entero entre 0 y 100.</li>
+<li>De serie: <code>15</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Atraco máximo: <code>atraco_max</code></h4>
+<p>Lo más que se puede quitar en un atraco a otro jugador, en euros.</p>
+<ul>
+<li>Un número entero entre 0 y 100000000.</li>
+<li>De serie: <code>1000</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Segundos para atracar un negocio: <code>robo_segundos</code></h4>
+<p>Los segundos que hay que aguantar en la puerta para vaciar la caja del negocio de otro jugador. Al dueño le salta el aviso.</p>
+<ul>
+<li>Un número entero entre 1 y 600.</li>
+<li>De serie: <code>20</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Recompensa por tumbar a un inocente: <code>recompensa</code></h4>
+<p>Lo que sube, en euros, la recompensa por la cabeza de quien tumba a quien no se defendía.</p>
+<ul>
+<li>Un número entero entre 0 y 100000000.</li>
+<li>De serie: <code>500</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h3>Mundo vivo</h3>
+<p>El tráfico, la gente de la calle, la policía y los personajes que lleva el servidor.</p>
+<h4>Tráfico común: <code>trafico</code></h4>
+<p>Con si, los coches que circulan los lleva el servidor y son los mismos para todos. Con no, cada jugador ve su propio tráfico.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>si</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Coches por zona con jugadores: <code>trafico_max</code></h4>
+<p>Cuántos coches lleva el servidor, como mucho, por cada zona de una localidad en la que hay jugadores. Para unos amigos que van juntos es el total de coches de la localidad.</p>
+<ul>
+<li>Un número entero entre 0 y 200.</li>
+<li>De serie: <code>8</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Coches por localidad, como mucho: <code>trafico_total</code></h4>
+<p>El tope de coches en una misma localidad cuando hay jugadores repartidos por muchas zonas. Con 0 no hay tope.</p>
+<ul>
+<li>Un número entero entre 0 y 5000.</li>
+<li>De serie: <code>60</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Coches patrulla por localidad: <code>patrullas</code></h4>
+<p>Coches patrulla del servidor que rondan por cada localidad con jugadores. Con 0, ninguno.</p>
+<ul>
+<li>Un número entero entre 0 y 50.</li>
+<li>De serie: <code>1</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Policía común: <code>policia</code></h4>
+<p>Con si, la búsqueda, la persecución y la detención las lleva el servidor, y las ve y las oye todo el que esté cerca. Con no, las lleva el juego de cada jugador.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>si</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Gente de la calle común: <code>peatones</code></h4>
+<p>Con si, los peatones los lleva el servidor y son los mismos para todos.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>si</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Peatones por zona con jugadores: <code>peatones_max</code></h4>
+<p>Cuántos peatones lleva el servidor, como mucho, por cada zona de una localidad en la que hay jugadores.</p>
+<ul>
+<li>Un número entero entre 0 y 200.</li>
+<li>De serie: <code>10</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Peatones por localidad, como mucho: <code>peatones_total</code></h4>
+<p>El tope de peatones en una misma localidad cuando hay jugadores repartidos por muchas zonas. Con 0 no hay tope.</p>
+<ul>
+<li>Un número entero entre 0 y 5000.</li>
+<li>De serie: <code>80</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Personajes que lleva el servidor: <code>personajes</code></h4>
+<p>Paseantes, rateros, pistoleros, ladrones de coches y atracadores que lleva el servidor y son los mismos para todos. Salen solo donde hay jugadores. Con 0, ninguno.</p>
+<ul>
+<li>Un número entero entre 0 y 200.</li>
+<li>De serie: <code>6</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Metros a los que se sigue a los demás al detalle: <code>radio_detalle</code></h4>
+<p>A cada jugador se le cuenta diez veces por segundo dónde están los que tiene a menos de esta distancia, y una vez por segundo por dónde andan los demás de su localidad. Es lo que más red y procesador ahorra en servidores con mucha gente. Con 0, a todos al detalle y siempre, que solo conviene con poca gente.</p>
+<ul>
+<li>Un número entero entre 0 y 100000.</li>
+<li>De serie: <code>150</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h3>Economía y vehículos</h3>
+<p>El dinero que reconoce el servidor y los vehículos que se dejan en la calle.</p>
+<h4>El servidor lleva la cuenta del dinero: <code>economia</code></h4>
+<p>Con si, el servidor lleva la cuenta del dinero de cada jugador y no da por bueno lo que no puede justificar.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>si</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Ganancia máxima por hora: <code>ganancia_hora</code></h4>
+<p>Lo más que se puede ganar en una hora de reloj con trabajos, ventas, juego y botín de la calle, en euros. Lo que da el propio servidor no cuenta.</p>
+<ul>
+<li>Un número entero entre 0 y 1000000000.</li>
+<li>De serie: <code>30000</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Horas de ganancia que se pueden acumular: <code>ganancia_acumula</code></h4>
+<p>La ganancia por hora que un jugador no usa no se pierde: se le guarda hasta este número de horas, también mientras está fuera, para que una buena racha quepa entera. Con 1, nunca tiene más margen que el de una hora.</p>
+<ul>
+<li>Un número entero entre 1 y 48.</li>
+<li>De serie: <code>3</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Encargos repetibles reconocidos por hora, de cada tipo: <code>encargos_hora</code></h4>
+<p>Los contratos, los combates del gimnasio, los atracos y los encargos de coches que se cumplen de verdad no gastan la ganancia por hora: el servidor los da por buenos, hasta este número por hora de cada tipo. Con 0 no reconoce ninguno y todos cuentan contra la ganancia por hora.</p>
+<ul>
+<li>Un número entero entre 0 y 1000.</li>
+<li>De serie: <code>6</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Paga máxima reconocida por un encargo repetible: <code>encargo_max</code></h4>
+<p>Lo más que se da por bueno de la paga de un solo encargo repetible, en euros. Lo que pase de ahí cuenta contra la ganancia por hora.</p>
+<ul>
+<li>Un número entero entre 0 y 1000000000.</li>
+<li>De serie: <code>15000</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Dinero inicial máximo: <code>saldo_inicial</code></h4>
+<p>Lo más con que puede empezar un personaje nuevo, en euros.</p>
+<ul>
+<li>Un número entero entre 0 y 1000000000.</li>
+<li>De serie: <code>5000</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Horas que dura un vehículo en la calle: <code>vehiculos_horas</code></h4>
+<p>Horas de verdad que un vehículo dejado en la calle sigue ahí.</p>
+<ul>
+<li>Un número entero entre 1 y 8760.</li>
+<li>De serie: <code>12</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Vehículos aparcados por jugador: <code>vehiculos_por_jugador</code></h4>
+<p>Cuántos vehículos puede tener aparcados en la calle cada jugador. Al dejar uno más, desaparece el más antiguo.</p>
+<ul>
+<li>Un número entero entre 1 y 100.</li>
+<li>De serie: <code>3</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h3>Casas y negocios</h3>
+<p>Venderlos, perderlos por no entrar y que nadie se quede con todos los negocios.</p>
+<h4>Venta al mercado, en tanto por ciento: <code>venta_mercado</code></h4>
+<p>El tanto por ciento del precio que recupera quien vende su casa o su negocio al mercado.</p>
+<ul>
+<li>Un número entero entre 0 y 100.</li>
+<li>De serie: <code>70</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Días sin entrar para perder las propiedades: <code>propiedad_dias</code></h4>
+<p>Días de verdad sin entrar tras los que las propiedades de un jugador vuelven al mercado. Se le guarda su parte.</p>
+<ul>
+<li>Un número entero entre 1 y 3650.</li>
+<li>De serie: <code>30</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Negocios por jugador: <code>negocios_max</code></h4>
+<p>Cuántos negocios puede tener a la vez un mismo jugador, para que nadie se quede con todos. Con 0 no hay tope. Si alguien tiene más de los que permite el tope, a medianoche vuelven al mercado los últimos que compró, y se le devuelve lo que pagó por ellos.</p>
+<ul>
+<li>Un número entero entre 0 y 1000.</li>
+<li>De serie: <code>3</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Comprar a la fuerza un negocio ajeno, en tanto por ciento de su precio: <code>compra_forzosa</code></h4>
+<p>Cualquier jugador puede quedarse con el negocio de otro pagándole este tanto por ciento de su precio, aunque no lo venda. Lo cobra su dueño. No vale con los negocios de tu banda ni de una banda aliada. Con 0 no se puede.</p>
+<ul>
+<li>Un número entero entre 0 y 10000.</li>
+<li>De serie: <code>200</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Días de protección de un negocio recién comprado: <code>forzosa_dias</code></h4>
+<p>Durante estos días de verdad después de comprarlo, nadie puede quedarse a la fuerza con ese negocio.</p>
+<ul>
+<li>Un número entero entre 0 y 365.</li>
+<li>De serie: <code>3</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h3>Bandas y territorios</h3>
+<p>Lo que cuesta fundar una banda, reclamar un barrio y declarar una guerra.</p>
+<h4>Precio de fundar una banda: <code>precio_banda</code></h4>
+<p>En euros.</p>
+<ul>
+<li>Un número entero entre 0 y 1000000000.</li>
+<li>De serie: <code>2000</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Precio de reclamar un barrio: <code>precio_barrio</code></h4>
+<p>En euros, de la caja de la banda.</p>
+<ul>
+<li>Un número entero entre 0 y 1000000000.</li>
+<li>De serie: <code>3000</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Renta diaria de cada barrio: <code>renta_barrio</code></h4>
+<p>Lo que deja cada barrio en la caja de la banda a medianoche, en euros.</p>
+<ul>
+<li>Un número entero entre 0 y 1000000000.</li>
+<li>De serie: <code>300</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Precio de declarar una guerra: <code>precio_guerra</code></h4>
+<p>En euros, de la caja de la banda.</p>
+<ul>
+<li>Un número entero entre 0 y 1000000000.</li>
+<li>De serie: <code>1000</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Minutos hasta que empieza una guerra: <code>guerra_espera</code></h4>
+<p>Minutos de verdad entre declarar una guerra y que empiece.</p>
+<ul>
+<li>Un número entero entre 1 y 10080.</li>
+<li>De serie: <code>20</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Minutos que dura una guerra: <code>guerra_dura</code></h4>
+<p>Minutos de verdad.</p>
+<ul>
+<li>Un número entero entre 1 y 1440.</li>
+<li>De serie: <code>10</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h3>Rol y convivencia</h3>
+<p>Los canales de chat para interpretar a tu personaje y lo que se oye de los demás jugadores.</p>
+<h4>Canales de rol: <code>rol</code></h4>
+<p>Con si, los jugadores tienen un canal para hablar en personaje, que solo oye quien está cerca, otro para hablar fuera de personaje, que oye todo el servidor, una orden para describir lo que hace su personaje y una frase de ficha que los demás pueden leer. Con no, solo queda el chat de siempre.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>si</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Metros a los que llega lo dicho en personaje: <code>rol_metros</code></h4>
+<p>A qué distancia se oye lo que un jugador dice en personaje y las acciones que describe. Lo dicho fuera de personaje llega siempre a todo el servidor.</p>
+<ul>
+<li>Un número entero entre 5 y 2000.</li>
+<li>De serie: <code>30</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Radio de los coches de otros jugadores: <code>radio_coches</code></h4>
+<p>Con si, quien está cerca del vehículo de otro jugador oye, floja, la emisora del juego que lleva puesta. Solo se cuenta qué emisora del juego es: nunca viaja música ni nada personal. Con no, no se oye la radio de nadie.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>si</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h3>Vida honrada</h3>
+<p>Los contratos fijos con su nómina y el trato de las tiendas según el prestigio de cada jugador.</p>
+<h4>Nóminas de los contratos fijos: <code>nominas</code></h4>
+<p>Con si, quien firma un contrato fijo en la oficina de empleo cobra su nómina al acabar cada periodo. La paga el servidor: él cuenta los turnos y pone la cifra, que sale de los datos del juego y no gasta la ganancia por hora. Con no, en este servidor no hay contratos fijos. Hace falta que el mundo del servidor sea el de la versión 1.7.1 o posterior.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>si</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Paga máxima por nómina: <code>nomina_max</code></h4>
+<p>Lo más que paga el servidor por la nómina de un periodo, en euros, diga lo que diga el mundo del juego o un mod.</p>
+<ul>
+<li>Un número entero entre 0 y 1000000000.</li>
+<li>De serie: <code>1500</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Turnos de contrato que cuentan cada día: <code>nomina_turnos_dia</code></h4>
+<p>Cuántos turnos de un contrato fijo cuenta el servidor a un jugador en un mismo día del juego.</p>
+<ul>
+<li>Un número entero entre 1 y 50.</li>
+<li>De serie: <code>3</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<h4>Rebajas por prestigio en las tiendas: <code>trato_prestigio</code></h4>
+<p>Con si, a quien tiene buen nombre entre los vecinos las tiendas le rebajan un poco, y a quien lo tiene muy malo le recargan, como al jugar sin conexión con el nivel suave. Solo lo nota quien juega con la versión 1.7.1 o posterior. Con no, todos pagan lo mismo.</p>
+<ul>
+<li>Valores: si o no.</li>
+<li>De serie: <code>si</code>.</li>
+<li>Se aplica sin reiniciar el servidor.</li>
+</ul>
+<!-- OPCIONES:FIN -->
+</body>
+</html>

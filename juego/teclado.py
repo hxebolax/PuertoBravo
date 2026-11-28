@@ -219,3 +219,21 @@ class Captura:
 
     def cerrado(self):
         pass
+
+
+def _pl():
+    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
+    try:
+        from .i18n import actual
+        return actual() == "pl"
+    except Exception:  # noqa: BLE001
+        return False
+
+
+if _pl():
+    NOMBRES.update({pygame.K_SPACE: "spacja", pygame.K_TAB: "Tab", pygame.K_BACKSPACE: "Backspace", pygame.K_COMMA: "przecinek",
+                    pygame.K_PERIOD: "kropka", pygame.K_MINUS: "myślnik", pygame.K_SLASH: "ukośnik", pygame.K_HOME: "Home",
+                    pygame.K_END: "End", pygame.K_INSERT: "Insert", pygame.K_DELETE: "Delete", pygame.K_QUOTE: "akcent",
+                    pygame.K_RIGHTBRACKET: "plus"})
+    ETIQUETAS.update({"spacja": pygame.K_SPACE, "tab": pygame.K_TAB, "backspace": pygame.K_BACKSPACE,
+                      "strzałka w górę": pygame.K_UP, "strzałka w dół": pygame.K_DOWN})

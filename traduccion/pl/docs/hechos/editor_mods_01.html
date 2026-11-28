@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Podręcznik edytora modów Puerto Bravo</title>
+<style>
+body { font-family: Segoe UI, Arial, sans-serif; max-width: 54em; margin: 1em auto; padding: 0 1em; line-height: 1.6; background: #111; color: #f2f2f2; font-size: 1.1em; }
+h1, h2, h3 { color: #ffd84d; }
+a { color: #8fd0ff; }
+code { color: #9fe89f; }
+kbd { border: 1px solid #aaa; border-radius: 4px; padding: 0 .35em; background: #2a2a2a; }
+li { margin-bottom: .3em; }
+</style>
+</head>
+<body>
+<h1>Podręcznik edytora modów Puerto Bravo</h1>
+<p>Edytor modów to osobny program, ze zwykłymi oknami i kontrolkami Windows, przygotowany do pracy z czytnikiem ekranu i klawiaturą. Tworzy się w nim wszystko, co może zawierać mod, bez pisania ręcznie ani jednej linijki. Ten podręcznik jest podzielony nagłówkami.</p>
+
+<h2>1. Otwieranie edytora</h2>
+<ul>
+<li>Uruchom <strong>EditorMods.exe</strong>, który jest obok <strong>PuertoBravo.exe</strong>.</li>
+</ul>
+<p>Edytor zapisuje mody w folderze <code>data\mods</code>, bo stamtąd czyta je gra. Mod to jeden plik z rozszerzeniem <code>.pbm</code>.</p>
+<p>Mody zapisane przez edytor są chronione, z rozszerzeniem <code>.pbm</code>: plik jest zaszyfrowany i podpisany, więc nie da się go przeczytać ani poprawić w edytorze tekstu. Edytor otwiera chronione mody, także te dołączone do gry; przy zapisie zawsze je chroni.</p>
+<p>Edytor działa w języku gry: tym, który wybierzesz w Opcjach, Język, albo, przy ustawieniu automatycznym, w języku twojego Windowsa. Teksty twojego moda natomiast widać w grze dokładnie tak, jak je napiszesz, w dowolnym języku.</p>
+<p>Jeśli ktoś przekaże ci niechroniony mod w pliku <code>.json</code>, gra go nie wczyta: otwórz go tutaj klawiszami <kbd>Control O</kbd> i zapisz klawiszami <kbd>Control S</kbd>. Edytor go sprawdzi, zapisze jako <code>.pbm</code>, gotowy do użycia, i zachowa oryginalny plik z końcówką <code>.json.original</code>.</p>
+
+<h2>2. Okno główne</h2>
+<p>Ma dwie listy i rząd przycisków. Klawiszem <kbd>Tab</kbd> przechodzisz z jednego do drugiego.</p>
+<ul>
+<li>Sekcje: rodzaje zawartości. Gdy poruszasz się po niej strzałkami, druga lista się zmienia.</li>
+<li>Elementy: to, co twój mod ma w wybranej sekcji.</li>
+<li>Przyciski: Dodaj, Edytuj, Powiel, Usuń, Przesuń w górę, Przesuń w dół i Kopiuj z oryginalnej gry.</li>
+</ul>
+<p>Każda lista i każdy przycisk ma swoją literę dostępu: naciśnij <kbd>Alt</kbd> i literę, którą podaje twój czytnik, żeby do niego przejść.</p>
+<h3>Sekcje</h3>
+<ul>
+<li>Miejsca: sklepy, domy, interesy, banki, urzędy pracy, akademie, jadłodajnie i wszystkie inne rodzaje, z położeniem, dźwiękiem i opcjami.</li>
+<li>Misje: z miejscem rozpoczęcia, wymaganiami, nagrodą i wszystkimi krokami.</li>
+<li>Broń, pojazdy i wyścigi.</li>
+<li>Posiłki, przedmioty i ryby.</li>
+<li>Postacie do wyboru na początku gry.</li>
+<li>Ubrania: rzeczy ze sklepów odzieżowych, z ceną i, jeśli mają wzmocnienia, opancerzeniem, które dają.</li>
+<li>Dodatki: okulary, łańcuszki, pierścionki, zegarki i to, co wymyślisz. Każdy ma swój rodzaj; z każdego rodzaju nosi się tylko jeden.</li>
+<li>Osłony ze sklepu z bronią: to, co sprzedaje się oprócz kamizelki, z opancerzeniem, jakie zostawia.</li>
+<li>Dniówki: prace bez pojazdu z urzędu pracy, z płacą i tym, jak męczą.</li>
+<li>Walki na siłowni: boks, mieszane sztuki walki i te, które dodasz. Ile rund, imiona rywali, ile wytrzymują i ile się zarabia. Pole To walka sportowa jest zaznaczone: powalanie rywali nie jest przestępstwem ani nie obniża prestiżu. Odznacz je tylko, jeśli chcesz nielegalnej walki, w której każdy powalony rywal liczy się jako napaść, jeśli ktoś to zobaczy.</li>
+<li>Meble w domu: nazwa, cena i teksty.</li>
+<li>Ulepszenia z warsztatu: nazwa, cena, ile mają poziomów, co poprawiają i ile daje każdy poziom. Możesz zmienić siedem z gry albo dodać inne.</li>
+<li>Ludzie na ulicy: imiona, nazwiska, zawody i zdania ludzi, przezwiska celów kontraktów, imiona psów i inne nazwy, które gra wybiera losowo.</li>
+<li>Charaktery ludzi: usposobienia osób, z którymi się rozmawia.</li>
+<li>Bandy: bandy z okolicy i z jakimi wrogami walczy każda z nich.</li>
+<li>Rodzaje wrogów: katalog wrogów, z nazwą, bronią, zdrowiem, celnością, zdaniami i, jeśli go mają, pojazdem.</li>
+<li>Policja według poziomu poszukiwań: jaki rodzaj policjanta wyjeżdża na każdym poziomie.</li>
+<li>Kasa lokali: ile pieniędzy jest w kasie każdego rodzaju lokalu i kto jej pilnuje.</li>
+<li>Jedzenie z dowozem, w dwóch sekcjach: karta, z każdym daniem i napojem, ceną oraz tym, ile zaspokaja głodu i pragnienia; oraz czasy i zdania.</li>
+<li>Zakupy i kuchnia, w pięciu sekcjach: Produkty sklepów spożywczych, Alejki sklepów, Rodzaje sklepów spożywczych, Przepisy kulinarne oraz liczby i zdania o zakupach, spiżarni i kuchni.</li>
+<li>Napady na lokale i dostawców: ile dni obrabowany lokal cię pamięta i wszystko o napadach na dostawców i ich konsekwencjach.</li>
+<li>Przygotowane skoki, w dwóch sekcjach: Role w skoku, z każdą rolą, tym, co robi, od czego zależy i jaką część łupu bierze; oraz liczby i zdania radia.</li>
+<li>Latanie, w trzech sekcjach: Latanie: liczby i zdania; Statki powietrzne: jak lata każdy; oraz Mapa lotnicza: gdzie leży każda miejscowość.</li>
+<li>Negocjacje z bandami: ile się płaci za oddanie, kupno albo pobieranie haraczu, ile kosztuje rozejm i zdania każdej odpowiedzi.</li>
+<li>Odbijanie dzielnic: wszystko o pokonanych bandach, które próbują odzyskać dzielnice gracza: tempo, ostrzeżenia, szturmy, obrona, lojalność i zdania.</li>
+<li>Kontrakty z tablicy: rodzaje zleceń wywieszanych na tablicy w tawernach.</li>
+<li>Ludzie działają i dołączają do twojej bandy: kiedy ktoś ci towarzyszy, bije cię albo zgłasza, przysługi i warunki werbunku.</li>
+<li>Zawód policjanta i Zgłoszenia z radiostacji policji: stopnie, płace, nagany i zgłoszenia, które przekazuje centrala.</li>
+<li>Plany we dwoje i Życie we dwoje, do treści dla dorosłych: plany ze scenami oraz liczby i zdania o wspólnym mieszkaniu.</li>
+<li>Stawki i ceny: ile kosztują usługi, bilety, wstępy, wynajem, mandaty i łapówki oraz ile płacą prace i stałe nagrody. W każdej możesz zmienić cenę i nazwę; identyfikatora gra używa, żeby ją znaleźć, i nie wolno go zmieniać. Tam, gdzie cena wynika z obliczeń, na przykład łapówka za każdy poziom poszukiwań, stawka jest podstawą.</li>
+<li>Ulica: reakcje, policja i helikopter: co mówi gra, gdy ludzie uciekają, co ile ludzie rozmawiają w przelocie, ile amunicji upuszczają wrogowie, ile patroli robi obchód, karetki, ile kosztuje poddanie się i wszystko o policyjnym helikopterze.</li>
+<li>Wojna o dzielnice na ulicy: ilu członków bandy chodzi po jej dzielnicy, ile jest fal, co się zyskuje i zdania. Na karcie Szukaj bójki są liczby i zdania o bójkach, które gracz wywołuje z bandą bez zdobywania czegokolwiek.</li>
+<li>Misje dostosowują się do twojej obstawy: o ile rośnie opór w misji za każdą osobę towarzyszącą graczowi, na umiarkowanym i silnym, z limitami, oraz zdania ostrzeżeń.</li>
+<li>Pościgi i klawisz celu: co ile sekund podaje się, gdzie jest uciekający i od jakiej odległości, przy ilu metrach zwalnia i o ile, te same liczby przy włączonej opcji Pomoc w pościgach, ile się wytrzymuje przy śledzeniu kogoś pieszo, czas podwójnego naciśnięcia celu i zdania wyjaśniające pościg na początku.</li>
+<li>Moje pojazdy i kierowca: ile pojazdów gracza mieści się na ulicy, ile trwa dojazd kierowcy bandy, jakimi pojazdami przyjeżdża i jakie zdania mówi.</li>
+<li>Radio pieszo i w lokalach: w jakich rodzajach lokali gra muzyka w tle i z jaką głośnością oraz głośność odtwarzacza ze słuchawkami. Każde miejsce może poza tym samo włączyć albo wyłączyć muzykę.</li>
+<li>Realizm: liczby dotyczące pragnienia, higieny, awarii i przepisów drogowych: co ile łapie się gumę, ile kosztuje mandat, ile punktów ma prawo jazdy.</li>
+<li>Paliwo: cena litra, na ile starcza bak, kiedy ostrzega rezerwa, kanister, pomoc drogowa i litry baku według silnika.</li>
+<li>Rozdziały historii.</li>
+<li>Mapy: całe miejscowości, z dzielnicami, ulicami i wyspami.</li>
+<li>Do treści dla dorosłych: osoby, zajęcia, prezenty i substancje. Przy każdej osobie jest, czy to mężczyzna, czy kobieta: przy opcji Pociągają mnie osoby, która nie pociąga gracza, nie można zaprosić na romantyczną randkę. Bez tej informacji dotyczy każdego.</li>
+</ul>
+
+<h2>3. Klawisze</h2>
+<h3>W dowolnym miejscu edytora</h3>
+<ul>
+<li><kbd>Control H</kbd>: mówi nazwę i objaśnienie kontrolki, na której jesteś. Używaj go zawsze, gdy nie wiesz, do czego służy pole.</li>
+<li><kbd>F1</kbd>: otwiera ten podręcznik.</li>
+<li><kbd>Alt</kbd>: przechodzi do paska menu.</li>
+</ul>
+<h3>Menu Plik</h3>
+<ul>
+<li><kbd>Control N</kbd>: nowy mod.</li>
+<li><kbd>Control O</kbd>: otwarcie moda z folderu modów.</li>
+<li><kbd>Control S</kbd>: zapis.</li>
+<li><kbd>Control Shift S</kbd>: zapis pod inną nazwą.</li>
+<li><kbd>Control Q</kbd>: wyjście. Jeśli są niezapisane zmiany, najpierw pyta.</li>
+</ul>
+<h3>Menu Mod</h3>
+<ul>
+<li><kbd>Control D</kbd>: dane moda: nazwa, autor, wersja i opis.</li>
+<li><kbd>F5</kbd>: sprawdzenie moda.</li>
+<li><kbd>Control M</kbd>: włączanie albo wyłączanie modów, żeby wybrać, które wczytuje gra.</li>
+<li><kbd>Control B</kbd>: otwarcie folderu modów w Eksploratorze.</li>
+<li><kbd>F9</kbd>: zapis, sprawdzenie i uruchomienie gry, żeby wypróbować mod.</li>
+<li><kbd>Control G</kbd>: zapis scenariusza nagrań moda, do nagrania zdań z misji.</li>
+<li><kbd>Control Shift V</kbd>: otwórz folder z głosami.</li>
+<li><kbd>Control Shift A</kbd>: dodaj własny dźwięk, żeby użyć go w broni, pojazdach i miejscach.</li>
+</ul>
+<h3>Na listach elementów</h3>
+<ul>
+<li><kbd>Strzałki</kbd>: poruszanie się po liście.</li>
+<li><kbd>Enter</kbd>: edycja wybranego elementu.</li>
+<li><kbd>Delete</kbd>: usunięcie go. Prosi o potwierdzenie.</li>
+</ul>
+<h3>W formularzach</h3>
+<ul>
+<li><kbd>Tab</kbd> i <kbd>Shift Tab</kbd>: następne i poprzednie pole.</li>
+<li><kbd>Alt</kbd> z literą pola: przejście do tego pola.</li>
+<li><kbd>Control Tab</kbd>: w formularzach z kartami przejście do następnej karty.</li>
+<li><kbd>Enter</kbd>: zatwierdzenie. <kbd>Escape</kbd>: anulowanie bez zapisywania zmian w formularzu.</li>
+</ul>
+
+<h2>4. Tworzenie elementu</h2>
+<ol>
+<li>Wybierz sekcję.</li>
+<li>Naciśnij Dodaj. Otworzy się formularz z polami tego rodzaju zawartości.</li>
+<li>Wypełnij pola. Obowiązkowe mówią o tym w nazwie. <kbd>Control H</kbd> objaśnia każde.</li>
+<li>Zatwierdź. Jeśli brakuje czegoś obowiązkowego, edytor przeniesie cię do pola i powie, czego brakuje.</li>
+</ol>
+<p>Długie formularze są podzielone na karty. Pojawiają się tylko pola, które mają sens: na przykład po wybraniu rodzaju miejsca „academia” pojawia się pole z prowadzonymi kursami.</p>
+<h3>Pola, które są listami</h3>
+<p>Niektóre pola same zawierają listę: kroki misji, zdania dialogu, wrogów w kroku albo dzielnice mapy. Edytuje się je przyciskiem, który otwiera kolejne okno z ich listą i przyciskami Dodaj, Edytuj, Powiel, Usuń, Przesuń w górę i Przesuń w dół. Kolejność ma znaczenie: kroki misji rozgrywa się od góry do dołu.</p>
+<h3>Pola, w których wybiera się coś z gry</h3>
+<p>Tam, gdzie trzeba wskazać miejsce, broń, pojazd, dźwięk albo misję, edytor daje listę rozwijaną ze wszystkim, co istnieje: z gry, z innych modów i z twojego moda. Nie trzeba pamiętać identyfikatorów.</p>
+<h3>Kopiowanie z oryginalnej gry</h3>
+<p>Przycisk Kopiuj z oryginalnej gry przenosi do twojego moda kopię oryginalnego elementu, żeby go zmienić. Jeśli zostawisz ten sam identyfikator, zastępuje oryginał; jeśli go zmienisz, dochodzi jako nowy. To najszybszy sposób nauki: skopiuj misję, która ci się podoba, i zobacz, jak jest zrobiona.</p>
+
+<h3>Tworzenie własnego pojazdu</h3>
+<p>Nowy pojazd to kolejny element: nie trzeba niczego programować. W sekcji Pojazdy naciśnij Dodaj albo przenieś podobny przyciskiem Kopiuj z oryginalnej gry i zmień mu identyfikator. Wypełnij nazwę, prędkość maksymalną, przyspieszenie, hamowanie i wytrzymałość; wybierz dźwięk silnika i jego wysokość, która przy większej liczbie brzmi wyżej; a jeśli chcesz, klakson, syrenę, litry baku i pracę, którą można nim wykonywać. Zaznacz, czy to łódź, czy lata. Żeby pojawił się w grze: dodaj go do pojazdów dzielnicy, żeby tam jeździł i parkował, ustaw mu cenę, żeby sprzedawały go salony albo sklepy żeglarskie, albo użyj go w kroku misji. Bez ceny nie da się go nigdzie kupić, a sprawdzenie moda (<kbd>F5</kbd>) o tym ostrzega. Z ceną jest sprzedawany we wszystkich salonach, które nie ograniczają swoich modeli; żeby sprzedawał go tylko jeden, zaznacz go w Modelach na sprzedaż tego salonu.</p>
+
+<h3>Nauka na przykładowych modach</h3>
+<p>W folderze modów jest dziewięć pełnych modów: Bahía del Ocaso, czyli całe miasto z długą historią, Costa Dorada, Valdeolmos, Peñas Altas, Isla de los Vientos, Neonowe noce, Zawody i sprawunki, Silnik i asfalt oraz El Diablo, agencja płatnych zabójców z własnymi zleceniami. Otwórz je klawiszami <kbd>Control O</kbd>: <code>costa_dorada</code> ma przykład wszystkiego, co można stworzyć, w tym całą mapę i misje z dziewięcioma rodzajami kroków.</p>
+
+
+<h3>Zdarzenia uliczne, wędkowanie i komisariaty</h3>
+<p>Sekcja Zdarzenia uliczne ma trzy zdarzenia z gry, zgubioną teczkę, napad i chuliganów, oraz te, które dodasz. Każde zdarzenie jest rodzaju, który gra umie prowadzić: coś zgubionego, czego szuka się radarem, napad z ofiarą albo grupa, która zagraża ulicy. Podajesz jego nazwę, jak często się zdarza, ile trwa, nagrodę, co mówi na początku (z {situar} w miejscu, gdzie ma być miejsce), co mówi, jeśli je rozwiążesz albo skończy się czas, jego wrogów i ich broń, i czy pojawia się tylko w niektórych miejscowościach. Z tym samym identyfikatorem co zdarzenie z gry zmieniasz je.</p>
+<p>W każdej miejscowości Dopuszczane zdarzenia uliczne zaznacza tylko te, które pasują, na przykład teczkę w spokojnym miasteczku, a Tu nie ma zdarzeń ulicznych usuwa wszystkie. Każdy gracz może też wyłączyć te, których nie chce, w swoich opcjach.</p>
+<p>Na łowisku albo przystani Jaka to woda mówi, czy to morze, rzeka, czy jezioro. Przy każdej rybie są W jakich wodach żyje i Tylko w tych miejscowościach: rzeczna ryba właściwa dla twojego miasteczka bierze tylko tam. Ryba bez żadnego zaznaczenia bierze wszędzie, jak dawniej.</p>
+<p>Kilometry każdego wyjazdu liczą się też dla policji: kogoś zatrzymanego w miasteczku bez komisariatu zabiera się do tego, który jest najmniej kilometrów stąd, wyjazdami. Jeśli twoje miasteczko nie ma komisariatu, ustaw kilometry dokładnie. W Ulepszeniach warsztatu Montuje się też w helikopterach i awionetkach decyduje, czy warsztat oferuje to temu, co lata.</p>
+<h2>5. Misje</h2>
+<p>Misja to lista kroków. Każdy krok ma rodzaj:</p>
+<ul>
+<li>Dialog: zdania, które mówi każda postać.</li>
+<li>Idź: dotrzeć w jakieś miejsce, pieszo albo pojazdem, z limitem czasu albo bez.</li>
+<li>Daj: gra daje ci broń, pieniądze albo przedmiot.</li>
+<li>Ukradnij: zdobyć konkretny pojazd.</li>
+<li>Dostarcz: zawieźć pojazd w jakieś miejsce, z największymi dopuszczalnymi uszkodzeniami.</li>
+<li>Zlikwiduj: rozprawić się z wrogami.</li>
+<li>Podnieś: podnieść jeden albo kilka przedmiotów.</li>
+<li>Policja: daje ci poziom poszukiwań albo każe go zgubić.</li>
+<li>Ściganie: dogonić uciekający pojazd.</li>
+</ul>
+<p>W tekstach możesz pisać Dani: gra zamienia to na imię postaci, którą wybrał gracz.</p>
+<h3>Misje z pojazdem: czy wymagają swojego</h3>
+<p>Misja z krokiem kradzieży pojazdu domyślnie wymaga tego pojazdu: gracz musi do niego wsiąść i go dostarczyć. Jeśli w twojej misji chodzi o to, żeby coś zawieźć, a nieważne czym, zaznacz w misji pole Można to zrobić pojazdem gracza. Wtedy gracz może dojechać swoim tam, gdzie jest pojazd z misji, zatrzymać się obok i wykonać ją swoim; po dostarczeniu zatrzymuje go. Jego pojazd musi być tej samej klasy co pojazd z misji: jeśli ten z misji lata, jego też. Nie zaznaczaj tego, gdy pojazd jest przedmiotem zlecenia, jak przy kradzieży. Gra mówi graczowi w streszczeniu misji, przed przyjęciem, czy dostaje pojazd, czy musi zabrać konkretny, czy może użyć swojego: nie musisz tego pisać.</p>
+<h3>Moje pojazdy i kierowca</h3>
+<p>W sekcji Moje pojazdy i kierowca jest tylko jeden element, ogólny. Decydujesz w nim, ile pojazdów gracza mieści się na ulicy, zanim najstarszy sam pojedzie do garażu, w jakim przedziale sekund dojeżdża kierowca bandy, przy jakim poziomie poszukiwań przestaje przyjeżdżać, jakimi pojazdami bandy może się pojawić i jakie zdania mówi w każdej chwili: przy wyjeździe, po przybyciu, gdy nie ma celu, gdy mu go wskazujesz, po dotarciu do celu, gdy wysiadasz i na pożegnanie. Jeśli zostawisz listę zdań pustą, obowiązują te z gry. W tej samej sekcji jest lista Proponowane nazwy pojazdów: to te, które gra proponuje, kilka losowych za każdym razem, gdy gracz nadaje nazwę pojazdowi i nie chce jej pisać, Tabulatorem albo przyciskiem pada. Ile kosztuje wezwanie go, jest w Stawkach i cenach, w Szofer z twojej bandy.</p>
+<h3>Ulica: reakcje, policja i helikopter</h3>
+<p>W sekcji Ulica jest tylko jeden element, ogólny, podzielony na sześć kart. To liczby i zdania o tym, co dzieje się na ulicy, bez szukania tego przez gracza. To, czy każda rzecz jest włączona, czy wyłączona, decyduje każdy gracz w swoich opcjach; tutaj decydujesz, jak to wygląda, gdy jest włączone.</p>
+<ul>
+<li>Ogólne: co ile sekund gra może powiedzieć, że ktoś ucieka, ilu uciekających krzyczy, i zdania. W zdaniach tam, gdzie napiszesz quien w nawiasach klamrowych, pojawi się „Mężczyzna”, „Kobieta” albo imię osoby, jeśli gracz już ją zna; a tam, gdzie napiszesz n w nawiasach klamrowych – ile jest osób.</li>
+<li>Mówiący ludzie: ilu przechodniów spaceruje parami, co ile sekund słychać rozmowę przy każdym ustawieniu gracza, jak przedstawia się zdanie i o jakich tematach rozmawiają. Same zdania pochodzą z bazy rozmów gry.</li>
+<li>Łup i patrole: ilu powalonych wrogów upuszcza amunicję i ile, ilu upuszcza broń przy opcji trudności, ile patroli robi obchód w dzień i w nocy i ile razy wyjeżdża patrol, gdy gracz zostanie zaatakowany. Przy zerze patroli nie ma żadnego.</li>
+<li>Karetki i poddanie się: ile razy przyjeżdża karetka, ile trwa dojazd i ile zostaje; oraz ile kosztuje poddanie się: grzywna za poziom, procent pieniędzy, godziny w areszcie i od jakiego poziomu traci się całą broń.</li>
+<li>Helikopter: przy jakim poziomie poszukiwań wylatuje, ile trwa jego przylot, ile wytrzymuje, na jakiej wysokości i w jakiej odległości krąży, jakie najmniejsze obrażenia musi mieć broń, żeby coś mu zrobić, i ile kosztuje zestrzelenie go.</li>
+<li>Zgubić helikopter: ile sekund trzeba być poza jego zasięgiem wzroku, jak długo szuka, ile trwa, zanim rozpozna gracza i wróci, co mówi przez głośnik i jakie rodzaje miejsc nie mają dachu.</li>
+</ul>
+<p>Rada: jeśli bardzo zwiększysz promień helikoptera, sprawdź, czy któraś z twoich ciężkich broni go dosięga, bo inaczej nie da się go zestrzelić.</p>
+<h3>Wojna o dzielnice na ulicy</h3>
+<p>To też jest jeden element, ogólny, i liczy się tylko dla tego, kto ma ten tryb włączony w opcjach. Decydujesz, ilu przechodniów w dzielnicy bandy należy do bandy, po ilu stratach wypowiada wojnę, ile fal trzeba pokonać, żeby zdobyć i obronić, ilu wrogów przynosi pierwsza, ile trwa oddech między falami, jak długo można być poza dzielnicą, nagrody i zdania. W zdaniach banda w nawiasach klamrowych to nazwa bandy, a barrio w nawiasach klamrowych – nazwa dzielnicy.</p>
+<p>Kto walczy w każdej fali, wynika z sekcji Bandy: rodzaje wrogów bandy i jej posiłki z pojazdem w ostatniej fali. Ci, którzy chodzą po ulicy, są tego rodzaju, który banda ma ustawiony w polu Rodzaj wroga u ich ludzi chodzących po ulicy; jeśli nie ma żadnego – pierwszego z jej rodzajów. A to, która banda rządzi w dzielnicy, jeśli chcesz ustalić to sam, ustawia się w samej dzielnicy, w polu Banda rządząca w dzielnicy; dzielnicom, które nie mają żadnej, tryb przydziela jedną, zawsze tę samą w danej rozgrywce.</p>
+<h3>Splatające się historie</h3>
+<p>Decyzja otwiera gałąź: z polem Tylko jeśli podjęto decyzję misja albo krok obowiązują tylko dla tego, kto wybrał daną opcję. Żeby gałąź pamiętała, co postanowiono w innej, albo żeby połączyć kilka, są jeszcze trzy pola, w misjach i w krokach:</p>
+<ul>
+<li>Tylko jeśli zbiegną się te decyzje: kilka decyzji naraz, każda jako nazwa, dwukropek i numer opcji, oddzielone przecinkami. Na przykład concejal:1, trono:3. Bez niczego więcej potrzebne są wszystkie.</li>
+<li>Ile z nich trzeba co najmniej i ile najwyżej: do liczenia. Z listą uczciwych opcji minimum trzy to zakończenie dla kogoś, kto wszystko zrobił dobrze, maksimum zero – dla kogoś, kto nic nie zrobił dobrze, a od jednego do dwóch – to pośrodku.</li>
+<li>W misjach I co najmniej jedna z każdej grupy: dla misji, która przychodzi po rozwidleniu. Wpisuje się misje z każdej gałęzi oddzielone spacjami, a grupy średnikiem: fd2 fd3 fd4; vd2 vd3. Pojawia się, gdy ukończono jedną z każdej grupy.</li>
+</ul>
+<p>Krok dialogu z jednym z tych warunków, postawiony na końcu misji, to najprostszy sposób, żeby postać skomentowała to, co gracz zrobił w innej historii. Jeśli tej decyzji jeszcze nie podjęto, krok jest pomijany.</p>
+<p>Gracz może być mężczyzną albo kobietą. Gdy zdanie zmienia się zależnie od tego, do kogo jest mówione, napisz obie formy w nawiasach kwadratowych, najpierw męską, a potem żeńską, oddzielone pionową kreską. Gra zostawia tylko właściwą:</p>
+<ul>
+<li>[Zrobiłeś|Zrobiłaś] to: zrobiłeś albo zrobiłaś.</li>
+<li>Jesteś [tym nowym|tą nową]: działa też dla kilku słów.</li>
+<li>Kierowc[a|zyni]: jedna z form może mieć inną końcówkę, a wspólny początek pisze się raz.</li>
+</ul>
+<p>Działa w każdym tekście: dialogach, tekstach kroków, opcjach decyzji, zakończeniach i opisach. Jeśli nie użyjesz nawiasów, zdanie jest mówione wszystkim tak samo, więc najwygodniej jest pisać zdania pasujące do każdego, a nawiasów używać tylko tam, gdzie nie ma innego sposobu.</p>
+<p>W postaciach do wyboru jest pole Mówią do niego. Jeśli zostawisz je bez wartości, gracz decyduje na początku, czy mówi się do niego w rodzaju męskim, czy żeńskim. Ustaw je tylko wtedy, gdy twoja postać musi być nim albo nią.</p>
+
+<h3>Kroki do grania na słuch</h3>
+<p>Oprócz dziewięciu zwykłych rodzajów kroków jest sześć pomyślanych dla słuchu:</p>
+<ul>
+<li>Śledzić kogoś pieszo tak, żeby cię nie zauważył. W polu Miejsce jest punkt wyjścia, w Miejsce docelowe – dokąd idzie ta osoba, a w Kto to jest – jak nazywa ją gra: księgowy, twoja kuzynka.</li>
+<li>Odprowadzić kogoś do miejsca. W polu Miejsce jest to, gdzie się tę osobę odbiera, a w Miejsce docelowe – dokąd trzeba ją zaprowadzić.</li>
+<li>Dotrzeć do pilnowanego punktu tak, żeby cię nie usłyszeli. Wybierasz miejsce, ilu strażników chodzi wokół i, jeśli chcesz, nazwę przedmiotu zdobywanego po dotarciu.</li>
+<li>Przejść przez kilka miejsc, po kolei. Zaznaczasz miejsca; limit czasu, jeśli go ustawisz, dotyczy całej trasy.</li>
+<li>Obserwować miejsce przez chwilę tak, żeby cię nie zauważono. Wybierasz miejsce, ile sekund trzeba obserwować, w ilu metrach trzeba zostać i, jeśli chcesz, co gracz odkrywa na koniec.</li>
+<li>Wyścig pojazdem z rywalami. W polu Miejsce jest start; w miejscach, przez które trzeba przejechać, trasa, której ostatnie miejsce to meta. Wybierasz, ilu rywali się ściga, od jednego do czterech, i ich prędkość w metrach na sekundę: dziesięć to wyścig do wygrania, a piętnaście – trudny. Wszystkie miejsca muszą być w tej samej miejscowości.</li>
+</ul>
+<p>W modzie Bahía del Ocaso misje od ocs1 do ocs6 to przykład każdego z nich.</p>
+<h3>Samouczki i manekiny treningowe</h3>
+<p>Misję można oznaczyć jako samouczek: dopóki trwa, policja nie przyjeżdża, cokolwiek zrobi gracz. A w grupie wrogów pole Nie atakuje zmienia ich w manekiny treningowe: można na nich namierzyć i ich powalić, ale nie ruszają się ani nie zadają obrażeń. Z tymi dwiema rzeczami robi się samouczek walki, w którym nie da się przegrać.</p>
+<p>Żeby samouczek sprawdzał, co robi gracz, i nie kończył się samym dotarciem w jakieś miejsce, jest rodzaj kroku Ćwiczenie w samouczku. Jest zaliczony, gdy gracz naprawdę zrobi jedną z tych rzeczy: wypłynie, będzie sterował przez podaną przez ciebie liczbę metrów i stopni skrętu, przybije do nabrzeża, zacznie pracę pojazdem służbowym albo wykona kurs w tej pracy. A krok pójścia w jakieś miejsce ma pole Oprócz dotarcia wymaga: z nim krok nie jest zaliczony po dotarciu, jeśli gracz wcześniej nie użył radaru. W czasie ćwiczeń wypływania, sterowania i przybijania przystanie pożyczają łódź za darmo; a w czasie ćwiczeń pracy można używać klawisza pracy, nawet gdy trwa misja.</p>
+<p>Pole To objaśnienie sprawia, że misja nie jest do grania: pojawia się w telefonie ze słowem Objaśnienie na początku, a po wybraniu czyta się po kolei zdania z jej kroków dialogowych, z nagraniami, jeśli je ma. Służy do opowiedzenia czegoś, czego nie da się sprawdzić, na przykład gry ze znajomymi.</p>
+<p>A w grupie wrogów pole Nie trzeba go zabijać sprawia, że ten wróg poddaje się, gdy zostanie mu mniej niż połowa zdrowia: liczy się jako załatwiony, a jeśli gracz go zabije, misja się nie udaje. Tego używają kontrakty z daniem nauczki.</p>
+<h3>Ludzie na ulicy</h3>
+<p>Sekcja Ludzie na ulicy ma tylko jeden element, z kilkoma listami rozłożonymi na trzy karty. W prawie wszystkich wpisuje się jedną nazwę albo jedno zdanie w wierszu:</p>
+<p>W grupie Gotowe zdania są te, które gra proponuje komuś, kto nie chce pisać albo gra padem, przy wysyłaniu wiadomości do innych graczy: zdania do czatu, do mówienia w roli, działania fabularne, które pisze się małymi literami i bez imienia na początku, bo gra je dodaje, oraz zdania do mówienia poza rolą. Gracz przechodzi przez nie Tabulatorem albo przyciskiem pada.</p>
+<ul>
+<li>Imiona męskie, imiona żeńskie i nazwiska: osób, z którymi rozmawia się na ulicy.</li>
+<li>Przezwiska celów kontraktów: Kartofel, Żmija.</li>
+<li>Imiona psów: te, które proponuje schronisko dla zwierząt.</li>
+<li>Zawody: każdy z formą żeńską, jeśli się zmienia, wiekiem, w jakim się go ma, i tym, jak często występuje. Dzięki temu nikt nie studiuje w wieku sześćdziesięciu lat ani nie idzie na emeryturę w wieku dwudziestu.</li>
+<li>Pojedyncze zdania: to, co mówi ktoś, gdy naciśniesz Enter obok niego.</li>
+<li>Nazwy dla bandy gracza, imiona rywali z wyścigów w misjach i imiona postaci na serwerze sieciowym.</li>
+<li>Postacie na serwerze: to, co od czasu do czasu mówią postacie prowadzone przez serwer sieciowy, z listą dla każdej klasy: spacerowiczów, kieszonkowców, rewolwerowców, złodziei samochodów i napastników. Jeśli zostawisz listę pustą, serwer używa swoich zdań. Obowiązują na serwerze, na który ktoś wejdzie z tymi danymi.</li>
+</ul>
+<p>To, co wpiszesz, dodaje się do tego, co ma już gra: po wpisaniu trzech nowych imion ludzie będą się nazywać tak jak wcześniej i do tego na te trzy sposoby. Jeśli chcesz, żeby istniały tylko twoje, na przykład w modzie osadzonym w innym kraju, zaznacz pole Moje listy zastępują listy z gry: wtedy każda wypełniona lista zajmuje miejsce listy z gry, a te, które zostawisz puste, pozostają takie jak w grze. Przyciskiem Kopiuj z oryginalnej gry przenosisz pełne listy, żeby je obejrzeć albo przyciąć.</p>
+<p>W sekcji Charaktery ludzi jest pięć usposobień z gry: uprzejmy, gaduła, oschły, nieśmiały i zadziorny. W każdym możesz zmienić, jak do ciebie mówi i ile zaufania zyskuje albo traci za powitanie, komplement, dowcip albo obelgę, oraz jego odwagę, która decyduje, czy ucieka, czy staje ci naprzeciw. Możesz dodawać nowe charaktery; ponieważ gra ma napisane zdania tylko dla tych pięciu, każdy nowy charakter mówi, zdaniami którego z nich się posługuje.</p>
+<h3>Rodzaje wrogów</h3>
+<p>Rodzaj wroga to karta, którą pisze się raz i używa w wielu miejscach. Podaje nazwę, broń albo kilka broni, żeby każdy wychodził z jedną losową, zdrowie, celność, głos, zdania, które krzyczy na widok gracza, i czy idzie pieszo, czy jedzie pojazdem. Używają go:</p>
+<ul>
+<li>Kroki likwidacji w misjach: w każdej grupie wrogów wybierasz rodzaj i ilu ich jest. Pozostałe pola grupy, czyli nazwa, broń, zdrowie, celność i pojazd, służą do zmiany czegoś w tym rodzaju tylko w tej grupie. Dawny sposób nadal działa: grupa bez rodzaju, z nazwą i bronią.</li>
+<li>Bandy: każda banda podaje, z jakimi rodzajami walczy, gdy zdobywa się jej dzielnicę, jaki jest rodzaj jej posiłków i jaki – jej ludzi chodzących po ulicy.</li>
+<li>Policja: sekcja Policja według poziomu poszukiwań mówi, jakie rodzaje policjantów wyjeżdżają na każdym poziomie.</li>
+<li>Kasa lokali: rodzaj tego, kto jej pilnuje.</li>
+</ul>
+<p>Jeśli rodzaj jedzie pojazdem, jego wrogowie przyjeżdżają nim: pojawiają się jakieś dwieście metrów dalej, jadą ulicą w stronę gracza, zatrzymują się blisko i wysiadają. Pole Ilu mieści się w pojeździe rozdziela dużą grupę na kilka pojazdów. Na morzu i przy grze na serwerze idą pieszo.</p>
+<p>Jeśli nadasz rodzajowi identyfikator jednego z gry, zmieniasz go w całej grze. Tak zmienia się domyślnych wrogów: identyfikatory agente, agente_subfusil, agente_escopeta i asalto to policja; guardaespaldas i objetivo_contrato – kontrakty; vigilante i vigilante_armado – banki; pandillero, pandillero_duro i pandillero_motorizado – bandy. Przyciskiem Kopiuj z oryginalnej gry zobaczysz wszystkie.</p>
+<p>W zdaniach to, co zmienia się zależnie od tego, czy bohater jest nim, czy nią, pisze się w nawiasach kwadratowych, jak w reszcie gry: Za [nim|nią].</p>
+<h3>Policja na każdym poziomie poszukiwań</h3>
+<p>W sekcji Policja według poziomu poszukiwań jest pięć elementów, po jednym na poziom, z identyfikatorami od nivel_1 do nivel_5. Każdy zaznacza rodzaje policjantów, którzy mogą wyjechać: każdy patrol, który rusza po gracza, przywozi policjantów jednego z tych rodzajów, wybranego losowo. Rodzaj decyduje o broni, zdrowiu, radiowozie i o tym, ilu policjantów z niego wysiada. Pole Ostrzeżenie to zdanie mówione po osiągnięciu tego poziomu; gra używa go na poziomie 5, żeby zapowiedzieć jednostkę szturmową. Żeby policja była twardsza, utwórz nowe rodzaje policjantów i zaznacz je na wysokich poziomach.</p>
+<h3>Kasa lokali</h3>
+<p>Każdy element sekcji Kasa lokali dotyczy jednego rodzaju lokalu: sklepów, banków, warsztatów, siłowni, sklepów z bronią i pozostałych. Podaje, ile pieniędzy jest w kasie, między minimum a maksimum, ilu jej pilnuje, jakiego rodzaju to wrogowie i jaki poziom poszukiwań dostaje się za napad na nią. Gra wybiera każdego dnia inną kwotę dla każdego lokalu. Używają tego napady na dowolny lokal, na banki i napady na dostawców.</p>
+<h3>Napady na lokale i dostawców</h3>
+<p>Każdy lokal, którego rodzaj ma kasę w sekcji Kasa lokali, można obrabować z jego menu: jeśli dasz kasę rodzajowi lokalu, który jej nie miał, ten rodzaj można odtąd obrabować; jeśli ją usuniesz – już nie. Gdy jest ochrona, najpierw trzeba się z nią rozprawić. Sekcja Napady na lokale i dostawców, która ma jeden element, mówi resztę: ile dni lokal cię pamięta, ile na sto wzywa policję na twój widok, zamiast zamknąć ci drzwi, które rodzaje lokali cię nie pamiętają, jak nazywa się obsługujący w każdym z nich oraz zdania. Na pozostałych kartach jest napad na dostawców: posiłki, towar, który zabiera gracz, i trzy konsekwencje, każda ze swoją wagą; przy wadze zero ta konsekwencja nigdy nie wypada.</p>
+<h3>Przygotowane skoki i role w skoku</h3>
+<p>Sekcja Role w skoku ma jeden element na rolę. Każdy podaje nazwę, co robi, od czego zależy, jak dobrze to robi, czyli od celności, prowadzenia, nerwów albo lojalności, jaką część łupu bierze i objaśnienie czytane w grze. To, co robi, wybiera się z zamkniętej listy pięciu rzeczy: czekać na zewnątrz z pracującym silnikiem, zajmować policję, trzymać ludzi w ryzach, otwierać kasę albo strzelać z pojazdu. Możesz zmienić role z gry, używając tego samego identyfikatora, usunąć którąś albo dodać inne z inną nazwą i inną częścią. Jeśli twój mod zawiera tę sekcję, role są jego i tylko jego.</p>
+<p>Sekcja Przygotowane skoki: liczby i zdania, która ma jeden element, mówi resztę, rozłożoną na karty: ile jest warta świeżo zwerbowana osoba i ile się uczy; ile trwa kasa zależnie od rodzaju lokalu; jak długo czujka zajmuje policję, przewaga kierowcy i celność strzelca; szansa na każdą rzecz, która może pójść źle; co się dzieje z zatrzymanymi; górna granica podziału; i wszystkie zdania, z pięciu faz i te, które każdy mówi przez radio. Szansa ustawiona na zero wyłącza tę część.</p>
+<p>Poza tym dwa nowe pola działają w misjach każdego moda. W kroku Podnieś pole Ile sekund trwa otwarcie albo wzięcie: przy więcej niż zero przedmiotu nie bierze się od razu; gracz naciska Enter, słychać postęp, a on musi zostać obok. W kroku Policja pole Ile sekund jedzie policja: gracz ma tyle czasu, żeby się oddalić, zanim zaczną go szukać.</p>
+<h3>Latanie: liczby i zdania, Statki powietrzne i Mapa lotnicza</h3>
+<p>Sekcja Statki powietrzne: jak lata każdy ma jeden element na każdy latający pojazd: jego prędkość i wysokość przelotową, pułap, zasięg z pełnym bakiem, ile wznosi się na sekundę i czy potrzebuje pasa do lądowania. Z identyfikatorem maszyny z gry zmieniasz to, jak lata ta maszyna; dla twojego latającego pojazdu, którego nie ma na liście, gra wywnioskuje coś rozsądnego z jego prędkości.</p>
+<p>Sekcja Mapa lotnicza: gdzie leży każda miejscowość mówi, gdzie w okolicy leży każda z nich, w kilometrach na wschód i na północ od Puerto Bravo. Z tego wynikają odległości i kursy przelotów. Jeśli twój mod dodaje miejscowość z lądowiskiem albo lotniskiem, a nie umieścisz jej tutaj, gra umieści ją sama, patrząc, którędy się do niej dociera: wyspę tam, gdzie jest jej nabrzeże na morzu; miejscowość z drogą kilka kilometrów od sąsiedniej, w stronę, w którą wychodzi ta droga. Jeśli chcesz, żeby była w konkretnym miejscu, umieść ją tutaj.</p>
+<p>Sekcja Latanie: liczby i zdania, która ma jeden element, zawiera resztę, na kartach: wysokości i lądowanie awaryjne; paliwo; przelot, z przyspieszeniem i wiatrem; podejście; zdarzenia i ich wagi, gdzie waga ustawiona na zero usuwa to zdarzenie; burze i przeszkody niskiego lotu; radar i porwanie; hangary i loty komercyjne; i wszystkie zdania, wieży i pozostałe. W miejscach rodzaju lądowisko albo lotnisko jest nowe pole, Cena miejsca w hangarze. Ceny paliwa, wynajmu hangaru i przewozu są w sekcji Stawki i ceny, a licencja pilota – w sekcji z dyplomami.</p>
+<h3>Jedzenie z dowozem</h3>
+<p>Sekcja Jedzenie z dostawą: karta ma jeden element na danie albo napój: nazwę, cenę, ile zaspokaja głodu i pragnienia, od zera do stu, i ile daje zdrowia. Z identyfikatorem z gry zmieniasz to danie; z nowym dodajesz kolejne do karty. Sekcja Jedzenie z dostawą: czasy i zdania ma jeden element: ile idzie zamówienie, między minimum a maksimum w minutach gry, o ile dłużej w deszczu, ile rzeczy się mieści, ile czeka dostawca, jeśli gracza nie ma, oraz zdania, z nazwami lokali z dowozem. Cena dostawy jest w Stawkach i cenach.</p>
+<h3>Karty dań lokali i to, co sprzedaje każdy sklep</h3>
+
+<p>Sekcja Karty dań lokali z jedzeniem ma jedną kartę na każdy rodzaj lokalu: lodziarnia, pizzeria, bar plażowy, tawerna... Każda ma swoje dania i napoje, z ceną, tym, ile zaspokajają głodu i pragnienia, od zera do stu, ile dają zdrowia, i objaśnieniem pod <kbd>F1</kbd>. Każde miejsce z jedzeniem, bar albo tawerna wybiera swoją w polu Karta dań; bez karty lokal z jedzeniem podaje ogólną listę dań, jak w poprzednich wersjach, a bar albo tawerna tylko piwo z tapą. Identyfikatorem karty z gry zastępujesz ją w całości; nowym dodajesz kolejną. W sklepach pole Co sprzedaje oprócz jedzenia zaznacza, czy sprzedają apteczki, wytrychy, odtwarzacz ze słuchawkami, karmę albo broń ze sklepu; gdy nic nie jest zaznaczone, sprzedają wszystko.</p>
+
+<h3>Zakupy i kuchnia: produkty, alejki, sklepy i przepisy</h3>
+<p>Pięć sekcji, które idą razem. Dzięki nim mod może dodać produkty i przepisy, otworzyć nową alejkę albo wymyślić nowy rodzaj sklepu.</p>
+<ul>
+<li>Produkty sklepów spożywczych: jeden element na produkt, z nazwą, ceną, alejką, w której jest, tym, czy w domu trzyma się go w lodówce, czy w spiżarni, i ile dni wytrzymuje; puste albo zero – nie psuje się. Jeśli można go zjeść bez gotowania, wypełnij na karcie Jeśli je się to bez gotowania, ile zaspokaja głodu i pragnienia, ile daje zdrowia i nastroju, i zaznacz, czy to napój. Jeśli zostawisz wszystko puste, to tylko składnik.</li>
+<li>Alejki sklepów: nazwa, małymi literami, tak jak mówi ją gra po dotarciu, i opis.</li>
+<li>Rodzaje sklepów spożywczych: jakie alejki ma każdy rodzaj sklepu i jak jest drogi, w procentach. Gra ustala rodzaj każdego sklepu tak: najpierw patrzy na pole Jaki to rodzaj sklepu spożywczego samego miejsca; jeśli jest puste, na listę sklepów danego rodzaju; potem na słowa z nazwy, a wygrywa pierwszy rodzaj z listy, który pasuje; a na końcu na rodzaj, który ma zaznaczone, że dotyczy wszystkich pozostałych. Rodzaj bez alejek to sklep, który nie sprzedaje jedzenia do domu.</li>
+<li>Przepisy kulinarne: nazwa, składniki, które wybiera się z listy produktów i z których zużywa się po jednej sztuce, ile minut gry to trwa, ile wychodzi porcji, ile dni wytrzymują w lodówce i jak się to robi: bez ognia, na patelni albo w garnku, co decyduje, co słychać i czy może się przypalić. Na karcie Każda porcja: ile zaspokaja głodu i pragnienia, ile daje zdrowia i nastroju. Postaraj się, żeby wyraźnie syciło bardziej niż jedzenie pakowane.</li>
+<li>Zakupy, spiżarnia i kuchnia, liczby i zdania: jeden element. Co mieści się w spiżarni, w lodówce i przy sobie; ile dni wcześniej ostrzega się, że coś się przeterminuje; ilu produktów brakuje każdego dnia i jaka jest zniżka w promocji; jak łatwo zostać zauważonym przy wyjściu bez płacenia i co się wtedy dzieje; co ile danie się przypala albo wychodzi najwyższej klasy, o ile zmienia się to, jak syci, ile wprawy daje każde danie i jak pomagają wprawa i wyposażona kuchnia; oraz zdania sklepikarza i kuchni.</li>
+</ul>
+<p>Nowy produkt pojawia się we wszystkich sklepach, które mają jego alejkę. Nowy przepis pojawia się w książce kucharskiej wszystkich kuchni.</p>
+<h3>Odbijanie dzielnic</h3>
+<p>Sekcja Odbijanie dzielnic zawiera wszystkie liczby i zdania o tym, co się dzieje, gdy gracz ma już całe miasto albo wiele dzielnic, a pokonane bandy próbują je odzyskać. Używany jest tylko pierwszy element; zostaw mu identyfikator general. Jest podzielona na karty:</p>
+<ul>
+<li>Pierwsza: dni spokoju, od ilu dzielnic zaczyna się wersja łagodna i tempo każdej fazy.</li>
+<li>Bandy: siła, z jaką zaczynają, ile rosną każdego dnia i przy każdej intensywności, siła, przy której decydują się na szturm, i sojusze.</li>
+<li>Cel: jak bardzo waży każdy powód przy wyborze dzielnicy: że należała do nich, że jest słabo broniona, że jest porzucona albo że jest najbardziej dochodowa, i ile jest w tym przypadku.</li>
+<li>Szturm: dni przygotowań, godziny, o których się zaczyna, czas na odpowiedź i odpoczynek przy każdej intensywności oraz godziny, które zawsze zostają po przebudzeniu.</li>
+<li>Osobiście i Wysłać ludzi: fale oraz rachunek siły przeciw obronie, gdy gracz nie idzie.</li>
+<li>Obrona i Lojalność: strażnicy, wzmocnienia i informatorzy z cenami oraz to, jak rośnie i spada lojalność dzielnicy.</li>
+<li>Konsekwencje oraz Uderzenie i obce bandy: sława, morale, kiedy banda zostaje rozbita, uderzenie w kryjówki i nazwy obcych band.</li>
+<li>Cztery karty zdań: początkowe ostrzeżenie, groźby, wyniki oraz lojalność i rozejm. Każde zdanie mówi w swojej pomocy, jakie wstawki przyjmuje, na przykład {banda} albo {barrio}.</li>
+</ul>
+<p>Liczby dotyczące rozejmu, który zawiera się jak inne umowy, są w sekcji Negocjacje z bandami, na karcie Rozejm.</p>
+<h3>Życie, reputacja i konsekwencje</h3>
+<p>Sześć sekcji zawiera wszystko o uczciwym życiu, podwójnym życiu i ich konsekwencjach.</p>
+<ul>
+<li>Życie, reputacja i konsekwencje: liczby i zdania. Jeden element; zostaw mu identyfikator general. Jest podzielony na karty: Sklepy, ze zniżkami, dopłatą i kredytem na kreskę; Świadkowie i policja; Ulica; Kartoteka, z dniami trwania każdej wagi i tym, ile zdejmują prace społeczne i adwokat; Kariera zawodowa, z dniami każdego okresu, ocenami, upomnieniami i awansami; Firma; Kontrole i przykrywka; Podatki i rachunki; Bank; Podwójne życie; Wymuszenia i dobre uczynki; Związek; oraz sześć kart zdań. Każde zdanie mówi w swojej pomocy, jakie wstawki przyjmuje, na przykład {jefe}, {euros} albo {negocio}. Poziom łagodny i wymagający wylicza się z normalnego za pomocą dwóch procentów z pierwszej karty.</li>
+<li>Dyplomy. Każdy dyplom ma nazwę, liczbę zajęć, cenę i czas trwania każdych z nich, najmniejszy prestiż potrzebny do zapisu, dyplom, który trzeba mieć wcześniej, jeśli jest, i tekst mówiący, co otwiera.</li>
+<li>Stałe prace i ich stanowiska. Każda praca ma swoją firmę, informację, czy wymaga zaufania, jakie prace liczą się jako zmiana i stanowiska, od pierwszego do najwyższego. W polu Prace liczone jako zmiana wpisuje się jedną w wierszu: słowo jornada, dwukropek i identyfikator dniówki z sekcji Dniówki albo słowo oficio, dwukropek i zawód z pojazdem, na przykład taxi albo ambulancia. Każde stanowisko ma nazwę, pensję za okres, wymagane zmiany, wymagany dyplom i prestiż oraz informację, czy przynosi decyzje z odpowiedzialnością.</li>
+<li>Ulepszenia interesów. Każde prowadzi do poziomu, od drugiego w górę, i mówi, ile kosztuje i o ile podnosi, oba w procentach ceny i tego, co daje interes, oraz jakiego wymaga dyplomu i prestiżu. Gra przyjmuje tyle poziomów, ile ustawisz.</li>
+<li>Decyzje na stanowiskach z odpowiedzialnością. Sytuacja i od dwóch do czterech wyjść; każde dodaje albo odejmuje coś od jakości zmiany, która liczy się w ocenie.</li>
+<li>Sytuacje na ulicy: pomóc albo skorzystać. Sytuacja i do czterech wyjść. Każde wyjście może wymagać przedmiotu, pieniędzy albo godzin i ma to, co się dzieje, jeśli się uda, oraz, jeśli ustawisz szansę niepowodzenia, to, co się dzieje wtedy: prestiż, sława, pieniądze, nastrój i zdrowie oraz to, co się opowiada. Opcję „idź swoją drogą” gra dodaje zawsze sama.</li>
+</ul>
+<p>W misjach są nowe pola dla historii takich jak uczciwa droga: Należy do uczciwej drogi, przez co misja daje prestiż zamiast sławy i nie zaczyna się sama po dotarciu na miejsce, tylko pojawia się jako kolejna opcja w menu tego miejsca; Czego wymaga z życia gracza, przez co czeka, aż gracz będzie miał umowę, przepracowane zmiany, kursy, prestiż, biznesy, czystą kartotekę albo wykonane zlecenia z tablicy (łącznie albo, z polem Tylko zlecenia z tablicy w tym miejscu, tylko z jednego miejsca: na przykład misja, która otwiera się po dwóch zleceniach agencji; po wykonaniu zlecenia, które ją otwiera, gra powiadamia o nowej misji); oraz Epilogi, żeby ostatnia misja zamykała historię takim albo innym zakończeniem, zależnie od podjętych decyzji. W opcjach decyzji jest też Prestiż, który daje albo odbiera.</p>
+<h3>Negocjacje z bandami</h3>
+<p>Jeden element z kwotami trzech umów: ile płacą za oddanie im dzielnicy, ile żądają za jej sprzedaż i dzienny haracz, który gra zmienia według siły gracza i jego stosunków z każdą bandą. Także ile dni trwa haracz, ile trzeba czekać, żeby znów załatwiać to samo, ile zyskuje się na targowaniu oraz zdania każdej odpowiedzi, na trzech kartach. Bandy to te z sekcji Bandy.</p>
+<h3>Kontrakty z tablicy</h3>
+<p>Każdy element to rodzaj zlecenia z tawern. Najważniejsze jest pole Na czym polega zlecenie, które ma osiem wartości: zlikwidować cel i jego ochroniarzy; to samo, a część obstawy przyjeżdża pojazdem; cel, który ucieka pojazdem; cel ukryty w lokalu; śledzić jego posłańca aż do kryjówki; dać mu nauczkę, nie zabijając go; odzyskać przedmiot; albo chronić kogoś i zaprowadzić go w bezpieczne miejsce. Po wybraniu jednej pojawiają się jej pola: rodzaje wrogów celu, obstawy i posiłków, które pochodzą z sekcji Rodzaje wrogów; pojazdy, którymi może uciec; rodzaje lokali; przedmioty albo osoby do ochrony.</p>
+<p>Do tego: jak często się zdarza, ile zleceń trzeba wykonać, żeby się pojawiło, podstawowa zapłata i dodatek za każdego wroga z obstawy, a także tekst, którym jest ogłaszane na tablicy, w którym można użyć przydomka celu, miejsca, liczby osób z obstawy i reszty; pomoc pola mówi, jak zapisać każde z nich. Gra wiesza codziennie trzy różne zlecenia. Przydomki celów są w sekcji Ludzie z ulicy. Pole Tylko na tablicach w tych miejscach ogranicza, gdzie zlecenie wisi: gdy nic nie jest zaznaczone, na tablicy we wszystkich tawernach; gdy coś jest zaznaczone, tylko na tablicy w tych miejscach. Mod El Diablo korzysta z tego, żeby jego zlecenia pojawiały się tylko przy barze jego agencji.</p>
+
+<h3>Ludzie działają i dołączają do twojej bandy</h3>
+<p>Jeden element. Na pierwszej karcie: przy jakim zaufaniu i ile razy na sto ktoś przez chwilę towarzyszy graczowi, jak długo, ile razy bije go ktoś obrażony, ile razy go zgłasza i ile zaufania potrzeba do przysługi. Na karcie Zwerbować są warunki, żeby ktoś z ulicy dołączył do bandy: zaufanie, sława, odwaga jego charakteru, najwyższy wiek i premia, czyli procent stawki za werbunek. Pozostałe karty to zdania. Odwagę każdego charakteru zmienia się w Charakterach ludzi.</p>
+<h3>Zawód policjanta i zgłoszenia z radiostacji</h3>
+<p>Sekcja Zawód policjanta ma jeden element, na kilku kartach: prestiż potrzebny do przyjęcia, stopnie, co ile zgłoszeń jest awans i o ile więcej się zarabia, nagany, czas między zgłoszeniami i na dotarcie, ilu słucha wezwania do zatrzymania się, ilu kierowców zatrzymuje się na syrenę, mandat i to, co zabiera policjant, oraz wszystkie zdania. Cena kursu jest w Stawkach i cenach.</p>
+<p>Sekcja Zgłoszenia z radiostacji policji ma jeden element na zgłoszenie. Jego rodzaj to jeden z czterech: kradzież w lokalu, bójka na ulicy, pirat drogowy albo pościg. Każde podaje, jak często występuje, ile płaci, rodzaj wroga podejrzanych, ilu ich jest, pojazdy, które mogą prowadzić, i to, co mówi radiostacja, z miejscem i pojazdem. Możesz zmienić cztery z gry albo dodać inne tych samych rodzajów.</p>
+<h3>Plany we dwoje i życie we dwoje</h3>
+<p>Należą do treści dla dorosłych. Każdy plan z sekcji Plany we dwoje ma cenę, liczbę godzin, bliskość i nastrój, które daje, rodzaj miejsca, które musi być w miejscowości, jeśli go wymaga, oraz sceny: za każdym razem, gdy realizuje się plan, opowiadane są dwie i nie powtarzają się, dopóki nie usłyszysz wszystkich, więc warto napisać cztery albo więcej. W scenach imię partnera wpisuje się tak, jak mówi pomoc pola, a pisać je trzeba tak, żeby pasowały, czy partner jest mężczyzną, czy kobietą.</p>
+<p>Sekcja Życie we dwoje ma jeden element: przy jakiej bliskości i po ilu randkach ktoś zgadza się zamieszkać razem, ile osób na sto nigdy się nie przeprowadza, co daje wspólny posiłek, co ile ktoś o coś prosi, co się zyskuje albo traci, oraz zdania. W sekcji Osoby każda osoba ma poza tym pole Czy zamieszkałby z graczem, żeby ustawić to ręcznie: chętnie, gdy związek idzie bardzo dobrze, albo nigdy.</p>
+<h3>Ulepszenia z warsztatu</h3>
+<p>Każde ulepszenie mówi, co poprawia, z listy siedmiu działań, które gra potrafi obsłużyć: silnik, hamulce, opancerzenie, opony, zawieszenie, wydech i bak. Mówi też, ile ma poziomów, od jednego do pięciu, ile daje każdy poziom w procentach i ile kosztuje pierwszy; każdy poziom kosztuje tę cenę pomnożoną przez swój numer. Identyfikatorem ulepszenia z gry je zmieniasz; nowym dodajesz kolejny wiersz w menu warsztatu. Ulepszenie bez działania można kupić i ma opis, ale niczego nie zmienia.</p>
+<h3>Broń: gdzie się ją kupuje</h3>
+<p>Pole Gdzie się kupuje w broni wybiera rodzaj lokalu, który ją sprzedaje: sklepy z bronią, sklepy albo lombardy. Bez wartości sprzedaje się ją w sklepach z bronią. Amunicję kupuje się też w sklepach z bronią, niezależnie od tego, gdzie sprzedaje się broń. Pole Nie przyjmuje tłumika usuwa to ulepszenie dla tej broni. I każda broń powinna mieć swój dźwięk: wybierz jeden z gry albo wstaw swój do folderu dźwięków, jak wyjaśnia rozdział o dźwiękach.</p>
+<h3>Dzielnice i bandy</h3>
+<p>W opisie dzielnicy opowiedz, jaka jest, a nie czyja jest. Jeśli w twojej dzielnicy rządzi banda, wpisz jej nazwę w polu Banda rządząca w dzielnicy i nie dawaj w opisie zdań w rodzaju „terytorium takiej a takiej bandy”. Gra sama dodaje zdanie właściwe w danej chwili: terytorium tej bandy, dopóki ona rządzi, terytorium gracza, gdy ją zdobędzie, w stanie wojny, gdy się o nią walczy, i bandy, która mu ją odbierze, jeśli jej nie obroni. Jeśli wpiszesz bandę w opisie, dzielnica nadal będzie mówić, że należy do niej, gdy już tak nie będzie. Kto zdobywa tę dzielnicę, walczy z bandą, którą ustawisz; jeśli nie ustawisz żadnej – z losową. Bandy są w sekcji Bandy: możesz dodać własne, z nazwą i rodzajami wrogów, i wpisać tę nazwę w swoich dzielnicach.</p>
+<p>Jeśli mimo to chcesz, żeby opis dzielnicy mówił o ludziach, którzy w niej rządzą albo których widać na jej ulicach, wypełnij też Opis, gdy dzielnica przechodzi w inne ręce: gra używa tego drugiego, gdy dzielnica przechodzi do gracza albo innej bandy. Miejsca mają to samo, w Więcej opcji: Nazwa, gdy dzielnica przechodzi w inne ręce, i Opis, gdy dzielnica przechodzi w inne ręce. Służą do kryjówki, lokalu kontrolowanego przez bandę albo dowolnego miejsca, którego nazwa lub opis mówi, kto rządzi: na przykład „Kryjówka Los Calaveras” może zmienić nazwę na „Dawna kryjówka Los Calaveras”. Jeśli zostawisz je puste, miejsce się nie zmienia.</p>
+<p>Dwa miejsca nie mogą być w tym samym punkcie, bo gracz mógłby wejść tylko do jednego. Jeśli umieścisz miejsce na fasadzie i w położeniu, które zajmuje już inne, także z innego moda albo z gry, gra sama przesunie je w wolne miejsce na tej samej fasadzie. Lepiej samemu wybrać wolne położenie.</p>
+<h3>Stacje benzynowe i paliwo</h3>
+<p>Żeby w twojej miejscowości można było zatankować, utwórz miejsce rodzaju Sklep i zaznacz To stacja benzynowa: ma dystrybutor. Możesz ustawić jej własną cenę litra. Postaw co najmniej jedną w każdej miejscowości z samochodami: kto gra z włączonym paliwem, będzie jej potrzebował. W każdym pojeździe możesz wpisać litry jego baku albo zaznaczyć, że nie zużywa paliwa, jeśli nie ma silnika.</p>
+<h3>Tramwaj, pociąg i lotnisko w twoich miejscowościach</h3>
+<p>W danych gry i w dołączonych do niej modach przystanki tramwajowe, dworzec kolejowy, lotnisko i tory są zapisane jak wszystko inne i edytuje się je tak samo:</p>
+<ul>
+<li>Każdy przystanek, dworzec i lotnisko to miejsce z rodzajem: Przystanek tramwajowy, Dworzec kolejowy albo Lotnisko. Możesz zmienić jego nazwę, opis, kwartał, fasadę i położenie albo je usunąć.</li>
+<li>Każdy przystanek ma poza tym swoją Kolejność na linii tramwajowej: tramwaj objeżdża je od najmniejszego do największego numeru i wraca do pierwszego.</li>
+<li>Lotnisko może być lądowiskiem: zaznacz To lądowisko z krótkim pasem. Na lądowiska przylatują rejsowe awionetki, nie duże samoloty, i wynajmuje się tam tylko awionetki. To coś dla miasteczka.</li>
+<li>Miejscowość ma pola Tory kolejowe biegną i Numer tej ulicy albo alei. Tory kolejowe przecinają miejscowość z jednej strony na drugą, w linii prostej: ulicą, z zachodu na wschód, albo aleją, z południa na północ. Jeżdżą po nich pociągi, które zatrzymują się na dworcu. Jeśli zostawisz je bez wartości, tory biegną przed dworcem kolejowym. Bez dworca kolejowego nie ma torów.</li>
+<li>Miejscowość ma pole Trasa torów tramwajowych: listę skrzyżowań, przez które biegną, po kolei. Wystarczy podać skrzyżowania, na których skręcają. Każdy przystanek jest w punkcie torów najbliżej niego.</li>
+<li>Miejscowość ma też pole Dodać brakujący transport publiczny. Przy tak, jeśli twojej miejscowości brakuje którejś z tych rzeczy, gra dodaje ją przy wczytywaniu: przystanki we wszystkich dzielnicach i lotnisko, jeśli to miasto, oraz dworzec kolejowy, jeśli ma wyjazd drogą. Przy nie ma tylko to, co jej dasz.</li>
+</ul>
+<p>Jeśli utworzysz nową miejscowość i nic nie ustawisz, działa tak samo: gra dodaje to, czego brakuje. Jeśli przystanki ustawisz sam, nie dodaje żadnego więcej. Przycisk Sprawdź ostrzega, jeśli skrzyżowanie torów nie istnieje, jeśli dwa przystanki mają tę samą kolejność albo jeśli przystanek jest dalej niż sześćdziesiąt metrów od torów.</p>
+<h3>Decyzje, gałęzie i zakończenia</h3>
+<p>Każda opcja decyzji może poza tym zostawić rentę: pieniądze, które gracz dostaje albo płaci co północ, na zawsze.</p>
+<p>Rodzaj kroku Decyzja gracza otwiera menu z opcjami, które napiszesz, od dwóch do czterech. Każda opcja ma tekst wybierany przez gracza, objaśnienie pod F1, to, co się opowiada przy jej wyborze, oraz konsekwencje: pieniądze, sławę, nastrój i stosunki z bandą.</p>
+<ul>
+<li>Nadaj decyzji nazwę, jedno słowo bez spacji. Dzięki tej nazwie inne misje i kroki mogą zależeć od tego, co wybrano.</li>
+<li>W misji pola Tylko jeśli podjęto decyzję i Numer wybranej opcji sprawiają, że ta misja istnieje tylko w jednej gałęzi historii. Pierwsza opcja to 1.</li>
+<li>W kroku te same dwa pola sprawiają, że ten krok rozgrywa się tylko w jednej gałęzi; w pozostałych jest pomijany.</li>
+<li>W misji pole Tekst zakończenia historii zmienia ją w zakończenie: po jej ukończeniu ten tekst jest mówiony i zapisuje się w dzienniku. Przy kilku takich misjach, każdej po innej opcji, historia ma kilka zakończeń.</li>
+</ul>
+<p>W głównej historii przykładem są misje od fd1 do fd4: decyzja z trzema opcjami i zakończenie dla każdej z nich.</p>
+
+<h3>Nadawanie głosu postaciom</h3>
+<p>Zdania z dialogów czyta czytnik ekranu gracza. Jeśli chcesz, żeby brzmiały nagranymi głosami, w modzie nie trzeba niczego zmieniać: wystarczy zostawić nagrania w folderze nagrań gry.</p>
+<ol>
+<li>Zapisz mod i naciśnij <kbd>Control G</kbd> albo wybierz Scenariusz nagrań w menu Mod. Edytor zapisuje plik tekstowy ze wszystkimi zdaniami ze wszystkich misji i otwiera go w Notatniku.</li>
+<li>W scenariuszu nad każdym zdaniem jest nazwa, jaką musi mieć jego nagranie, na przykład <strong>oc01_1_2</strong>: misja, numer kroku i numer zdania. Na końcu jest podane, ile zdań ma każda postać, żeby można je było rozdzielić między kilka osób.</li>
+<li>Nagraj każde zdanie w osobnym pliku, w formacie WAV, OGG, FLAC albo MP3, o tej nazwie.</li>
+<li>Niektóre zdania zmieniają się z bohaterem: te, w których pada jego imię, te z formą męską i żeńską w nawiasach kwadratowych oraz te, które mówi on sam. Scenariusz ostrzega o tym pod każdym z nich i podaje nazwy pozostałych form, z małpą na końcu: <strong>oc01_1_2@alex</strong>, <strong>oc01_1_2@m</strong>, <strong>oc01_1_2@alex_m</strong>. Plik bez niczego na końcu to wersja dla Daniego w rodzaju męskim. Możesz nagrać tylko ją: komuś, kto gra innym bohaterem, to zdanie przeczyta jego czytnik, nigdy nagranie innego.</li>
+<li>Zostaw pliki w folderze nagrań, który otwiera się klawiszami <kbd>Control Shift V</kbd>. Mogą być w podfolderach.</li>
+<li>Naciśnij znów <kbd>Control G</kbd>, kiedy chcesz: zdania, które mają już plik, są oznaczone słowem NAGRANE.</li>
+</ol>
+<p>Zdania bez nagrania nadal czyta czytnik, więc można nagrywać po trochu. Jeśli potem zmienisz kolejność kroków albo zdań w misji, zmienią się ich numery: wygeneruj scenariusz ponownie i zmień nazwy plików.</p>
+<p>Żeby udostępnić mod z nagraniami, przekaż plik moda i osobno folder z nagraniami do skopiowania do <strong>data\voces\propias</strong>. Używaj własnych głosów albo głosów syntetycznych, do których masz prawo: nie głosów sklonowanych od prawdziwych ludzi ani wziętych z innych gier czy filmów.</p>
+
+<h2>6. Dźwięki</h2>
+<p>Wszystko, co dodasz, powinno brzmieć. Każde miejsce ma pole dźwięku, czyli tego, który słychać, gdy przechodzisz obok jego drzwi, i w tle po wejściu, a broń i pojazdy mają swoje. Wybierz z listy rozwijanej jeden z dźwięków gry. Jeśli chcesz własny, w menu Mod wybierz Dodaj własny dźwięk, skrótem <kbd>Control Shift A</kbd>: wskazujesz plik WAV, OGG, FLAC albo MP3, edytor kopiuje go do <code>data\mods\sonidos</code> pod nazwą bez akcentów i spacji, i od razu jest na wszystkich listach dźwięków. Jeśli nazywa się tak jak dźwięk z gry, dostaje przedrostek <code>mod_</code>: mod nigdy nie zastępuje dźwięków gry, bo należą one do wszystkich paczek. Przewodnik <a href="cambiar_sonidos_pl.html">cambiar_sonidos_pl.html</a> opisuje wszystkie dźwięki.</p>
+
+
+<h2>7. Sprawdzanie i próby</h2>
+<p><kbd>F5</kbd> sprawdza mod i wymienia, co znajdzie: odwołania do rzeczy, które nie istnieją, miejsca poza mapą albo na budynku, misje bez kroków, powtórzone identyfikatory i niespójne kroki. Każde ostrzeżenie mówi, w którym elemencie jest. Popraw i sprawdzaj ponownie, aż nie zostanie żadne.</p>
+<p><kbd>F9</kbd> zapisuje, sprawdza i uruchamia grę. Zacznij nową grę albo wczytaj zapisaną i obejrzyj swoją zawartość.</p>
+
+<p>Jeśli sprawdzenie mówi, że coś wskazuje na nieistniejącą miejscowość, mówi też dlaczego: czy wpisano nazwę miejscowości zamiast jej identyfikatora, czy miejscowość jest w innym modzie. Miejsca, które prowadzą do miejscowości, muszą być w tym samym modzie co ona. Gdy zmienisz identyfikator miejscowości ze swojego moda, wszystko, co na nią wskazywało, miejsca, wyjazdy, wyścigi i mapa z powietrza, zmienia się samo, a edytor mówi, ile odwołań zmienił.</p>
+
+
+<h2>8. Włączanie i wyłączanie modów</h2>
+<p>Klawiszami <kbd>Control M</kbd> otwiera się lista pól wyboru ze wszystkimi modami z folderu. Zaznaczone to te, które wczytuje gra. Wyłączony mod nie jest usuwany: jego plik zmienia rozszerzenie, a gra go pomija. Od wersji 1.7.3 można to zrobić także w samej grze, w Opcje, Mody: włącz albo wyłącz.</p>
+
+
+<h2>9. Udostępnianie moda</h2>
+<p>Wyślij plik <code>.pbm</code> z folderu <code>data\mods</code>. Osoba, która go dostanie, musi tylko skopiować go do swojego folderu <code>data\mods</code>. Jeśli twój mod używa własnych dźwięków, wyślij też te pliki, które są w <code>data\mods\sonidos</code>, a odbiorca kopiuje je do tego samego folderu.</p>
+<h2>10. Częste problemy</h2>
+<ul>
+<li>Czytnik nie mówi nazwy pola: naciśnij <kbd>Control H</kbd>.</li>
+<li>Gra nie pokazuje mojej zawartości: sprawdź klawiszami <kbd>Control M</kbd>, czy mod jest włączony, i klawiszem <kbd>F5</kbd>, czy nie ma błędów. Miejsca z treściami dla dorosłych pojawiają się tylko przy włączonej tej opcji w grze.</li>
+<li>Zepsułem mod: oryginały gry nigdy nie są zmieniane. Wyłącz albo usuń plik moda, a gra będzie znów taka jak wcześniej.</li>
+</ul>
+
+</body>
+</html>

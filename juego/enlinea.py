@@ -543,11 +543,11 @@ class EnLinea:
         self._sv_descontar_robos(int(ok.get("robos") or 0))
         for cosa in ok.get("pendientes", []):
             if cosa.get("que") == "coche":
-                self.decir(tr('Mientras no estabas, {get} se llevó tu {get2} de donde lo dejaste.').format(get=(cosa.get('por', 'alguien')), get2=(cosa.get('nombre', 'vehículo'))))
+                self.decir(tr('Mientras no estabas, {get} se llevó tu {get2} de donde lo dejaste.').format(get=(cosa.get('por', tr('alguien'))), get2=(cosa.get('nombre', tr('vehículo')))))
             if cosa.get("que") == "caido":
                 n = min(self.j.dinero, int(cosa.get("pierde", 0)))
                 self.j.dinero -= n
-                self.decir(tr('Mientras te desconectabas en plena pelea, {get} te tumbó. Has perdido {n} euros.').format(get=(cosa.get('por', 'alguien')), n=(n)))
+                self.decir(tr('Mientras te desconectabas en plena pelea, {get} te tumbó. Has perdido {n} euros.').format(get=(cosa.get('por', tr('alguien'))), n=(n)))
         info = self.sv["info"]
         quienes = ", ".join(x.nombre for x in self.remotos.values())
         self.son("amigo_entra", cat="interfaz")
@@ -1673,7 +1673,7 @@ class EnLinea:
 
     def _svm_dado(self, m):
         self.son("recoger", cat="interfaz", vol=0.5)
-        self.decir(tr('Entregado a {get}.').format(get=(m.get('nombre', 'tu compañero'))))
+        self.decir(tr('Entregado a {get}.').format(get=(m.get('nombre', tr('tu compañero')))))
 
     def _svm_quien(self, m):
         self.sv["quien"] = m.get("e") or []
@@ -1819,7 +1819,7 @@ class EnLinea:
             if d is None:
                 self.sv_comprado(l)
             elif d.get("cuenta") != self.sv.get("cuenta"):
-                self._sv_devolver(l, d.get("nombre", "otro jugador"))
+                self._sv_devolver(l, d.get("nombre", tr("otro jugador")))
 
     def _sv_devolver(self, l, nombre):
         if l.id in self.j.propiedades:
@@ -1847,7 +1847,7 @@ class EnLinea:
                 self.son("mision_ok", cat="interfaz")
                 self.decir(tr('¡{nombre} es tuyo!').format(nombre=(l.nombre)))
         elif m.get("cuenta") is not None:
-            self._sv_devolver(l, str(m.get("nombre", "otro jugador")))
+            self._sv_devolver(l, str(m.get("nombre", tr("otro jugador"))))
 
     def sv_oferta(self, l):
         """Por cuánto vende su dueño esta propiedad a otros jugadores. Cero si no la vende."""
@@ -1865,7 +1865,7 @@ class EnLinea:
             return
         if l is not None:
             self.sv["props"][l.id] = {"cuenta": -1, "nombre": str(m.get("nombre", ""))}
-            self._sv_devolver(l, str(m.get("nombre", "otro jugador")))
+            self._sv_devolver(l, str(m.get("nombre", tr("otro jugador"))))
 
     def sv_tope_negocios(self):
         """Cuántos negocios deja tener este servidor a cada jugador. Cero sin tope, o fuera de un servidor."""
@@ -1900,7 +1900,7 @@ class EnLinea:
         self.sv["robo"] = m.get("lugar")
         self.son("alarma", xy=(l.x, l.y) if l else None, vol=0.7)
         self.delito(3, tr("atraco a un negocio"), siempre=True)
-        self.decir(tr('¡Atraco! Salta la alarma y a {get} le llega el aviso. Aguanta en la puerta {get2} segundos, a pie, sin alejarte.').format(get=(m.get('nombre', 'su dueño')), get2=(m.get('segundos', 20))), True)
+        self.decir(tr('¡Atraco! Salta la alarma y a {get} le llega el aviso. Aguanta en la puerta {get2} segundos, a pie, sin alejarte.').format(get=(m.get('nombre', tr('su dueño'))), get2=(m.get('segundos', 20))), True)
 
     def _svm_robo_fin(self, m):
         self.sv["robo"] = None
@@ -2068,7 +2068,7 @@ class EnLinea:
         r = self.remotos.get(m.get("a"))
         if r is not None:
             self.son("dolor_npc", xy=(r.x, r.y), ref=6)
-        self.sv_dicho("impacto", tr('Atropellas a {get}.').format(get=(m.get('nombre', 'alguien'))) if m.get("atropello") else tr('Le das a {get}.').format(get=(m.get('nombre', 'alguien'))), 3.0)
+        self.sv_dicho("impacto", tr('Atropellas a {get}.').format(get=(m.get('nombre', tr('alguien')))) if m.get("atropello") else tr('Le das a {get}.').format(get=(m.get('nombre', tr('alguien')))), 3.0)
 
     def _svm_fallo(self, m):
         if m.get("motivo"):
@@ -2108,7 +2108,7 @@ class EnLinea:
             self.poner_busqueda(2)
 
     def _svm_muerte(self, m):
-        self.sv_dicho("muerte", tr('{get} ha tumbado a {get2}.').format(get=(m.get('por', 'Alguien')), get2=(m.get('quien', 'alguien'))), 1.0)
+        self.sv_dicho("muerte", tr('{get} ha tumbado a {get2}.').format(get=(m.get('por', 'Alguien')), get2=(m.get('quien', tr('alguien')))), 1.0)
 
     # ---------------------------------------------------------------- vehículos
     def sv_poner_vehiculos(self):
@@ -2490,7 +2490,7 @@ class EnLinea:
         self.j.dinero += n
         self.j.stats["dinero_ganado"] += n
         self.son("mision_ok", cat="interfaz")
-        self.decir(tr('Misión completada con {get}: {get2}. Tu parte: {n} euros.').format(get=(m.get('de', 'tu grupo')), get2=(m.get('titulo', '')), n=(n)))
+        self.decir(tr('Misión completada con {get}: {get2}. Tu parte: {n} euros.').format(get=(m.get('de', tr('tu grupo'))), get2=(m.get('titulo', '')), n=(n)))
         self._sv_quitar_ecos()
 
     def sv_lidero(self):
@@ -2547,7 +2547,7 @@ class EnLinea:
     def _svm_grupo_msg(self, m):
         d = m.get("d") or {}
         que = d.get("que")
-        nombre = str(m.get("nombre", "tu compañero"))
+        nombre = str(m.get("nombre", tr("tu compañero")))
         if que == "paso":
             self.sv["mision_grupo"] = {"titulo": str(d.get("titulo", "")), "texto": str(d.get("texto", "")), "lugar": d.get("lugar")}
             self.son("notificacion", cat="interfaz", vol=0.6)

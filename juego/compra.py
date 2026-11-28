@@ -190,16 +190,16 @@ def comestible(prod):
 
 
 def _cuantos(n, uno, varios):
-    return f"{n} {uno if n == 1 else varios}"
+    return _ile_pl(n, uno, varios) if _pl() else f"{n} {uno if n == 1 else varios}"
 
 
 def _euros(n):
-    return f"{int(n)} {'euro' if int(n) == 1 else 'euros'}"
+    return f"{int(n)} euro" if _pl() else f"{int(n)} {'euro' if int(n) == 1 else 'euros'}"
 
 
 def _junta(nombres):
     nombres = list(nombres)
-    return nombres[0] if len(nombres) == 1 else ", ".join(nombres[:-1]) + tr(" y ") + nombres[-1] if nombres else "nada"
+    return nombres[0] if len(nombres) == 1 else ", ".join(nombres[:-1]) + tr(" y ") + nombres[-1] if nombres else ("nic" if _pl() else "nada")
 
 
 def efecto_txt(d, realista=True):
@@ -856,3 +856,35 @@ class MenuCesta(Menu):
             self.opciones[self.i].ajuste(1 if ev.key == pygame.K_RIGHT else -1)
         else:
             super().tecla(ev)
+
+
+def _pl():
+    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
+    try:
+        from .i18n import actual
+        return actual() == "pl"
+    except Exception:  # noqa: BLE001
+        return False
+
+# ---------------------------------------------------------------- łatka polskiej wersji (latki/liczebniki_zakupy.py)
+_FORMY_PL = {}
+for _klucze, _formy in (
+        (("producto", "productos", "produkt", "produkty"), ("produkt", "produkty", "produktów")),
+        (("pasillo", "pasillos", "alejka", "alejki"), ("alejka", "alejki", "alejek")),
+        (("ración", "raciones", "porcja", "porcje"), ("porcja", "porcje", "porcji")),
+        (("día", "días", "dzień", "dni"), ("dzień", "dni", "dni")),
+        (("cosa", "cosas", "rzecz", "rzeczy"), ("rzecz", "rzeczy", "rzeczy")),
+        (("receta", "recetas", "przepis", "przepisy"), ("przepis", "przepisy", "przepisów")),
+        (("unidad", "unidades", "sztuka", "sztuki"), ("sztuka", "sztuki", "sztuk"))):
+    for _k in _klucze:
+        _FORMY_PL[_k] = _formy
+
+
+def _ile_pl(n, uno, varios):
+    """1 produkt, 2–4 produkty (ale 12–14 produktów), 0 i 5 i więcej produktów."""
+    f = _FORMY_PL.get(uno) or _FORMY_PL.get(varios) or (uno, varios, varios)
+    if n == 1:
+        return f"{n} {f[0]}"
+    if n % 10 in (2, 3, 4) and n % 100 not in (12, 13, 14):
+        return f"{n} {f[1]}"
+    return f"{n} {f[2]}"

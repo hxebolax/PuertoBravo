@@ -381,6 +381,8 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         m = int(self.reloj % 60)
         franja = tr("de la madrugada") if h < 6 else tr("de la mañana") if h < 13 else tr("de la tarde") if h < 21 else tr("de la noche")
         h12 = h % 12 or 12
+        if _pl():
+            return f"{h}:{m:02d}"
         return tr('{h12} y {m:02d} {franja}').format(h12=(h12), m=(m), franja=(franja)) if m else tr('{h12} en punto {franja}').format(h12=(h12), franja=(franja))
 
     def estado_musica(self):
@@ -1315,7 +1317,7 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
             lista += [(v.nombre + (tr(", vehículo aparcado") if v.ia == "aparcado" else tr(", policía") if v.ia == "policia" else tr(", en marcha") if v.ia else tr(", vehículo parado")), v.x, v.y, v)
                       for v in self.vehiculos if v is not self.j.veh and not v.muerto and v.dist(x, y) <= 70]
         if f in ("todo", "personas"):
-            lista += [(p.nombre + (tr(" hostil") if p.hostil else ""), p.x, p.y, p) for p in self.personas if not p.muerto and p.dist(x, y) <= 60]
+            lista += [(_opis_radar(p) + (tr(" hostil") if p.hostil else ""), p.x, p.y, p) for p in self.personas if not p.muerto and p.dist(x, y) <= 60]
             lista += [(r.nombre + (tr(", tu amigo, al volante") if r.veh else tr(", tu amigo, a pie")), r.x, r.y, r) for r in getattr(self, "remotos", {}).values()
                       if r.mapa == self.mundo.id and r.visto and r.dist(x, y) <= 200]
         if f in ("todo", "objetos"):
@@ -2473,3 +2475,43 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
             self.forzando = None
         self.app.radio.apagar()
         self.mez.parar_todo()
+
+
+def _pl():
+    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
+    try:
+        from .i18n import actual
+        return actual() == "pl"
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def _pl():
+    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
+    try:
+        from .i18n import actual
+        return actual() == "pl"
+    except Exception:  # noqa: BLE001
+        return False
+
+# ---------------------------------------------------------------- łatka polskiej wersji (latki/radar_przechodnie.py)
+def _opis_radar(p):
+    """Jak radar nazywa osobę: przechodnia opisuje płcią, wiekiem i zawodem; resztę zostawia jak była."""
+    if not _pl() or p.tipo != "civil" or p.hostil or getattr(p, "tag", None) or p.nombre not in ("Peatón", "Przechodzień"):
+        return p.nombre
+    try:
+        from .charla import ficha
+        f = ficha(p)
+    except Exception:                                     # noqa: BLE001 — radar nie może się wywrócić przez opis
+        return p.nombre
+    kobieta = f.get("genero") == "m"
+    wiek = f.get("edad", 40)
+    if wiek < 30:
+        osoba = "młoda kobieta" if kobieta else "młody mężczyzna"
+    elif wiek >= 60:
+        osoba = "starsza pani" if kobieta else "starszy pan"
+    else:
+        osoba = "kobieta" if kobieta else "mężczyzna"
+    zawod = str(f.get("oficio") or "").strip()
+    tekst = osoba + (", " + zawod if zawod else "")
+    return tekst[:1].upper() + tekst[1:]

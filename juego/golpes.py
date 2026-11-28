@@ -253,7 +253,7 @@ class Golpes:
         t += tr("Aún no ha dado ningún golpe contigo") if not f.get("exp") else tr("Lleva un golpe contigo") if f["exp"] == 1 else tr('Lleva {exp} golpes contigo').format(exp=(f['exp']))
         if f.get("baja", 0) >= self.dia:
             dias = f["baja"] - self.dia + 1
-            t += tr('. Está {v}: le queda{v2} {dias} día{v3}').format(v=(tr('detenido') if f.get('detenido') else tr('de baja, herido')), v2=(tr('n') if dias != 1 else ''), dias=(dias), v3=(tr('s') if dias != 1 else ''))
+            t += tr('. Está {v}: le queda{v2} {dias} día{v3}').format(v=(tr('detenido') if f.get('detenido') else tr('de baja, herido')), v2=('' if _pl() else (tr('n') if dias != 1 else '')), dias=(_dni_pl(dias) if _pl() else dias), v3=('' if _pl() else (tr('s') if dias != 1 else '')))
         t += f". {self.estado_animo_banda(f).capitalize()}. {self.tarea_txt(f)}"      # cómo está y qué hace (capo.py)
         return t
 
@@ -1101,3 +1101,20 @@ def preparar(p, l, empezar, que=tr("el golpe")):
     m = Menu(app, lambda: tr('Preparar {que}: {nombre}. Tienes al lado a {len} de {v}').format(que=(que), nombre=(l.nombre), len=(len(presentes())), v=(p.j.banda_nombre or tr('tu banda'))), ops,
              intro=tr("Da un papel a cada uno. A quien no le des ninguno, viene contigo"))
     app.abrir(m)
+
+
+def _pl():
+    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
+    try:
+        from .i18n import actual
+        return actual() == "pl"
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def _dni_pl(d):
+    if d == 1:
+        return "został 1 dzień"
+    if d % 10 in (2, 3, 4) and d % 100 not in (12, 13, 14):
+        return f"zostały {d} dni"
+    return f"zostało {d} dni"
