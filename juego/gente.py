@@ -161,7 +161,7 @@ def oficio_para(edad, genero="h", rng=random):
     if not ops:
         ops, pesos = list(OFICIOS), [1.0] * len(OFICIOS)
     o = rng.choices(ops, weights=pesos)[0]
-    return _oficio_pl(str(o.get("femenino") or o["nombre"]) if genero == "m" else o["nombre"], genero)
+    return str(o.get("femenino") or o["nombre"]) if genero == "m" else o["nombre"]
 
 
 def caracter(ident):
@@ -293,49 +293,3 @@ def botin_local(tipo, rng=random, minimo=0, maximo=0):
     Si ese tipo no tiene caja en los datos, entre los dos números que se le pasen."""
     c = caja_local(tipo) or {"minimo": int(minimo), "maximo": max(int(minimo), int(maximo))}
     return rng.randint(c["minimo"], c["maximo"])
-
-
-def _pl():
-    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
-    try:
-        from .i18n import actual
-        return actual() == "pl"
-    except Exception:  # noqa: BLE001
-        return False
-
-# ---------------------------------------------------------------- łatka polskiej wersji (latki/zawody_przechodniow.py)
-_OFICIOS_PL = {
-    "camarero": ("kelner", "kelnerka"), "camarera": ("kelner", "kelnerka"), "pescador": ("rybak", "rybaczka"), "pescadora": ("rybak", "rybaczka"),
-    "estudiante": ("student", "studentka"), "taxista": ("taksówkarz", "taksówkarka"), "[taksówkarz|taksówkarka]": ("taksówkarz", "taksówkarka"),
-    "[strażnik|strażniczka]": ("ochroniarz", "ochroniarka"), "enfermero": ("pielęgniarz", "pielęgniarka"),
-    "enfermera": ("pielęgniarz", "pielęgniarka"), "albañil": ("murarz", "murarka"), "murarz": ("murarz", "murarka"),
-    "funcionario": ("urzędnik", "urzędniczka"), "funcionaria": ("urzędnik", "urzędniczka"), "mecánico": ("mechanik", "mechaniczka"),
-    "mecánica": ("mechanik", "mechaniczka"), "mechanik": ("mechanik", "mechaniczka"), "panadero": ("piekarz", "piekarka"),
-    "panadera": ("piekarz", "piekarka"), "jubilado": ("emeryt", "emerytka"), "jubilada": ("emeryt", "emerytka"),
-    "dependiente": ("sprzedawca", "sprzedawczyni"), "dependienta": ("sprzedawca", "sprzedawczyni"), "músico": ("muzyk", "muzyczka"),
-    "música": ("muzyk", "muzyczka"), "muzyk": ("muzyk", "muzyczka"), "repartidor": ("dostawca", "dostawczyni"),
-    "repartidora": ("dostawca", "dostawczyni"), "profesor": ("nauczyciel", "nauczycielka"), "profesora": ("nauczyciel", "nauczycielka"),
-    "electricista": ("elektryk", "elektryczka"), "peluquero": ("fryzjer", "fryzjerka"), "peluquera": ("fryzjer", "fryzjerka"),
-    "vigilante": ("ochroniarz", "ochroniarka"), "cocinero": ("kucharz", "kucharka"), "cocinera": ("kucharz", "kucharka"),
-    "administrativo": ("pracownik biurowy", "pracownica biurowa"), "administrativa": ("pracownik biurowy", "pracownica biurowa"),
-    "fontanero": ("hydraulik", "hydrauliczka"), "fontanera": ("hydraulik", "hydrauliczka"), "estibador": ("doker", "dokerka"),
-    "estibadora": ("doker", "dokerka"), "socorrista": ("ratownik", "ratowniczka"),
-}
-
-
-def _oficio_pl(nombre, genero):
-    if not _pl():
-        return nombre
-    para = _OFICIOS_PL.get(nombre)
-    return (para[1] if genero == "m" else para[0]) if para else nombre
-
-
-# Charakter „amable”: jego opis to samo słowo co identyfikator, więc słownik go nie tłumaczy.
-_caracter_es = caracter
-
-
-def caracter(ident):
-    c = _caracter_es(ident)
-    if _pl() and c.get("desc") == "amable":
-        c = dict(c, desc="uprzejmie")
-    return c

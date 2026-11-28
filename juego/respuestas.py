@@ -180,7 +180,7 @@ def responder(texto, ficha, ctx, rng=random):
     tema = tema_de(texto)
     repetido = ""
     if tema is None:
-        tabla = NO_SE_PREGUNTA if "?" in (texto or "") or normal(texto).split()[:1] in (["que"], ["como"], ["cuando"], ["donde"], ["quien"], ["por"], ["cual"], ["cuanto"], ["co"], ["jak"], ["kiedy"], ["gdzie"], ["kto"], ["dlaczego"], ["czemu"], ["ile"], ["ktory"], ["ktora"], ["czy"], ["skad"], ["dokad"], ["jaki"], ["jaka"]) else NO_SE_COMENTARIO
+        tabla = NO_SE_PREGUNTA if "?" in (texto or "") or normal(texto).split()[:1] in (["que"], ["como"], ["cuando"], ["donde"], ["quien"], ["por"], ["cual"], ["cuanto"]) or _pl() and normal(texto).split()[:1] in (["co"], ["jak"], ["kiedy"], ["gdzie"], ["kto"], ["dlaczego"], ["czemu"], ["ile"], ["ktory"], ["ktora"], ["czy"], ["skad"], ["dokad"], ["jaki"], ["jaka"]) else NO_SE_COMENTARIO
         cuerpo = _elegir(tabla[""] + tabla[caracter] * 3, dichas, rng)
         cambio, ident = 0, None
     else:

@@ -320,7 +320,7 @@ def tr_servidor(texto):
 # palabras que el catálogo traduce, así que no se traducen nunca, salvo en los campos que son texto para leer, como el
 # nombre de algo o los rangos de la policía: si no, el código ya no los encontraría («fishing» en vez de «pesca»).
 _IDENTIFICADOR = re.compile(r"[a-z0-9_]+\Z")
-CAMPOS_DE_TEXTO = frozenset(("nombre", "nombres", "rangos", "texto", "titulo", "descripcion", "frases"))
+CAMPOS_DE_TEXTO = frozenset(("nombre", "nombres", "rangos", "texto", "titulo", "descripcion", "frases", "femenino", "desc"))     # femenino y desc: los oficios y caracteres de gente.json
 
 
 def es_identificador(valor, clave):

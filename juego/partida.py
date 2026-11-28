@@ -2485,15 +2485,6 @@ def _pl():
     except Exception:  # noqa: BLE001
         return False
 
-
-def _pl():
-    """Łatka działa tylko przy języku polskim: po hiszpańsku i angielsku gra zostaje jak u autora."""
-    try:
-        from .i18n import actual
-        return actual() == "pl"
-    except Exception:  # noqa: BLE001
-        return False
-
 # ---------------------------------------------------------------- łatka polskiej wersji (latki/radar_przechodnie.py)
 def _opis_radar(p):
     """Jak radar nazywa osobę: przechodnia opisuje płcią, wiekiem i zawodem; resztę zostawia jak była."""

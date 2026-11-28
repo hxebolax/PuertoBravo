@@ -638,14 +638,15 @@ _BOTON_SOLO = ("a", "b", "x", "y", "lb", "rb")
 def _frase_boton(tipo, b):
     """«el botón A», «el gatillo derecho», «la cruceta arriba»: el botón, con su artículo."""
     n = NOMBRES[tipo].get(b, b)
+    el, la = ("", "") if _pl() else (tr("el "), tr("la "))          # en polaco no hay artículos
     if b in ("lt", "rt"):
-        return (tr("el ") + n) if tipo == "xbox" else tr("el botón {n}").format(n=n)
+        return (el + n) if tipo == "xbox" else tr("el botón {n}").format(n=n)
     if b in ("arriba", "abajo", "izquierda", "derecha"):
-        return tr("la ") + n
+        return la + n
     if b in ("l3", "r3"):
         return tr("la palanca izquierda pulsada") if b == "l3" else tr("la palanca derecha pulsada")
     if b in ("back", "start", "misc", "guide"):
-        return tr("el ") + n
+        return el + n
     if b == "touchpad":
         return tr("el panel táctil")
     return tr("el botón {n}").format(n=n)
@@ -658,7 +659,8 @@ def _boton_de(mapa, key, mod, contexto, frase, tipo):
         return None
     if len(acciones) > 1:
         f = frase.lower()
-        con_pista = [a for a in acciones if _PISTAS.get(a) and __import__("re").search(_PISTAS[a], f)]
+        pistas = _pistas()                                       # en polaco, con sus palabras; en los demás idiomas, como siempre
+        con_pista = [a for a in acciones if pistas.get(a) and __import__("re").search(pistas[a], f)]
         if len(con_pista) == 1:
             acciones = con_pista
     orden = [contexto, "coche" if contexto == "pie" else "pie"] if len(acciones) == 1 else [contexto]
@@ -824,9 +826,13 @@ _TECLAS_TXT.update({"enter": K.K_RETURN, "spacja": K.K_SPACE, "spację": K.K_SPA
 _PISTAS_PL = {"freno_mano": "hamulec ręczn|ręczn", "atacar": "strzel|atak|uderz|bij", "recargar": "przeład",
               "radio": "stacj|radio", "claxon": "klakson|trąb", "gritar": "krzyk|krzycz", "media_vuelta": "zawr",
               "paseo": "spacer|chodz|idź|przejdź", "trabajo": "prac|zmian|służb", "hablar": "rozm|mów|pogad|zagad|powiedz"}
-for _k, _v in _PISTAS_PL.items():
-    if _PISTAS.get(_k):
-        _PISTAS[_k] = _PISTAS[_k] + "|" + _v
+
+
+def _pistas():
+    """Las pistas para elegir el botón de una frase: las de siempre y, solo con el juego en polaco, también las polacas."""
+    if not _pl():
+        return _PISTAS
+    return {k: (v + "|" + _PISTAS_PL[k] if k in _PISTAS_PL else v) for k, v in _PISTAS.items()}
 
 _NARZEDNIK_PL = (("przycisk ", "przyciskiem "), ("lewy spust", "lewym spustem"), ("prawy spust", "prawym spustem"),
                  ("krzyżak ", "krzyżakiem "), ("panel dotykowy", "panelem dotykowym"), ("wciśnięcie ", "wciśnięciem "))

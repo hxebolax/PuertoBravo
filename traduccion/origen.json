@@ -4474,6 +4474,9 @@
 "Apagando.": [
 "servidor/nucleo.py"
 ],
+"Apagar el motor": [
+"juego/catalogo_sonidos.py"
+],
 "Aparcado delante y sin apagar el motor. Cuando salgáis, arranco.": [
 "juego/golpes.py",
 "data/datos/vida.json"
@@ -4629,6 +4632,12 @@
 ],
 "Aquí compran vehículos para despiece. Vuelve montado en el que quieras vender y te dicen cuánto dan.": [
 "juego/menus_juego.py"
+],
+"Aquí dentro no puede venir nadie a recogerte. Pídelo al salir.": [
+"juego/misvehiculos.py"
+],
+"Aquí dentro no te pueden traer un vehículo. Pídelo al salir.": [
+"juego/misvehiculos.py"
 ],
 "Aquí el conocido soy yo.": [
 "juego/respuestas_datos2.py"
@@ -4955,6 +4964,9 @@
 ],
 "Arrancar el motor": [
 "juego/catalogo_sonidos.py"
+],
+"Arrancar o apagar el motor": [
+"juego/mando.py"
 ],
 "Arrancas el motor de un vehículo.": [
 "juego/catalogo_sonidos.py"
@@ -6975,6 +6987,9 @@
 ],
 "Cada entrenamiento sube cinco puntos tu salud máxima, hasta 150. Uno al día.": [
 "juego/menus_lugares.py"
+],
+"Cada intento con el vehículo por debajo del estado de arriba falla con esta probabilidad.": [
+"editor/esquema.py"
 ],
 "Cada jueves sale del banco con un maletín y no vuelve a la oficina. Síguele. Quiero saber dónde lo deja.": [
 "data/datos/misiones_extra3.json"
@@ -9591,6 +9606,9 @@
 "Con Intro eliges qué hacer con ello: comerlo, si se come tal cual, llevarte una encima o tirarlo.": [
 "juego/menus_cocina.py"
 ],
+"Con Mayúsculas E el jugador apaga el motor del vehículo y lo vuelve a arrancar. Solo se apaga con el vehículo parado o casi: por debajo de esta velocidad.": [
+"editor/esquema.py"
+],
 "Con abogado, tanto por ciento de lo que sube el rumor": [
 "editor/esquema_honrado.py"
 ],
@@ -9715,6 +9733,9 @@
 ],
 "Con el vehículo parado, estando en él o al lado. Tardas un cuarto de hora. Las ruedas de repuesto se compran en los talleres y en las gasolineras.": [
 "juego/menus_extra.py"
+],
+"Con el vehículo parado, lo apaga: no gasta combustible ni se oye, para esperar en silencio u oír la radio aparcado. Otra vez, lo arranca.": [
+"juego/mando.py"
 ],
 "Con el vuelo real. Con sí, cada aparato tiene su depósito; el juego avisa en la reserva, y si se acaba, el motor se para y planeas. Se reposta aterrizado en un helipuerto, un aeropuerto o un aeródromo, con Intro, en Repostar; en tu hangar; o desde el móvil, en Mis vehículos, donde te lo traen. Las gasolineras no sirven para lo que vuela. Con no, el depósito no se gasta nunca, y sigues pilotando igual: despegue, altura, aterrizaje y travesías. Lo único que quita el pilotaje es el vuelo real.": [
 "juego/menus_juego.py"
@@ -9854,6 +9875,9 @@
 "juego/honrado.py",
 "juego/vida.py",
 "juego/vida.py"
+],
+"Con la policía buscándote, en el gimnasio no te dejan subir al ring. Despístalos antes.": [
+"juego/menus_lugares.py"
 ],
 "Con la policía buscándote, la compañía no te deja ni acercarte a la pista.": [
 "juego/vuelo.py"
@@ -10417,6 +10441,9 @@
 ],
 "Conducción ": [
 "juego/partida.py"
+],
+"Conduce tu chófer: el motor es cosa suya.": [
+"juego/conduccion.py"
 ],
 "Conduce {nombre}: tú vas de pasajero. ": [
 "juego/misvehiculos.py"
@@ -16075,6 +16102,9 @@
 "El motor envolvente usa sonido binaural: con auriculares se distingue si algo suena delante o detrás, y no solo a izquierda o derecha. Además mezcla el sonido fuera del programa, así que no da tirones cuando hay muchos sonidos a la vez. El clásico es el de siempre. El cambio se aplica al cerrar y volver a abrir el juego. En ordenadores con procesador antiguo, y con el sonido mono activado, se usa siempre el clásico.": [
 "juego/menus_juego.py"
 ],
+"El motor está apagado. {tecla} lo arranca.": [
+"juego/conduccion.py"
+],
 "El motor está en marcha. Conduces tú: yo voy mirando atrás.": [
 "juego/golpes.py",
 "data/datos/vida.json"
@@ -16087,6 +16117,9 @@
 ],
 "El motor suena mucho más bajo. La policía te oye de menos lejos: cuando te buscan, te pierde antes al alejarte.": [
 "data/datos/vida.json"
+],
+"El motor tose y no arranca: está muy dañado. Prueba otra vez, o llévalo al taller.": [
+"juego/conduccion.py"
 ],
 "El motor tose y se para: no queda combustible. Planeas.": [
 "juego/vuelo.py",
@@ -17499,6 +17532,9 @@
 "editor/esquema_vuelo.py",
 "editor/esquema_vuelo.py",
 "editor/esquema_vuelo.py"
+],
+"En el aire no se apaga el motor. Aterriza antes.": [
+"juego/conduccion.py"
 ],
 "En el aire, a {int} metros. La D sube y la A baja.": [
 "juego/vuelo.py"
@@ -21918,6 +21954,9 @@
 ],
 "Girarás a la ": [
 "juego/conduccion.py"
+],
+"Giras la llave y el motor baja de vueltas hasta pararse: lo has apagado con Mayúsculas E.": [
+"juego/catalogo_sonidos.py"
 ],
 "Glorieta de la Universidad": [
 "data/datos/mapas/san_lucero.json"
@@ -30046,6 +30085,10 @@
 "editor/accesibilidad/revision_teclado.py",
 "editor/accesibilidad/revision_teclado.py"
 ],
+"Mayúsculas E": [
+"juego/ayuda.py",
+"juego/conduccion.py"
+],
 "Mayúsculas F": [
 "juego/ayuda.py"
 ],
@@ -31408,10 +31451,16 @@
 ],
 "Motor": [
 "juego/sistemas.py",
+"editor/esquema.py",
+"editor/esquema.py",
+"editor/esquema.py",
 "data/datos/vida.json"
 ],
 "Motor Sierra": [
 "data/datos/mapas/monteferro.json"
+],
+"Motor apagado.": [
+"juego/conduccion.py"
 ],
 "Motor de barco": [
 "juego/catalogo_sonidos.py"
@@ -31439,6 +31488,9 @@
 ],
 "Motor de tractor": [
 "juego/catalogo_sonidos.py"
+],
+"Motor en marcha.": [
+"juego/conduccion.py"
 ],
 "Motor y asfalto": [
 "data/mods/motor_y_asfalto.json",
@@ -32459,6 +32511,9 @@
 ],
 "No admite silenciador": [
 "editor/esquema.py"
+],
+"No arranca: no queda combustible.": [
+"juego/conduccion.py"
 ],
 "No arreglaste lo de la policía: una redada en tus barrios te cuesta {perdido} euros.": [
 "juego/sistemas.py"
@@ -33589,6 +33644,9 @@
 ],
 "No tengo. Pregunta en el bar.": [
 "juego/respuestas_datos2.py"
+],
+"No tiene motor.": [
+"juego/conduccion.py"
 ],
 "No tiene ninguna rueda pinchada.": [
 "juego/menus_juego.py"
@@ -34990,6 +35048,9 @@
 "Para asaltar la mansión necesitas armas serias. La Rusa sabe dónde hay.": [
 "data/datos/misiones.json"
 ],
+"Para asearte": [
+"juego/compra.py"
+],
 "Para atracar a alguien tenéis que estar los dos a pie y a un paso.": [
 "servidor/nucleo.py"
 ],
@@ -35065,6 +35126,9 @@
 ],
 "Para el servidor y lo vuelve a arrancar: así valen los cambios que piden reinicio.": [
 "panel_servidor/ventana.py"
+],
+"Para el vehículo antes de apagar el motor.": [
+"juego/conduccion.py"
 ],
 "Para el vehículo primero.": [
 "juego/realismo.py"
@@ -35739,7 +35803,7 @@
 "Pasarla por encima, subiendo a {v} metros": [
 "juego/vuelo_pantalla.py"
 ],
-"Pasas al pabellón de los combates: aquí solo estáis tu rival y tú.": [
+"Pasas al pabellón de los combates: aquí no hay nadie de la calle, solo tu rival y los tuyos.": [
 "juego/extras2.py"
 ],
 "Pasas cuatro horas sirviendo comidas. Sales cansad[o|a] y content[o|a]. Son las {hora_txt}.": [
@@ -36881,6 +36945,12 @@
 "Por debajo de esta lealtad, un camello se queda algo más y, si le detienen, canta": [
 "editor/esquema.py"
 ],
+"Por debajo de esta velocidad se puede apagar el motor, en metros por segundo": [
+"editor/esquema.py"
+],
+"Por debajo de este estado, en por ciento, puede no arrancar": [
+"editor/esquema.py"
+],
 "Por debajo se pierden solo las de fuego, como en cualquier detención.": [
 "editor/esquema.py"
 ],
@@ -37441,6 +37511,9 @@
 ],
 "Probabilidad de que los vecinos encubran una falta, por ciento": [
 "editor/esquema_honrado.py"
+],
+"Probabilidad de que no arranque, en por ciento": [
+"editor/esquema.py"
 ],
 "Probabilidad de que no te atiendan, por ciento": [
 "editor/esquema_honrado.py"
@@ -46043,7 +46116,7 @@
 "Tu récord en la máquina de memoria: {get} rondas": [
 "juego/menus_extra.py"
 ],
-"Tu salud ya está al máximo.": [
+"Tu salud ya está al máximo: guardas el botiquín.": [
 "juego/partida.py"
 ],
 "Tu situación: ": [
@@ -47213,6 +47286,9 @@
 ],
 "Un vehículo frena de golpe o derrapa.": [
 "juego/catalogo_sonidos.py"
+],
+"Un vehículo muy dañado tose y a veces no arranca. Con cero, arranca siempre.": [
+"editor/esquema.py"
 ],
 "Un vehículo o un edificio está ardiendo. Si es un vehículo, va a explotar: aléjate.": [
 "juego/catalogo_sonidos.py"
@@ -51342,6 +51418,12 @@
 "admin ": [
 "panel_servidor/ventana.py"
 ],
+"administrativa": [
+"data/datos/gente.json"
+],
+"administrativo": [
+"data/datos/gente.json"
+],
 "agacharte o levantarte": [
 "juego/mando.py"
 ],
@@ -51384,6 +51466,9 @@
 "al volante esa tecla te baja del vehículo; sacar a otro jugador del suyo se hace a pie": [
 "juego/mando.py"
 ],
+"albañil": [
+"data/datos/gente.json"
+],
 "alcance {_num} metros": [
 "juego/combate.py"
 ],
@@ -51402,11 +51487,22 @@
 "algo que le hacía ilusión": [
 "juego/convivencia.py"
 ],
+"alguien": [
+"juego/enlinea.py",
+"juego/enlinea.py",
+"juego/enlinea.py",
+"juego/enlinea.py",
+"juego/enlinea.py",
+"juego/menus_enlinea.py"
+],
 "alquilada": [
 "juego/vuelo_pantalla.py"
 ],
 "alta: se nota movimiento raro por sus calles": [
 "juego/reconquista.py"
+],
+"amable": [
+"data/datos/gente.json"
 ],
 "amable y cordial": [
 "juego/gente.py",
@@ -51465,6 +51561,12 @@
 "juego/atracos.py",
 "data/datos/vida.json"
 ],
+"arrancar o apagar el motor": [
+"juego/mando.py"
+],
+"arrancar o apagar el motor. Se apaga con el vehículo parado: no gasta combustible, no anda y no se oye, para esperar en silencio u oír la radio aparcado. Otra vez lo arranca, si queda combustible; muy dañado, puede costar": [
+"juego/ayuda.py"
+],
 "as": [
 "juego/sistemas.py"
 ],
@@ -51499,6 +51601,7 @@
 "juego/combate.py"
 ],
 "auxiliar de emergencias": [
+"data/datos/vida.json",
 "data/datos/vida.json"
 ],
 "avanzar página": [
@@ -51651,7 +51754,14 @@
 "juego/mundo.py"
 ],
 "camarer[o|a] de sala": [
+"data/datos/vida.json",
 "data/datos/vida.json"
+],
+"camarera": [
+"data/datos/gente.json"
+],
+"camarero": [
+"data/datos/gente.json"
 ],
 "cambia de emisora. Mayúsculas R apaga la radio": [
 "juego/ayuda.py"
@@ -51771,6 +51881,12 @@
 "juego/capo.py",
 "data/datos/vida.json"
 ],
+"cocinera": [
+"data/datos/gente.json"
+],
+"cocinero": [
+"data/datos/gente.json"
+],
 "coma decimal": [
 "juego/menus_componentes.py",
 "herramientas/generar_datos.py"
@@ -51815,6 +51931,7 @@
 ],
 "con chulería": [
 "juego/gente.py",
+"data/datos/gente.json",
 "data/datos/gente.json"
 ],
 "con cifrado": [
@@ -51829,6 +51946,7 @@
 ],
 "con ganas de hablar": [
 "juego/gente.py",
+"data/datos/gente.json",
 "data/datos/gente.json"
 ],
 "con gente otra vez": [
@@ -51887,6 +52005,7 @@
 ],
 "con timidez": [
 "juego/gente.py",
+"data/datos/gente.json",
 "data/datos/gente.json"
 ],
 "con un arma en la mano, atracar al peatón que tengas al lado": [
@@ -51918,7 +52037,11 @@
 "juego/golpes.py"
 ],
 "conductor de autobús": [
+"data/datos/gente.json",
 "data/datos/gente.json"
+],
+"conductor[|a]": [
+"data/datos/vida.json"
 ],
 "conductor[|a] de ambulancia": [
 "juego/trabajos.py"
@@ -51930,9 +52053,11 @@
 "juego/trabajos.py"
 ],
 "conductor[|a] de primera": [
+"data/datos/vida.json",
 "data/datos/vida.json"
 ],
 "conductora de autobús": [
+"data/datos/gente.json",
 "data/datos/gente.json"
 ],
 "confía en ti": [
@@ -51948,6 +52073,7 @@
 "data/datos/misiones_extra2.json"
 ],
 "coordinador[|a] comarcal": [
+"data/datos/vida.json",
 "data/datos/vida.json"
 ],
 "copiar el programa nuevo": [
@@ -52090,6 +52216,7 @@
 ],
 "de pocas palabras": [
 "juego/gente.py",
+"data/datos/gente.json",
 "data/datos/gente.json"
 ],
 "de tu banda": [
@@ -52127,6 +52254,12 @@
 ],
 "dentro de {int} días": [
 "juego/reconquista.py"
+],
+"dependienta": [
+"data/datos/gente.json"
+],
+"dependiente": [
+"data/datos/gente.json"
 ],
 "deporte=deportivo": [
 "juego/vestuario.py"
@@ -52198,12 +52331,15 @@
 "juego/ia.py"
 ],
 "director[|a] de flota": [
+"data/datos/vida.json",
 "data/datos/vida.json"
 ],
 "director[|a] de producción": [
+"data/datos/vida.json",
 "data/datos/vida.json"
 ],
 "director[|a] de zona": [
+"data/datos/vida.json",
 "data/datos/vida.json"
 ],
 "disparar desde el vehículo": [
@@ -52301,7 +52437,6 @@
 ],
 "el ": [
 "juego/actualizador.py",
-"juego/mando.py",
 "juego/mando.py"
 ],
 "el Brisa Rally de pruebas": [
@@ -52813,6 +52948,9 @@
 "el único que envías": [
 "juego/reconquista.py"
 ],
+"electricista": [
+"data/datos/gente.json"
+],
 "elegante=elegante": [
 "juego/vestuario.py"
 ],
@@ -52895,6 +53033,7 @@
 "juego/menus_juego.py"
 ],
 "en paro": [
+"data/datos/gente.json",
 "data/datos/gente.json"
 ],
 "en personaje": [
@@ -52919,14 +53058,22 @@
 "juego/ayuda.py"
 ],
 "encargad[o|a] de local": [
+"data/datos/vida.json",
 "data/datos/vida.json"
 ],
 "encargad[o|a] de tienda": [
+"data/datos/vida.json",
 "data/datos/vida.json"
 ],
 "encontrado": [
 "juego/mochila.py",
 "juego/mochila.py"
+],
+"enfermera": [
+"data/datos/gente.json"
+],
+"enfermero": [
+"data/datos/gente.json"
 ],
 "entra y juega en lo que tiene en común con el servidor; se le dice qué no coincide, y lo que afecta a los demás lo decide el servidor con su mundo": [
 "servidor/opciones.py"
@@ -53037,6 +53184,12 @@
 "este sitio": [
 "juego/charla.py"
 ],
+"estibador": [
+"data/datos/gente.json"
+],
+"estibadora": [
+"data/datos/gente.json"
+],
 "estoy cansado|estoy cansada|estas cansado|estas cansada|tengo sueno|que sueno|no he dormido|dormir|has dormido|madrugar|el madrugon": [
 "juego/respuestas_datos1.py"
 ],
@@ -53045,6 +53198,9 @@
 ],
 "estoy triste|estoy mal|estoy fatal|me siento solo|me siento sola|estoy deprimido|estoy deprimida|un mal dia|todo me sale mal|no puedo mas|estoy harto|estoy harta": [
 "juego/respuestas_datos2.py"
+],
+"estudiante": [
+"data/datos/gente.json"
 ],
 "está": [
 "juego/misvehiculos.py"
@@ -53139,6 +53295,12 @@
 "flecha izquierda": [
 "juego/teclado.py"
 ],
+"fontanera": [
+"data/datos/gente.json"
+],
+"fontanero": [
+"data/datos/gente.json"
+],
 "forzada para pruebas": [
 "juego/procesador.py"
 ],
@@ -53170,6 +53332,12 @@
 "fuerte, bastante más oposición si vas acompañado": [
 "juego/menus_juego.py"
 ],
+"funcionaria": [
+"data/datos/gente.json"
+],
+"funcionario": [
+"data/datos/gente.json"
+],
 "fundar la banda": [
 "servidor/nucleo.py"
 ],
@@ -53190,6 +53358,9 @@
 ],
 "gatillo izquierdo": [
 "juego/mando.py"
+],
+"gerente": [
+"data/datos/vida.json"
 ],
 "gimnasio=El monitor": [
 "juego/atracos.py",
@@ -53418,22 +53589,33 @@
 "juego/i18n.py"
 ],
 "jef[e|a] de guardia": [
+"data/datos/vida.json",
 "data/datos/vida.json"
 ],
 "jef[e|a] de sala": [
+"data/datos/vida.json",
 "data/datos/vida.json"
 ],
 "jef[e|a] de sección": [
+"data/datos/vida.json",
 "data/datos/vida.json"
 ],
 "jef[e|a] de taller": [
+"data/datos/vida.json",
 "data/datos/vida.json"
 ],
 "jef[e|a] de tráfico": [
+"data/datos/vida.json",
 "data/datos/vida.json"
 ],
 "jefe": [
 "servidor/nucleo.py"
+],
+"jubilada": [
+"data/datos/gente.json"
+],
+"jubilado": [
+"data/datos/gente.json"
 ],
 "juego ": [
 "panel_servidor/ventana.py",
@@ -54175,6 +54357,12 @@
 "me voy": [
 "juego/charla.py"
 ],
+"mecánica": [
+"data/datos/gente.json"
+],
+"mecánico": [
+"data/datos/gente.json"
+],
 "media": [
 "juego/combate.py"
 ],
@@ -54297,6 +54485,12 @@
 "más prestigio entre los vecinos: {int} de {int2}": [
 "juego/honrado.py"
 ],
+"música": [
+"data/datos/gente.json"
+],
+"músico": [
+"data/datos/gente.json"
+],
 "n": [
 "juego/golpes.py"
 ],
@@ -54357,6 +54551,14 @@
 "juego/menus_actualizar.py",
 "juego/menus_charla.py",
 "juego/menus_charla.py",
+"juego/menus_enlinea.py",
+"juego/menus_enlinea.py",
+"juego/menus_enlinea.py",
+"juego/menus_enlinea.py",
+"juego/menus_enlinea.py",
+"juego/menus_enlinea.py",
+"juego/menus_enlinea.py",
+"juego/menus_enlinea.py",
 "juego/menus_enlinea.py",
 "juego/menus_enlinea.py",
 "juego/menus_extra.py",
@@ -54525,10 +54727,14 @@
 "data/datos/vida.json"
 ],
 "oficial de primera": [
+"data/datos/vida.json",
 "data/datos/vida.json"
 ],
 "olores sospechosos": [
 "juego/laboratorio.py"
+],
+"operari[o|a]": [
+"data/datos/vida.json"
 ],
 "os acabáis de conocer": [
 "juego/adultos.py"
@@ -54547,6 +54753,9 @@
 "juego/sistemas.py"
 ],
 "otro jugador": [
+"juego/enlinea.py",
+"juego/enlinea.py",
+"juego/enlinea.py",
 "juego/enlinea.py"
 ],
 "otro puerto": [
@@ -54569,6 +54778,12 @@
 ],
 "pagas la cesta, o te atienden de lo demás si no llevas nada": [
 "juego/compra.py"
+],
+"panadera": [
+"data/datos/gente.json"
+],
+"panadero": [
+"data/datos/gente.json"
 ],
 "panel táctil": [
 "juego/mando.py",
@@ -54621,6 +54836,12 @@
 "pasaje y carga para pilotos con licencia": [
 "juego/vuelo_pantalla.py"
 ],
+"peluquera": [
+"data/datos/gente.json"
+],
+"peluquero": [
+"data/datos/gente.json"
+],
 "pensando en sus cosas": [
 "juego/ia.py"
 ],
@@ -54642,6 +54863,12 @@
 "pescaderia=El pescadero": [
 "juego/atracos.py",
 "data/datos/vida.json"
+],
+"pescador": [
+"data/datos/gente.json"
+],
+"pescadora": [
+"data/datos/gente.json"
 ],
 "pescar en el mar, o sirena en vehículos de emergencias": [
 "juego/mando.py"
@@ -54759,6 +54986,12 @@
 ],
 "primera y última opción": [
 "herramientas/generar_datos.py"
+],
+"profesor": [
+"data/datos/gente.json"
+],
+"profesora": [
+"data/datos/gente.json"
 ],
 "propuesta por ": [
 "juego/online.py"
@@ -54953,6 +55186,12 @@
 "renta de los barrios": [
 "servidor/nucleo.py"
 ],
+"repartidor": [
+"data/datos/gente.json"
+],
+"repartidora": [
+"data/datos/gente.json"
+],
 "repasan los mensajes anteriores. El punto repite el último": [
 "juego/ayuda.py"
 ],
@@ -54970,6 +55209,9 @@
 ],
 "repite la indicación del GPS. En una misión, sin destino marcado, vuelve a marcar lo que pide la misión; sin misión, recupera el último destino que quitaste": [
 "juego/ayuda.py"
+],
+"reponedor[|a]": [
+"data/datos/vida.json"
 ],
 "reproductor con auriculares: encender y emisora siguiente": [
 "juego/mando.py"
@@ -55234,6 +55476,9 @@
 "sin tipos": [
 "editor/esquema.py"
 ],
+"socorrista": [
+"data/datos/gente.json"
+],
 "sois aliados": [
 "juego/misiones.py"
 ],
@@ -55257,6 +55502,9 @@
 ],
 "soy nuevo|soy nueva|acabo de llegar|no soy de aqui|vengo de fuera|he vuelto|acabo de volver|no conozco esto|estoy perdido|estoy perdida|me he perdido": [
 "juego/respuestas_datos2.py"
+],
+"su dueño": [
+"juego/enlinea.py"
 ],
 "su sitio": [
 "juego/encuentros.py",
@@ -55312,6 +55560,11 @@
 "juego/menus_charla.py",
 "juego/menus_enlinea.py",
 "juego/menus_enlinea.py",
+"juego/menus_enlinea.py",
+"juego/menus_enlinea.py",
+"juego/menus_enlinea.py",
+"juego/menus_enlinea.py",
+"juego/menus_enlinea.py",
 "juego/menus_extra.py",
 "juego/menus_extra.py",
 "juego/menus_juego.py",
@@ -55351,7 +55604,8 @@
 "juego/laboratorio.py"
 ],
 "taxista": [
-"juego/trabajos.py"
+"juego/trabajos.py",
+"data/datos/gente.json"
 ],
 "te acercas a hablar": [
 "juego/compra.py",
@@ -55582,6 +55836,10 @@
 "tu coche|los coches|el trafico|los atascos|conduces|sabes conducir|una moto|las motos|aparcar|el aparcamiento|la gasolina|el carne|correr con el coche|las carreras": [
 "juego/respuestas_datos1.py"
 ],
+"tu compañero": [
+"juego/enlinea.py",
+"juego/enlinea.py"
+],
 "tu cumpleanos|mi cumpleanos|es mi cumpleanos|felicidades|feliz|que celebras": [
 "juego/respuestas_datos2.py"
 ],
@@ -55590,6 +55848,9 @@
 ],
 "tu garaje": [
 "juego/misvehiculos.py"
+],
+"tu grupo": [
+"juego/enlinea.py"
 ],
 "tu guardaespaldas": [
 "juego/menus_extra.py"
@@ -55650,6 +55911,7 @@
 "juego/honrado.py"
 ],
 "técnic[o|a] de emergencias": [
+"data/datos/vida.json",
 "data/datos/vida.json"
 ],
 "tímida, se corta al hablar": [
@@ -55658,6 +55920,9 @@
 ],
 "título de {hon_titulo_nombre}": [
 "juego/menus_honrado.py"
+],
+"tú": [
+"juego/menus_enlinea.py"
 ],
 "ucraniano": [
 "juego/i18n.py"
@@ -56214,6 +56479,9 @@
 "ve allí en persona, la defensa empieza al entrar en el barrio; el móvil, en Territorios, te marca el camino.": [
 "juego/sistemas.py"
 ],
+"vehículo": [
+"juego/enlinea.py"
+],
 "vehículo ha quedado reparado": [
 "juego/sistemas.py"
 ],
@@ -56256,7 +56524,8 @@
 "juego/i18n.py"
 ],
 "vigilante": [
-"juego/trabajos.py"
+"juego/trabajos.py",
+"data/datos/gente.json"
 ],
 "vista ": [
 "panel_servidor/ventana.py"

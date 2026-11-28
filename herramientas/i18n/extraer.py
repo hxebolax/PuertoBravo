@@ -64,7 +64,31 @@ def de_los_datos():
             d = json.load(open(f, encoding="utf-8"))
         except (OSError, ValueError):
             continue
-        rec(d, os.path.relpath(f, RAIZ).replace("\\", "/"))
+        rel = os.path.relpath(f, RAIZ).replace("\\", "/")
+        rec(d, rel)
+        if os.path.basename(f) == "gente.json" and isinstance(d, dict):      # los oficios y los caracteres son una palabra en
+            bloques = [d] + [g for g in d.get("gente", []) if isinstance(g, dict)]
+            for o in (o for g in bloques for o in g.get("oficios", [])):      # minúscula, como un identificador, pero se leen
+                for clave in ("nombre", "femenino"):
+                    if isinstance(o, dict) and isinstance(o.get(clave), str) and o[clave].strip():
+                        r.setdefault(o[clave], []).append(rel)
+            for c in (c for g in bloques for c in g.get("caracteres", [])):
+                if isinstance(c, dict) and isinstance(c.get("desc"), str) and c["desc"].strip():
+                    r.setdefault(c["desc"], []).append(rel)
+
+        def puestos(o):                                                  # los puestos de las carreras: «gerente», «operari[o|a]»
+            if isinstance(o, dict):
+                for k, v in o.items():
+                    if k == "puestos" and isinstance(v, list):
+                        for q in v:
+                            if isinstance(q, dict) and isinstance(q.get("nombre"), str) and q["nombre"].strip():
+                                r.setdefault(q["nombre"], []).append(rel)
+                    else:
+                        puestos(v)
+            elif isinstance(o, list):
+                for v in o:
+                    puestos(v)
+        puestos(d)
     for f in sorted(glob.glob(os.path.join(RAIZ, "data", "sonidos", "*", "pack.json"))):     # el nombre y la descripción de cada pack
         try:
             d = json.load(open(f, encoding="utf-8"))
