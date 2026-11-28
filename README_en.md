@@ -101,7 +101,7 @@ Everything that happens has its own sound, placed around you: what sounds to the
 - Stereo headphones.
 - A screen reader running, such as NVDA or JAWS. If there is none, the game speaks with the Windows voice.
 
-Download the latest version, unzip the folder wherever you like and run `PuertoBravo.exe`. It installs nothing: it is portable. Inside the game, `F1` tells you the keys at any time, and the main menu opens the full manual, which is in `data\docs\manual_en.html` (and in Spanish, `manual_es.html`) and can be navigated by headings. The game uses the language of Windows, Spanish, English, Vietnamese, Brazilian Portuguese or Russian, and you can choose it in Options, Language. The release notes of each version are written in Spanish and in English: with the game in Spanish you read them in Spanish, and with any other language, in English.
+Download the latest version, unzip the folder wherever you like and run `PuertoBravo.exe`. It installs nothing: it is portable. Inside the game, `F1` tells you the keys at any time, and the main menu opens the full manual, which is in `data\docs\manual_en.html` (and in Spanish, `manual_es.html`) and can be navigated by headings. The game uses the language of Windows, Spanish, English, Vietnamese, Brazilian Portuguese, Russian or Polish, and you can choose it in Options, Language. The release notes of each version are written in Spanish and in English: with the game in Spanish you read them in Spanish, and with any other language, in English.
 
 If something goes wrong, the game keeps a log of each session in `data\logs`, with no personal data: zip the session's folder and attach it to an [issue](https://github.com/hxebolax/PuertoBravo/issues), or send it on Mastodon to [@HXeBoLaX](https://comunidad.nvda.es/@HXeBoLaX). The manual explains how.
 
@@ -497,6 +497,7 @@ Thanks to everyone who has helped make Puerto Bravo better through GitHub. Whene
 - [Daoductrung](https://github.com/Daoductrung): the Vietnamese translation of the game, all of its documentation and the Marisma Negra mod, and the fix so that the mod card and the workshop upgrades are in the game's language.
 - [leoguimaoficial](https://github.com/leoguimaoficial): the complete Brazilian Portuguese translation and its corrections.
 - [dimasya34](https://github.com/dimasya34): the Russian translation of the game, its README and its corrections, the fix for the update installer, which could not run with the game in Russian, and the controller names in Russian.
+- [MichalBrajer123](https://github.com/MichalBrajer123): the Polish translation of the game, its guides and the Marisma Negra mod, with the scene voices in Polish, and the suggestion to start and switch off the vehicle's engine.
 
 ### Bug reports and suggestions
 

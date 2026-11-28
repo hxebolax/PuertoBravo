@@ -89,7 +89,7 @@ Todo lo que ocurre tiene su sonido, colocado a tu alrededor: lo que suena a la d
 - Auriculares estéreo.
 - Un lector de pantalla abierto, como NVDA o JAWS. Si no hay ninguno, el juego habla con la voz de Windows.
 
-Descarga la última versión, descomprime la carpeta donde quieras y ejecuta `PuertoBravo.exe`. No instala nada: es portable. Dentro del juego, `F1` dice las teclas en cualquier momento, y el menú principal abre el manual completo, que está en `data\docs\manual_es.html` (y en inglés, `manual_en.html`) y se navega por encabezados. El juego va en el idioma de Windows, en español, en inglés, en vietnamita, en portugués de Brasil o en ruso, y se puede elegir en Opciones, Idioma. Las novedades de cada versión se escriben en español y en inglés: con el juego en español se leen en español, y con cualquier otro idioma, en inglés.
+Descarga la última versión, descomprime la carpeta donde quieras y ejecuta `PuertoBravo.exe`. No instala nada: es portable. Dentro del juego, `F1` dice las teclas en cualquier momento, y el menú principal abre el manual completo, que está en `data\docs\manual_es.html` (y en inglés, `manual_en.html`) y se navega por encabezados. El juego va en el idioma de Windows, en español, en inglés, en vietnamita, en portugués de Brasil, en ruso o en polaco, y se puede elegir en Opciones, Idioma. Las novedades de cada versión se escriben en español y en inglés: con el juego en español se leen en español, y con cualquier otro idioma, en inglés.
 
 Si algo falla, el juego deja un registro de cada sesión en `data\logs`, sin datos personales: comprimes la carpeta de la sesión y la adjuntas a una [incidencia](https://github.com/hxebolax/PuertoBravo/issues), o la envías por Mastodon a [@HXeBoLaX](https://comunidad.nvda.es/@HXeBoLaX). El manual explica cómo.
 
@@ -483,6 +483,7 @@ Gracias a todas las personas que han ayudado a mejorar Puerto Bravo desde GitHub
 - [Daoductrung](https://github.com/Daoductrung): la traducción al vietnamita del juego, de toda su documentación y del mod Marisma Negra, y el arreglo para que la ficha de los mods y las mejoras del taller salgan en el idioma del juego.
 - [leoguimaoficial](https://github.com/leoguimaoficial): la traducción completa al portugués de Brasil y sus correcciones.
 - [dimasya34](https://github.com/dimasya34): la traducción al ruso del juego, su README y sus correcciones, el arreglo del instalador de las actualizaciones, que con el juego en ruso no se podía ejecutar, y los nombres del mando en ruso.
+- [MichalBrajer123](https://github.com/MichalBrajer123): la traducción al polaco del juego, de sus guías y del mod Marisma Negra, con las voces de las escenas en polaco, y la propuesta de arrancar y apagar el motor del vehículo.
 
 ### Con avisos de fallos y propuestas
 
