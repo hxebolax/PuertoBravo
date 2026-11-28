@@ -2,7 +2,7 @@
 
 Grabaciones reales para pasos, puertas, armas, golpes, cristales, coche, lluvia, agua y monedas.
 
-Trae los 282 sonidos del juego: 216 son grabaciones reales descargadas y 66 son el sonido
+Trae los 283 sonidos del juego: 217 son grabaciones reales descargadas y 66 son el sonido
 original del juego, para los que no hay una grabación libre que encaje o que conviene no tocar
 (balizas, tonos, semáforos, radar y firmas de los lugares: de ellos depende orientarse sin ver).
 Todos proceden de colecciones con licencia CC0 (dominio público): se pueden usar, modificar y
@@ -209,6 +209,7 @@ QUÉ SONIDO SALE DE DÓNDE
   menu_ok.flac: confirmation_001.ogg, de Interface Sounds, de Kenney. Dura 0,29 segundos.
   mision_fallo.flac: negative_sound.ogg, de UI sound effects: button clicks, user feedback, notifications. Dura 0,98 segundos.
   mision_ok.flac: fanfare_3.ogg, de classic fanfare lick. Dura 2,05 segundos.
+  motor_apagar.flac: Car_Engine_Turning_Off.ogg, de Car Sound Effects Pack. Dura 1,60 segundos.
   motor_avioneta.flac: motor_avioneta.ogg, de Freesound, grabaciones CC0 de gecop, Bidone, ccovi, 16HPanskaWillheimova_Sara, TRP, Fission9, swordofkings128, TicAshfield y freemaster2. Dura 4,00 segundos.
   motor_barco.flac: ship1.ogg, de War on Water sound effects. Dura 2,00 segundos.
   motor_bici.flac: bicycle_spokes-1.ogg, de Bicycle sounds. Dura 0,90 segundos.

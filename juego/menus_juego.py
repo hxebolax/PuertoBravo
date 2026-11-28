@@ -1423,7 +1423,7 @@ def movil(p):
         h, mi = int(s["tiempo"] // 3600), int(s["tiempo"] % 3600 // 60)
         total = len(p.datos["misiones"])
         ops = [tr('Misiones completadas: {len} de {total}').format(len=(len(p.completadas)), total=(total)), tr('Dinero: {dinero} euros. Ganado en total: {dinero_ganado}').format(dinero=(j.dinero), dinero_ganado=(s['dinero_ganado'])),
-               tr('Tiempo jugado: {h} horas y {mi} minutos. Día {dia}').format(h=(h), mi=(mi), dia=(p.dia)), tr('Lugares visitados: {len} de {len2}').format(len=(len(j.visitados)), len2=(len(p.lugares))),
+               tr('Tiempo jugado: {h} horas y {mi} minutos. Día {dia}').format(h=(h), mi=(mi), dia=(p.dia)), tr('Lugares visitados: {len} de {len2}').format(len=(len(j.visitados)), len2=(sum(1 for l in p.lugares.values() if l.mapa != "arena"))),
                tr('Barrios y localidades visitados: {len} de {sum}').format(len=(len(j.barrios_vistos)), sum=(sum(len(m.barrios) for m in p.mapas.values() if m.tipo != "recinto"))),
                tr('Objetos de colección: {len} de {total_casetes}').format(len=(len(j.casetes)), total_casetes=(p.total_casetes())),
                tr('Peces pescados: {get}. Servicios de trabajo: {get2}').format(get=(s.get('peces', 0)), get2=(s.get('servicios', 0))),

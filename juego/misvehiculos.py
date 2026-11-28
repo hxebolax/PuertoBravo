@@ -579,6 +579,10 @@ class MisVehiculos:
             self.app.son("error")
             self.decir(tr("En mitad del mar no te pueden traer un vehículo."), True)
             return None
+        if self.mundo.tipo == "recinto":                          # el pabellón de los combates: dentro no se aparca
+            self.app.son("error")
+            self.decir(tr("Aquí dentro no te pueden traer un vehículo. Pídelo al salir."), True)
+            return None
         if self.j.estrellas > AJUSTES["chofer_busqueda_max"]:
             self.app.son("error")
             self.decir(tr("Con tanta policía buscándote, tu mecánico no se acerca."), True)
@@ -765,6 +769,8 @@ class MisVehiculos:
             motivo = tr('{nombre} ya está en ello. Si quieres otro, despídelo antes.').format(nombre=(self.chofer['nombre']))
         elif self.mundo.tipo == "mar":
             motivo = tr("En mitad del mar no puede venir nadie a recogerte.")
+        elif self.mundo.tipo == "recinto":
+            motivo = tr("Aquí dentro no puede venir nadie a recogerte. Pídelo al salir.")
         elif j.estrellas > AJUSTES["chofer_busqueda_max"]:
             motivo = tr("Con tanta policía buscándote, nadie de la banda se acerca. Despístalos antes.")
         elif getattr(self, "pasajero", None) is not None:

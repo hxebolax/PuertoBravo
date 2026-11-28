@@ -531,7 +531,7 @@ class Crucero:
         if self.fase not in ("crucero", "ascenso") or AJ("peso_paisaje") <= 0:
             return
         for m in self.p.mapas.values():
-            if m.id in self.paisajes or m.id in (self.origen.id, self.destino["mapa"].id) or m.tipo == "mar":
+            if m.id in self.paisajes or m.id in (self.origen.id, self.destino["mapa"].id) or m.tipo in ("mar", "recinto"):
                 continue
             pt = V.punto_aire(m.id)
             d = V.distancia(self.pos, pt)
@@ -557,7 +557,7 @@ class Crucero:
     def _forzoso(self):
         """Te quedas sin altura lejos de un campo: te posas donde puedes, y apareces en la localidad más cercana."""
         p, v = self.p, self.v
-        cerca = min((m for m in p.mapas.values() if m.tipo != "mar"), key=lambda m: V.distancia(self.pos, V.punto_aire(m.id)))
+        cerca = min((m for m in p.mapas.values() if m.tipo not in ("mar", "recinto")), key=lambda m: V.distancia(self.pos, V.punto_aire(m.id)))
         self.hecho = True
         self._callar()
         self.app.cerrar(self)
@@ -668,7 +668,7 @@ def _destinos_desde(c):
     out = []
     pista = c.a["pista"]
     for m in p.mapas.values():
-        if m.tipo == "mar":
+        if m.tipo in ("mar", "recinto"):
             continue
         campos = [l for l in m.lugares.values() if l.tipo in V.CAMPOS]
         if not campos:

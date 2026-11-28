@@ -626,6 +626,9 @@ def gimnasio(p, l):
             if p.mision or p.trabajo:
                 p.app.son("error")
                 p.app.decir(tr("Termina antes lo que tienes entre manos."), True)
+            elif j.estrellas and p.hay_arena() and c.get("deportivo", True):     # al pabellón no se entra para despistar a la policía
+                p.app.son("error")
+                p.app.decir(tr("Con la policía buscándote, en el gimnasio no te dejan subir al ring. Despístalos antes."), True)
             elif p.pagar(int(c.get("inscripcion", 0))):
                 p.empezar_combate(l, c)
         return f

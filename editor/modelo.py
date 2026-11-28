@@ -102,6 +102,12 @@ def resumen(nombre_esq, d):
         return ESQUEMAS[nombre_esq]["titulo"]
 
 
+
+def _localidades(b):
+    """Los mapas del juego que son localidades: el pabellón de los combates del gimnasio (tipo recinto) no lo es, y no
+    se ofrece para poner cosas en él."""
+    return [m for m in b["mapas"] if m.get("tipo") != "recinto"]
+
 class Mod:
     """Un mod en edición. Internamente todo está en forma editable."""
 
@@ -207,12 +213,12 @@ class Catalogo:
                     out[a["id"]] = str(a.get("nombre", a["id"]))
             return sorted(out.items(), key=lambda e: e[1].lower())
         if ref == "mapa":
-            out = [(m["id"], m["nombre"]) for m in b["mapas"]]
+            out = [(m["id"], m["nombre"]) for m in _localidades(b)]
             return out + [(m.get("id"), m.get("nombre", m.get("id"))) for m in sec.get("mapas", []) if m.get("id") and m.get("id") not in dict(out)]
         if ref == "lugar":
             out = {}
             nombres = {m["id"]: m["nombre"] for m in b["mapas"]}
-            for m in b["mapas"]:
+            for m in _localidades(b):
                 for l in m.get("lugares", []):
                     out[l["id"]] = tr('{nombre}, en {nombre2}').format(nombre=(l['nombre']), nombre2=(m['nombre']))
             for m in sec.get("mapas", []):
@@ -246,7 +252,7 @@ class Catalogo:
         b = self.base
         if clave == "lugares":
             out = []
-            for m in b["mapas"]:
+            for m in _localidades(b):
                 for l in m.get("lugares", []):
                     x = dict(l)
                     x["mapa"] = m["id"]
@@ -257,7 +263,7 @@ class Catalogo:
         if clave == "capitulos":
             return [{"clave": k, "valor": v} for k, v in b["capitulos"].items()]
         if clave == "mapas":
-            return list(b["mapas"])
+            return list(_localidades(b))
         if clave == "personajes":
             return list(b.get("personajes", []))
         return list(b.get(clave, []))

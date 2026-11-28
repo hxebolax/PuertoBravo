@@ -524,6 +524,13 @@ ESQUEMAS = {
         c("chofer_espera_min", tr("El chófer tarda en llegar, como poco, estos segundos"), "entero", minimo=1, maximo=600, defecto=25, grupo=tr("Chófer")),
         c("chofer_espera_max", tr("Y como mucho"), "entero", tr("Cada vez tarda un tiempo distinto entre los dos. Con lluvia tarda más, y de noche, algo menos."), minimo=1, maximo=900, defecto=75, grupo=tr("Chófer")),
         c("chofer_busqueda_max", tr("Nivel de búsqueda con el que todavía viene"), "entero", tr("Con más nivel de búsqueda que este, ni el chófer ni el mecánico se acercan."), minimo=0, maximo=5, defecto=2, grupo=tr("Chófer")),
+        c("motor_parado", tr("Por debajo de esta velocidad se puede apagar el motor, en metros por segundo"), "decimal",
+          tr("Con Mayúsculas E el jugador apaga el motor del vehículo y lo vuelve a arrancar. Solo se apaga con el vehículo parado o casi: por debajo de esta velocidad."),
+          minimo=0, maximo=20, defecto=1.0, grupo=tr("Motor")),
+        c("motor_danado_pct", tr("Por debajo de este estado, en por ciento, puede no arrancar"), "entero",
+          tr("Un vehículo muy dañado tose y a veces no arranca. Con cero, arranca siempre."), minimo=0, maximo=100, defecto=15, grupo=tr("Motor")),
+        c("motor_fallo_pct", tr("Probabilidad de que no arranque, en por ciento"), "entero",
+          tr("Cada intento con el vehículo por debajo del estado de arriba falla con esta probabilidad."), minimo=0, maximo=100, defecto=50, grupo=tr("Motor")),
         c("seguro_cuota", tr("Cuota diaria del seguro por cada vehículo en la calle, en euros"), "entero",
           tr("El seguro de los vehículos se contrata en el móvil, en Mis vehículos. Cada medianoche cobra esto por cada vehículo de tierra del jugador que esté en la calle; "
           "los del garaje no pagan. Con cero, el seguro sale gratis."), minimo=0, maximo=5000, defecto=12, grupo=tr("Seguro")),

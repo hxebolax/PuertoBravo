@@ -158,7 +158,7 @@ def colocar(mapas):
     a unos kilómetros de su vecina, hacia el lado por el que sale esa carretera. La que no se pueda deducir se queda
     donde la ponga punto_aire."""
     mar = next((m for m in mapas.values() if m.tipo == "mar"), None)
-    faltan = [m for m in mapas.values() if m.id not in MAPA_AIRE and m.tipo != "mar"]
+    faltan = [m for m in mapas.values() if m.id not in MAPA_AIRE and m.tipo not in ("mar", "recinto")]
     for _ in range(len(faltan) + 1):
         puestos = 0
         for m in [m for m in faltan if m.id not in MAPA_AIRE]:
@@ -476,7 +476,7 @@ class Vuelo:
         aqui = punto_aire(self.mundo.id)
         out = []
         for m in self.mapas.values():
-            if m.id == self.mundo.id or m.tipo == "mar":
+            if m.id == self.mundo.id or m.tipo in ("mar", "recinto"):
                 continue
             campos = [l for l in m.lugares.values() if l.tipo in CAMPOS]
             if not campos:
@@ -859,7 +859,7 @@ class Vuelo:
         tipos = AJ.lista("sitios_discretos")
         ops = []
         for m in self.mapas.values():
-            if m.id == self.mundo.id or m.tipo == "mar" or not any(q.tipo in CAMPOS for q in m.lugares.values()):
+            if m.id == self.mundo.id or m.tipo in ("mar", "recinto") or not any(q.tipo in CAMPOS for q in m.lugares.values()):
                 continue
             campos = [q for q in m.lugares.values() if q.tipo in CAMPOS]
             sitios = [q for q in m.lugares.values() if q.tipo in tipos and all(math.hypot(q.x - c.x, q.y - c.y) > 120 for c in campos)]
@@ -1016,7 +1016,7 @@ class Vuelo:
         aqui = punto_aire(self.mundo.id)
         destinos = []
         for m in self.mapas.values():
-            if m.id == self.mundo.id or m.tipo == "mar":
+            if m.id == self.mundo.id or m.tipo in ("mar", "recinto"):
                 continue
             campos = sorted((q for q in m.lugares.values() if q.tipo in CAMPOS), key=lambda q: q.id)
             if campos:

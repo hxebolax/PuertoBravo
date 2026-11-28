@@ -320,7 +320,7 @@ def cifras():
     from juego import mundo
     from juego.extras2 import LOGROS
     d = mundo.cargar_datos(con_mods=False, traducir=False)
-    mapas = mundo.crear_mapas(d)
+    mapas = {k: m for k, m in mundo.crear_mapas(d).items() if m.tipo != "recinto"}       # el pabellón de los combates no es una localidad
     lugares = sum(len(getattr(m, "lugares_todos", m.lugares)) for m in mapas.values())
     armas = d["armas"]
     armas = armas if isinstance(armas, list) else list(armas.values())

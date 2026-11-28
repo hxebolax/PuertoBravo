@@ -19,7 +19,7 @@ li { margin-bottom: .3em; }
 <h2>1. Vị trí của các thư mục</h2>
 <ul>
 <li><code>data\sonidos</code>: Tất cả các hiệu ứng âm thanh, được phân bổ vào các thư mục con.</li>
-<li><code>data\sonidos\por_defecto</code>: Các âm thanh mặc định nguyên bản, mỗi âm thanh là một tệp. Bao gồm 282 tệp. Nếu thiếu hoặc bị xóa, trò chơi sẽ tự động tái tạo lại.</li>
+<li><code>data\sonidos\por_defecto</code>: Các âm thanh mặc định nguyên bản, mỗi âm thanh là một tệp. Bao gồm 283 tệp. Nếu thiếu hoặc bị xóa, trò chơi sẽ tự động tái tạo lại.</li>
 <li><code>data\radio</code>: Nhạc của các đài phát thanh, mỗi đài là một tệp.</li>
 <li><code>data\radio\mi_musica</code>: Đài phát thanh của riêng bạn. Hãy sao chép những bài hát bạn yêu thích vào đây.</li>
 <li><code>data\musica</code>: Nhạc nền môi trường, mỗi tình huống có một thư mục riêng với nhiều bản nhạc bên trong.</li>
@@ -55,7 +55,7 @@ li { margin-bottom: .3em; }
 <p>Mỗi bản ghi âm có thể có mức âm lượng khác nhau. Để điều đó không phá vỡ sự cân bằng của trò chơi, khi tải một âm thanh do bạn thay thế, trò chơi sẽ tự động đưa nó về cùng mức âm lượng với âm thanh gốc: hệ thống đo đoạn âm thanh lớn nhất trong tệp của bạn, so sánh với âm thanh gốc và tự động tăng hoặc giảm âm lượng cho phù hợp mà không gây vỡ tiếng (clipping). Nhờ vậy, tiếng bước chân không bao giờ bị kêu to hơn tiếng súng, và âm định vị không bao giờ bị chìm nghỉm. Bạn có thể tắt tính năng này trong Tùy chọn, Âm thanh và âm nhạc, Cân bằng âm lượng các âm thanh tùy chỉnh.</p>
 <p>Nếu bạn vẫn thấy một âm thanh cụ thể kêu quá to hoặc quá nhỏ, hãy vào Tùy chọn, Âm thanh và âm nhạc, Điều chỉnh âm lượng từng âm thanh. Tất cả các âm thanh đều có ở đây, chia theo các nhóm giống hệt danh sách ở cuối tài liệu này: nhấn Enter để nghe thử và dùng phím Mũi tên trái / phải để giảm hoặc tăng từ 30% đến 200%. Mục Tìm kiếm âm thanh cho phép tìm nhanh theo từ khóa trong tên mà không cần biết nó thuộc nhóm nào. Menu sẽ hiển thị bạn đã thay đổi bao nhiêu âm thanh (tổng số và trong từng nhóm), cho phép đặt lại âm lượng mặc định cho một âm thanh, cả nhóm hoặc tất cả. Thiết lập này được lưu trong tùy chọn của bạn theo tên tệp nên sẽ không bị mất khi cập nhật game.</p>
 <h3>Nghe thử bất kỳ âm thanh nào ngay trong trò chơi</h3>
-<p>Tại menu chính và menu tạm dừng, mục Học các âm thanh chứa toàn bộ 282 âm thanh của trò chơi: đầu tiên là nhóm Các âm thanh quan trọng nhất, tiếp theo là Tìm kiếm âm thanh và sau đó là toàn bộ các âm thanh, chia theo các nhóm và thứ tự giống hệt danh sách ở cuối tài liệu này. Hãy vào một nhóm và nhấn Enter trên một âm thanh: trò chơi sẽ đọc tên và ý nghĩa của âm thanh đó, đồng thời phát thử riêng âm thanh đó với gói âm thanh bạn đang dùng. Với Tìm kiếm âm thanh, bạn chỉ cần gõ một từ (ví dụ: còi xe), trò chơi sẽ liệt kê tất cả các âm thanh có từ đó trong tên hoặc mô tả, không phân biệt dấu. Tính năng này giúp bạn kiểm tra ngay bản thu âm của mình mà không cần phải vào game tạo tình huống.</p>
+<p>Tại menu chính và menu tạm dừng, mục Học các âm thanh chứa toàn bộ 283 âm thanh của trò chơi: đầu tiên là nhóm Các âm thanh quan trọng nhất, tiếp theo là Tìm kiếm âm thanh và sau đó là toàn bộ các âm thanh, chia theo các nhóm và thứ tự giống hệt danh sách ở cuối tài liệu này. Hãy vào một nhóm và nhấn Enter trên một âm thanh: trò chơi sẽ đọc tên và ý nghĩa của âm thanh đó, đồng thời phát thử riêng âm thanh đó với gói âm thanh bạn đang dùng. Với Tìm kiếm âm thanh, bạn chỉ cần gõ một từ (ví dụ: còi xe), trò chơi sẽ liệt kê tất cả các âm thanh có từ đó trong tên hoặc mô tả, không phân biệt dấu. Tính năng này giúp bạn kiểm tra ngay bản thu âm của mình mà không cần phải vào game tạo tình huống.</p>
 
 <h2>3. Các gói âm thanh (Sound packs)</h2>
 <p>Một gói âm thanh là một thư mục chứa các tệp có tên giống hệt các âm thanh của trò chơi. Các gói nằm bên trong <code>data\sonidos</code>, mỗi gói nằm trong một thư mục con riêng bên cạnh thư mục <code>por_defecto</code>, và có thể chuyển đổi trong trò chơi tại mục Tùy chọn, Âm thanh và âm nhạc, Gói âm thanh bằng các phím Mũi tên trái và phải. Sự thay đổi có hiệu lực ngay lập tức và không đụng chạm đến các tệp trong <code>data\sonidos\por_defecto</code>: để quay lại, chỉ cần chọn «Mặc định».</p>
@@ -64,7 +64,7 @@ li { margin-bottom: .3em; }
 <li>Âm lượng của từng âm thanh trong gói sẽ được tự động cân bằng theo âm thanh gốc như đã giải thích ở trên.</li>
 <li>Các gói âm thanh đi kèm trò chơi có đầy đủ chính xác các tệp giống như <code>por_defecto</code>, trùng khớp từng tên gọi: không thừa, không thiếu một tệp nào. Các bản thu âm này đều thuộc phạm vi công cộng (giấy phép CC0) và được tổng hợp từ kenney.nl, opengameart.org, freesound.org và bigsoundbank.com.</li>
 <li>Các âm báo của các kênh roleplay (<code>chat_personaje</code>, <code>chat_fuera</code> và <code>chat_accion</code>) cũng như âm báo chờ máy chủ (<code>espera_servidor</code>) trong mọi gói âm thanh đều được giữ nguyên mặc định: đây là quy ước âm thanh chuẩn và cần phải luôn đồng nhất.</li>
-<li>Trò chơi đi kèm sẵn các gói âm thanh «Thay thế», với 282 âm thanh, «Âm thanh vòm», với 282 âm thanh, «Chân thực», với 282 âm thanh, «Retro», với 282 âm thanh. Mỗi gói đều có đầy đủ toàn bộ âm thanh của trò chơi: thay thế bằng các bản thu âm phạm vi công cộng cho mọi âm thanh ngoại trừ âm định hướng, và giữ nguyên âm thanh gốc cho các âm định hướng: âm định vị, tín hiệu âm thanh, đèn giao thông, radar, định vị vị trí và âm thanh các địa điểm. Tệp <code>CREDITOS.txt</code> trong mỗi gói nêu rõ nguồn gốc của từng âm thanh và âm thanh nào là nguyên bản.</li>
+<li>Trò chơi đi kèm sẵn các gói âm thanh «Thay thế», với 283 âm thanh, «Âm thanh vòm», với 283 âm thanh, «Chân thực», với 283 âm thanh, «Retro», với 283 âm thanh. Mỗi gói đều có đầy đủ toàn bộ âm thanh của trò chơi: thay thế bằng các bản thu âm phạm vi công cộng cho mọi âm thanh ngoại trừ âm định hướng, và giữ nguyên âm thanh gốc cho các âm định hướng: âm định vị, tín hiệu âm thanh, đèn giao thông, radar, định vị vị trí và âm thanh các địa điểm. Tệp <code>CREDITOS.txt</code> trong mỗi gói nêu rõ nguồn gốc của từng âm thanh và âm thanh nào là nguyên bản.</li>
 </ul>
 <h3>Tự tạo gói âm thanh của riêng bạn</h3>
 <ol>
@@ -133,7 +133,7 @@ li { margin-bottom: .3em; }
 <li>Định hướng và GPS: 19 âm thanh.</li>
 <li>Âm thanh các địa điểm: 37 âm thanh.</li>
 <li>Di chuyển đi bộ và bơi lội: 20 âm thanh.</li>
-<li>Phương tiện và lái xe: 19 âm thanh.</li>
+<li>Phương tiện và lái xe: 20 âm thanh.</li>
 <li>Hỏng hóc, xưởng sửa chữa, xăng xe và cướp trộm phương tiện: 10 âm thanh.</li>
 <li>Thuyền bè, trực thăng, tàu hỏa, tàu điện và máy bay: 16 âm thanh.</li>
 <li>Vũ khí, tiếng nổ của từng loại: 14 âm thanh.</li>
@@ -240,8 +240,9 @@ li { margin-bottom: .3em; }
 <li><code>levantarse</code>: Đứng dậy. Bạn đứng dậy sau khi ngồi xổm. Thời lượng 0.25 giây.</li>
 </ul>
 <h3>Phương tiện và lái xe</h3>
-<p>19 âm thanh. Âm thanh động cơ được phát lặp lại liên tục và trò chơi sẽ tăng cao độ theo tốc độ di chuyển. Thu âm tiếng nổ cầm chừng của động cơ ở vòng tua ổn định.</p>
+<p>20 âm thanh. Âm thanh động cơ được phát lặp lại liên tục và trò chơi sẽ tăng cao độ theo tốc độ di chuyển. Thu âm tiếng nổ cầm chừng của động cơ ở vòng tua ổn định.</p>
 <ul>
+<li><code>motor_apagar</code>: Apagar el motor. Giras la llave y el motor baja de vueltas hasta pararse: lo has apagado con Mayúsculas E. Phát lặp lại liên tục. Thời lượng 1.29 giây.</li>
 <li><code>claxon_bici</code>: Chuông xe đạp. Tiếng chuông xe đạp. Thời lượng 0.54 giây.</li>
 <li><code>claxon</code>: Còi xe hơi. Bạn bấm còi xe, hoặc tài xế khác bấm còi với bạn. Tài xế riêng của bạn sẽ bấm hai tiếng khi đến nơi, và thợ sửa xe bấm khi giao xe cho bạn. Thời lượng 0.45 giây.</li>
 <li><code>claxon_camion</code>: Còi xe tải. Còi hơi của xe tải hoặc xe buýt. Thời lượng 0.70 giây.</li>

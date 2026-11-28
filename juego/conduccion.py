@@ -32,6 +32,18 @@ def texto_estilo_piloto(estilo):
     return tr("Piloto normal: velocidad de ciudad, y para en los semáforos.")
 
 
+
+def _ajustes_motor(datos):
+    """Lo de arrancar y apagar el motor, de vehiculos_propios en vida.json, con una copia de serie por si falta el dato:
+    por debajo de qué velocidad cuenta como parado (m/s) y, por debajo de qué estado (por ciento), puede no arrancar y
+    con qué probabilidad."""
+    c = next((x for x in (datos or {}).get("vehiculos_propios", []) if isinstance(x, dict)), {})
+    try:
+        return {"parado": float(c.get("motor_parado", 1.0)), "danado": float(c.get("motor_danado_pct", 15)),
+                "fallo_pct": float(c.get("motor_fallo_pct", 50))}
+    except (TypeError, ValueError):
+        return {"parado": 1.0, "danado": 15.0, "fallo_pct": 50.0}
+
 class Conduccion:
     # ------------------------------------------------------------- utilidades
     def modo_asistido(self):
@@ -72,6 +84,50 @@ class Conduccion:
         """Cuánto daño le hace un choque a este vehículo respecto a uno de serie: menos con la suspensión reforzada."""
         from . import sistemas
         return sistemas.factor_golpes(v)
+
+    # ------------------------------------------------------------ arrancar y apagar el motor (issue 48)
+    def tecla_motor_txt(self):
+        from . import teclado
+        return teclado.textos(self.cfg, tr("Mayúsculas E"))
+
+    def alternar_motor(self):
+        """Mayúsculas E, o el menú de acciones del mando: con el vehículo parado, apaga el motor; apagado, lo arranca.
+        Apagado no gasta combustible ni anda, y no se oye: para esperar en silencio, vigilar u oír la radio aparcado."""
+        v = self.j.veh
+        if v is None:
+            return
+        AJ = _ajustes_motor(self.datos)
+        if v.modelo.get("motor") == "motor_bici" or v.modelo.get("sin_motor"):
+            self.son("error", cat="interfaz")
+            return self.decir(tr("No tiene motor."), True)
+        if self.chofer_conduce():
+            self.son("error", cat="interfaz")
+            return self.decir(tr("Conduce tu chófer: el motor es cosa suya."), True)
+        if not getattr(v, "motor_apagado", False):
+            if v.modelo.get("vuela") and (self.vuelo_alt() > 0 or getattr(v, "fase", "tierra") not in ("tierra", None)):
+                self.son("error", cat="interfaz")
+                return self.decir(tr("En el aire no se apaga el motor. Aterriza antes."), True)
+            if abs(v.vel) > AJ["parado"]:
+                self.son("error", cat="interfaz")
+                return self.decir(tr("Para el vehículo antes de apagar el motor."), True)
+            v.motor_apagado = True
+            v.vel = 0.0
+            if v.canal:
+                v.canal.parar()
+                v.canal = None
+            self.son("motor_apagar", vol=0.6)
+            return self.decir(tr("Motor apagado."), True)
+        if self.gasta(v) and self.litros(v) <= 0:
+            self.son("motor_seco", cat="interfaz")
+            return self.decir(tr("No arranca: no queda combustible."), True)
+        estado = v.salud / max(1.0, v.salud_max)
+        if estado < AJ["danado"] / 100.0 and random.random() * 100 < AJ["fallo_pct"]:
+            self.son("motor_seco", cat="interfaz")
+            return self.decir(tr("El motor tose y no arranca: está muy dañado. Prueba otra vez, o llévalo al taller."), True)
+        v.motor_apagado = False
+        self.son("arranque", vol=0.6)
+        self._motor(v, True)
+        self.decir(tr("Motor en marcha."), True)
 
     def _motor(self, v, propio):
         if v.canal is None:
@@ -372,6 +428,7 @@ class Conduccion:
         if v.modelo.get("motor") != "motor_bici" and not getattr(v, "en_marcha", False):      # en un golpe, el conductor lo tenía arrancado
             self.son("arranque", vol=0.6)
         v.en_marcha = False
+        v.motor_apagado = False                                  # al subir, el motor arranca (Mayúsculas E lo apaga: issue 48)
         self._motor(v, True)
         self.rodadura = self.son("rodadura", bucle=True, vol=0.0)
         self.preparar_conduccion()
@@ -570,6 +627,8 @@ class Conduccion:
                 self.app.radio.pista_idx = 0
                 self.cfg["emisora"] = (self.cfg["emisora"] + 1) % len(self.app.radio.emisoras)
             self.decir(self.app.radio.sintonizar(self.cfg["emisora"]), True)
+        elif k == pygame.K_e and mayus:
+            self.alternar_motor()
         elif k == pygame.K_e:
             if not self.modo_asistido():
                 v.rumbo = round(v.rumbo / 90.0) * 90 % 360
@@ -715,13 +774,17 @@ class Conduccion:
             t = self.vuelo_controles(v, dt, t)
         from . import sistemas                          # las mejoras del taller cambian cómo va el vehículo
         freno = mo["freno"] * (sistemas.factor_lluvia(v) if self.lluvia else 1.0) * sistemas.factor_frenada(v) * self.factor_averia_frenos(v)
-        con_motor = self.gastar_combustible(v, dt)
+        apagado = bool(getattr(v, "motor_apagado", False))     # apagado con la llave: ni gasta ni anda (issue 48)
+        con_motor = not apagado and self.gastar_combustible(v, dt)
         temerario = False                               # el piloto temerario se salta la frenada automática
         self.rodar(v, dt)
         self.vigilar_velocidad(v, dt)
         if v.ardiendo >= 0 or not con_motor:
             v.vel -= math.copysign(min(abs(v.vel), (6 if v.ardiendo >= 0 else 3.5) * dt), v.vel)
-            if not con_motor and pygame.K_UP in t and self.t - getattr(self, "t_aviso_seco", -99) > 6:
+            if apagado and pygame.K_UP in t and self.t - getattr(self, "t_aviso_seco", -99) > 6:
+                self.t_aviso_seco = self.t
+                self.decir(tr('El motor está apagado. {tecla} lo arranca.').format(tecla=self.tecla_motor_txt()))
+            elif not con_motor and not apagado and pygame.K_UP in t and self.t - getattr(self, "t_aviso_seco", -99) > 6:
                 self.t_aviso_seco = self.t
                 self.son("motor_seco", cat="interfaz")
                 self.decir(tr("El motor no arranca: no queda combustible."))

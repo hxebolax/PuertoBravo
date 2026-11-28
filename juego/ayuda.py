@@ -87,6 +87,7 @@ TECLAS = {
         ("E", tr("en conducción libre, endereza el coche hacia el punto cardinal más cercano")),
         ("W", tr("velocidad actual")),
         (tr("Mayúsculas W"), tr("estado del vehículo: cómo está, sus mejoras, el combustible y las averías")),
+        (tr("Mayúsculas E"), tr("arrancar o apagar el motor. Se apaga con el vehículo parado: no gasta combustible, no anda y no se oye, para esperar en silencio u oír la radio aparcado. Otra vez lo arranca, si queda combustible; muy dañado, puede costar")),
         ("H", tr("claxon")),
         ("R", tr("cambia de emisora. Mayúsculas R apaga la radio")),
         (tr("Control"), tr("disparar desde el vehículo sin bajarte, con un arma de fuego en la mano: primero la Q fija a quien tengas cerca, y Control le dispara. La I cambia de arma. Con un arma automática, mantenla pulsada")),

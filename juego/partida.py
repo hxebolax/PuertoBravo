@@ -759,7 +759,7 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
             self._reponer_veh_fuera()
             self._reponer_mis_vehiculos()
         self.barrio_act = self.mundo.barrio(x, y)["id"]
-        if self.barrio_act not in j.barrios_vistos:
+        if self.barrio_act not in j.barrios_vistos and self.mundo.tipo != "recinto":      # el pabellón no es una localidad
             j.barrios_vistos.append(self.barrio_act)
         self.cruce_act = self.mundo.cruce(x, y)
         self.lugar_act = self.lugar_cercano(22)
@@ -2151,7 +2151,7 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         if b["id"] != self.barrio_act:
             primera = self.barrio_act is None
             self.barrio_act = b["id"]
-            nuevo = b["id"] not in j.barrios_vistos
+            nuevo = b["id"] not in j.barrios_vistos and self.mundo.tipo != "recinto"
             if nuevo:
                 j.barrios_vistos.append(b["id"])
             if self.cfg["anunciar_barrios"] and not primera:
@@ -2226,7 +2226,7 @@ class Partida(Conduccion, Combate, Misiones, Trabajos, Extras, Extras2, Extras3,
         if nuevo is not self.lugar_act:
             self.lugar_act = nuevo
             if nuevo:
-                if nuevo.id not in j.visitados:
+                if nuevo.id not in j.visitados and self.mundo.tipo != "recinto":
                     j.visitados.append(nuevo.id)
                 if self.cfg["anunciar_lugares"]:
                     extra = ""

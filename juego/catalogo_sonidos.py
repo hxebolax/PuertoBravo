@@ -130,6 +130,7 @@ SONIDOS = {
         ("motor_bici", tr("Bicicleta"), tr("Vas en bicicleta: el clic de la cadena.")),
         ("rodadura", tr("Ruedas sobre el asfalto"), tr("El ruido de los neumáticos de tu vehículo. Suena más fuerte cuanto más corres.")),
         ("arranque", tr("Arrancar el motor"), tr("Arrancas el motor de un vehículo.")),
+        ("motor_apagar", tr("Apagar el motor"), tr("Giras la llave y el motor baja de vueltas hasta pararse: lo has apagado con Mayúsculas E.")),
         ("puerta_coche", tr("Puerta de un vehículo"), tr("Subes a un vehículo o te bajas de él.")),
         ("claxon", tr("Claxon de coche"), tr("Tocas el claxon, o te lo toca otro conductor. Tu chófer lo toca dos veces al llegar, y tu mecánico cuando te deja un vehículo.")),
         ("claxon_camion", tr("Bocina de camión"), tr("La bocina de un camión o de un autobús.")),

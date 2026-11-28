@@ -19,7 +19,7 @@ li { margin-bottom: .3em; }
 <h2>1. Dónde está cada cosa</h2>
 <ul>
 <li><code>data\sonidos</code>: todos los efectos de sonido, repartidos en subcarpetas.</li>
-<li><code>data\sonidos\por_defecto</code>: los sonidos de serie, un archivo por sonido. Son 282 archivos. Si falta alguno o lo borras, el juego lo vuelve a crear.</li>
+<li><code>data\sonidos\por_defecto</code>: los sonidos de serie, un archivo por sonido. Son 283 archivos. Si falta alguno o lo borras, el juego lo vuelve a crear.</li>
 <li><code>data\radio</code>: la música de las emisoras, un archivo por emisora.</li>
 <li><code>data\radio\mi_musica</code>: tu propia emisora. Copia aquí las canciones que quieras.</li>
 <li><code>data\musica</code>: la música de ambiente, con una carpeta por situación y varias piezas en cada una.</li>
@@ -55,7 +55,7 @@ li { margin-bottom: .3em; }
 <p>Cada grabación viene a un volumen distinto. Para que eso no estropee el equilibrio del juego, al cargar un sonido que has cambiado el juego lo lleva al mismo nivel que tenía el original: mide el tramo más fuerte de tu archivo, lo compara con el del sonido original y lo sube o lo baja lo que haga falta, sin dejar que sature. Así unos pasos no pueden quedar más fuertes que un disparo, ni una baliza inaudible. Se puede desactivar en Opciones, Sonido y música, Igualar el volumen de los sonidos cambiados.</p>
 <p>Si aun así un sonido concreto te parece fuerte o flojo, ve a Opciones, Sonido y música, Ajustar el volumen de cada sonido. Están todos, por los mismos grupos que la lista del final de este documento: Intro lo hace sonar y las flechas izquierda y derecha lo bajan o lo suben, del 30 al 200 por ciento. Buscar un sonido lo encuentra por una palabra de su nombre, sin tener que saber en qué grupo está. El menú dice cuántos sonidos tienes cambiados, en total y en cada grupo, y deja devolver a su volumen de serie uno solo, un grupo entero o todos. El ajuste se guarda con tus opciones y va por el nombre del archivo, así que no se pierde al actualizar el juego.</p>
 <h3>Escuchar cualquier sonido dentro del juego</h3>
-<p>En el menú principal y en el de pausa, Aprender los sonidos tiene los 282 sonidos del juego: primero el grupo Los más importantes, después Buscar un sonido y después todos, por los mismos grupos que la lista del final de este documento y en el mismo orden. Entra en un grupo y pulsa Intro sobre un sonido: el juego dice cómo se llama y qué significa, y lo hace sonar a él solo, con el pack que tengas puesto. Con Buscar un sonido escribes una palabra, por ejemplo sirena, y salen todos los que la tienen en el nombre o en la explicación, con tildes o sin ellas. Sirve para comprobar cómo ha quedado una grabación tuya sin tener que provocar el sonido jugando.</p>
+<p>En el menú principal y en el de pausa, Aprender los sonidos tiene los 283 sonidos del juego: primero el grupo Los más importantes, después Buscar un sonido y después todos, por los mismos grupos que la lista del final de este documento y en el mismo orden. Entra en un grupo y pulsa Intro sobre un sonido: el juego dice cómo se llama y qué significa, y lo hace sonar a él solo, con el pack que tengas puesto. Con Buscar un sonido escribes una palabra, por ejemplo sirena, y salen todos los que la tienen en el nombre o en la explicación, con tildes o sin ellas. Sirve para comprobar cómo ha quedado una grabación tuya sin tener que provocar el sonido jugando.</p>
 
 <h2>3. Packs de sonidos</h2>
 <p>Un pack es una carpeta con archivos que se llaman igual que los sonidos del juego. Los packs van dentro de <code>data\sonidos</code>, cada uno en su subcarpeta, al lado de <code>por_defecto</code>, y se eligen dentro del juego en Opciones, Sonido y música, Pack de sonidos, con las flechas izquierda y derecha. El cambio se oye al momento y no toca tus archivos de <code>data\sonidos\por_defecto</code>: para volver atrás, elige «por defecto».</p>
@@ -64,7 +64,7 @@ li { margin-bottom: .3em; }
 <li>El volumen de cada sonido del pack se iguala al del original, como se explica arriba.</li>
 <li>Los packs que vienen con el juego traen exactamente los mismos archivos que <code>por_defecto</code>, con los mismos nombres: ni uno más ni uno menos. Sus grabaciones son de dominio público (licencia CC0) y salen de kenney.nl, opengameart.org, freesound.org y bigsoundbank.com.</li>
 <li>Los tonos de los canales de rol (<code>chat_personaje</code>, <code>chat_fuera</code> y <code>chat_accion</code>) y el de la espera al servidor (<code>espera_servidor</code>) son en todos los packs los de serie, a propósito: son un código de tonos y conviene que suenen siempre igual.</li>
-<li>De serie vienen instalados los packs «Alternativo», con 282 sonidos, «Envolvente», con 282 sonidos, «Realista», con 282 sonidos, «Retro», con 282 sonidos. Cada uno trae todos los sonidos del juego: sustituyen por grabaciones de dominio público todo lo que no es orientación, y conservan el original en los sonidos de orientación: balizas, tonos, semáforos, radar, localizadores y sonidos de los lugares. El archivo <code>CREDITOS.txt</code> de cada pack dice de dónde sale cada sonido y cuáles son originales.</li>
+<li>De serie vienen instalados los packs «Alternativo», con 283 sonidos, «Envolvente», con 283 sonidos, «Realista», con 283 sonidos, «Retro», con 283 sonidos. Cada uno trae todos los sonidos del juego: sustituyen por grabaciones de dominio público todo lo que no es orientación, y conservan el original en los sonidos de orientación: balizas, tonos, semáforos, radar, localizadores y sonidos de los lugares. El archivo <code>CREDITOS.txt</code> de cada pack dice de dónde sale cada sonido y cuáles son originales.</li>
 </ul>
 <h3>Hacer tu propio pack</h3>
 <ol>
@@ -133,7 +133,7 @@ li { margin-bottom: .3em; }
 <li>Orientación y GPS: 19 sonidos.</li>
 <li>Sonidos de los lugares: 37 sonidos.</li>
 <li>Moverse a pie y nadar: 20 sonidos.</li>
-<li>Vehículos y conducción: 19 sonidos.</li>
+<li>Vehículos y conducción: 20 sonidos.</li>
 <li>Averías, taller, gasolina y robo de vehículos: 10 sonidos.</li>
 <li>Barcos, helicópteros, tren, tranvía y avión: 16 sonidos.</li>
 <li>Armas, el disparo de cada una: 14 sonidos.</li>
@@ -240,8 +240,9 @@ li { margin-bottom: .3em; }
 <li><code>paso_via0</code>: Pasos sobre las vías, pie izquierdo. Estás en medio de las vías del tranvía o del tren: un toque metálico, del raíl, con grava debajo. Dura 0,20 segundos.</li>
 </ul>
 <h3>Vehículos y conducción</h3>
-<p>19 sonidos. Los motores se reproducen en bucle y el juego les sube el tono con la velocidad. Graba el motor al ralentí, a régimen constante.</p>
+<p>20 sonidos. Los motores se reproducen en bucle y el juego les sube el tono con la velocidad. Graba el motor al ralentí, a régimen constante.</p>
 <ul>
+<li><code>motor_apagar</code>: Apagar el motor. Giras la llave y el motor baja de vueltas hasta pararse: lo has apagado con Mayúsculas E. Se reproduce en bucle. Dura 1,29 segundos.</li>
 <li><code>arranque</code>: Arrancar el motor. Arrancas el motor de un vehículo. Dura 0,90 segundos.</li>
 <li><code>motor_bici</code>: Bicicleta. Vas en bicicleta: el clic de la cadena. Se reproduce en bucle. Dura 1,00 segundos.</li>
 <li><code>claxon_camion</code>: Bocina de camión. La bocina de un camión o de un autobús. Dura 0,70 segundos.</li>

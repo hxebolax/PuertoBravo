@@ -224,6 +224,14 @@ def generar(semilla=7):
     S["alarma"] = _norm(_filtro(np.tile(al, 2), hi=4000), 0.5)
     arr = _filtro(_sierra(38, 0.9) * (0.6 + 0.4 * np.sin(PI2 * 9 * _t(0.9))), hi=900)
     S["arranque"] = _norm(_bordes(arr, 20), 0.6)
+    # el motor que se para al girar la llave: baja de vueltas, tiembla y se calla, con el clic de la llave al final (issue 48)
+    tap = _t(1.2)
+    fap = 52 * (1 - 0.62 * tap / 1.2)
+    fase = np.cumsum(fap) / SR
+    ap = (2 * (fase % 1) - 1) * (0.55 + 0.45 * np.sin(PI2 * 7 * tap)) * (1 - tap / 1.2) ** 1.6
+    ap = _filtro(ap, hi=850)
+    clic = _filtro(np.random.default_rng(48).standard_normal(int(SR * 0.04)), 1500, 5000) * _decae(0.04, 0.008)      # semilla propia: no cambia los sonidos que vienen después
+    S["motor_apagar"] = _norm(_bordes(np.concatenate([ap, np.zeros(int(SR * 0.05)), 0.5 * clic]), 15), 0.55)
     tw = _t(2.0)
     fw = 650 + 650 * (0.5 - 0.5 * np.cos(PI2 * tw / 2.0))
     S["sirena"] = _norm(_filtro(np.sign(np.sin(PI2 * np.cumsum(fw) / SR)), hi=3500), 0.5)

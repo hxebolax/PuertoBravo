@@ -28,7 +28,7 @@ LOGROS = [
     ("empresario", tr("Empresario"), tr("Ten tres negocios."), lambda p: sum(1 for i in p.j.propiedades if p.lug(i) and p.lug(i).tipo == "negocio") >= 3),
     ("viajero", tr("Trotamundos"), tr("Visita todas las localidades."), lambda p: all(any(b["id"] in p.j.barrios_vistos for b in m.barrios) for m in p.mapas.values() if m.tipo != "recinto")),
     ("explorador", tr("Explorador"), tr("Visita cien lugares."), lambda p: len(p.j.visitados) >= 100),
-    ("cartografo", tr("Cartógraf[o|a]"), tr("Visita todos los lugares del juego."), lambda p: len(p.j.visitados) >= len(p.lugares)),
+    ("cartografo", tr("Cartógraf[o|a]"), tr("Visita todos los lugares del juego."), lambda p: len(p.j.visitados) >= sum(1 for l in p.lugares.values() if l.mapa != ARENA)),
     ("coleccionista", tr("Coleccionista"), tr("Encuentra diez objetos de colección."), lambda p: len(p.j.casetes) >= 10),
     ("completista", tr("Lo tengo todo"), tr("Encuentra todos los objetos de colección."), lambda p: len(p.j.casetes) >= p.total_casetes()),
     ("pescador", tr("Lobo de mar"), tr("Pesca veinticinco peces."), lambda p: p.j.stats.get("peces", 0) >= 25),
@@ -400,7 +400,7 @@ class Extras2:
         ring = self.lugares[ARENA_RING]
         self.cambiar_mapa(ARENA, ring.x, ring.y)
         self.teletransportar(ring.x, ring.y)
-        self.decir(tr("Pasas al pabellón de los combates: aquí solo estáis tu rival y tú."))
+        self.decir(tr("Pasas al pabellón de los combates: aquí no hay nadie de la calle, solo tu rival y los tuyos."))
 
     def vuelta_arena(self):
         """A dónde se vuelve del pabellón: (mapa, x, y). La puerta del gimnasio del combate o, si no se sabe, un gimnasio."""
