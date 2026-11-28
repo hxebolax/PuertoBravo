@@ -1235,7 +1235,7 @@ def lista_lugares(p, al_elegir=None, titulo=None, mapa=None, otras=True):
     def otras_localidades():
         ops = [Opcion(f"{m.nombre}. {p.desc_localidad(m)}", (lambda m=m: lista_lugares(p, al_elegir, None, m, False)),
                       ayuda=tr("Abre la lista de lugares de esa localidad. Al elegir uno, el GPS te lleva primero hasta la carretera, la estación o el embarcadero que va allí."))
-               for m in p.mapas.values() if m.id != p.mundo.id]
+               for m in p.mapas.values() if m.id != p.mundo.id and m.tipo != "recinto"]
         app.abrir(Menu(app, tr("Otras localidades"), ops, intro=tr("El GPS te guiará hasta la carretera, la estación o el embarcadero que lleva allí")))
 
     aqui = mundo is p.mundo                                      # en otra localidad la distancia no dice nada: siempre alfabético
@@ -1424,7 +1424,7 @@ def movil(p):
         total = len(p.datos["misiones"])
         ops = [tr('Misiones completadas: {len} de {total}').format(len=(len(p.completadas)), total=(total)), tr('Dinero: {dinero} euros. Ganado en total: {dinero_ganado}').format(dinero=(j.dinero), dinero_ganado=(s['dinero_ganado'])),
                tr('Tiempo jugado: {h} horas y {mi} minutos. Día {dia}').format(h=(h), mi=(mi), dia=(p.dia)), tr('Lugares visitados: {len} de {len2}').format(len=(len(j.visitados)), len2=(len(p.lugares))),
-               tr('Barrios y localidades visitados: {len} de {sum}').format(len=(len(j.barrios_vistos)), sum=(sum(len(m.barrios) for m in p.mapas.values()))),
+               tr('Barrios y localidades visitados: {len} de {sum}').format(len=(len(j.barrios_vistos)), sum=(sum(len(m.barrios) for m in p.mapas.values() if m.tipo != "recinto"))),
                tr('Objetos de colección: {len} de {total_casetes}').format(len=(len(j.casetes)), total_casetes=(p.total_casetes())),
                tr('Peces pescados: {get}. Servicios de trabajo: {get2}').format(get=(s.get('peces', 0)), get2=(s.get('servicios', 0))),
                tr('Vehículos robados: {vehiculos_robados}. Vendidos al desguace: {vendidos}').format(vehiculos_robados=(s['vehiculos_robados']), vendidos=(s['vendidos'])), tr('Enemigos abatidos: {enemigos}').format(enemigos=(s['enemigos'])),
@@ -1436,7 +1436,7 @@ def movil(p):
     def barrios():
         ops = [Opcion(f"{b['nombre']}{'' if m.nombre == b['nombre'] else ', ' + m.nombre}{'' if b['id'] in j.barrios_vistos else tr(', sin visitar')}. {p.barrio_desc(b, m)}",
                       ayuda=tr("Un barrio o una localidad, y cómo es. Los que todavía no has pisado dicen sin visitar."))
-               for m in p.mapas.values() for b in m.barrios]
+               for m in p.mapas.values() if m.tipo != "recinto" for b in m.barrios]
         app.abrir(Menu(app, tr("Barrios y localidades"), ops))
 
     def inventario():

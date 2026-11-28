@@ -16529,6 +16529,9 @@
 "El rey de San Lucero eres tú": [
 "data/datos/misiones_extra2.json"
 ],
+"El ring, en el centro del pabellón. Al terminar el combate vuelves a la puerta del gimnasio.": [
+"data/datos/mapas/arena.json"
+],
 "El ruido de los neumáticos de tu vehículo. Suena más fuerte cuanto más corres.": [
 "juego/catalogo_sonidos.py"
 ],
@@ -22027,6 +22030,18 @@
 ],
 "Gracias... es vieja.": [
 "juego/respuestas_datos2.py"
+],
+"Grada este": [
+"data/datos/mapas/arena.json"
+],
+"Grada norte": [
+"data/datos/mapas/arena.json"
+],
+"Grada oeste": [
+"data/datos/mapas/arena.json"
+],
+"Grada sur": [
+"data/datos/mapas/arena.json"
 ],
 "Grados que hay que girar, en total": [
 "editor/esquema.py"
@@ -34624,6 +34639,10 @@
 "PB1-": [
 "juego/enlinea.py"
 ],
+"Pabellón de los combates": [
+"data/datos/mapas/arena.json",
+"data/datos/mapas/arena.json"
+],
 "Pack de sonidos: {nombre_pack}": [
 "juego/menus_juego.py"
 ],
@@ -35719,6 +35738,9 @@
 ],
 "Pasarla por encima, subiendo a {v} metros": [
 "juego/vuelo_pantalla.py"
+],
+"Pasas al pabellón de los combates: aquí solo estáis tu rival y tú.": [
+"juego/extras2.py"
 ],
 "Pasas cuatro horas sirviendo comidas. Sales cansad[o|a] y content[o|a]. Son las {hora_txt}.": [
 "juego/vida.py"
@@ -39627,6 +39649,9 @@
 "Rincón de los buscadores, en la Playa Dorada": [
 "data/datos/ciudad.json"
 ],
+"Ring del pabellón": [
+"data/datos/mapas/arena.json"
+],
 "Riñonera": [
 "data/datos/vida.json"
 ],
@@ -40208,6 +40233,9 @@
 ],
 "Sales del grupo y los demás siguen juntos.": [
 "juego/menus_enlinea.py"
+],
+"Sales del pabellón a la puerta del gimnasio.": [
+"juego/extras2.py"
 ],
 "Sales del paso sin más, y tu negocio no tendrá problemas mientras pagues.": [
 "juego/honrado.py"
@@ -46929,6 +46957,9 @@
 ],
 "Un ordenador y un montón de impresos. Aquí te atienden.": [
 "juego/sistemas.py"
+],
+"Un pabellón cerrado con el ring en el centro y las gradas alrededor. Aquí solo estáis tu rival y tú.": [
+"data/datos/mapas/arena.json"
 ],
 "Un pantalán de tablas medio podridas, el único punto de atraque de la isla.": [
 "data/datos/mapas/isla_tortuga.json"

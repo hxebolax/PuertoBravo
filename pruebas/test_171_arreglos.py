@@ -68,6 +68,7 @@ def test_un_mod_puede_poner_peleas_que_si_son_delito(robot):
     robot.frames(5)
     assert p.mision["enemigos"][0].deportivo
     p.abandonar_mision()
+    _testigo(p)                                                      # el deportivo se pelea en el pabellón: al volver, la calle es otra
     p.empezar_combate(l, {"id": "clandestina", "nombre": "Pelea clandestina", "rivales": ["el Sordo"], "deportivo": False})
     robot.frames(5)
     e = p.mision["enemigos"][0]

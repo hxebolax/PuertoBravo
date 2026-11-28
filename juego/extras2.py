@@ -15,6 +15,8 @@ HABILIDADES = {
 }
 
 MODELOS_ENCARGO = ["sedan", "deportivo", "todoterreno", "furgoneta", "moto", "descapotable", "pickup", "utilitario", "buggy", "limusina"]
+ARENA = "arena"                  # el pabellón de los combates del gimnasio (data/datos/mapas/arena.json)
+ARENA_RING = "arena_ring"
 
 LOGROS = [
     ("primera", tr("De vuelta a casa"), tr("Completa tu primera misión."), lambda p: len(p.completadas) >= 1),
@@ -24,7 +26,7 @@ LOGROS = [
     ("millonario", tr("Magnate"), tr("Reúne 250000 euros entre efectivo y banco."), lambda p: p.j.dinero + p.j.banco >= 250000),
     ("casero", tr("Casero"), tr("Ten tres viviendas."), lambda p: sum(1 for i in p.j.propiedades if p.lug(i) and p.lug(i).tipo == "casa") >= 3),
     ("empresario", tr("Empresario"), tr("Ten tres negocios."), lambda p: sum(1 for i in p.j.propiedades if p.lug(i) and p.lug(i).tipo == "negocio") >= 3),
-    ("viajero", tr("Trotamundos"), tr("Visita todas las localidades."), lambda p: all(any(b["id"] in p.j.barrios_vistos for b in m.barrios) for m in p.mapas.values())),
+    ("viajero", tr("Trotamundos"), tr("Visita todas las localidades."), lambda p: all(any(b["id"] in p.j.barrios_vistos for b in m.barrios) for m in p.mapas.values() if m.tipo != "recinto")),
     ("explorador", tr("Explorador"), tr("Visita cien lugares."), lambda p: len(p.j.visitados) >= 100),
     ("cartografo", tr("Cartógraf[o|a]"), tr("Visita todos los lugares del juego."), lambda p: len(p.j.visitados) >= len(p.lugares)),
     ("coleccionista", tr("Coleccionista"), tr("Encuentra diez objetos de colección."), lambda p: len(p.j.casetes) >= 10),
@@ -370,9 +372,63 @@ class Extras2:
                           "texto": tr('{entrada} Tu rival es {rival}. Pulsa Q para fijarlo y Espacio para golpear.').format(entrada=(entrada), rival=(rival)),
                           "enemigos": [{"n": 1, "tipo": rival[0].upper() + rival[1:], "arma": "punos", "deportivo": bool(c.get("deportivo", True)),
                                         "salud": int(c.get("salud", 60)) + int(c.get("salud_asalto", 0)) * n + int(c.get("salud_victoria", 20)) * g}]})
-        self._empezar_repetible({"id": c["id"], "titulo": tr('{nombre} contra {v}').format(nombre=(c['nombre']), v=(rivales[0])) if asaltos == 1 else c["nombre"], "lugar": l.id, "contador": c["id"],
-                                 "pasos": pasos, "solo_punos": True, "recompensa": {"dinero": int(c.get("premio", 150)) + int(c.get("premio_victoria", 100)) * g}})
+        m = {"id": c["id"], "titulo": tr('{nombre} contra {v}').format(nombre=(c['nombre']), v=(rivales[0])) if asaltos == 1 else c["nombre"], "lugar": l.id, "contador": c["id"],
+             "pasos": pasos, "solo_punos": True, "recompensa": {"dinero": int(c.get("premio", 150)) + int(c.get("premio_victoria", 100)) * g}}
+        if self.hay_arena() and c.get("deportivo", True):        # se pelea en el pabellón, sin nadie que pase por al lado. Una pelea
+                                                                 # ilegal de un mod (deportivo: no) sigue en la calle, con sus testigos
+            for paso in pasos:
+                paso["lugar"] = ARENA_RING
+            m["arena"] = {"mapa": l.mapa, "x": l.x, "y": l.y}
+        self._empezar_repetible(m)
         self.son("campana_ring", cat="interfaz")
+
+    # ------------------------------------------------------------- el pabellón
+    # Los combates del gimnasio se pelean en un mapa aparte (data/datos/mapas/arena.json): sin tráfico, sin peatones y sin
+    # policía. Al aporrear el golpe con el rival lejos ya no se le da al que pasa, que se quedaba en una agresión con la
+    # policía en mitad del combate. Se entra al empezar el combate y se vuelve a la puerta del gimnasio al terminar, de
+    # cualquier manera: ganando, perdiendo, dejándolo o cayendo. En un servidor, y en las peleas ilegales de los mods, se
+    # sigue peleando en la calle.
+    def hay_arena(self):
+        return ARENA in self.mapas and ARENA_RING in self.lugares and not getattr(self, "en_servidor", False)
+
+    def entrar_arena(self, m):
+        if not m.get("arena") or not self.hay_arena() or self.mundo.id == ARENA:
+            return
+        if self.j.veh:
+            self.salir_vehiculo(forzado=True)
+        self.salir_interior(silencio=True)
+        ring = self.lugares[ARENA_RING]
+        self.cambiar_mapa(ARENA, ring.x, ring.y)
+        self.teletransportar(ring.x, ring.y)
+        self.decir(tr("Pasas al pabellón de los combates: aquí solo estáis tu rival y tú."))
+
+    def vuelta_arena(self):
+        """A dónde se vuelve del pabellón: (mapa, x, y). La puerta del gimnasio del combate o, si no se sabe, un gimnasio."""
+        r = (self.mision or {}).get("def", {}).get("arena") if self.mision else None
+        r = r or getattr(self, "_arena_vuelta", None)
+        if r and r.get("mapa") in self.mapas:
+            return r["mapa"], float(r["x"]), float(r["y"])
+        l = next((l for l in self.lugares.values() if l.tipo == "gimnasio" and l.mapa == "puerto_bravo"), None) \
+            or next((l for l in self.lugares.values() if l.tipo == "gimnasio"), None)
+        if l is not None:
+            return l.mapa, l.x, l.y
+        l = next(iter(self.app.mundo.lugares.values()))
+        return l.mapa, l.x, l.y
+
+    def salir_arena(self, m=None):
+        if self.mundo.id != ARENA:
+            return
+        if m and m.get("arena"):
+            self._arena_vuelta = m["arena"]
+        mapa, x, y = self.vuelta_arena()
+        self._arena_vuelta = None
+        ms, self.mision = self.mision, None                      # salir no cuenta como abandonar el combate
+        try:
+            self.cambiar_mapa(mapa, x, y)
+            self.teletransportar(x, y)
+        finally:
+            self.mision = ms
+        self.decir(tr("Sales del pabellón a la puerta del gimnasio."))
 
     def empezar_boxeo(self, l):
         self.empezar_combate(l, self.combate_def("boxeo") or {"id": "boxeo", "nombre": tr("Combate de boxeo")})
