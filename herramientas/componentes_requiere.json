@@ -1,5 +1,5 @@
 {
- "_por_que": "Componentes que, con la compilación de con_la_version, se publican para versiones anteriores del juego. idioma-ru: en la 1.7.3, la 1.7.4 y la 1.7.5 el catálogo ruso traducía las órdenes del instalador de las actualizaciones y no dejaba actualizar. El componente lleva un catálogo que sirve en las tres (herramientas/catalogo_union.py) y sin esas órdenes. idioma-pl, voces-pl y mod-marisma_negra (con su polaco): el polaco llega con la 1.7.7 y se publica ya para la 1.7.6, desde su compilación (dist), con un catálogo de las claves de la 1.7.6.",
+ "_por_que": "Componentes que, con la compilación de con_la_version, se publican para versiones anteriores del juego. idioma-ru: en la 1.7.3, la 1.7.4 y la 1.7.5 el catálogo ruso traducía las órdenes del instalador de las actualizaciones y no dejaba actualizar. El componente lleva un catálogo que sirve en las tres (herramientas/catalogo_union.py) y sin esas órdenes. idioma-pl, voces-pl y mod-marisma_negra (con su polaco): el polaco llega con la 1.7.7 y se publica ya para la 1.7.6, desde su compilación (dist), con un catálogo de las claves de la 1.7.6. sonidos-genny 2: trae ya los dos sonidos de la 1.7.7 (el motor que se apaga y el pabellón); en la 1.7.6 sobran y no molestan, y así quien tenga la 1.7.6 sigue viendo el pack.",
  "idioma-ru": {
   "requiere_juego": "1.7.3",
   "con_la_version": "1.7.6"
@@ -13,6 +13,10 @@
   "con_la_version": "1.7.7"
  },
  "mod-marisma_negra": {
+  "requiere_juego": "1.7.6",
+  "con_la_version": "1.7.7"
+ },
+ "sonidos-genny": {
   "requiere_juego": "1.7.6",
   "con_la_version": "1.7.7"
  }
